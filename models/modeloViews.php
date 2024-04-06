@@ -33,6 +33,10 @@ class modeloViews
             $modulo = 'views/moduls/local.php';
         }elseif ($enlace == 'agregarProeevedor') {
             $modulo = 'views/moduls/proeevedor.php';
+        }elseif ($enlace == 'agregarCategoria') {
+            $modulo = 'views/moduls/categoria.php';
+        }elseif ($enlace == 'agregarMedida') {
+            $modulo = 'views/moduls/medida.php';
         }
         return $modulo;
 

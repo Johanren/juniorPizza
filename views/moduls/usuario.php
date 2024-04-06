@@ -15,6 +15,9 @@ if (isset($_GET['action'])) {
     </script>';
     }
 }
+if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" ) {
+    echo '<script>window.location="inicio"</script>';
+}
 ///Usuario
 $user = new ControladorUsuario();
 $user->agregarUsuario();

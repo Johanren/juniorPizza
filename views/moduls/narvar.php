@@ -1,3 +1,7 @@
+<?php
+$listar = new ControladorUsuario();
+$res = $listar->consultarUsuarioPerfil();
+?>
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -70,12 +74,15 @@
             <i class="fas fa-fw fa-wrench"></i>
             <span>Usuarios</span>
         </a>
-        <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Menu:</h6>
                 <a class="collapse-item" href="usuario">Usuario</a>
                 <a class="collapse-item" href="cliente">Cliente</a>
-                <?php if($_SESSION['rol'] != "Administrador"){}else{?><a class="collapse-item" href="local">local</a><?php } ?>
+                <?php if ($_SESSION['rol'] != "Administrador") {
+                } else { ?><a class="collapse-item" href="local">local</a>
+                <?php } ?>
                 <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
                 <a class="collapse-item" href="utilities-other.html">Other</a>-->
             </div>
@@ -317,19 +324,31 @@
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                        <img class="img-profile rounded-circle" src="views/img/undraw_profile.svg">
+                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                            <?php echo $res[0]['usuario'] ?>
+                        </span>
+                        <?php
+                        if ($res[0]['foto'] != null) {
+                            ?>
+                            <img class="img-profile rounded-circle" src="<?php echo $res[0]['foto'] ?>">
+                            <?php
+                        } else {
+                            ?>
+                            <img class="img-profile rounded-circle" src="views/img/undraw_profile.svg">
+                            <?php
+                        }
+                        ?>
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="perfil">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Profile
+                            Perfil
                         </a>
                         <a class="dropdown-item" href="#">
                             <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Settings
+                            Configuración
                         </a>
                         <a class="dropdown-item" href="#">
                             <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -338,7 +357,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Logout
+                            Cerrar Sesión
                         </a>
                     </div>
                 </li>

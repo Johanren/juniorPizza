@@ -15,7 +15,7 @@ if (isset($_GET['action'])) {
     </script>';
     }
 }
-if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" ) {
+if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
     echo '<script>window.location="inicio"</script>';
 }
 ///Usuario
@@ -38,71 +38,73 @@ $res = $user->listarUsuario();
         </div>
     </div>
     <br>
-    <table id="usuario" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Primer Nombre</th>
-                <th>Segundo Nombre</th>
-                <th>Primer Apellido</th>
-                <th>Segundo Apellido</th>
-                <th>Usuario</th>
-                <th>Contraseña</th>
-                <th>Rol</th>
-                <th>Activo</th>
-                <th>Establecimiento</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($res as $key => $value) {
-                ?>
+    <div class="table-responsive">
+        <table id="usuario" class="table table-striped table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        <?php echo $value['primer_nombre'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['segundo_nombre'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['primer_apellido'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['segundo_apellido'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['usuario'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['clave'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_rol'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_activo'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_local'] ?>
-                    </td>
+                    <th>Primer Nombre</th>
+                    <th>Segundo Nombre</th>
+                    <th>Primer Apellido</th>
+                    <th>Segundo Apellido</th>
+                    <th>Usuario</th>
+                    <th>Contraseña</th>
+                    <th>Rol</th>
+                    <th>Activo</th>
+                    <th>Establecimiento</th>
                 </tr>
+            </thead>
+            <tbody>
                 <?php
-            }
-            ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Primer Nombre</th>
-                <th>Segundo Nombre</th>
-                <th>Primer Apellido</th>
-                <th>Segundo Apellido</th>
-                <th>Usuario</th>
-                <th>Contraseña</th>
-                <th>Rol</th>
-                <th>Activo</th>
-                <th>Establecimiento</th>
-            </tr>
-        </tfoot>
-    </table>
+                foreach ($res as $key => $value) {
+                    ?>
+                    <tr>
+                        <td>
+                            <?php echo $value['primer_nombre'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['segundo_nombre'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['primer_apellido'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['segundo_apellido'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['usuario'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['clave'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['nombre_rol'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['nombre_activo'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['nombre_local'] ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Primer Nombre</th>
+                    <th>Segundo Nombre</th>
+                    <th>Primer Apellido</th>
+                    <th>Segundo Apellido</th>
+                    <th>Usuario</th>
+                    <th>Contraseña</th>
+                    <th>Rol</th>
+                    <th>Activo</th>
+                    <th>Establecimiento</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

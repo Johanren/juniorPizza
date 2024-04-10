@@ -20,4 +20,10 @@ class ControladorMedida
         $res = $listar->listarMedidaaModelo();
         return $res;
     }
+
+    function consultarMedidaAjaxControlador($dato){
+        $consultar = new ModeloMedida();
+        $res = $consultar->consultarMedidaAjaxModelo($dato);
+        return $res;
+    }
 }

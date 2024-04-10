@@ -7,14 +7,22 @@ if (isset($_GET['action'])) {
     </script>';
     }
 }
+if (isset($_GET['id'])) {
+    print "<script>$(document).ready(function() {
+        $('#exampleModal').modal('toggle')
+    });</script>";
+    $mostrarProee = new ControladorProeevedor();
+    $resProee = $mostrarProee->consultarProeevedor();
+
+    $mostrarProducto = new ControladorFacturaProeevedor();
+    $resProducto = $mostrarProducto->listarFacturaProducto();
+}
 ///Usuario
-$user = new ControladorProeevedor();
-$user->agregarProeevedor();
-$res = $user->listarProeevedor();
-//local
-$activo = new ControladorLocal();
-$resLocal = $activo->listarLocal();
+$user = new ControladorFacturaProeevedor();
+$res = $user->listarProeevedorFactura();
+
 ?>
+<script src="views/js/jquery-3.3.1.slim.min.js"></script>
 <div class="container mt-5">
     <br>
     <table id="usuario" class="table table-striped table-bordered">
@@ -22,9 +30,8 @@ $resLocal = $activo->listarLocal();
             <tr>
                 <th># Nit</th>
                 <th>Nombre Proeevedor</th>
-                <th>Telefono</th>
-                <th>Dirección</th>
-                <th>Establecimiento</th>
+                <th>Fecha Factura</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -39,13 +46,16 @@ $resLocal = $activo->listarLocal();
                         <?php echo $value['nombre_proeevedor'] ?>
                     </td>
                     <td>
-                        <?php echo $value['telefono_proeevedor'] ?>
+                        <?php echo $value['fecha_ingreso'] ?>
                     </td>
                     <td>
-                        <?php echo $value['direccion_proeevedor'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_local'] ?>
+                        <a href="index.php?action=facturaProeevedor&id=<?php echo $value['id_proeevedor'] ?>"><button
+                                class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                    fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                    <path
+                                        d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                </svg></button></a>
                     </td>
                 </tr>
                 <?php
@@ -56,9 +66,8 @@ $resLocal = $activo->listarLocal();
             <tr>
                 <th># Nit</th>
                 <th>Nombre Proeevedor</th>
-                <th>Telefono</th>
-                <th>Dirección</th>
-                <th>Establecimiento</th>
+                <th>Fecha Factura</th>
+                <th>Acciones</th>
             </tr>
         </tfoot>
     </table>
@@ -66,68 +75,67 @@ $resLocal = $activo->listarLocal();
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Proeevedor</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Factura Proeevedor</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form action="" method="post">
-                    <div class="form-row">
+                    <div class="form-row mt-2" style="text-align: center;">
+                        <div class="form-group col-md-3"></div>
                         <div class="form-group col-md-6">
-                            <label for="inputEmail4">Proeevedor</label>
-                            <input type="text" class="form-control" name="proe" id="inputEmail4"
-                                placeholder="Proeevedor">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="inputPassword4">Nit</label>
-                            <input type="text" class="form-control" name="nit" id="inputPassword4"
-                                placeholder="Nit">
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="inputEmail4">Dirección</label>
-                            <input type="text" class="form-control" name="dire" id="inputEmail4"
-                                placeholder="Dirección">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="inputPassword4">Telefono</label>
-                            <input type="texr" class="form-control" name="tel" id="inputPassword4"
-                                placeholder="Telefono">
+                            Proeevedor: <span id="nom_proeevedor">
+                                <?php echo $resProee[0]['nombre_proeevedor'] ?>
+                            </span><br>
+                            Nit: <span id="nit_proeevedor">
+                                <?php echo $resProee[0]['nit_proeevedor'] ?>
+                            </span><br>
+                            Telefono: <span id="tel_proeevedor">
+                                <?php echo $resProee[0]['telefono_proeevedor'] ?>
+                            </span><br>
+                            Dirección: <span id="dir_proeevedor">
+                                <?php echo $resProee[0]['direccion_proeevedor'] ?>
+                            </span>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <?php
-                        if ($_SESSION['rol'] == "Administrador") {
-                            ?>
-                            <div class="form-group col-md-6">
-                                <label for="">Establecimiento</label>
-                                <select id="" name="local" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <?php
-                                    foreach ($resLocal as $key => $value) {
-                                        ?>
-                                        <option value="<?php echo $value['id_local'] ?>">
-                                            <?php echo $value['nombre_local'] ?>
-                                        </option>
-                                        <?php
-                                    }
+                    <div class="table-responsive mt-3">
+                        <table class="table mt-2" id="producto">
+                            <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Categoria</th>
+                                    <th>Medida</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($resProducto as $key => $value) {
                                     ?>
-                                </select>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                                    <tr>
+                                        <td><?php echo $value['codigo_producto'] ?></td>
+                                        <td><?php echo $value['nombre_producto'] ?></td>
+                                        <td><?php echo $value['precio_unitario'] ?></td>
+                                        <td><?php echo $value['cantidad_producto'] ?></td>
+                                        <td><?php echo $value['nombre_categoria'] ?></td>
+                                        <td><?php echo $value['nombre_medida'] ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <button type="submit" name="agregarProeevedor" class="btn btn-primary">Agregar</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <?php
-
+require_once 'conexion.php';
 class ModeloProeevedor
 {
     public $tabla = "proeevedor";
@@ -26,10 +26,63 @@ class ModeloProeevedor
         }
     }
 
-    function listarProeevedorModelo(){
+    function listarProeevedorModelo()
+    {
         $sql = "SELECT * FROM $this->tabla INNER JOIN local ON local.id_local = proeevedor.id_local";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consultarProeevedorAjaxModelo($dato)
+    {
+        if ($dato != '') {
+            $dato = '%' . $dato . '%';
+            $sql = "SELECT * FROM $this->tabla WHERE nit_proeevedor like ? OR nombre_proeevedor like ? ORDER BY id_proeevedor ";
+        } else {
+            $sql = "SELECT * FROM $this->tabla ORDER BY id_proeevedor";
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($dato != '') {
+                $stms->bindParam(1, $dato, PDO::PARAM_STR);
+                $stms->bindParam(2, $dato, PDO::PARAM_STR);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consultarProeevedorModelo($id)
+    {
+        if ($_SESSION['rol'] == "Administrador") {
+            $sql = "SELECT * FROM $this->tabla WHERE id_proeevedor = ?";
+        }else{
+            $sql = "SELECT * FROM $this->tabla WHERE id_proeevedor = ? AND id_local = ?";
+        }
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($_SESSION['rol'] == "Administrador") {
+            $stms->bindParam(1, $id, PDO::PARAM_INT);
+        }else{
+            $stms->bindParam(1, $id, PDO::PARAM_INT);
+            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+        }
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();

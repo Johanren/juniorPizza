@@ -1,8 +1,10 @@
-<?php 
+<?php
 
-class ModeloLocal{
+class ModeloLocal
+{
     public $tabla = "local";
-    function agregarLocalModelo($dato){
+    function agregarLocalModelo($dato)
+    {
         $sql = "INSERT INTO $this->tabla (nombre_local, nit, direccion, telefono) VALUES (?,?,?,?)";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -23,7 +25,8 @@ class ModeloLocal{
         }
     }
 
-    function listarModeloModelo(){
+    function listarModeloModelo()
+    {
         $sql = "SELECT * FROM $this->tabla";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -32,6 +35,31 @@ class ModeloLocal{
                 return $stms->fetchAll();
             } else {
                 return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consultarModeloAjaxModelo($dato)
+    {
+        if ($dato != '') {
+            $dato = '%' . $dato . '%';
+            $sql = "SELECT * FROM $this->tabla WHERE nombre_local like ? ORDER BY id_local ";
+        } else {
+            $sql = "SELECT * FROM $this->tabla ORDER BY id_local";
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($dato != '') {
+                $stms->bindParam(1, $dato, PDO::PARAM_STR);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
             }
         } catch (PDOException $e) {
             print_r($e->getMessage());

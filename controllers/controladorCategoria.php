@@ -20,4 +20,10 @@ class ControladorCategoria
         $res = $listar->listarCategoriaModelo();
         return $res;
     }
+
+    function consultarCategoriaAjaxControlador($dato){
+        $consultar = new ModeloCategoria();
+        $res = $consultar->consultarCategoriaAjaxModelo($dato);
+        return $res;
+    }
 }

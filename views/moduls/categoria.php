@@ -30,36 +30,38 @@ $resActivo = $activo->listarActivo();
         </div>
     </div>
     <br>
-    <table id="usuario" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Categoria</th>
-                <th>Activo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($res as $key => $value) {
-                ?>
+    <div class="table-responsive">
+        <table id="usuario" class="table table-striped table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        <?php echo $value['nombre_categoria'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_activo'] ?>
-                    </td>
+                    <th>Categoria</th>
+                    <th>Activo</th>
                 </tr>
+            </thead>
+            <tbody>
                 <?php
-            }
-            ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Categoria</th>
-                <th>Activo</th>
-            </tr>
-        </tfoot>
-    </table>
+                foreach ($res as $key => $value) {
+                    ?>
+                    <tr>
+                        <td>
+                            <?php echo $value['nombre_categoria'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['nombre_activo'] ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Activo</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

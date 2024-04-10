@@ -21,4 +21,10 @@ class ControladorLocal
         $res = $listar->listarModeloModelo();
         return $res;
     }
+
+    function consultarLocalAjaxControlador($dato){
+        $consultar = new ModeloLocal();
+        $res = $consultar->consultarModeloAjaxModelo($dato);
+        return $res;
+    }
 }

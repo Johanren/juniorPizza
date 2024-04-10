@@ -34,6 +34,9 @@ $res = $user->listarIngredinteProductoId();
                         d="M3.146 5.146a.5.5 0 0 1 .708 0L5.177 6.47a.75.75 0 0 1 0 1.06L3.854 8.854a.5.5 0 1 1-.708-.708L4.293 7 3.146 5.854a.5.5 0 0 1 0-.708M5.5 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5" />
                 </svg>
             </button>
+            <button id="miBoton" onclick="habilitarInput()" class="btn btn-primary">
+                Habilitar Inputs
+            </button>
         </div>
     </div>
     <br>
@@ -41,9 +44,8 @@ $res = $user->listarIngredinteProductoId();
         <table id="usuario" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Promocion</th>
-                    <th>Produtos</th>
-                    <th>Estado</th>
+                    <th>Producto</th>
+                    <th>Ingredientes</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -64,7 +66,6 @@ $res = $user->listarIngredinteProductoId();
                             }
                             ?>
                         </td>
-                        <td>asdas</td>
                         <td><a href="index.php?action=ingrediente_Producto&id=<?php echo $value['id_producto'] ?>"><button
                                     class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
                                         fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
@@ -79,9 +80,8 @@ $res = $user->listarIngredinteProductoId();
             </tbody>
             <tfoot>
                 <tr>
-                    <th>Promocion</th>
-                    <th>Produtos</th>
-                    <th>Estado</th>
+                    <th>Producto</th>
+                    <th>Ingredientes</th>
                     <th>Acciones</th>
                 </tr>
             </tfoot>
@@ -94,7 +94,7 @@ $res = $user->listarIngredinteProductoId();
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Promoción</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Producto con Ingrediente</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -102,7 +102,7 @@ $res = $user->listarIngredinteProductoId();
             <div class="modal-body">
                 <form action="" method="post">
                     <div class="table-responsive">
-                        <a id="agregarPromocion" class="btn btn-primary">
+                        <a id="agregarIngredienteProducto" class="btn btn-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                                 class="bi bi-node-plus" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -127,17 +127,17 @@ $res = $user->listarIngredinteProductoId();
                             </tbody>
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th>Producto</th>
-                                    <th></th>
+                                    <th>Ingredientes</th>
+                                    <th>Medida</th>
+                                    <th>Cantidad</th>
                                 </tr>
                             </thead>
-                            <tbody id="produc">
+                            <tbody id="ingreprodu">
                                 <tr>
-                                    <td><input type="hidden" name="id_prodcu[]" id="id_prodcu_1"><input type="text"
-                                            class="form-control prod" id="produc_1"></td>
-                                    <td><input type="text" name="" id="codigoProd_1" class="form-control"></td>
-                                    <td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td>
+                                    <td><input type="hidden" name="id_ingre[]" id="id_ingre_1"><input type="text"
+                                            class="form-control ingre" id="ingre_1"></td>
+                                    <td><input type="text" class="form-control" id="medida_1"></td>
+                                    <td><input type="text" class="form-control" name="cantidad[]"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -152,7 +152,8 @@ $res = $user->listarIngredinteProductoId();
     </div>
 </div>
 <!------>
-<div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">

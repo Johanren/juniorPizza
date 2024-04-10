@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="views/css/login.css">
     <link rel="stylesheet" href="views/css/perfil.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="icon" href="views/img/icon.jpg">
+    <link rel="stylesheet" href="views/css/jquery-ui.css">
 
 </head>
 
@@ -57,6 +58,9 @@
 <!-- Page level custom scripts -->
 <script src="views/js/demo/chart-area-demo.js"></script>
 <script src="views/js/demo/chart-pie-demo.js"></script>
+<script src="views/js/jquery-ui.js"></script>
+<script src="views/js/js.js"></script>
+
 
 
 </html>

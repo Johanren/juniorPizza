@@ -30,36 +30,38 @@ $resActivo = $activo->listarActivo();
         </div>
     </div>
     <br>
-    <table id="usuario" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Medida</th>
-                <th>Activo</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($res as $key => $value) {
-                ?>
+    <div class="table-responsive">
+        <table id="usuario" class="table table-striped table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        <?php echo $value['nombre_medida'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_activo'] ?>
-                    </td>
+                    <th>Medida</th>
+                    <th>Activo</th>
                 </tr>
+            </thead>
+            <tbody>
                 <?php
-            }
-            ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Medida</th>
-                <th>Activo</th>
-            </tr>
-        </tfoot>
-    </table>
+                foreach ($res as $key => $value) {
+                    ?>
+                    <tr>
+                        <td>
+                            <?php echo $value['nombre_medida'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['nombre_activo'] ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Medida</th>
+                    <th>Activo</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -77,8 +79,7 @@ $resActivo = $activo->listarActivo();
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Medida</label>
-                            <input type="text" class="form-control" name="med" id="inputEmail4"
-                                placeholder="Medida">
+                            <input type="text" class="form-control" name="med" id="inputEmail4" placeholder="Medida">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Activo</label>

@@ -8,7 +8,6 @@ class modeloViews
             $enlace == 'ingresar' ||
             $enlace == 'inicio' ||
             $enlace == 'productos' ||
-            $enlace == 'agregarProductos' ||
             $enlace == 'promocion' ||
             $enlace == 'categoria' ||
             $enlace == 'medida' ||
@@ -18,7 +17,9 @@ class modeloViews
             $enlace == 'usuario' ||
             $enlace == 'cliente' ||
             $enlace == 'salir' ||
-            $enlace == 'local'
+            $enlace == 'local' ||
+            $enlace  ==  'ingredientes' ||
+            $enlace == 'ingrediente_Producto'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
         } elseif ($enlace == 'agregarUsuario') {
@@ -37,6 +38,12 @@ class modeloViews
             $modulo = 'views/moduls/categoria.php';
         }elseif ($enlace == 'agregarMedida') {
             $modulo = 'views/moduls/medida.php';
+        }elseif ($enlace == 'agregarIngrediente') {
+            $modulo = 'views/moduls/ingredientes.php';
+        }elseif ($enlace == 'agregarProducto') {
+            $modulo = 'views/moduls/productos.php';
+        }elseif ($enlace == 'agregarIngredienteProducto') {
+            $modulo = 'views/moduls/ingrediente_Producto.php';
         }
         return $modulo;
 

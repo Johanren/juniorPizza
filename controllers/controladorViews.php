@@ -12,10 +12,19 @@ class controladorViews
     public function enlacesPaginaControlador()
     {
         if (isset($_GET['action'])) {
-            $enlace = $_GET['action'];
-        } else {
-            $enlace = 'inicio';
-        }
+			if (isset($_SESSION['validar'])) {
+				$enlace = $_GET['action'];
+			} else {
+				$enlace = 'ingresar';
+			}
+
+		} else {
+			if (isset($_SESSION['validar'])) {
+				$enlace = 'inicio';
+			} else {
+				$enlace = 'ingresar';
+			}
+		}
 
         $pagina = new modeloViews();
         $respuesta = $pagina->enlacePagina($enlace);

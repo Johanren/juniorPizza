@@ -40,7 +40,8 @@ class ModeloIngredienteProducto
         }
     }
 
-    function listarIngredinteProductoModelo($id){
+    function listarIngredinteProductoModelo($id)
+    {
         $sql = "SELECT GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ') FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente WHERE ingrediente_producto.id_producto = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -50,6 +51,31 @@ class ModeloIngredienteProducto
                 return $stms->fetchAll();
             } else {
                 return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consultarIngredeinteAjaxModelo($dato)
+    {
+        if ($dato != '') {
+            $dato = '%' . $dato . '%';
+            $sql = "SELECT producto.id_producto, producto.nombre_producto, GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ') FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente WHERE producto.nombre_producto like ? ORDER BY producto.id_producto";
+        } else {
+            $sql = "SELECT producto.id_producto, producto.nombre_producto, GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ') FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente ORDER BY producto.id_producto";
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($dato != '') {
+                $stms->bindParam(1, $dato, PDO::PARAM_STR);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
             }
         } catch (PDOException $e) {
             print_r($e->getMessage());

@@ -6,6 +6,7 @@ require_once '../controllers/controladorCategoria.php';
 require_once '../controllers/controladorLocal.php';
 require_once '../controllers/controladorProducto.php';
 require_once '../controllers/controladorIngredientes.php';
+require_once '../controllers/controladorIngredienteProducto.php';
 //modelo
 require_once '../models/modeloProeevedor.php';
 require_once '../models/modeloMedida.php';
@@ -13,6 +14,7 @@ require_once '../models/modeloCategoria.php';
 require_once '../models/modeloLocal.php';
 require_once '../models/modeloProducto.php';
 require_once '../models/modeloIngrediente.php';
+require_once '../models/modeloIngredienteProducto.php';
 class Ajax
 {
     public $proeevedor;
@@ -22,6 +24,7 @@ class Ajax
     public $local;
     public $producto;
     public $ingrediente;
+    public $productoPedido;
 
 
     function consultarProeevedorAjax()
@@ -114,6 +117,21 @@ class Ajax
 
         print json_encode($datos);
     }
+
+    function consultarproductoPedidoAjax()
+    {
+        $consultar = new ControladorIngredienteProducto();
+        $respuesta = $consultar->consultarIngredeinteAjaxControlador($this->productoPedido);
+        foreach ($respuesta as $key => $value) {
+            $datos[] = array(
+                'label' => $value['nombre_producto'],
+                'id' => $value['id_producto'],
+                'descripcion' => (isset($value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null
+            );
+        }
+
+        print json_encode($datos);
+    }
 }
 
 $ajax = new Ajax();
@@ -146,4 +164,9 @@ if (isset($_GET['producto'])) {
 if (isset($_GET['ingrediente'])) {
     $ajax->ingrediente = $_GET['ingrediente'];
     $ajax->consultarIngredienteAjax();
+}
+
+if (isset($_GET['productoPedido'])) {
+    $ajax->productoPedido = $_GET['productoPedido'];
+    $ajax->consultarproductoPedidoAjax();
 }

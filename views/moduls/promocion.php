@@ -1,9 +1,9 @@
 <?php
 
 if (isset($_GET['action'])) {
-    if ($_GET['action'] == "agregarIngredienteProducto") {
+    if ($_GET['action'] == "agregarPromocion") {
         print '<script>
-        swal("Hurra!!!", "Producto enlazado con ingrediente exitoso", "success");
+        swal("Hurra!!!", "Promocion agregada con exito", "success");
     </script>';
     }
 }
@@ -18,9 +18,12 @@ if (isset($_GET['id'])) {
     $resProducto = $mostrarProducto->listarFacturaProducto();
 }
 ///Usuario
-$user = new ControladorIngredienteProducto();
-$user->agregarIngredienteProducto();
-$res = $user->listarIngredinteProductoId();
+$user = new ControladorPromocion();
+$user->agregarPromocion();
+$res = $user->listarPromocionId();
+if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+    echo '<script>window.location="inicio"</script>';
+}
 ?>
 <div class="container mt-5">
     <div class="row">
@@ -57,14 +60,14 @@ $res = $user->listarIngredinteProductoId();
                         </td>
                         <td>
                             <?php
-                            $resPro = $user->listarIngredinteProducto($value['id_producto']);
+                            $resPro = $user->listarPromocion($value['id_producto']);
                             foreach ($resPro as $key => $valu) {
                                 $conn = $key + 1;
-                                print $valu["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"];
+                                print $valu["GROUP_CONCAT(nombre_producto SEPARATOR ', ')"];
                             }
                             ?>
                         </td>
-                        <td>asdas</td>
+                        <td><?php echo $value['nombre_activo'] ?></td>
                         <td><a href="index.php?action=ingrediente_Producto&id=<?php echo $value['id_producto'] ?>"><button
                                     class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
                                         fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
@@ -127,9 +130,9 @@ $res = $user->listarIngredinteProductoId();
                             </tbody>
                             <thead>
                                 <tr>
-                                    <th></th>
                                     <th>Producto</th>
                                     <th></th>
+                                    <th>Cantidad</th>
                                 </tr>
                             </thead>
                             <tbody id="produc">
@@ -142,7 +145,7 @@ $res = $user->listarIngredinteProductoId();
                             </tbody>
                         </table>
                     </div>
-                    <button type="submit" name="agregarIngredienteProducto" class="btn btn-primary">Agregar</button>
+                    <button type="submit" name="agregarPromocion" class="btn btn-primary">Agregar</button>
                 </form>
             </div>
             <div class="modal-footer">

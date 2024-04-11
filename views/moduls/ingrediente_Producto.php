@@ -21,6 +21,9 @@ if (isset($_GET['id'])) {
 $user = new ControladorIngredienteProducto();
 $user->agregarIngredienteProducto();
 $res = $user->listarIngredinteProductoId();
+if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+    echo '<script>window.location="inicio"</script>';
+}
 ?>
 <div class="container mt-5">
     <div class="row">

@@ -14,6 +14,9 @@ $res = $user->listarMedida();
 //activo
 $activo = new ControladorActivo();
 $resActivo = $activo->listarActivo();
+if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+    echo '<script>window.location="inicio"</script>';
+}
 ?>
 <div class="container mt-5">
     <div class="row">

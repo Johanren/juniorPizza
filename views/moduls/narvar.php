@@ -15,14 +15,20 @@ $res = $listar->consultarUsuarioPerfil();
 
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
+    <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="inicio">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Panel</span></a>
-    </li>
-
+    } else {
+        ?>
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="inicio">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Panel</span></a>
+        </li>
+        <?php
+    }
+    ?>
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -30,67 +36,111 @@ $res = $listar->consultarUsuarioPerfil();
     <div class="sidebar-heading">
         Interfas
     </div>
+    <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
 
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-            aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Configurar Productos</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Menú:</h6>
-                <a class="collapse-item" href="ingredientes">Ingredientes</a>
-                <a class="collapse-item" href="productos">Productos</a>
-                <a class="collapse-item" href="ingrediente_Producto">Productos & ingredientes</a>
-                <a class="collapse-item" href="promocion">Promociones</a>
-                <a class="collapse-item" href="categoria">Categoria</a>
-                <a class="collapse-item" href="medida">Medida</a>
+    } else {
+        ?>
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Configurar Productos</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menú:</h6>
+                    <a class="collapse-item" href="ingredientes">Ingredientes</a>
+                    <a class="collapse-item" href="productos">Productos</a>
+                    <a class="collapse-item" href="ingrediente_Producto">Productos & ingredientes</a>
+                    <a class="collapse-item" href="promocion">Promociones</a>
+                    <a class="collapse-item" href="categoria">Categoria</a>
+                    <a class="collapse-item" href="medida">Medida</a>
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+        <?php
+    }
+    ?>
+    <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
 
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Proveedores</span>
-        </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Menu:</h6>
-                <a class="collapse-item" href="proeevedor">Proveedores</a>
-                <a class="collapse-item" href="facturaProeevedor">Factura Proeevedor</a>
-                <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
+    } else {
+        ?>
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Proveedores</span>
+            </a>
+            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu:</h6>
+                    <a class="collapse-item" href="proeevedor">Proveedores</a>
+                    <a class="collapse-item" href="facturaProeevedor">Factura Proeevedor</a>
+                    <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
                 <a class="collapse-item" href="utilities-other.html">Other</a>-->
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+        <?php
+    }
+    ?>
+    <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Mesero") {
 
-    <!-- Nav Item - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
-            aria-expanded="true" aria-controls="collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Usuarios</span>
-        </a>
-        <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Menu:</h6>
-                <a class="collapse-item" href="usuario">Usuario</a>
-                <a class="collapse-item" href="cliente">Cliente</a>
-                <?php if ($_SESSION['rol'] != "Administrador") {
-                } else { ?><a class="collapse-item" href="local">local</a>
-                <?php } ?>
-                <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
+    } else {
+        ?>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#mesero" aria-expanded="true"
+                aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Mesero</span>
+            </a>
+            <div id="mesero" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu:</h6>
+                    <a class="collapse-item" href="mesas">Mesas</a>
+                    <a class="collapse-item" href="pedido">Pedidos</a>
+                    <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
                 <a class="collapse-item" href="utilities-other.html">Other</a>-->
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+        <?php
+    }
+    ?>
+    <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
 
+    } else {
+        ?>
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
+                aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Usuarios</span>
+            </a>
+            <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu:</h6>
+                    <a class="collapse-item" href="usuario">Usuario</a>
+                    <a class="collapse-item" href="cliente">Cliente</a>
+                    <?php if ($_SESSION['rol'] != "Administrador") {
+                    } else { ?><a class="collapse-item" href="local">local</a>
+                    <?php } ?>
+                    <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
+                <a class="collapse-item" href="utilities-other.html">Other</a>-->
+                </div>
+            </div>
+        </li>
+        <?php
+    }
+    ?>
     <!-- Divider -->
     <hr class="sidebar-divider">
 

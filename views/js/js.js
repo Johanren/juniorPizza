@@ -211,8 +211,42 @@ $(document).ready(function () {
 			minLength: 1,
 			select: function (event, ui) {
 				$("#produc_" + index).val(ui.item.label);
-				$("#id_prodcu" + index).val(ui.item.id);
+				$("#id_prodcu_" + index).val(ui.item.id);
 				$("#codigoProd_" + index).val(ui.item.codigo);
+				return false;
+
+			}
+
+		});
+	});
+});
+
+//Autocomplete pedido
+$(document).ready(function () {
+	$('body').on('keydown', '.producto', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+		$(this).autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { productoPedido: request.term },
+					success: function (data) {
+						response(data);
+						//console.log("el dato", data);
+
+					}
+
+				});
+			},
+			minLength: 1,
+			select: function (event, ui) {
+				$("#producto_" + index).val(ui.item.label);
+				$("#id_predido_" + index).val(ui.item.id);
+				$("#descripcion_" + index).val(ui.item.descripcion);
 				return false;
 
 			}
@@ -256,10 +290,28 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarPromocion").click(function () {
-		$("#produc").append('<tr><td><input type="hidden" name="id_prodcu[]" id="id_prodcu_'+index+'"><input type="text"class="form-control prod" id="produc_'+index+'"></td><td><input type="text" name="" id="codigoProd_'index'" class="form-control"></td><td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td></tr>');
+		$("#produc").append('<tr><td><input type="hidden" name="id_prodcu[]" id="id_prodcu_'+index+'"><input type="text"class="form-control prod" id="produc_'+index+'"></td><td><input type="text" name="" id="codigoProd_'+	index+'" class="form-control"></td><td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td></tr>');
 		index++;
 	});
 });
+
+//Agreagr pedido
+
+$(document).ready(function () {
+	var index = 2;
+	$("#agregarPedido").click(function () {
+		$("#pedidoProducto").append('<tr class="eliminar_'+index+'"><td><input type="hidden" name="id_pedido[]" id="id_predido_'+index+'"><input type="text"name="producto[]" class="form-control producto" id="producto_'+index+'"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_'+index+'" class="form-control" cols="30"rows="1"></textarea></th><th><input type="number" name="cantidad[]" class="form-control"placeholder="Cantidad Pedido"></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
+		index++;
+	});
+});
+
+//revome
+for (let index = 0; index < 30; index++) {
+
+	$(document).on('click', '.eliminar', function () {
+		$(this).parents('.eliminar_' + index + '').remove();
+	})
+}
 
 //habilitar inputs
 function habilitarInput() {

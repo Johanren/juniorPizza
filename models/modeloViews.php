@@ -18,32 +18,40 @@ class modeloViews
             $enlace == 'cliente' ||
             $enlace == 'salir' ||
             $enlace == 'local' ||
-            $enlace  ==  'ingredientes' ||
-            $enlace == 'ingrediente_Producto'
+            $enlace == 'ingredientes' ||
+            $enlace == 'ingrediente_Producto' ||
+            $enlace == 'mesas' ||
+            $enlace == 'pedido'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
         } elseif ($enlace == 'agregarUsuario') {
             $modulo = 'views/moduls/usuario.php';
-        }elseif ($enlace == 'agregarCliente') {
+        } elseif ($enlace == 'agregarCliente') {
             $modulo = 'views/moduls/cliente.php';
-        }elseif ($enlace == 'loginFallido') {
+        } elseif ($enlace == 'loginFallido') {
             $modulo = 'views/moduls/ingresar.php';
-        }elseif ($enlace == 'loginInactivo') {
+        } elseif ($enlace == 'loginInactivo') {
             $modulo = 'views/moduls/ingresar.php';
-        }elseif ($enlace == 'agregarLocal') {
+        } elseif ($enlace == 'agregarLocal') {
             $modulo = 'views/moduls/local.php';
-        }elseif ($enlace == 'agregarProeevedor') {
+        } elseif ($enlace == 'agregarProeevedor') {
             $modulo = 'views/moduls/proeevedor.php';
-        }elseif ($enlace == 'agregarCategoria') {
+        } elseif ($enlace == 'agregarCategoria') {
             $modulo = 'views/moduls/categoria.php';
-        }elseif ($enlace == 'agregarMedida') {
+        } elseif ($enlace == 'agregarMedida') {
             $modulo = 'views/moduls/medida.php';
-        }elseif ($enlace == 'agregarIngrediente') {
+        } elseif ($enlace == 'agregarIngrediente') {
             $modulo = 'views/moduls/ingredientes.php';
-        }elseif ($enlace == 'agregarProducto') {
+        } elseif ($enlace == 'agregarProducto') {
             $modulo = 'views/moduls/productos.php';
-        }elseif ($enlace == 'agregarIngredienteProducto') {
+        } elseif ($enlace == 'agregarIngredienteProducto') {
             $modulo = 'views/moduls/ingrediente_Producto.php';
+        } elseif ($enlace == 'agregarPromocion') {
+            $modulo = 'views/moduls/promocion.php';
+        } elseif ($enlace == 'agregarMesa') {
+            $modulo = 'views/moduls/mesas.php';
+        } elseif ($enlace == 'agregarPedidor') {
+            $modulo = 'views/moduls/pedido.php';
         }
         return $modulo;
 

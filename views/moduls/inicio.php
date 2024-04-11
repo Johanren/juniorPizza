@@ -1,3 +1,8 @@
+<?php
+if ($_SESSION['rol'] == "Mesero") {
+    echo '<script>window.location="mesas"</script>';
+}
+?>
 <!-- Begin Page Content -->
 <div class="container-fluid">
 

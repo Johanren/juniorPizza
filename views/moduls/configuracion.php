@@ -1,6 +1,9 @@
 <?php
 $listar = new ControladorSistema();
 $res = $listar->listarConfiguracionSistema();
+
+$funcion = new ControladorFuncion();
+$funcion->listarFunciones();
 ?>
 <div class="container">
     <div class="tabs-to-dropdown">
@@ -46,8 +49,13 @@ $res = $listar->listarConfiguracionSistema();
                                         </div>
                                         <div class="col-auto">
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" name="<?php echo $value['nombre_campo'] ?>" <?php if($value['estado']==true){echo "checked";}else{} ?> id="<?php echo $value['nombre_campo'] ?>" 
-                                                    type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                                                <input class="form-check-input" name="<?php echo $value['nombre_campo'] ?>"
+                                                    <?php if ($value['estado'] == 'true') {
+                                                        echo "checked";
+                                                    } else {
+                                                    } ?>
+                                                    id="<?php echo $value['nombre_campo'] ?>" type="checkbox" role="switch"
+                                                    id="flexSwitchCheckDefault">
                                                 <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                                             </div>
                                         </div>

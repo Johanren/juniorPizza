@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['action'])) {
-    if ($_GET['action'] == "agregarPedidor") {
+    if ($_GET['action'] == "        ") {
         print '<script>
         swal("Hurra!!!", "Pedido agregado exitosamente", "success");
     </script>';

@@ -1,3 +1,14 @@
+//Imprimir Pedido Cocina
+document.addEventListener('DOMContentLoaded', function () {
+	// Este código se ejecutará cuando la página haya cargado completamente
+	var boton = document.getElementById('btnImprimir');
+
+	// Simulamos un clic en el botón después de 3 segundos
+	setTimeout(function () {
+		boton.click(); // Desencadenamos el evento de clic en el botón
+	}, 3000); // 3000 milisegundos = 3 segundos
+});
+
 //Autocomplete
 $("#proeevedor").autocomplete({
 	source: function (request, response) {
@@ -260,7 +271,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
-		$("#producto").append('<tr><td><input type="text" class="form-control" name="codigo[]"></td><td><input type="text" class="form-control" name="nombre[]"></td><td><input type="text" class="form-control" name="precio[]"></td><td><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_'+index+'"><input type="text" class="form-control categoria"name="" id="categoria_'+index+'"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_'+index+'"><input type="text" class="form-control medida" name=""id="medida_'+index+'"></td><?php if ($_SESSION["rol"] == "Administrador") { ?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_'+index+'"><input type="text" class="form-control nom_local" id="local_'+index+'"></td><?php } ?></tr>');
+		$("#producto").append('<tr><td><input type="text" class="form-control" name="codigo[]"></td><td><input type="text" class="form-control" name="nombre[]"></td><td><input type="text" class="form-control" name="precio[]"></td><td><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?php if ($_SESSION["rol"] == "Administrador") { ?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local" id="local_' + index + '"></td><?php } ?></tr>');
 		index++;
 	});
 });
@@ -270,7 +281,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarIngrediente").click(function () {
-		$("#ingrediente").append('<tr><td><input type="text" class="form-control" name="nom_ingre[]"></td><td><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_'+index+'"><input type="text" class="form-control medida" name=""id="medida_'+index+'"></td></tr>');
+		$("#ingrediente").append('<tr><td><input type="text" class="form-control" name="nom_ingre[]"></td><td><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td></tr>');
 		index++;
 	});
 });
@@ -280,7 +291,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarIngredienteProducto").click(function () {
-		$("#ingreprodu").append('<tr><td><input type="hidden" name="id_ingre[]" id="id_ingre_'+index+'"><input type="text"class="form-control ingre" id="ingre_'+index+'"></td><td><input type="text" class="form-control" id="medida_'+index+'"></td><td><input type="text" class="form-control" name="cantidad[]"></td></tr>');
+		$("#ingreprodu").append('<tr><td><input type="hidden" name="id_ingre[]" id="id_ingre_' + index + '"><input type="text"class="form-control ingre" id="ingre_' + index + '"></td><td><input type="text" class="form-control" id="medida_' + index + '"></td><td><input type="text" class="form-control" name="cantidad[]"></td></tr>');
 		index++;
 	});
 });
@@ -288,7 +299,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 3;
 	$("#agregarIngredienteProduct").click(function () {
-		$("#ingreprod").append('<tr><td><input type="hidden" name="id_ingre[]" id="id_ingre_'+index+'"><input type="text"class="form-control ingre" id="ingre_'+index+'"></td><td><input type="text" class="form-control" id="medida_'+index+'"></td><td><input type="text" class="form-control" name="cantidad[]"></td></tr>');
+		$("#ingreprod").append('<tr><td><input type="hidden" name="id_ingre[]" id="id_ingre_' + index + '"><input type="text"class="form-control ingre" id="ingre_' + index + '"></td><td><input type="text" class="form-control" id="medida_' + index + '"></td><td><input type="text" class="form-control" name="cantidad[]"></td></tr>');
 		index++;
 	});
 });
@@ -298,7 +309,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarPromocion").click(function () {
-		$("#produc").append('<tr><td><input type="hidden" name="id_prodcu[]" id="id_prodcu_'+index+'"><input type="text"class="form-control prod" id="produc_'+index+'"></td><td><input type="text" name="" id="codigoProd_'+	index+'" class="form-control"></td><td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td></tr>');
+		$("#produc").append('<tr><td><input type="hidden" name="id_prodcu[]" id="id_prodcu_' + index + '"><input type="text"class="form-control prod" id="produc_' + index + '"></td><td><input type="text" name="" id="codigoProd_' + index + '" class="form-control"></td><td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td></tr>');
 		index++;
 	});
 });
@@ -308,7 +319,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarPedido").click(function () {
-		$("#pedidoProducto").append('<tr class="eliminar_'+index+'"><td><input type="hidden" name="id_pedido[]" id="id_predido_'+index+'"><input type="text"name="producto[]" class="form-control producto" id="producto_'+index+'"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_'+index+'" class="form-control" cols="30"rows="1"></textarea></th><th><input type="number" name="cantidad[]" class="form-control"placeholder="Cantidad Pedido"></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
+		$("#pedidoProducto").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_pedido[]" id="id_predido_' + index + '"><input type="text"name="producto[]" class="form-control producto" id="producto_' + index + '"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_' + index + '" class="form-control" cols="30"rows="1"></textarea></th><th><input type="number" name="cantidad[]" class="form-control"placeholder="Cantidad Pedido"></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
 		index++;
 	});
 });
@@ -339,22 +350,22 @@ function habilitarInput() {
 
 //actualizar funciones
 
-$('input[type="checkbox"]').on('change', function() {
+$('input[type="checkbox"]').on('change', function () {
 	var datos = {};
-	$('input[type="checkbox"]').each(function() {
-	  datos[$(this).attr('id')] = $(this).is(':checked');
-	  console.log(datos);
+	$('input[type="checkbox"]').each(function () {
+		datos[$(this).attr('id')] = $(this).is(':checked');
+		console.log(datos);
 	});
 
 	$.ajax({
-	  url: 'views/actualizar.php',
-	  type: 'POST',
-	  data: datos,
-	  success: function(response) {
-		$('#mensaje').text(response);
-	  },
-	  error: function(xhr, status, error) {
-		console.error(xhr.responseText);
-	  }
+		url: 'views/actualizar.php',
+		type: 'POST',
+		data: datos,
+		success: function (response) {
+			$('#mensaje').text(response);
+		},
+		error: function (xhr, status, error) {
+			console.error(xhr.responseText);
+		}
 	});
-  });
+});

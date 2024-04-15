@@ -7,6 +7,7 @@ require_once '../controllers/controladorLocal.php';
 require_once '../controllers/controladorProducto.php';
 require_once '../controllers/controladorIngredientes.php';
 require_once '../controllers/controladorIngredienteProducto.php';
+require_once '../controllers/controladorPedido.php';
 //modelo
 require_once '../models/modeloProeevedor.php';
 require_once '../models/modeloMedida.php';
@@ -15,6 +16,8 @@ require_once '../models/modeloLocal.php';
 require_once '../models/modeloProducto.php';
 require_once '../models/modeloIngrediente.php';
 require_once '../models/modeloIngredienteProducto.php';
+require_once '../models/modeloPedido.php';
+
 class Ajax
 {
     public $proeevedor;
@@ -25,6 +28,8 @@ class Ajax
     public $producto;
     public $ingrediente;
     public $productoPedido;
+    public $id_mesa;
+    public $fecha;
 
 
     function consultarProeevedorAjax()
@@ -132,6 +137,28 @@ class Ajax
 
         print json_encode($datos);
     }
+
+    function consultarPedidoPrintAjax()
+    {
+        $resPedido = new ControladorPedido();
+        $respe = $resPedido->listarPedidoCocinaPrint($this->id_mesa, $this->fecha);
+        foreach ($respe as $key => $value) {
+            $datos[] = array('nombre' => $value['producto'], 'cantidad' => $value['cantidad'], 'descripcion' => (isset($value['descripcion'])) ? $value['descripcion'] : " ");
+        }
+        header('Content-Type: text/html; charset=UTF-8');
+        print json_encode($datos);
+    }
+
+    function consultarMesaPrintAjax()
+    {
+        $resPedido = new ControladorPedido();
+        $respe = $resPedido->buscarMesaUsuarioId($this->id_mesa, $this->fecha);
+        foreach ($respe as $key => $value) {
+            $datos[] = array('nombre' => $value['primer_nombre'], 'apellido' => $value['primer_apellido'], 'mesa' => $value['nombre_mesa']);
+        }
+        header('Content-Type: text/html; charset=UTF-8');
+        print json_encode($datos);
+    }
 }
 
 $ajax = new Ajax();
@@ -169,4 +196,16 @@ if (isset($_GET['ingrediente'])) {
 if (isset($_GET['productoPedido'])) {
     $ajax->productoPedido = $_GET['productoPedido'];
     $ajax->consultarproductoPedidoAjax();
+}
+
+if (isset($_GET['id_mesa']) && isset($_GET['fecha'])) {
+    $ajax->id_mesa = $_GET['id_mesa'];
+    $ajax->fecha = $_GET['fecha'];
+    $ajax->consultarPedidoPrintAjax();
+}
+
+if (isset($_GET['id_mesa']) && isset($_GET['fechaActual'])) {
+    $ajax->id_mesa = $_GET['id_mesa'];
+    $ajax->fecha = $_GET['fechaActual'];
+    $ajax->consultarMesaPrintAjax();
 }

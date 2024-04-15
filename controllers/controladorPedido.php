@@ -61,6 +61,7 @@ class ControladorPedido
 
     function listarPedidoCocinaPrint($id, $fecha)
     {
+        header('Content-Type: text/html; charset=UTF-8');
         $listar = new ModeloPedido();
         $res = $listar->listarPedidoCocinaModelo($id, $fecha);
         return $res;
@@ -75,6 +76,13 @@ class ControladorPedido
             $actualizar = new ModeloPedido();
             $res = $actualizar->actualizarPedidoPrintModelo($id, $fecha, $print);
         }
+    }
+
+    function buscarMesaUsuarioId($id_mesa, $fecha)
+    {
+        $listar = new ModeloPedido();
+        $res = $listar->listarMesaUsuarioIdModelo($id_mesa, $fecha);
+        return $res;
     }
 }
 

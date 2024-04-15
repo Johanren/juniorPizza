@@ -138,4 +138,21 @@ class ModeloPedido
             print_r($e->getMessage());
         }
     }
+
+    function listarMesaUsuarioIdModelo($id, $fecha){
+        $sql = "SELECT DISTINCT usuario.primer_nombre, usuario.primer_apellido, mesa.nombre_mesa FROM $this->tabla INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario WHERE fecha_ingreso like ? AND pedido.id_mesa = ? AND cocina = 0 ";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+        $stms->bindParam(2, $id, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

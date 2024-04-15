@@ -111,227 +111,235 @@ $fechaActal = date('Y-m-d');
                     <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
                 </div>
             </div>
+            <div class="field">
+                <!--<label class="label">Máxima longitud para el precio</label>-->
+                <div class="control">
+                    <input hidden id="id_mesa" value="<?php echo $_GET['id_mesa'] ?>" class="input" type="text">
+                </div>
+            </div>
+            <div class="field">
+                <!--<label class="label">Máxima longitud para el precio</label>-->
+                <div class="control">
+                    <input hidden id="fecha" value="<?php echo $_GET['fecha'] ?>" class="input" type="text">
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<div id="respuestaServidor"></div>
 <?php
 if (isset($_GET['id_mesa'])) {
-    $nombreSistema = "Inventario";
-    $nit = "1111";
-    $tel = "1111";
-    $dire = "NNNN";
+    $nombreSistema = "Comanda de Cocina";
+    $mesa = "1111";
+    $usuario = "1111";
     ?>
     <script>
-        let clicEjecutado = false;
-        function clicConAjax() {
-            if (!clicEjecutado) {
-                document.addEventListener("keydown", function (event) {
-                    document.getElementById("btnImprimir").click();
-                    clicEjecutado = true;
-                });
-            }
-        }
-        console.log(setTimeout(clicConAjax, 5000));
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-            // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
-            // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
-            // a cualquier lugar
-            const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
-                const resultado = [];
-                let indice = 0;
-                while (indice < cadena.length) {
-                    const pedazo = cadena.substring(indice, indice + maximaLongitud);
-                    indice += maximaLongitud;
-                    resultado.push(pedazo);
-                }
-                return resultado;
-            }
-            const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
-                let mayorConteoDeCadenasSeparadas = 0;
-                const cadenasSeparadas = [];
-                for (const contenido of contenidosConMaximaLongitud) {
-                    const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
-                    cadenasSeparadas.push({ separadas, maximaLongitud: contenido.maximaLongitud });
-                    if (separadas.length > mayorConteoDeCadenasSeparadas) {
-                        mayorConteoDeCadenasSeparadas = separadas.length;
-                    }
-                }
-                return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
-            }
-            const tabularDatos = (cadenas, relleno, separadorColumnas) => {
-                const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
-                let indice = 0;
-                const lineas = [];
-                while (indice < mayorConteoDeBloques) {
-                    let linea = "";
-                    for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
-                        let cadena = "";
-                        if (indice < contenidos.separadas.length) {
-                            cadena = contenidos.separadas[indice];
+
+        var id_mesa = $('#id_mesa').val();
+        var fecha = $('#fecha').val();
+
+        $.ajax({
+            url: 'views/ajax.php',
+            type: 'get',
+            dataType: 'json',
+            data: { id_mesa: id_mesa, fecha: fecha },
+            success: function (response) {
+                //console.log(response.nombre);
+                document.addEventListener("DOMContentLoaded", async () => {
+                    // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
+                    // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
+                    // a cualquier lugar
+                    const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
+                        const resultado = [];
+                        let indice = 0;
+                        while (indice < cadena.length) {
+                            const pedazo = cadena.substring(indice, indice + maximaLongitud);
+                            indice += maximaLongitud;
+                            resultado.push(pedazo);
                         }
-                        if (cadena.length < contenidos.maximaLongitud) {
-                            cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
+                        return resultado;
+                    }
+                    const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
+                        let mayorConteoDeCadenasSeparadas = 0;
+                        const cadenasSeparadas = [];
+                        for (const contenido of contenidosConMaximaLongitud) {
+                            const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
+                            cadenasSeparadas.push({ separadas, maximaLongitud: contenido.maximaLongitud });
+                            if (separadas.length > mayorConteoDeCadenasSeparadas) {
+                                mayorConteoDeCadenasSeparadas = separadas.length;
+                            }
                         }
-                        linea += cadena + separadorColumnas;
+                        return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
                     }
-                    lineas.push(linea);
-                    indice++;
-                }
-                return lineas;
-            }
-
-
-            const obtenerListaDeImpresoras = async () => {
-                return await ConectorPluginV3.obtenerImpresoras();
-            }
-            const URLPlugin = "http://localhost:8000"
-            const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
-                $btnImprimir = document.querySelector("#btnImprimir"),
-                $separador = document.querySelector("#separador"),
-                $relleno = document.querySelector("#relleno"),
-                $maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
-                $maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
-                $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
-            $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
-
-            const init = async () => {
-                /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
-                for (const impresora of impresoras) {
-                    $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
-                        value: impresora,
-                        text: impresora,
-                    }));
-                }*/
-                $btnImprimir.addEventListener("click", () => {
-                    const nombreImpresora = "prueba1";
-                    if (!nombreImpresora) {
-                        return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
+                    const tabularDatos = (cadenas, relleno, separadorColumnas) => {
+                        const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
+                        let indice = 0;
+                        const lineas = [];
+                        while (indice < mayorConteoDeBloques) {
+                            let linea = "";
+                            for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
+                                let cadena = "";
+                                if (indice < contenidos.separadas.length) {
+                                    cadena = contenidos.separadas[indice];
+                                }
+                                if (cadena.length < contenidos.maximaLongitud) {
+                                    cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
+                                }
+                                linea += cadena + separadorColumnas;
+                            }
+                            lineas.push(linea);
+                            indice++;
+                        }
+                        return lineas;
                     }
-                    imprimirTabla("prueba1");
+
+
+                    const obtenerListaDeImpresoras = async () => {
+                        return await ConectorPluginV3.obtenerImpresoras();
+                    }
+                    const URLPlugin = "http://localhost:8000"
+                    const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
+                        $btnImprimir = document.querySelector("#btnImprimir"),
+                        $separador = document.querySelector("#separador"),
+                        $relleno = document.querySelector("#relleno"),
+                        $maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
+                        $maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
+                        $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
+                    $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
+
+                    const init = async () => {
+                        /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
+                        for (const impresora of impresoras) {
+                            $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
+                                value: impresora,
+                                text: impresora,
+                            }));
+                        }*/
+                        $btnImprimir.addEventListener("click", () => {
+                            const nombreImpresora = "prueba1";
+                            if (!nombreImpresora) {
+                                return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
+                            }
+                            imprimirTabla("prueba1");
+                        });
+                    }
+
+
+                    const imprimirTabla = async (nombreImpresora) => {
+                        const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
+                            maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
+                            maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
+                            relleno = $relleno.value,
+                            separadorColumnas = $separador.value;
+                        const obtenerLineaSeparadora = () => {
+                            const lineasSeparador = tabularDatos(
+                                [
+                                    { contenido: "-", maximaLongitud: maximaLongitudNombre },
+                                    { contenido: "-", maximaLongitud: maximaLongitudCantidad },
+                                    { contenido: "-", maximaLongitud: maximaLongitudPrecio },
+                                ],
+                                "-",
+                                "+",
+                            );
+                            let separadorDeLineas = "";
+                            if (lineasSeparador.length > 0) {
+                                separadorDeLineas = lineasSeparador[0]
+                            }
+                            return separadorDeLineas;
+                        }
+                        // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
+                        // definir otras propiedades, etcétera
+                        const listaDeProductos = response;
+                        //console.log(listaDeProductos);
+
+                        // Comenzar a diseñar la tabla
+                        let tabla = obtenerLineaSeparadora() + "\n";
+
+
+                        const lineasEncabezado = tabularDatos([
+
+                            { contenido: "Nombre", maximaLongitud: maximaLongitudNombre },
+                            { contenido: "Cantidad", maximaLongitud: maximaLongitudCantidad },
+                            { contenido: "Descripcion", maximaLongitud: maximaLongitudPrecio },
+                        ],
+                            relleno,
+                            separadorColumnas,
+                        );
+
+                        for (const linea of lineasEncabezado) {
+                            tabla += linea + "\n";
+                        }
+                        tabla += obtenerLineaSeparadora() + "\n";
+                        for (const producto of listaDeProductos) {
+                            const lineas = tabularDatos(
+                                [
+                                    { contenido: producto.nombre, maximaLongitud: maximaLongitudNombre },
+                                    { contenido: producto.cantidad.toString(), maximaLongitud: maximaLongitudCantidad },
+                                    { contenido: producto.descripcion.toString(), maximaLongitud: maximaLongitudPrecio },
+                                ],
+                                relleno,
+                                separadorColumnas
+                            );
+                            for (const linea of lineas) {
+                                tabla += linea + "\n";
+                            }
+                            tabla += obtenerLineaSeparadora() + "\n";
+                        }
+                        console.log(tabla);
+                        const conector = new ConectorPluginV3(URLPlugin);
+
+                        $.ajax({
+                            url: 'views/ajax.php',
+                            type: 'GET',
+                            dataType: 'json',
+                            data: { id_mesa: id_mesa, fechaActual: fecha },
+                            success: async function (response) {
+                                const listarPedido = response;
+                                for (const producto of listarPedido) {
+                                    // Extraer el valor específico del array devuelto
+                                    const respuesta = await conector
+                                        .Iniciar()
+                                        .DeshabilitarElModoDeCaracteresChinos()
+                                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                                        //.DescargarImagenDeInternetEImprimir("", 0, 216)
+                                        .Feed(1)
+                                        .EscribirTexto("<?php echo $nombreSistema ?>\n")
+                                        .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa+"\n")
+                                        .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                                        .TextoSegunPaginaDeCodigos(2, "cp850", "Atendido por:"+producto.nombre+" "+producto.apellido+"\n")
+                                        .Feed(1)
+                                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+                                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+                                        .EscribirTexto(tabla)
+                                        .EscribirTexto("------------------------------------------------\n")
+                                        .Feed(3)
+                                        .Corte(1)
+                                        .Pulso(48, 60, 120)
+                                        .imprimirEn("prueba1");
+                                    if (respuesta === true) {
+                                        alert("Impreso correctamente");
+                                    } else {
+                                        alert("Error: " + respuesta);
+                                    }
+                                }
+
+                            },
+                            error: function (xhr, status, error) {
+                                // Mostrar error si hay algún problema con la solicitud AJAX
+                                $('#valorEspecifico').text('Error: ' + error);
+                            }
+                        });
+                    }
+                    init();
                 });
+
+            },
+            error: function (xhr, status, error) {
+                // Mostrar error si hay algún problema con la solicitud AJAX
+                $('#respuestaServidor').text('Error: ' + error);
             }
-
-
-            const imprimirTabla = async (nombreImpresora) => {
-                const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
-                    maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
-                    maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
-                    relleno = $relleno.value,
-                    separadorColumnas = $separador.value;
-                const obtenerLineaSeparadora = () => {
-                    const lineasSeparador = tabularDatos(
-                        [
-                            { contenido: "-", maximaLongitud: maximaLongitudNombre },
-                            { contenido: "-", maximaLongitud: maximaLongitudCantidad },
-                            { contenido: "-", maximaLongitud: maximaLongitudPrecio },
-                        ],
-                        "-",
-                        "+",
-                    );
-                    let separadorDeLineas = "";
-                    if (lineasSeparador.length > 0) {
-                        separadorDeLineas = lineasSeparador[0]
-                    }
-                    return separadorDeLineas;
-                }
-                // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
-                // definir otras propiedades, etcétera
-                const listaDeProductos = [
-                    <?php
-                    $resPedido = new ControladorPedido();
-                    $respe = $resPedido->listarPedidoCocinaPrint($_GET['id_mesa'], $_GET['fecha']);
-                    foreach ($respe as $key => $pedido) {
-                        ?>{
-                            nombre: "<?php echo $pedido['producto'] ?>",
-                            cantidad: <?php echo $pedido['cantidad'] ?>,
-                            descripcion: "<?php echo $pedido['descripcion'] ?>",
-                        },
-                        <?php
-                    }
-
-                    ?>
-                ];
-                // Comenzar a diseñar la tabla
-                let tabla = obtenerLineaSeparadora() + "\n";
-
-
-                const lineasEncabezado = tabularDatos([
-
-                    { contenido: "Nombre", maximaLongitud: maximaLongitudNombre },
-                    { contenido: "Cantidad", maximaLongitud: maximaLongitudCantidad },
-                    { contenido: "Descripcion", maximaLongitud: maximaLongitudPrecio },
-                ],
-                    relleno,
-                    separadorColumnas,
-                );
-
-                for (const linea of lineasEncabezado) {
-                    tabla += linea + "\n";
-                }
-                tabla += obtenerLineaSeparadora() + "\n";
-                for (const producto of listaDeProductos) {
-                    const lineas = tabularDatos(
-                        [
-                            { contenido: producto.nombre, maximaLongitud: maximaLongitudNombre },
-                            { contenido: producto.cantidad.toString(), maximaLongitud: maximaLongitudCantidad },
-                            { contenido: producto.descripcion.toString(), maximaLongitud: maximaLongitudPrecio },
-                        ],
-                        relleno,
-                        separadorColumnas
-                    );
-                    for (const linea of lineas) {
-                        tabla += linea + "\n";
-                    }
-                    tabla += obtenerLineaSeparadora() + "\n";
-                }
-                console.log(tabla);
-
-
-
-                const conector = new ConectorPluginV3(URLPlugin);
-                const respuesta = await conector
-                    .Iniciar()
-                    .DeshabilitarElModoDeCaracteresChinos()
-                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                    //.DescargarImagenDeInternetEImprimir("", 0, 216)
-                    .Feed(1)
-                    .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                    .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
-                    .TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: <?php echo $tel ?>\n")
-                    .TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: <?php echo $dire ?>\n")
-                <?php
-                if (isset($_POST['buscar'])) {
-                    ?>
-                        .EscribirTexto("Fecha: <?php echo $_POST['buscar'] ?>")
-                    <?php
-                } else {
-                    ?>
-                        .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                    <?php
-                }
-                ?>
-                    .Feed(1)
-                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                    .EscribirTexto("____________________\n")
-                    .TextoSegunPaginaDeCodigos(2, "cp850", "Venta de plugin para impresoras versión 3\n")
-                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                    .EscribirTexto(tabla)
-                    .EscribirTexto("------------------------------------------------\n")
-                    .EscribirTexto("Total $1111\n")
-                    .Feed(3)
-                    .Corte(1)
-                    .Pulso(48, 60, 120)
-                    .imprimirEn("prueba1");
-                if (respuesta === true) {
-                    alert("Impreso correctamente");
-                } else {
-                    alert("Error: " + respuesta);
-                }
-            }
-            init();
         });
+
     </script>
     <?php
 }

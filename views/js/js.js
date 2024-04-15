@@ -285,6 +285,14 @@ $(document).ready(function () {
 	});
 });
 
+$(document).ready(function () {
+	var index = 3;
+	$("#agregarIngredienteProduct").click(function () {
+		$("#ingreprod").append('<tr><td><input type="hidden" name="id_ingre[]" id="id_ingre_'+index+'"><input type="text"class="form-control ingre" id="ingre_'+index+'"></td><td><input type="text" class="form-control" id="medida_'+index+'"></td><td><input type="text" class="form-control" name="cantidad[]"></td></tr>');
+		index++;
+	});
+});
+
 //Agreagr promocion&procuto
 
 $(document).ready(function () {
@@ -329,4 +337,24 @@ function habilitarInput() {
 	}
 }
 
+//actualizar funciones
 
+$('input[type="checkbox"]').on('change', function() {
+	var datos = {};
+	$('input[type="checkbox"]').each(function() {
+	  datos[$(this).attr('id')] = $(this).is(':checked');
+	  console.log(datos);
+	});
+
+	$.ajax({
+	  url: 'views/actualizar.php',
+	  type: 'POST',
+	  data: datos,
+	  success: function(response) {
+		$('#mensaje').text(response);
+	  },
+	  error: function(xhr, status, error) {
+		console.error(xhr.responseText);
+	  }
+	});
+  });

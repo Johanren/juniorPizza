@@ -31,46 +31,48 @@ if ($_SESSION['rol'] != "Administrador") {
         </div>
     </div>
     <br>
-    <table id="usuario" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Nombre Local</th>
-                <th># Nit</th>
-                <th>Dirección</th>
-                <th>Telefono</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($res as $key => $value) {
-                ?>
+    <div class="table-responsive">
+        <table id="usuario" class="table table-striped table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        <?php echo $value['nombre_local'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nit'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['direccion'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['telefono'] ?>
-                    </td>
+                    <th>Nombre Local</th>
+                    <th># Nit</th>
+                    <th>Dirección</th>
+                    <th>Telefono</th>
                 </tr>
+            </thead>
+            <tbody>
                 <?php
-            }
-            ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>Nombre Local</th>
-                <th># Nit</th>
-                <th>Dirección</th>
-                <th>Telefono</th>
-            </tr>
-        </tfoot>
-    </table>
+                foreach ($res as $key => $value) {
+                    ?>
+                    <tr>
+                        <td>
+                            <?php echo $value['nombre_local'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['nit'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['direccion'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['telefono'] ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Nombre Local</th>
+                    <th># Nit</th>
+                    <th>Dirección</th>
+                    <th>Telefono</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

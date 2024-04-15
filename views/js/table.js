@@ -5,3 +5,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#producto').DataTable();
 } );
+
+$(document).ready(function() {
+    $('#proevedor').DataTable();
+} );

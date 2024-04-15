@@ -28,6 +28,12 @@ class ControladorIngredienteProducto{
         return $res;
     }
 
+    function listarIngredienteId($id){
+        $consultar = new ModeloIngredienteProducto();
+        $res = $consultar->listarIngredienteId($id);
+        return $res;
+    }
+
     function consultarIngredeinteAjaxControlador($dato){
         $consultar = new ModeloIngredienteProducto();
         $res = $consultar->consultarIngredeinteAjaxModelo($dato);

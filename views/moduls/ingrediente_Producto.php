@@ -11,11 +11,11 @@ if (isset($_GET['id'])) {
     print "<script>$(document).ready(function() {
         $('#editar').modal('toggle')
     });</script>";
-    $mostrarProee = new ControladorProeevedor();
-    $resProee = $mostrarProee->consultarProeevedor();
+    $mostrarProee = new ControladorProducto();
+    $resProee = $mostrarProee->consultarProducto();
 
-    $mostrarProducto = new ControladorFacturaProeevedor();
-    $resProducto = $mostrarProducto->listarFacturaProducto();
+    $mostrarProducto = new ControladorIngredienteProducto();
+    $resProducto = $mostrarProducto->listarIngredienteId($resProee[0]['id_producto']);
 }
 ///Usuario
 $user = new ControladorIngredienteProducto();
@@ -155,8 +155,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
     </div>
 </div>
 <!------>
-<div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -168,6 +167,13 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
             <div class="modal-body">
                 <form action="" method="post">
                     <div class="table-responsive">
+                        <a id="agregarIngredienteProduct" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                class="bi bi-node-plus" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M11 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8M6.025 7.5a5 5 0 1 1 0 1H4A1.5 1.5 0 0 1 2.5 10h-1A1.5 1.5 0 0 1 0 8.5v-1A1.5 1.5 0 0 1 1.5 6h1A1.5 1.5 0 0 1 4 7.5zM11 5a.5.5 0 0 1 .5.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2A.5.5 0 0 1 11 5M1.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+                            </svg>
+                        </a>
                         <table class="table table-striped table-bordered mt-2">
                             <thead>
                                 <tr>
@@ -178,10 +184,15 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="hidden" name="id_producto" id="id_producto"><input type="text"
-                                            class="form-control" id="codigo"></td>
-                                    <td><input type="text" class="form-control" id="nombreProducto"></td>
-                                    <td><input type="text" class="form-control" id="precio"></td>
+                                    <td><input type="hidden" name="id_producto"
+                                            value="<?php echo $resProee[0]['id_producto'] ?> " id="id_producto"><input
+                                            type="text" class="form-control"
+                                            value="<?php echo $resProee[0]['codigo_producto'] ?> " id="codigo"></td>
+                                    <td><input type="text" class="form-control"
+                                            value="<?php echo $resProee[0]['nombre_producto'] ?> " id="nombreProducto">
+                                    </td>
+                                    <td><input type="text" class="form-control"
+                                            value="<?php echo $resProee[0]['precio_unitario'] ?> " id="precio"></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -191,11 +202,27 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     <th>Cantidad</th>
                                 </tr>
                             </thead>
-                            <tbody id="ingreprodu">
+                            <tbody id="ingreprod">
+                                <?php
+                                foreach ($resProducto as $key => $value) {
+                                    ?>
+                                    <tr>
+                                        <td><input type="hidden" name="id_ingreEdit[]" id="id_ingre_1"
+                                                value="<?php echo $value['id_ingrediente'] ?>"><input type="text"
+                                                class="form-control ingre" id="ingre_1"
+                                                value="<?php echo $value['nombre_ingrediente'] ?>"></td>
+                                        <td><input type="text" class="form-control" id="medida_1"
+                                                value="<?php echo $value['nombre_medida'] ?>"></td>
+                                        <td><input type="text" class="form-control" name="cantidadEdit[]"
+                                                value="<?php echo $value['cantidad'] ?>"></td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
                                 <tr>
-                                    <td><input type="hidden" name="id_ingre[]" id="id_ingre_1"><input type="text"
-                                            class="form-control ingre" id="ingre_1"></td>
-                                    <td><input type="text" class="form-control" id="medida_1"></td>
+                                    <td><input type="hidden" name="id_ingre[]" id="id_ingre_2"><input type="text"
+                                            class="form-control ingre" id="ingre_2"></td>
+                                    <td><input type="text" class="form-control" id="medida_2"></td>
                                     <td><input type="text" class="form-control" name="cantidad[]"></td>
                                 </tr>
                             </tbody>

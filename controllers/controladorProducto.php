@@ -39,9 +39,17 @@ class ControladorProducto
         return $res;
     }
 
-    function consultarProductoAjaxControlador($dato){
+    function consultarProductoAjaxControlador($dato)
+    {
         $consultar = new ModeloProducto();
         $res = $consultar->consultarModeloProductoAjaxModelo($dato);
+        return $res;
+    }
+
+    function consultarProducto()
+    {
+        $consultar = new ModeloProducto();
+        $res = $consultar->consultarProductoModelo($_GET['id']);
         return $res;
     }
 }

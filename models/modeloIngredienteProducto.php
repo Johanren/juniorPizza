@@ -81,4 +81,20 @@ class ModeloIngredienteProducto
             print_r($e->getMessage());
         }
     }
+
+    function listarIngredienteId($id){
+        $sql = "SELECT * FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente INNER JOIN medida ON medida.id_medida = ingrediente.id_medida WHERE ingrediente_producto.id_producto = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $id, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

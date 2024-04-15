@@ -31,20 +31,25 @@ class ModeloFacturaProeevedor
         }
     }
 
-    function listarProeevedorFacturaModelo(){
+    function listarProeevedorFacturaModelo($fecha)
+    {
         date_default_timezone_set('America/Mexico_City');
-        $fechaActal = date('Y-m-d');
+        if ($fecha != null) {
+            $fechaActal = $fecha;
+        } else {
+            $fechaActal = date('Y-m-d');
+        }
         if ($_SESSION['rol'] == "Administrador") {
             $sql = "SELECT DISTINCT factura_proeevedor.id_proeevedor, proeevedor.nit_proeevedor, proeevedor.nombre_proeevedor, factura_proeevedor.fecha_ingreso, proeevedor.id_local FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ?";
-        }else{
+        } else {
             $sql = "SELECT DISTINCT factura_proeevedor.id_proeevedor, proeevedor.nit_proeevedor, proeevedor.nombre_proeevedor, factura_proeevedor.fecha_ingreso, proeevedor.id_local FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_local = ?";
         }
-        
+
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
-        }else{
+        } else {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
             $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_STR);
         }
@@ -59,22 +64,29 @@ class ModeloFacturaProeevedor
         }
     }
 
-    function listarFacturaProductoModelo($id){
+    function listarFacturaProductoModelo($id, $fecha)
+    {
         date_default_timezone_set('America/Mexico_City');
-        $fechaActal = date('Y-m-d');
+        if ($fecha != null) {
+            $fechaActal = $fecha;
+        } else {
+            $fechaActal = date('Y-m-d');
+        }
         if ($_SESSION['rol'] == "Administrador") {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = factura_proeevedor.id_medida INNER JOIN categoria ON categoria.id_categoria = factura_proeevedor.id_categoria INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_proeevedor";
-        }else{
+            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = factura_proeevedor.id_medida INNER JOIN categoria ON categoria.id_categoria = factura_proeevedor.id_categoria INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_proeevedor = ?";
+        } else {
             $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = factura_proeevedor.id_medida INNER JOIN categoria ON categoria.id_categoria = factura_proeevedor.id_categoria INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_proeevedor AND proeevedor.id_local = ?";
         }
-        
+
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
-        }else{
+            $stms->bindParam(2, $id, PDO::PARAM_STR);
+        } else {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
-            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_STR);
+            $stms->bindParam(2, $id, PDO::PARAM_STR);
+            $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_STR);
         }
         try {
             if ($stms->execute()) {

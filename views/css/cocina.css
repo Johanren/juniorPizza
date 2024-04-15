@@ -1,0 +1,53 @@
+.comanda {
+        
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.comanda-header {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: center;
+}
+
+.comanda-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.comanda-header h5 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.comanda-body {
+    padding: 10px;
+}
+
+.comanda-item {
+    margin-bottom: 5px;
+}
+
+.comanda-item:last-child {
+    margin-bottom: 0;
+}
+
+.comanda-item .producto {
+    font-weight: bold;
+}
+
+.comanda-footer {
+    background-color: #f2f2f2;
+    padding: 10px;
+    text-align: center;
+}
+
+.comanda-footer p {
+    margin: 0;
+}
+
+.comanda-footer .chef {
+    font-weight: bold;
+}

@@ -19,7 +19,8 @@ class ControladorUsuario
                     $_SESSION['usuario'] = $res[0]['usuario'];
                     $_SESSION['rol'] = $res[0]['nombre_rol'];
                     $_SESSION['validar'] = true;
-                    header('location:inicio');
+                    $funcion = new ControladorFuncion();
+                    $funcion->listarFunciones();
                 } else {
                     header('location:loginFallido');
                 }

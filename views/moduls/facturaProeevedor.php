@@ -22,55 +22,71 @@ $user = new ControladorFacturaProeevedor();
 $res = $user->listarProeevedorFactura();
 
 ?>
-<script src="views/js/jquery-3.3.1.slim.min.js"></script>
 <div class="container mt-5">
+    <div class="row">
+        <div class="col-sm-6">
+            <form action="" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="date" name="fecha" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <button class="btn btn-primary" name="buscar">Buscar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <br>
-    <table id="usuario" class="table table-striped table-bordered">
-        <thead>
-            <tr>
-                <th># Nit</th>
-                <th>Nombre Proeevedor</th>
-                <th>Fecha Factura</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            foreach ($res as $key => $value) {
-                ?>
+    <div class="table-responsive">
+        <table id="proevedor" class="table table-striped table-bordered">
+            <thead>
                 <tr>
-                    <td>
-                        <?php echo $value['nit_proeevedor'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_proeevedor'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['fecha_ingreso'] ?>
-                    </td>
-                    <td>
-                        <a href="index.php?action=facturaProeevedor&id=<?php echo $value['id_proeevedor'] ?>"><button
-                                class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                    fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                    <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                    <path
-                                        d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                </svg></button></a>
-                    </td>
+                    <th># Nit</th>
+                    <th>Nombre Proeevedor</th>
+                    <th>Fecha Factura</th>
+                    <th>Acciones</th>
                 </tr>
+            </thead>
+            <tbody>
                 <?php
-            }
-            ?>
-        </tbody>
-        <tfoot>
-            <tr>
-                <th># Nit</th>
-                <th>Nombre Proeevedor</th>
-                <th>Fecha Factura</th>
-                <th>Acciones</th>
-            </tr>
-        </tfoot>
-    </table>
+                foreach ($res as $key => $value) {
+                    ?>
+                    <tr>
+                        <td>
+                            <?php echo $value['nit_proeevedor'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['nombre_proeevedor'] ?>
+                        </td>
+                        <td>
+                            <?php echo $value['fecha_ingreso'] ?>
+                        </td>
+                        <td>
+                            <a
+                                href="index.php?action=facturaProeevedor&id=<?php echo $value['id_proeevedor'] ?>&fecha=<?php echo $value['fecha_ingreso'] ?>"><button
+                                    class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
+                                        fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                                        <path
+                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                    </svg></button></a>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th># Nit</th>
+                    <th>Nombre Proeevedor</th>
+                    <th>Fecha Factura</th>
+                    <th>Acciones</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

@@ -3,6 +3,11 @@ if ($_SESSION['rol'] == "Mesero") {
     echo '<script>window.location="mesas"</script>';
 }
 ?>
+<script>
+    $(document).ready(function() {
+        $('#exampleModalCenter').modal('toggle')
+    });
+</script>
 <!-- Begin Page Content -->
 <div class="container-fluid">
 

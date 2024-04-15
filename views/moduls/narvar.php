@@ -21,7 +21,9 @@ $res = $listar->consultarUsuarioPerfil();
     } else {
         ?>
         <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
+        <li class="nav-item <?php if ($_GET['action'] == 'inicio') {
+            print 'active';
+        } ?>">
             <a class="nav-link" href="inicio">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Panel</span></a>
@@ -42,10 +44,12 @@ $res = $listar->consultarUsuarioPerfil();
     } else {
         ?>
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item">
+        <li class="nav-item <?php if ($_GET['action'] == 'ingredientes' || $_GET['action'] == 'productos' || $_GET['action'] == 'ingrediente_Producto' || $_GET['action'] == 'promocion' || $_GET['action'] == 'categoria' || $_GET['action'] == 'medida') {
+            print 'active';
+        } ?>">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
                 aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
+                <i class="fas fa-utensils"></i>
                 <span>Configurar Productos</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -69,10 +73,12 @@ $res = $listar->consultarUsuarioPerfil();
     } else {
         ?>
         <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
+        <li class="nav-item <?php if ($_GET['action'] == 'proeevedor' || $_GET['action'] == 'facturaProeevedor') {
+            print 'active';
+        } ?>">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                 aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
+                <i class="fas fa-building"></i>
                 <span>Proveedores</span>
             </a>
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
@@ -89,39 +95,17 @@ $res = $listar->consultarUsuarioPerfil();
     }
     ?>
     <?php
-    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Mesero") {
-
-    } else {
-        ?>
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#mesero" aria-expanded="true"
-                aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>Mesero</span>
-            </a>
-            <div id="mesero" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Menu:</h6>
-                    <a class="collapse-item" href="mesas">Mesas</a>
-                    <a class="collapse-item" href="pedido">Pedidos</a>
-                    <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>-->
-                </div>
-            </div>
-        </li>
-        <?php
-    }
-    ?>
-    <?php
     if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
 
     } else {
         ?>
         <!-- Nav Item - Utilities Collapse Menu -->
-        <li class="nav-item">
+        <li class="nav-item <?php if ($_GET['action'] == 'usuario' || $_GET['action'] == 'cliente' || $_GET['action'] == 'local') {
+            print 'active';
+        } ?>">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
                 aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
+                <i class="fas fa-users"></i>
                 <span>Usuarios</span>
             </a>
             <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities"
@@ -141,6 +125,55 @@ $res = $listar->consultarUsuarioPerfil();
         <?php
     }
     ?>
+    <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Mesero") {
+
+    } else {
+        ?>
+        <li class="nav-item <?php if ($_GET['action'] == 'mesas' || $_GET['action'] == 'pedido') {
+            print 'active';
+        } ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#mesero" aria-expanded="true"
+                aria-controls="collapseUtilities">
+                <i class="fas fa-tablet-alt"></i>
+                <span>Mesero</span>
+            </a>
+            <div id="mesero" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu:</h6>
+                    <a class="collapse-item" href="mesas">Mesas</a>
+                    <a class="collapse-item" href="pedido">Pedidos</a>
+                    <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
+                <a class="collapse-item" href="utilities-other.html">Other</a>-->
+                </div>
+            </div>
+        </li>
+        <?php
+    }
+    ?>
+    <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cocina") {
+
+    } else {
+        ?>
+        <li class="nav-item <?php if ($_GET['action'] == 'cocina') {
+            print 'active';
+        } ?>">
+            <a class="nav-link" href="cocina">
+                <i class="fas fa-store"></i>    
+                <span>Cocina</span></a>
+        </li>
+        <?php
+    }
+    ?>
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item <?php if ($_GET['action'] == 'recordatorio') {
+        print 'active';
+    } ?>">
+        <a class="nav-link" href="recordatorio">
+            <i class="fas fa-calendar"></i>
+            <span>Recordatorio</span></a>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -398,7 +431,7 @@ $res = $listar->consultarUsuarioPerfil();
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             Perfil
                         </a>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" href="configuracion">
                             <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                             Configuración
                         </a>

@@ -5,14 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Junior Pizza</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="views/css/bootstrap.css">
+    <link rel="stylesheet" href="views/css/dataTables.bootstrap4.min.css">
+    <script src="views/js/jquery-3.3.1.js"></script>
+    <script src="views/js/jquery.dataTables.min.js"></script>
+    <script src="views/js/dataTables.bootstrap4.min.js"></script>
+    <script src="views/js/sweetalert.min.js"></script>
     <link rel="stylesheet" href="views/css/login.css">
     <link rel="stylesheet" href="views/css/perfil.css">
+    <link rel="stylesheet" href="views/css/cocina.css">
+    <link rel="stylesheet" href="views/css/config.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link rel="icon" href="views/img/icon.jpg">
     <link rel="stylesheet" href="views/css/jquery-ui.css">
@@ -38,8 +42,56 @@
         include ("views/moduls/footer.php");
     }
     ?>
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Recordatorio</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <?php
+                    $evento = new ControladorEvento();
+                    $res = $evento->consultarEventoVentanaControlador();
+                    if (empty($res)) {
+                        ?>
+                        <h4 style="text-align: center;">No tienes eventos para hoy</h4>
+                        <?php
+                    } else {
+                        ?>
+                        <div class="table-responsive">
+                            <table class="table" id="usuario">
+                                <thead>
+                                    <tr>
+                                        <th>Evento</th>
+                                        <th>Descripcion</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    foreach ($res as $key => $value) {
+                                        $matriz = explode(" ", $value['start']);
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $value['title'] ?></td>
+                                            <td><?php echo $value['descripcion'] ?></td>
+                                            <td><?php echo $matriz[0] ?></td>
+                                            <td><?php echo $matriz[1] ?></td>
+                                        </tr>
+                                    <?php }
+                    } ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <script src="views/js/table.js"></script>
 
 <!-- Bootstrap core JavaScript-->
@@ -47,7 +99,7 @@
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<!--<script src="vendor/jquery-easing/jquery.easing.min.js"></script>-->
 
 <!-- Custom scripts for all pages-->
 <script src="views/js/sb-admin-2.min.js"></script>
@@ -60,6 +112,7 @@
 <script src="views/js/demo/chart-pie-demo.js"></script>
 <script src="views/js/jquery-ui.js"></script>
 <script src="views/js/js.js"></script>
+<script src="Views/js/ConectorJavaScript.js"></script>
 
 
 

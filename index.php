@@ -18,6 +18,9 @@ require_once 'controllers/controladorPromocion.php';
 require_once 'controllers/controladorMesa.php';
 require_once 'controllers/controladorPiso.php';
 require_once 'controllers/controladorPedido.php';
+require_once 'controllers/controladorEvento.php';
+require_once 'controllers/controladorSistema.php';
+require_once 'controllers/controladorFuncion.php';
 //Modelo
 require_once 'Models/conexion.php';
 require_once 'Models/modeloViews.php';
@@ -37,6 +40,9 @@ require_once 'models/modeloPromocion.php';
 require_once 'models/modeloMesa.php';
 require_once 'models/modeloPiso.php';
 require_once 'models/modeloPedido.php';
+require_once 'models/modeloEvento.php';
+require_once 'models/modeloSistema.php';
+require_once 'models/modeloFuncion.php';
 //fpdf
 
 

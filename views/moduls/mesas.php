@@ -19,10 +19,18 @@ if (isset($_GET['id'])) {
     print "<script>$(document).ready(function() {
         $('#pedido').modal('toggle')
     });</script>";
+} else {
+    echo "<script>
+    $(document).ready(function () {
+        $('#exampleModalCenter').modal('toggle')
+    });
+</script>";
 }
+
 $agregarPedido = new ControladorPedido();
 $agregarPedido->agregarPedido();
 ?>
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-sm-6">

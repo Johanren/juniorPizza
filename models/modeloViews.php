@@ -21,7 +21,11 @@ class modeloViews
             $enlace == 'ingredientes' ||
             $enlace == 'ingrediente_Producto' ||
             $enlace == 'mesas' ||
-            $enlace == 'pedido'
+            $enlace == 'pedido' ||
+            $enlace == 'recordatorio' ||
+            $enlace == 'cocina' ||
+            $enlace == '404' ||
+            $enlace == 'configuracion'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
         } elseif ($enlace == 'agregarUsuario') {
@@ -52,6 +56,10 @@ class modeloViews
             $modulo = 'views/moduls/mesas.php';
         } elseif ($enlace == 'agregarPedidor') {
             $modulo = 'views/moduls/pedido.php';
+        } elseif ($enlace == 'actualizoMesa') {
+            $modulo = 'views/moduls/pedido.php';
+        }else{
+            $modulo = 'views/moduls/404.php';
         }
         return $modulo;
 

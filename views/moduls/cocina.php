@@ -60,7 +60,9 @@ $fechaActal = date('Y-m-d');
                          } else {
                              print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
                          } ?>"><i class="fas fa-print fa-lg"></i></a>
-                        <a><i class="fas fa-print fa-lg"></i></a>
+                        <a
+                            href="index.php?action=cocina&estado=<?php print $pedido['id_mesa'] ?>&fecha=<?php print $pedido['fecha_ingreso'] ?>"><i
+                                class="fas fa-hand-point-right fa-lg"></i></a>
                     </div>
                 </div>
             </div>
@@ -135,6 +137,7 @@ if (isset($_GET['id_mesa'])) {
     ?>
     <script>
 
+        var print = 0;
         var id_mesa = $('#id_mesa').val();
         var fecha = $('#fecha').val();
 
@@ -304,9 +307,9 @@ if (isset($_GET['id_mesa'])) {
                                         //.DescargarImagenDeInternetEImprimir("", 0, 216)
                                         .Feed(1)
                                         .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                                        .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa+"\n")
+                                        .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
                                         .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                                        .TextoSegunPaginaDeCodigos(2, "cp850", "Atendido por:"+producto.nombre+" "+producto.apellido+"\n")
+                                        .TextoSegunPaginaDeCodigos(2, "cp850", "Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
                                         .Feed(1)
                                         .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
                                         .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
@@ -317,7 +320,22 @@ if (isset($_GET['id_mesa'])) {
                                         .Pulso(48, 60, 120)
                                         .imprimirEn("prueba1");
                                     if (respuesta === true) {
-                                        alert("Impreso correctamente");
+                                        $.ajax({
+                                            url: 'views/ajax.php',
+                                            type: 'GET',
+                                            dataType: 'json',
+                                            data: { respuestaPrint: print },
+                                            success: async function (response) {
+                                                if (response == true) {
+                                                    alert("Impreso correctamente");
+                                                }
+                                            },
+                                            error: function (xhr, status, error) {
+                                                // Mostrar error si hay algún problema con la solicitud AJAX
+                                                $('#valorEspecifico').text('Error: ' + error);
+                                            }
+                                        });
+
                                     } else {
                                         alert("Error: " + respuesta);
                                     }

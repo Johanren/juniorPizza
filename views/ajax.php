@@ -8,6 +8,7 @@ require_once '../controllers/controladorProducto.php';
 require_once '../controllers/controladorIngredientes.php';
 require_once '../controllers/controladorIngredienteProducto.php';
 require_once '../controllers/controladorPedido.php';
+require_once '../controllers/controladorMesa.php';
 //modelo
 require_once '../models/modeloProeevedor.php';
 require_once '../models/modeloMedida.php';
@@ -17,6 +18,7 @@ require_once '../models/modeloProducto.php';
 require_once '../models/modeloIngrediente.php';
 require_once '../models/modeloIngredienteProducto.php';
 require_once '../models/modeloPedido.php';
+require_once '../models/modeloMesa.php';
 
 class Ajax
 {
@@ -30,6 +32,10 @@ class Ajax
     public $productoPedido;
     public $id_mesa;
     public $fecha;
+    public $print;
+    public $printUsuario;
+
+    public $respuestaPrint;
 
 
     function consultarProeevedorAjax()
@@ -159,6 +165,35 @@ class Ajax
         header('Content-Type: text/html; charset=UTF-8');
         print json_encode($datos);
     }
+
+    function listarPedidoPrintAjax()
+    {
+        $resPedido = new ControladorPedido();
+        $respe = $resPedido->listarPedidoPrintAjaxControlador($this->print);
+        foreach ($respe as $key => $value) {
+            $datos[] = array('nombre' => $value['producto'], 'cantidad' => $value['cantidad'], 'descripcion' => (isset($value['descripcion'])) ? $value['descripcion'] : " ");
+        }
+        header('Content-Type: text/html; charset=UTF-8');
+        print json_encode($datos);
+    }
+
+    function listarPedidoPrintUsurioAjax()
+    {
+        $resPedido = new ControladorPedido();
+        $respe = $resPedido->listarPedidoPirntFechaUsuarioIngresoAjaxControlador($this->printUsuario);
+        foreach ($respe as $key => $value) {
+            $datos[] = array('nombre' => $value['primer_nombre'], 'apellido' => $value['primer_apellido'], 'mesa' => $value['nombre_mesa']);
+        }
+        header('Content-Type: text/html; charset=UTF-8');
+        print json_encode($datos);
+    }
+
+    function ActualizarPedidoMesa()
+    {
+        $resPedido = new ControladorPedido();
+        $respe = $resPedido->ActualizarPedidoMesaAjaxControlador($this->respuestaPrint);
+        print $respe;
+    }
 }
 
 $ajax = new Ajax();
@@ -208,4 +243,19 @@ if (isset($_GET['id_mesa']) && isset($_GET['fechaActual'])) {
     $ajax->id_mesa = $_GET['id_mesa'];
     $ajax->fecha = $_GET['fechaActual'];
     $ajax->consultarMesaPrintAjax();
+}
+
+if (isset($_GET['print'])) {
+    $ajax->print = $_GET['print'];
+    $ajax->listarPedidoPrintAjax();
+}
+
+if (isset($_GET['printUsuario'])) {
+    $ajax->printUsuario = $_GET['printUsuario'];
+    $ajax->listarPedidoPrintUsurioAjax();
+}
+
+if (isset($_GET['respuestaPrint'])) {
+    $ajax->respuestaPrint = $_GET['respuestaPrint'];
+    $ajax->ActualizarPedidoMesa();
 }

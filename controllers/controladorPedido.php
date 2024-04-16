@@ -74,7 +74,16 @@ class ControladorPedido
             $fecha = $_GET['fecha'];
             $print = 1;
             $actualizar = new ModeloPedido();
-            $res = $actualizar->actualizarPedidoPrintModelo($id, $fecha, $print);
+            //$res = $actualizar->actualizarPedidoPrintModelo($id, $fecha, $print);
+        }elseif (isset($_GET['estado'])) {
+            $id = $_GET['estado'];
+            $fecha = $_GET['fecha'];
+            $cocina = 1;
+            $actualizar = new ModeloPedido();
+            $res = $actualizar->actualizarPedidoCocinaModelo($id, $fecha, $cocina);
+            if ($res == true) {
+                echo '<script>window.location="cocina"</script>';
+            }
         }
     }
 
@@ -84,5 +93,40 @@ class ControladorPedido
         $res = $listar->listarMesaUsuarioIdModelo($id_mesa, $fecha);
         return $res;
     }
+
+    function listarPedidoPrintAjaxControlador($print){
+        $listar = new ModeloPedido();
+        $res = $listar->listarPedidoPrintAjaxModelo($print);
+        if ($res) {
+            $resListo = $listar->listarPedidoPirntFechaIngreso($res[0]['MAX(fecha_ingreso)'], $print);
+            return $resListo;
+        }
+    }
+
+    function listarPedidoPirntFechaUsuarioIngresoAjaxControlador($print){
+        $listar = new ModeloPedido();
+        $res = $listar->listarPedidoPrintAjaxModelo($print);
+        if ($res) {
+            $resListo = $listar->listarPedidoPirntFechaUsuarioIngreso($res[0]['MAX(fecha_ingreso)'], $print);
+            return $resListo;
+        }
+    }
+
+    function ActualizarPedidoMesaAjaxControlador($print){
+        $listar = new ModeloPedido();
+        $res = $listar->listarPedidoPrintAjaxModelo($print);
+        if ($res) {
+            $estadoMesa = 3;
+            $printNuero = 1; 
+            $mesa = new ControladorMesa();
+            $resFecha = $listar->listarPedidoPirntFechaUsuarioIngreso($res[0]['MAX(fecha_ingreso)'], $print);
+            $actualizar = $mesa->actualizarEstadoMesa($resFecha[0]['id_mesa'], $estadoMesa);
+            if ($actualizar) {
+                $resListo = $listar->actualizarPedidoMesa($res[0]['MAX(fecha_ingreso)'], $print, $estadoMesa, $printNuero);
+                return $resListo;
+            }
+        }
+    }
+    
 }
 

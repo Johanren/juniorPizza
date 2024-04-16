@@ -363,6 +363,7 @@ $('input[type="checkbox"]').on('change', function () {
 		data: datos,
 		success: function (response) {
 			$('#mensaje').text(response);
+			window.location="configuracion"
 		},
 		error: function (xhr, status, error) {
 			console.error(xhr.responseText);

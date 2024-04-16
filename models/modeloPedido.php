@@ -85,6 +85,24 @@ class ModeloPedido
         }
     }
 
+    function actualizarMesaPedidoEstado($id, $id_mesa, $estado){
+        $sql = "UPDATE $this->tabla SET id_mesa = ?, id_estado_mesa = ? WHERE id_mesa = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $id_mesa, PDO::PARAM_INT);
+        $stms->bindParam(2, $estado, PDO::PARAM_INT);
+        $stms->bindParam(3, $id, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
     function ListarMesaPedidoModelo($fecha)
     {
         $sql = "SELECT DISTINCT pedido.id_mesa, pedido.fecha_ingreso, mesa.nombre_mesa, usuario.primer_nombre, usuario.primer_apellido FROM $this->tabla INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario WHERE fecha_ingreso LIKE ? AND cocina = 0 ORDER BY fecha_ingreso DESC";
@@ -120,12 +138,12 @@ class ModeloPedido
         }
     }
 
-    function actualizarPedidoPrintModelo($id, $fecha ,$print)
+    function actualizarPedidoPrintModelo($id, $fecha, $print)
     {
         $sql = "UPDATE $this->tabla SET print = ? WHERE fecha_ingreso = ? AND id_mesa = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
-        $stms->bindParam(1, $print, PDO::PARAM_STR);
+        $stms->bindParam(1, $print, PDO::PARAM_INT);
         $stms->bindParam(2, $fecha, PDO::PARAM_STR);
         $stms->bindParam(3, $id, PDO::PARAM_INT);
         try {
@@ -139,7 +157,27 @@ class ModeloPedido
         }
     }
 
-    function listarMesaUsuarioIdModelo($id, $fecha){
+    function    actualizarPedidoCocinaModelo($id, $fecha, $cocina)
+    {
+        $sql = "UPDATE $this->tabla SET cocina = ? WHERE fecha_ingreso = ? AND id_mesa = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $cocina, PDO::PARAM_INT);
+        $stms->bindParam(2, $fecha, PDO::PARAM_STR);
+        $stms->bindParam(3, $id, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarMesaUsuarioIdModelo($id, $fecha)
+    {
         $sql = "SELECT DISTINCT usuario.primer_nombre, usuario.primer_apellido, mesa.nombre_mesa FROM $this->tabla INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario WHERE fecha_ingreso like ? AND pedido.id_mesa = ? AND cocina = 0 ";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -155,4 +193,78 @@ class ModeloPedido
             print_r($e->getMessage());
         }
     }
+
+    function listarPedidoPrintAjaxModelo($print)
+    {
+        $sql = "SELECT MAX(fecha_ingreso), id_mesa FROM $this->tabla WHERE print = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $print, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarPedidoPirntFechaIngreso($fecha, $print)
+    {
+        $sql = "SELECT * FROM $this->tabla WHERE fecha_ingreso = ? AND print = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+        $stms->bindParam(2, $print, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarPedidoPirntFechaUsuarioIngreso($fecha, $print)
+    {
+        $sql = "SELECT DISTINCT usuario.primer_nombre, usuario.primer_apellido, mesa.nombre_mesa, mesa.id_mesa FROM $this->tabla INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa WHERE fecha_ingreso = ? AND print = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+        $stms->bindParam(2, $print, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarPedidoMesa($fecha, $print, $estadoMesa, $printNuero)
+    {
+        $sql = "UPDATE $this->tabla SET print = ?, id_estado_mesa = ? WHERE fecha_ingreso = ? AND print = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $printNuero, PDO::PARAM_INT);
+        $stms->bindParam(2, $estadoMesa, PDO::PARAM_INT);
+        $stms->bindParam(3, $fecha, PDO::PARAM_STR);
+        $stms->bindParam(4, $print, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
 }

@@ -25,7 +25,11 @@ class modeloViews
             $enlace == 'recordatorio' ||
             $enlace == 'cocina' ||
             $enlace == '404' ||
-            $enlace == 'configuracion'
+            $enlace == 'configuracion' ||
+            $enlace == 'caja' ||
+            $enlace == 'deudores' ||
+            $enlace == 'venta_dia' ||
+            $enlace == 'devoluciones'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
         } elseif ($enlace == 'agregarUsuario') {

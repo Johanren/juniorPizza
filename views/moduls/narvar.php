@@ -152,6 +152,32 @@ $res = $listar->consultarUsuarioPerfil();
     }
     ?>
     <?php
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Mesero" && $_SESSION['rol'] != "Cajero") {
+
+    } else {
+        ?>
+        <li class="nav-item <?php if ($_GET['action'] == 'caja' || $_GET['action'] == 'venta_dia' || $_GET['action'] == 'devoluciones' || $_GET['action'] == 'deudores') {
+            print 'active';
+        } ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#facutracion" aria-expanded="true"
+                aria-controls="collapseUtilities">
+                <i class="fas fa-wallet"></i>
+                <span>Facturación</span>
+            </a>
+            <div id="facutracion" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Menu:</h6>
+                    <a class="collapse-item" href="caja">Caja</a>
+                    <a class="collapse-item" href="venta_dia">Venta dia</a>
+                    <a class="collapse-item" href="devoluciones">Devoluciones</a>
+                    <a class="collapse-item" href="deudores">Deudores</a>
+                </div>
+            </div>
+        </li>
+        <?php
+    }
+    ?>
+    <?php
     if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cocina") {
 
     } else {
@@ -160,7 +186,7 @@ $res = $listar->consultarUsuarioPerfil();
             print 'active';
         } ?>">
             <a class="nav-link" href="cocina">
-                <i class="fas fa-store"></i>    
+                <i class="fas fa-store"></i>
                 <span>Cocina</span></a>
         </li>
         <?php

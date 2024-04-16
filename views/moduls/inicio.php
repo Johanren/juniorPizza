@@ -1,6 +1,10 @@
 <?php
 if ($_SESSION['rol'] == "Mesero") {
     echo '<script>window.location="mesas"</script>';
+}if ($_SESSION['rol'] == "Cocina") {
+    echo '<script>window.location="cocina"</script>';
+}if ($_SESSION['rol'] == "Cajero") {
+    echo '<script>window.location="caja"</script>';
 }
 ?>
 <script>

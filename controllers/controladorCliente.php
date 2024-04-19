@@ -41,4 +41,10 @@ class ControladorCliente
         $res = $listar->listarModeloCliente();
         return $res;
     }
+
+    function consultarClienteAjax($dato){
+        $consultar = new ModeloCliente();
+        $res = $consultar->consultarClienteAjaxModelo($dato);
+        return $res;
+    }
 }

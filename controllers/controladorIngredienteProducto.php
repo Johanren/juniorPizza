@@ -44,4 +44,10 @@ class ControladorIngredienteProducto{
         }
         return $res;
     }
+
+    function listarIngredienteProductoFactura($id){
+        $consultar = new ModeloIngredienteProducto();
+        $res = $consultar->listarIngredienteProductoFacturaModelo($id);
+        return $res;
+    }
 }

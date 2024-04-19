@@ -9,6 +9,7 @@ require_once '../controllers/controladorIngredientes.php';
 require_once '../controllers/controladorIngredienteProducto.php';
 require_once '../controllers/controladorPedido.php';
 require_once '../controllers/controladorMesa.php';
+require_once '../controllers/controladorCliente.php';
 //modelo
 require_once '../models/modeloProeevedor.php';
 require_once '../models/modeloMedida.php';
@@ -19,6 +20,7 @@ require_once '../models/modeloIngrediente.php';
 require_once '../models/modeloIngredienteProducto.php';
 require_once '../models/modeloPedido.php';
 require_once '../models/modeloMesa.php';
+require_once '../models/modeloCliente.php';
 
 class Ajax
 {
@@ -36,7 +38,9 @@ class Ajax
     public $printUsuario;
 
     public $respuestaPrint;
-
+    public $cc;
+    public $articulo;
+    public $idArticulo;
 
     function consultarProeevedorAjax()
     {
@@ -191,8 +195,47 @@ class Ajax
     function ActualizarPedidoMesa()
     {
         $resPedido = new ControladorPedido();
-        $respe = $resPedido->ActualizarPedidoMesaAjaxControlador($this->respuestaPrint);
+        $respe = $resPedido->ActualizarPedidoMesaAjaxControlador($this->respuestaPrint, $this->id_mesa);
         print $respe;
+    }
+
+    function buscarClienteCC()
+    {
+        $consultar_cliente = new ControladorCLiente();
+        $res = $consultar_cliente->consultarClienteAjax($this->cc);
+        foreach ($res as $key => $value) {  
+            $datos[] = array(
+                'label1' => $value['numero_cc'],
+                'label' => $value['primer_nombre'] . " " . $value['primer_apellido'],
+                'id' => $value['id_cliente']
+            );
+        }
+
+        print json_encode($datos);
+    }
+
+    function consultarAritucloProeevedorNombre()
+    {
+        $consultar_id = new ControladorProducto();
+        $res = $consultar_id->consultarAritucloProeevedoridAjax($this->articulo);
+        foreach ($res as $key => $value) {
+            $datos[] = array(
+                'value' => $value['id_producto'],
+                'label' => $value['nombre_producto']
+            );
+        }
+
+        print json_encode($datos);
+
+    }
+
+    function consultarAritucloProeevedor()
+    {
+        $consultar_id = new ControladorProducto();
+        $res = $consultar_id->consultarAritucloProeevedorAjax($this->idArticulo);
+
+        print json_encode($res);
+
     }
 }
 
@@ -255,7 +298,31 @@ if (isset($_GET['printUsuario'])) {
     $ajax->listarPedidoPrintUsurioAjax();
 }
 
-if (isset($_GET['respuestaPrint'])) {
+if (isset($_GET['respuestaPrint']) && isset($_GET['id'])) {
     $ajax->respuestaPrint = $_GET['respuestaPrint'];
+    $ajax->id_mesa = $_GET['id'];
     $ajax->ActualizarPedidoMesa();
+}
+
+if (isset($_GET['cc'])) {
+    $ajax->cc = $_GET['cc'];
+    $ajax->buscarClienteCC();
+}
+
+if (isset($_GET['nombre'])) {
+    $ajax->articulo = $_GET['nombre'];
+    $ajax->consultarAritucloProeevedorNombre();
+}   
+
+$request = 0;
+if (isset($_GET['request'])) {
+    $request = $_GET['request'];
+}
+if ($request == 2) {
+    $userid = 0;
+    if (isset($_GET['userid'])) {
+        $ajax->idArticulo = $_GET['userid'];
+        $ajax->consultarAritucloProeevedor();
+    }
+
 }

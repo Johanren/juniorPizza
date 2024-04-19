@@ -184,6 +184,12 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     ?>
                                 </tr>
                             </tbody>
+                            <tbody>
+                                <tr>
+                                    <td><input type="number" name="totalFactura" placeholder="Total a Pagar" required
+                                            class="form-control"></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                     <button type="submit" name="agregarProducto" class="btn btn-primary">Agregar</button>

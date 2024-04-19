@@ -53,4 +53,23 @@ class ModeloPromocion{
             print_r($e->getMessage());
         }
     }
+
+    function listarPromocionProductoFacturaModelo($id)
+    {
+        $sql = "SELECT * FROM $this->tabla WHERE id_producto = ?";
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($id != null) {
+                $stms->bindParam(1, $id, PDO::PARAM_INT);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

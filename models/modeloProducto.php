@@ -31,7 +31,12 @@ class ModeloProducto
 
     function listarProductoModelo()
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local";
+        if ($_SESSION['rol'] == "Administrador") {
+            $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local";
+        } else {
+            $id = $_SESSION['id_local'];
+            $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE id_local = $id";
+        }
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         try {
@@ -83,6 +88,91 @@ class ModeloProducto
                 return $stms->fetchAll();
             } else {
                 return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consultarAritucloProeevedoridAjaxModelo($nit)
+    {
+
+        $sql = "SELECT * FROM $this->tabla WHERE codigo_producto like ? OR nombre_producto like ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($nit != null) {
+                $nombre = '%' . $nit . '%';
+                $nit = $nit . '%';
+                $stms->bindParam(1, $nit, PDO::PARAM_INT);
+                $stms->bindParam(2, $nombre, PDO::PARAM_STR);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consultarAritucloProeevedorAjaxModelo($id)
+    {
+        $sql = "SELECT * FROM $this->tabla WHERE id_producto = ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($id != null) {
+                $stms->bindParam(1, $id, PDO::PARAM_INT);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function mostrarArticuloModelo($id)
+    {
+        $sql = "SELECT * FROM $this->tabla  WHERE id_producto = ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($id != null) {
+                $stms->bindParam(1, $id, PDO::PARAM_INT);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarProductoFacturaModelo($dato)
+    {
+        $sql = "UPDATE $this->tabla SET cantidad_producto=? WHERE id_producto=?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($dato != null) {
+                $stms->bindParam(1, $dato['cantidad'], PDO::PARAM_INT);
+                $stms->bindParam(2, $dato['id_producto'], PDO::PARAM_INT);
+            }
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
             }
         } catch (PDOException $e) {
             print_r($e->getMessage());

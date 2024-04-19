@@ -29,7 +29,9 @@ class modeloViews
             $enlace == 'caja' ||
             $enlace == 'deudores' ||
             $enlace == 'venta_dia' ||
-            $enlace == 'devoluciones'
+            $enlace == 'devoluciones' ||
+            $enlace == 'nomina' ||
+            $enlace == 'factura_pdf'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
         } elseif ($enlace == 'agregarUsuario') {
@@ -62,7 +64,9 @@ class modeloViews
             $modulo = 'views/moduls/pedido.php';
         } elseif ($enlace == 'actualizoMesa') {
             $modulo = 'views/moduls/pedido.php';
-        }else{
+        } elseif ($enlace == 'agregarNomina') {
+            $modulo = 'views/moduls/nomina.php';
+        } else {
             $modulo = 'views/moduls/404.php';
         }
         return $modulo;

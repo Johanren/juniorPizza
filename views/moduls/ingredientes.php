@@ -90,6 +90,24 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
             </div>
             <div class="modal-body">
                 <form action="" method="post">
+                    <div class="form-row" style="text-align: center;">
+                        <div class="form-group col-md-3"></div>
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Proeevedor</label>
+                            <input type="hidden" name="id_proeevedor" id="id_proeevedor">
+                            <input type="text" class="form-control proeevedor" name="pro" id="proeevedor"
+                                placeholder="Numero de Nit" autocomplete="on">
+                        </div>
+                    </div>
+                    <div class="form-row mt-2" style="text-align: center;">
+                        <div class="form-group col-md-3"></div>
+                        <div class="form-group col-md-6">
+                            Proeevedor: <span id="nom_proeevedor"></span><br>
+                            Nit: <span id="nit_proeevedor"></span><br>
+                            Telefono: <span id="tel_proeevedor"></span><br>
+                            Dirección: <span id="dir_proeevedor"></span>
+                        </div>
+                    </div>
                     <a id="agregarIngrediente" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                             class="bi bi-node-plus" viewBox="0 0 16 16">
@@ -104,6 +122,13 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     <th>Ingrediente</th>
                                     <th>Cantidad</th>
                                     <th>Medida</th>
+                                    <?php
+                                    if ($_SESSION['rol'] == "Administrador") {
+                                        ?>
+                                        <th>Local</th>
+                                        <?php
+                                    }
+                                    ?>
                                 </tr>
                             </thead>
                             <tbody id="ingrediente">
@@ -113,6 +138,21 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     <td><input type="hidden" class="form-control" name="id_medida[]"
                                             id="id_medida_1"><input type="text" class="form-control medida" name=""
                                             id="medida_1"></td>
+                                    <?php
+                                    if ($_SESSION['rol'] == "Administrador") {
+                                        ?>
+                                        <td><input type="hidden" class="form-control " name="id_local[]"
+                                                id="id_local_1"><input type="text" class="form-control nom_local"
+                                                id="local_1"></td>
+                                        <?php
+                                    }
+                                    ?>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td><input type="number" name="totalFactura" placeholder="Total a Pagar" required
+                                            class="form-control"></td>
                                 </tr>
                             </tbody>
                         </table>

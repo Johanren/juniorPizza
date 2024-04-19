@@ -35,6 +35,13 @@ class ControladorPedido
         return $res;
     }
 
+    function listarPedidoMesaFactura()
+    {
+        $listarid = new ModeloPedido();
+        $res = $listarid->listarPedidoFacturaMesa();
+        return $res;
+    }
+
     function listarPedidoMesaDescripcion($id, $fecha)
     {
         $listarid = new ModeloPedido();
@@ -75,7 +82,7 @@ class ControladorPedido
             $print = 1;
             $actualizar = new ModeloPedido();
             //$res = $actualizar->actualizarPedidoPrintModelo($id, $fecha, $print);
-        }elseif (isset($_GET['estado'])) {
+        } elseif (isset($_GET['estado'])) {
             $id = $_GET['estado'];
             $fecha = $_GET['fecha'];
             $cocina = 1;
@@ -94,7 +101,8 @@ class ControladorPedido
         return $res;
     }
 
-    function listarPedidoPrintAjaxControlador($print){
+    function listarPedidoPrintAjaxControlador($print)
+    {
         $listar = new ModeloPedido();
         $res = $listar->listarPedidoPrintAjaxModelo($print);
         if ($res) {
@@ -103,7 +111,8 @@ class ControladorPedido
         }
     }
 
-    function listarPedidoPirntFechaUsuarioIngresoAjaxControlador($print){
+    function listarPedidoPirntFechaUsuarioIngresoAjaxControlador($print)
+    {
         $listar = new ModeloPedido();
         $res = $listar->listarPedidoPrintAjaxModelo($print);
         if ($res) {
@@ -112,12 +121,17 @@ class ControladorPedido
         }
     }
 
-    function ActualizarPedidoMesaAjaxControlador($print){
+    function ActualizarPedidoMesaAjaxControlador($print, $id)
+    {
         $listar = new ModeloPedido();
-        $res = $listar->listarPedidoPrintAjaxModelo($print);
+        if ($id == 0) {
+            $res = $listar->listarPedidoPrintAjaxModelo($print);
+        } else {
+            $res = $listar->listarPedidoPrintActAjaxModelo($print, $id);
+        }
         if ($res) {
             $estadoMesa = 3;
-            $printNuero = 1; 
+            $printNuero = 1;
             $mesa = new ControladorMesa();
             $resFecha = $listar->listarPedidoPirntFechaUsuarioIngreso($res[0]['MAX(fecha_ingreso)'], $print);
             $actualizar = $mesa->actualizarEstadoMesa($resFecha[0]['id_mesa'], $estadoMesa);
@@ -127,6 +141,22 @@ class ControladorPedido
             }
         }
     }
-    
+
+    function listarPedidoFactura()
+    {
+        if (isset($_GET['id_mesa'])) {
+            $listarid = new ModeloPedido();
+            $res = $listarid->listarPedidoFacturaModelo($_GET['id_mesa']);
+            return $res;
+        }
+    }
+
+    function actualizarPagoPedido($id, $fecha)
+    {
+        $listarid = new ModeloPedido();
+        $res = $listarid->actualizarPagoPedidoModelo($id, $fecha);
+        return $res;
+    }
+
 }
 

@@ -79,4 +79,17 @@ class ControladorUsuario
         $res = $listar->consultarUsuarioPerfilModelo($_SESSION['id_usuario']);
         return $res;
     }
+
+    function listarUsuarioNomina(){
+        $listar = new ModeloUsuario();
+        $res = $listar->listarUsuarioNominaModelo();
+        return $res;
+    }
+
+    function listarUsuarioId(){
+        $id = $_GET['id_usuario'];
+        $listar = new ModeloUsuario();
+        $res = $listar->listarUsuarioIdModelo($id);
+        return $res;
+    }
 }

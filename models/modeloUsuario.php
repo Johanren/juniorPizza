@@ -52,9 +52,18 @@ class ModeloUsuario
 
     function listarModeloUsuario()
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local";
+        if ($_SESSION['rol'] == "Administrador") {
+            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local";
+        } else {
+            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE local.id_local = ?";
+        }
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
+        if ($_SESSION['rol'] == "Administrador") {
+
+        } else {
+            $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
+        }
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -66,7 +75,52 @@ class ModeloUsuario
         }
     }
 
-    function consultarUsuarioPerfilModelo($id){
+    function consultarUsuarioPerfilModelo($id)
+    {
+        $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE id_usuario = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($id != '') {
+            $stms->bindParam(1, $id, PDO::PARAM_INT);
+        }
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarUsuarioNominaModelo()
+    {
+        if ($_SESSION['rol'] == "Administrador") {
+            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local";
+        } else {
+            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE local.id_local = ?";
+        }
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($_SESSION['rol'] == "Administrador") {
+
+        } else {
+            $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
+        }
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarUsuarioIdModelo($id)
+    {
         $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE id_usuario = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);

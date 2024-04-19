@@ -47,12 +47,13 @@ class ControladorMesa
         } elseif (isset($_POST['actualizarMesa_id'])) {
             $id_mesa = $_POST['mesa'];
             $id_esatdo = $_POST['estado'];
+            $fecha = $_GET['fecha'];
             $actualizar = new ModeloMesa();
             $res = $actualizar->actualizarEstadoMesaModelo($id_mesa, $id_esatdo);
             if ($res == true) {
                 $id_mesa = $_POST['mesa'];
                 $actualizarPedido = new ModeloPedido();
-                $res = $actualizarPedido->actualizarMesaPedidoEstado($_GET['id_mesa'], $id_mesa, $id_esatdo);
+                $res = $actualizarPedido->actualizarMesaPedidoEstado($_GET['id_mesa'], $id_mesa, $id_esatdo, $fecha);
                 if ($res == true) {
                     echo '<script>window.location="actualizoMesa"</script>';
                 }
@@ -69,6 +70,13 @@ class ControladorMesa
     {
         $actualizar = new ModeloMesa();
         $res = $actualizar->buscarMesaIdModelo($id_mesa);
+        return $res;
+    }
+
+    function estadoMesaFactura($id, $id_esatdo)
+    {
+        $actualizar = new ModeloMesa();
+        $res = $actualizar->actualizarEstadoMesaModelo($id, $id_esatdo);
         return $res;
     }
 }

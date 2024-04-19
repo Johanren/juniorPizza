@@ -72,14 +72,14 @@ class ModeloProeevedor
     {
         if ($_SESSION['rol'] == "Administrador") {
             $sql = "SELECT * FROM $this->tabla WHERE id_proeevedor = ?";
-        }else{
+        } else {
             $sql = "SELECT * FROM $this->tabla WHERE id_proeevedor = ? AND id_local = ?";
         }
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
             $stms->bindParam(1, $id, PDO::PARAM_INT);
-        }else{
+        } else {
             $stms->bindParam(1, $id, PDO::PARAM_INT);
             $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
         }
@@ -93,4 +93,6 @@ class ModeloProeevedor
             print_r($e->getMessage());
         }
     }
+
+    
 }

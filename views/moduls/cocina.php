@@ -319,12 +319,13 @@ if (isset($_GET['id_mesa'])) {
                                         .Corte(1)
                                         .Pulso(48, 60, 120)
                                         .imprimirEn("prueba1");
+                                        //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.17:8000" + "/imprimir");
                                     if (respuesta === true) {
                                         $.ajax({
                                             url: 'views/ajax.php',
                                             type: 'GET',
                                             dataType: 'json',
-                                            data: { respuestaPrint: print },
+                                            data: { respuestaPrint: print, id: id_mesa },
                                             success: async function (response) {
                                                 if (response == true) {
                                                     alert("Impreso correctamente");
@@ -358,6 +359,79 @@ if (isset($_GET['id_mesa'])) {
             }
         });
 
+    </script>
+    <script>
+        /*document.addEventListener("DOMContentLoaded", async () => {
+            const URLPlugin = "http://localhost:8000"
+            const $listaDeImpresoras = "prueba1",
+                $btnImprimir = document.querySelector("#btnImprimir"),
+                $btnObtenerImpresoras = "prueba1",
+                $url = "http://192.168.80.25:8000",
+                $mensaje = "hola";
+
+            const obtenerImpresoras = async () => {
+                const url = $url.value;
+                if (!url) {
+                    return alert("Escribe la URL");
+                }
+                for (let i = $listaDeImpresoras.options.length; i >= 0; i--) {
+                    $listaDeImpresoras.remove(i);
+                }
+                const impresoras = await ConectorPluginV3.obtenerImpresorasRemotas(URLPlugin, url + "/impresoras");
+                if (Array.isArray(impresoras)) {
+
+                    for (const impresora of impresoras) {
+                        $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
+                            value: impresora,
+                            text: impresora,
+                        }));
+                    }
+                } else {
+                    alert("Error obteniendo impresoras: " + impresoras);
+                }
+            };
+            const init = async () => {
+
+                $btnImprimir.addEventListener("click", () => {
+                    const nombreImpresora = "prueba1";
+                    if (!nombreImpresora) {
+                        return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
+                    }
+                    imprimirHolaMundo(nombreImpresora);
+                });
+                $btnObtenerImpresoras.addEventListener("click", () => {
+                    obtenerImpresoras();
+                });
+            }
+
+
+            const imprimirHolaMundo = async (nombreImpresora) => {
+                const mensaje = "Hola";
+                const url = "http://192.168.80.25:8000";
+                console.log(nombreImpresora);
+                console.log(mensaje);
+                console.log(url);
+                if (!mensaje) {
+                    return alert("Escribe un mensaje");
+                }
+
+                if (!url) {
+                    return alert("Escribe la URL");
+                }
+                const conector = new ConectorPluginV3(URLPlugin);
+                conector.Iniciar();
+                conector.EscribirTexto(mensaje);
+                conector.Feed(1);
+                const respuesta = await conector
+                    .imprimirEnImpresoraRemota(nombreImpresora, url + "/imprimir");
+                if (respuesta === true) {
+                    alert("Impreso correctamente");
+                } else {
+                    alert("Error: " + respuesta);
+                }
+            }
+            init();
+        });*/
     </script>
     <?php
 }

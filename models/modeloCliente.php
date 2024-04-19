@@ -43,4 +43,46 @@ class ModeloCliente
             print_r($e->getMessage());
         }
     }
+
+    function consultarClienteAjaxModelo($dato)
+    {
+        if ($dato != '') {
+            $sql = "SELECT * FROM $this->tabla WHERE numero_cc like '%$dato%' ORDER BY id_cliente";
+        } else {
+            $sql = "SELECT * FROM $this->tabla ORDER BY id_cliente";
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function mostrarClienteFacturaVentaModelo($id)
+    {
+        $sql = "SELECT * FROM $this->tabla WHERE id_cliente = ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($id != null) {
+                $stms->bindParam(1, $id, PDO::PARAM_STR);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+
+    }
 }

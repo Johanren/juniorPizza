@@ -10,6 +10,7 @@ class ControladorNomina
                 'nombre' => $_POST['nombre'],
                 'apellido' => $_POST['apellido'],
                 'rol' => $_POST['rol'],
+                'dia' => $_POST['dia'],
                 'pago' => $_POST['pago']
             );
             $nomina = new ModeloNomina();
@@ -20,15 +21,24 @@ class ControladorNomina
         }
     }
 
-    function ConsultarNomina($id){
-        $nomina =  new ModeloNomina();
+    function ConsultarNomina($id)
+    {
+        $nomina = new ModeloNomina();
         $res = $nomina->ConsultarNominaModelo($id);
         return $res;
     }
 
-    function deudaNomina(){
+    function deudaNomina()
+    {
         $sum = new ModeloNomina();
         $res = $sum->deudaNominaModelo();
+        return $res;
+    }
+
+    function consultarNominaPedidoAjax($id)
+    {
+        $sum = new ModeloNomina();
+        $res = $sum->consultarNominaPedidoAjaxModelo($id);
         return $res;
     }
 }

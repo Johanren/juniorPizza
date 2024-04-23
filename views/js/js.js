@@ -588,7 +588,7 @@ document.addEventListener('keydown', function (event) {
 		var urlActual = window.location.href;
 		var hosting = window.location.hostname;
 		//console.log(hosting);
-		if (urlActual == "http://"+hosting+"/inventario/agregarArticulo") {
+		if (urlActual == "http://" + hosting + "/inventario/agregarArticulo") {
 			document.getElementById("agregarArticulo").click();
 		} else {
 			document.getElementById("agregarFactura").click();
@@ -599,4 +599,16 @@ document.addEventListener('keydown', function (event) {
 	if (event.key === 'F4') {
 		document.getElementById("eliminarFactura").click();
 	}
+});
+
+//calcular dias trabajado
+$(document).ready(function () {
+	$(document).on('change', '#pago', function () {
+
+		var valorCampo = $('#dia').val();
+		console.log(valorCampo);
+		resta = parseInt(this.value) * valorCampo;
+		//console.log(resta)
+		document.querySelector('#pago_dia').value = resta
+	});
 });

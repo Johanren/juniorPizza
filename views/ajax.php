@@ -10,6 +10,7 @@ require_once '../controllers/controladorIngredienteProducto.php';
 require_once '../controllers/controladorPedido.php';
 require_once '../controllers/controladorMesa.php';
 require_once '../controllers/controladorCliente.php';
+require_once '../controllers/controladorNomina.php';
 //modelo
 require_once '../models/modeloProeevedor.php';
 require_once '../models/modeloMedida.php';
@@ -21,6 +22,7 @@ require_once '../models/modeloIngredienteProducto.php';
 require_once '../models/modeloPedido.php';
 require_once '../models/modeloMesa.php';
 require_once '../models/modeloCliente.php';
+require_once '../models/modeloNomina.php';
 
 class Ajax
 {
@@ -41,6 +43,7 @@ class Ajax
     public $cc;
     public $articulo;
     public $idArticulo;
+    public $id_nomina;
 
     function consultarProeevedorAjax()
     {
@@ -237,6 +240,17 @@ class Ajax
         print json_encode($res);
 
     }
+
+    function consultarNominaPedidoAjax()
+    {
+        $resPedido = new ControladorNomina();
+        $respe = $resPedido->consultarNominaPedidoAjax($this->id_nomina);
+        foreach ($respe as $key => $value) {
+            $datos[] = array('nombre' => $value['nombre'] . " " . $value['apellido'], 'dias' => $value['dias_trabajados'], 'ValorTotal' => $value['pago'],);
+        }
+        header('Content-Type: text/html; charset=UTF-8');
+        print json_encode($datos);
+    }
 }
 
 $ajax = new Ajax();
@@ -312,7 +326,12 @@ if (isset($_GET['cc'])) {
 if (isset($_GET['nombre'])) {
     $ajax->articulo = $_GET['nombre'];
     $ajax->consultarAritucloProeevedorNombre();
-}   
+}  
+
+if (isset($_GET['id_nomina'])) {
+    $ajax->id_nomina = $_GET['id_nomina'];
+    $ajax->consultarNominaPedidoAjax();
+}  
 
 $request = 0;
 if (isset($_GET['request'])) {

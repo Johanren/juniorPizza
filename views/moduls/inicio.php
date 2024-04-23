@@ -3,7 +3,7 @@ if ($_SESSION['rol'] == "Mesero") {
     echo '<script>window.location="mesas"</script>';
 }if ($_SESSION['rol'] == "Cocina") {
     echo '<script>window.location="cocina"</script>';
-}if ($_SESSION['rol'] == "Cajero") {
+}if ($_SESSION['rol'] == "Cajero" && $_SESSION['rol'] == "Gerente") {
     echo '<script>window.location="caja"</script>';
 }
 ?>

@@ -16,7 +16,7 @@ $res = $listar->consultarUsuarioPerfil();
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
     <?php
-    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+    if ($_SESSION['rol'] != "Administrador") {
 
     } else {
         ?>

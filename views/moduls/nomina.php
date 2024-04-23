@@ -68,7 +68,14 @@ if (isset($_GET['id_usuario'])) {
                             $resNomina = $nomina->ConsultarNomina($value['id_usuario']);
                             foreach ($resNomina as $key => $value) {
                                 ?>
-                                <a href="index.php?action=nomina&id_nomina=<?php echo $value['id_nomina'] ?>"><i
+                                <a <?php if (isset($_GET['id_nomina'])) {
+                                    echo "id='btnImprimir' href='#'";
+                                } else {
+
+                                    ?>
+                                        href="index.php?action=nomina&id_nomina=<?php echo $value['id_nomina'] ?>" <?php
+                                }
+                                ?>><i
                                         class="fas fa-print fa-lg"></i></a>
                                 <?php
                             }
@@ -97,7 +104,7 @@ if (isset($_GET['id_usuario'])) {
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Nomina</h5>
+                <h5 class="modal-title" id="exampleModalLabel" style="font-weight: 500; color: black;">NOMINA</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -106,12 +113,12 @@ if (isset($_GET['id_usuario'])) {
                 <form action="" method="post">
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputState">Nombre</label>
+                            <label for="inputState" style="font-weight: 500; color: black;">Nombre</label>
                             <input type="text" name="nombre" class="form-control"
                                 value="<?php echo $resUsuario[0]['primer_nombre'] ?>">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputState">Apellido</label>
+                            <label for="inputState" style="font-weight: 500; color: black;">Apellido</label>
                             <input type="text" name="apellido" class="form-control"
                                 value="<?php echo $resUsuario[0]['primer_apellido'] ?>">
                             </select>
@@ -119,14 +126,29 @@ if (isset($_GET['id_usuario'])) {
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="inputState">Cargo</label>
-                            <input type="text" name="rol" class="form-control"
-                                value="<?php echo $resUsuario[0]['nombre_rol'] ?>">
+                            <label for="inputState" style="font-weight: 500; color: black;">Dias Trabajado</label>
+                            <input type="text" name="dia" class="form-control" id="dia" value=""
+                                placeholder="Dias trabajado">
+                            </select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputState">Pago</label>
-                            <input type="text" name="pago" class="form-control" value="" placeholder="Valor a pagar">
+                            <label for="inputState" style="font-weight: 500; color: black;">Pago Por Dia</label>
+                            <input type="text" name="" class="form-control" id="pago" value=""
+                                placeholder="Valor por dia">
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputState" style="font-weight: 500; color: black;">Pago Total</label>
+                            <input type="text" name="pago" class="form-control" id="pago_dia" value=""
+                                placeholder="Valor a pagar">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputState" style="font-weight: 500; color: black;">Cargo</label>
+                            <input type="text" name="rol" class="form-control"
+                                value="<?php echo $resUsuario[0]['nombre_rol'] ?>">
                         </div>
                     </div>
                     <button type="submit" name="agregarNomina" class="btn btn-primary">Agregar</button>
@@ -138,20 +160,79 @@ if (isset($_GET['id_usuario'])) {
         </div>
     </div>
 </div>
+<div class="container">
+    <div class="columns">
+        <div class="column">
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="select is-rounded">
+                <select hidden id="listaDeImpresoras"></select>
+            </div>
+            <div class="field">
+                <!--<label class="label">Separador</label>-->
+                <div class="control">
+                    <input hidden id="separador" value=" " class="input" type="text" maxlength="1"
+                        placeholder="El separador de columnas">
+                </div>
+            </div>
+            <div class="field">
+                <!--<label class="label">Relleno</label>-->
+                <div class="control">
+                    <input hidden id="relleno" value=" " class="input" type="text" maxlength="1"
+                        placeholder="El relleno de las celdas">
+                </div>
+            </div>
+            <div class="field">
+                <!--<label class="label">Máxima longitud para el nombre</label>-->
+                <div class="control">
+                    <input hidden id="maximaLongitudNombre" value="20" class="input" type="number">
+                </div>
+            </div>
+            <div class="field">
+                <!--<label class="label">Máxima longitud para la cantidad</label>-->
+                <div class="control">
+                    <input hidden id="maximaLongitudCantidad" value="8" class="input" type="number">
+                </div>
+            </div>
+            <div class="field">
+                <!--<label class="label">Máxima longitud para el precio</label>-->
+                <div class="control">
+                    <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
+                    <input hidden id="id_nomina" value="<?php echo $_GET['id_nomina'] ?>" class="input" type="number">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <?php
 if (isset($_GET['id_nomina'])) {
+    $local = new ControladorLocal();
+    $res = $local->consultarLocal($_SESSION['id_local']);
+
+    date_default_timezone_set('America/Mexico_City');
+    $fechaActal = date('Y-m-d');
+    if ($res != null) {
+        $nombreSistema = $res[0]['nombre_local'];
+        $nit = $res[0]['nit'];
+        $tel = $res[0]['telefono'];
+        $dire = $res[0]['direccion'];
+    } else {
+        $nombreSistema = "Inventario";
+        $nit = "1111";
+        $tel = "1111";
+        $dire = "NNNN";
+    }
     ?>
     <script>
-
-        var print = 0;
-        var id_mesa = $('#id_mesa').val();
-        var fecha = $('#fecha').val();
+        var id_nomina = $('#id_nomina').val();
 
         $.ajax({
             url: 'views/ajax.php',
             type: 'get',
             dataType: 'json',
-            data: { id_mesa: id_mesa, fecha: fecha },
+            data: { id_nomina: id_nomina },
             success: function (response) {
                 //console.log(response.nombre);
                 document.addEventListener("DOMContentLoaded", async () => {
@@ -268,8 +349,8 @@ if (isset($_GET['id_nomina'])) {
                         const lineasEncabezado = tabularDatos([
 
                             { contenido: "Nombre", maximaLongitud: maximaLongitudNombre },
-                            { contenido: "Cantidad", maximaLongitud: maximaLongitudCantidad },
-                            { contenido: "Descripcion", maximaLongitud: maximaLongitudPrecio },
+                            { contenido: "Cantidad Dias", maximaLongitud: maximaLongitudCantidad },
+                            { contenido: "Total Pago", maximaLongitud: maximaLongitudPrecio },
                         ],
                             relleno,
                             separadorColumnas,
@@ -283,8 +364,8 @@ if (isset($_GET['id_nomina'])) {
                             const lineas = tabularDatos(
                                 [
                                     { contenido: producto.nombre, maximaLongitud: maximaLongitudNombre },
-                                    { contenido: producto.cantidad.toString(), maximaLongitud: maximaLongitudCantidad },
-                                    { contenido: producto.descripcion.toString(), maximaLongitud: maximaLongitudPrecio },
+                                    { contenido: producto.dias.toString(), maximaLongitud: maximaLongitudCantidad },
+                                    { contenido: producto.ValorTotal.toString(), maximaLongitud: maximaLongitudPrecio },
                                 ],
                                 relleno,
                                 separadorColumnas
@@ -297,63 +378,36 @@ if (isset($_GET['id_nomina'])) {
                         console.log(tabla);
                         const conector = new ConectorPluginV3(URLPlugin);
 
-                        $.ajax({
-                            url: 'views/ajax.php',
-                            type: 'GET',
-                            dataType: 'json',
-                            data: { id_mesa: id_mesa, fechaActual: fecha },
-                            success: async function (response) {
-                                const listarPedido = response;
-                                for (const producto of listarPedido) {
-                                    // Extraer el valor específico del array devuelto
-                                    const respuesta = await conector
-                                        .Iniciar()
-                                        .DeshabilitarElModoDeCaracteresChinos()
-                                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                                        //.DescargarImagenDeInternetEImprimir("", 0, 216)
-                                        .Feed(1)
-                                        .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                                        .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
-                                        .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                                        .TextoSegunPaginaDeCodigos(2, "cp850", "Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
-                                        .Feed(1)
-                                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                                        .EscribirTexto(tabla)
-                                        .EscribirTexto("------------------------------------------------\n")
-                                        .Feed(3)
-                                        .Corte(1)
-                                        .Pulso(48, 60, 120)
-                                        .imprimirEn("prueba1");
-                                    //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.17:8000" + "/imprimir");
-                                    if (respuesta === true) {
-                                        $.ajax({
-                                            url: 'views/ajax.php',
-                                            type: 'GET',
-                                            dataType: 'json',
-                                            data: { respuestaPrint: print, id: id_mesa },
-                                            success: async function (response) {
-                                                if (response == true) {
-                                                    alert("Impreso correctamente");
-                                                }
-                                            },
-                                            error: function (xhr, status, error) {
-                                                // Mostrar error si hay algún problema con la solicitud AJAX
-                                                $('#valorEspecifico').text('Error: ' + error);
-                                            }
-                                        });
-
-                                    } else {
-                                        alert("Error: " + respuesta);
-                                    }
-                                }
-
-                            },
-                            error: function (xhr, status, error) {
-                                // Mostrar error si hay algún problema con la solicitud AJAX
-                                $('#valorEspecifico').text('Error: ' + error);
-                            }
-                        });
+                        const respuesta = await conector
+                            .Iniciar()
+                            .DeshabilitarElModoDeCaracteresChinos()
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                            //.DescargarImagenDeInternetEImprimir("", 0, 216)
+                            .Feed(1)
+                            .EscribirTexto("<?php echo $nombreSistema ?>\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: <?php echo $tel ?>\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: <?php echo $dire ?>\n")
+                            .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                            .Feed(1)
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+                            .EscribirTexto(tabla)
+                            .EscribirTexto("------------------------------------------------\n")
+                            .EscribirTexto("\n")
+                            .EscribirTexto("\n")
+                            .EscribirTexto("Firma Gerente-----------------------------------\n")
+                            .EscribirTexto("\n")
+                            .EscribirTexto("\n")
+                            .EscribirTexto("Firma Empleado-----------------------------------\n")
+                            .Feed(3)
+                            .Corte(1)
+                            .Pulso(48, 60, 120)
+                            .imprimirEn("prueba1");
+                        if (respuesta === true) {
+                            alert("Impreso correctamente");
+                        } else {
+                            alert("Error: " + respuesta);
+                        }
                     }
                     init();
                 });

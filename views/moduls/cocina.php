@@ -116,13 +116,13 @@ $fechaActal = date('Y-m-d');
             <div class="field">
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
-                    <input hidden id="id_mesa" value="<?php echo $_GET['id_mesa'] ?>" class="input" type="text">
+                    <input hidden id="id_mesa" value="<?php if(isset($_GET['id_mesa'])){echo $_GET['id_mesa'];} ?>" class="input" type="text">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
-                    <input hidden id="fecha" value="<?php echo $_GET['fecha'] ?>" class="input" type="text">
+                    <input hidden id="fecha" value="<?php if(isset($_GET['fecha'])){echo $_GET['fecha'];} ?>" class="input" type="text">
                 </div>
             </div>
         </div>

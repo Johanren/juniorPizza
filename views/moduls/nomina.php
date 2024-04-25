@@ -200,7 +200,7 @@ if (isset($_GET['id_usuario'])) {
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
                     <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
-                    <input hidden id="id_nomina" value="<?php echo $_GET['id_nomina'] ?>" class="input" type="number">
+                    <input hidden id="id_nomina" value="<?php if(isset($_GET['id_nomina'])){echo $_GET['id_nomina'];} ?>" class="input" type="number">
                 </div>
             </div>
         </div>

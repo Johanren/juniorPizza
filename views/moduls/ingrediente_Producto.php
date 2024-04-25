@@ -197,7 +197,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             </thead>
                             <tbody id="ingreprod">
                                 <?php
-                                foreach ($resProducto as $key => $value) {
+                                foreach ($rejjjsProducto as $key => $value) {
                                     $conn = $key + 2;
                                     ?>
                                     <tr>

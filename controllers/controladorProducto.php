@@ -5,23 +5,23 @@ class ControladorProducto
     function agregarProducto()
     {
         if (isset($_POST['agregarProducto'])) {
-            if ($_POST['id_producto'] != "") {
-                $id = $_POST['id_producto'];
-                $id_proeevedor = $_POST['id_proeevedor'];
-                $codigo = $_POST['codigo'];
-                $nombre = $_POST['nombre'];
-                $precio = $_POST['precio'];
-                $cantidad = $_POST['cantidad'];
-                $cant = $_POST['cant'];
-                $id_categoria = $_POST['id_categoria'];
-                $id_medida = $_POST['id_medida'];
-                $totalFactura = $_POST['totalFactura'];
-                if ($_SESSION['rol'] == "Administrador") {
-                    $id_local = $_POST['id_local'];
-                } else {
-                    $id_local = $_SESSION['id_local'];
-                }
-                for ($i = 0; $i < count($codigo); $i++) {
+            $id = $_POST['id_producto'];
+            $id_proeevedor = $_POST['id_proeevedor'];
+            $codigo = $_POST['codigo'];
+            $nombre = $_POST['nombre'];
+            $precio = $_POST['precio'];
+            $cantidad = $_POST['cantidad'];
+            $cant = $_POST['cant'];
+            $id_categoria = $_POST['id_categoria'];
+            $id_medida = $_POST['id_medida'];
+            $totalFactura = $_POST['totalFactura'];
+            if ($_SESSION['rol'] == "Administrador") {
+                $id_local = $_POST['id_local'];
+            } else {
+                $id_local = $_SESSION['id_local'];
+            }
+            for ($i = 0; $i < count($codigo); $i++) {
+                if ($id[$i] != null) {
                     $cantidad_producto = $cant[$i] + $cantidad[$i];
                     $agreagr = new ModeloProducto();
                     $res = $agreagr->actualizarProductoModelo($id[$i], $id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad_producto, $id_categoria[$i], $id_medida[$i], $id_local[$i]);
@@ -32,22 +32,7 @@ class ControladorProducto
                             echo '<script>window.location="actualizarProducto"</script>';
                         }
                     }
-                }
-            } else {
-                $id_proeevedor = $_POST['id_proeevedor'];
-                $codigo = $_POST['codigo'];
-                $nombre = $_POST['nombre'];
-                $precio = $_POST['precio'];
-                $cantidad = $_POST['cantidad'];
-                $id_categoria = $_POST['id_categoria'];
-                $id_medida = $_POST['id_medida'];
-                $totalFactura = $_POST['totalFactura'];
-                if ($_SESSION['rol'] == "Administrador") {
-                    $id_local = $_POST['id_local'];
                 } else {
-                    $id_local = $_SESSION['id_local'];
-                }
-                for ($i = 0; $i < count($codigo); $i++) {
                     $agreagr = new ModeloProducto();
                     $res = $agreagr->agregarProductoModelo($id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_categoria[$i], $id_medida[$i], $id_local[$i]);
                     if ($res == true) {
@@ -59,6 +44,7 @@ class ControladorProducto
                     }
                 }
             }
+
         }
     }
 

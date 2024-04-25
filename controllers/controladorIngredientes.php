@@ -5,23 +5,23 @@ class ControladorIngredientes
     function agregarIngrediente()
     {
         if (isset($_POST['agregarIngrediente'])) {
-            if ($_POST['id_ingre'] != "") {
-                $id = $_POST['id_ingre'];
-                $id_categoria = 1;
-                $codigo = 0;
-                $precio = 0;
-                $nom_ingre = $_POST['nom_ingre'];
-                $id_medida = $_POST['id_medida'];
-                $cant = $_POST['cant'];
-                $cantidadIngre = $_POST['cantidadIngre'];
-                $id_proeevedor = $_POST['id_proeevedor'];
-                $totalFactura = $_POST['totalFactura'];
-                if ($_SESSION['rol'] == "Administrador") {
-                    $id_local = $_POST['id_local'];
-                } else {
-                    $id_local = $_SESSION['id_local'];
-                }
-                for ($i = 0; $i < count($nom_ingre); $i++) {
+            $id = $_POST['id_ingre'];
+            $id_categoria = 1;
+            $codigo = 0;
+            $precio = 0;
+            $nom_ingre = $_POST['nom_ingre'];
+            $id_medida = $_POST['id_medida'];
+            $cant = $_POST['cant'];
+            $cantidadIngre = $_POST['cantidadIngre'];
+            $id_proeevedor = $_POST['id_proeevedor'];
+            $totalFactura = $_POST['totalFactura'];
+            if ($_SESSION['rol'] == "Administrador") {
+                $id_local = $_POST['id_local'];
+            } else {
+                $id_local = $_SESSION['id_local'];
+            }
+            for ($i = 0; $i < count($nom_ingre); $i++) {
+                if ($id[$i] != null) {
                     $cantidad = $cantidadIngre[$i] + $cant[$i];
                     $agregar = new ModeloIngrediente();
                     $res = $agregar->actualizarIngredienteModelo($id[$i], $nom_ingre[$i], $id_medida[$i], $cantidad, $id_local[$i]);
@@ -32,22 +32,7 @@ class ControladorIngredientes
                             echo '<script>window.location="actualizarIngrediente"</script>';
                         }
                     }
-                }
-            } else {
-                $id_categoria = 1;
-                $codigo = 0;
-                $precio = 0;
-                $nom_ingre = $_POST['nom_ingre'];
-                $id_medida = $_POST['id_medida'];
-                $cant = $_POST['cant'];
-                $id_proeevedor = $_POST['id_proeevedor'];
-                $totalFactura = $_POST['totalFactura'];
-                if ($_SESSION['rol'] == "Administrador") {
-                    $id_local = $_POST['id_local'];
                 } else {
-                    $id_local = $_SESSION['id_local'];
-                }
-                for ($i = 0; $i < count($nom_ingre); $i++) {
                     $agregar = new ModeloIngrediente();
                     $res = $agregar->agregarIngredienteModelo($nom_ingre[$i], $id_medida[$i], $cant[$i], $id_local[$i]);
                     if ($res == true) {

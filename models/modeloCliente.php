@@ -29,7 +29,8 @@ class ModeloCliente
         }
     }
 
-    function listarModeloCliente(){
+    function listarModeloCliente()
+    {
         $sql = "SELECT * FROM $this->tabla INNER JOIN local ON local.id_local = cliente.id_local";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -73,7 +74,7 @@ class ModeloCliente
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($id != null) {
-                $stms->bindParam(1, $id, PDO::PARAM_STR);
+                $stms->bindParam(1, $id, PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -84,5 +85,31 @@ class ModeloCliente
             print_r($e->getMessage());
         }
 
+    }
+
+    function actualizarClienteModelo($dato)
+    {
+        $sql = "UPDATE $this->tabla SET primer_nombre=?,segundo_nombre=?,primer_apellido=?,segundo_apellido=?,numero_cc=?,correo=?,id_local=? WHERE id_cliente=?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($dato != '') {
+            $stms->bindParam(1, $dato['priNombre'], PDO::PARAM_STR);
+            $stms->bindParam(2, $dato['segNombre'], PDO::PARAM_STR);
+            $stms->bindParam(3, $dato['priApellido'], PDO::PARAM_STR);
+            $stms->bindParam(4, $dato['segApellido'], PDO::PARAM_STR);
+            $stms->bindParam(5, $dato['cc'], PDO::PARAM_STR);
+            $stms->bindParam(6, $dato['email'], PDO::PARAM_STR);
+            $stms->bindParam(7, $dato['local'], PDO::PARAM_INT);
+            $stms->bindParam(8, $dato['id'], PDO::PARAM_INT);
+        }
+        try {
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
     }
 }

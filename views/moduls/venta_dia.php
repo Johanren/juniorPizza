@@ -83,13 +83,13 @@ if ($resLocal != null) {
                         <?php echo $value['nombre_producto'] ?>
                     </td>
                     <td>
-                        <?php echo $value['valor_unitario'] ?>
+                        <?php echo $value["CONCAT('$', FORMAT(valor_unitario, '$#,##0.00'))"] ?>
                         </th>
                     <td>
                         <?php echo $valueCantidad['SUM(cantidad)'] ?>
                     </td>
                     <td>
-                        <?php echo $valueCantidad['SUM(precio_compra)'] ?>
+                        <?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
                     </td>
                     <td>
                         <?php echo $value['fecha_ingreso'] ?>
@@ -107,7 +107,7 @@ if ($resLocal != null) {
             <th></th>
             <th></th>
             <th>
-                <?php echo $total[0]['SUM(precio_compra)'] ?>
+                <?php echo $total[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
             </th>
         </tr>
     </tbody>
@@ -118,7 +118,7 @@ if ($resLocal != null) {
             <th></th>
             <th></th>
             <th>
-                <?php echo $resPro[0]['SUM(pago_factura)'] ?>
+                <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(pago_factura), '$#,##0.00'))"] ?>
             </th>
         </tr>
     </tbody>
@@ -129,7 +129,7 @@ if ($resLocal != null) {
             <th></th>
             <th></th>
             <th>
-                <?php echo $resNomina[0]['SUM(pago)'] ?>
+                <?php echo $resNomina[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"] ?>
             </th>
         </tr>
     </tbody>
@@ -140,7 +140,7 @@ if ($resLocal != null) {
             <th></th>
             <th></th>
             <th>
-                <?php echo $totalVenta = $total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(pago_factura)'] - $resNomina[0]['SUM(pago)'] ?>
+                <?php $totalVenta = $total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(pago_factura)'] - $resNomina[0]['SUM(pago)']; echo '$' . number_format($totalVenta, 2) ?>
             </th>
         </tr>
     </tbody>
@@ -387,7 +387,7 @@ if ($resLocal != null) {
                                 echo $valueCantidad['SUM(peso)'];
                             } ?>,
                             precio: <?php echo $value['valor_unitario'] ?>,
-                            precioTotal: <?php echo $valueCantidad['SUM(precio_compra)'] ?>,
+                            precioTotal: "<?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>",
                         },
                         <?php
                     }
@@ -462,11 +462,13 @@ if ($resLocal != null) {
                 .Feed(1)
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
                 .EscribirTexto("____________________\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "Venta de plugin para impresoras versión 3\n")
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
                 .EscribirTexto(tabla)
                 .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Total $<?php echo $total[0]['SUM(precio_compra)'] ?>\n")
+                .EscribirTexto("SubTotal <?php echo $total[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>\n")
+                .EscribirTexto("Subtotal Proeevedores <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(pago_factura), '$#,##0.00'))"] ?>\n")
+                .EscribirTexto("Subtotal Nomina <?php echo $resNomina[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"] ?>\n")
+                .EscribirTexto("Total $<?php echo number_format($totalVenta, 2) ?>\n")
                 .Feed(3)
                 .Corte(1)
                 .Pulso(48, 60, 120)

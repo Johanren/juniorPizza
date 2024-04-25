@@ -6,6 +6,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "El establecimiento ha sido agregado exitosamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "actualizarLocal") {
+        print '<script>
+        swal("Hurra!!!", "El establecimiento ha sido actualizado exitosamente", "success");
+    </script>';
+    }
 }
 ///Usuario
 $user = new ControladorLocal();
@@ -14,6 +19,12 @@ $res = $user->listarLocal();
 //
 if ($_SESSION['rol'] != "Administrador") {
     echo '<script>window.location="inicio"</script>';
+}
+if (isset($_GET['id_local'])) {
+    print "<script>$(document).ready(function() {
+        $('#local').modal('toggle')
+    });</script>";
+    $listar = $user->consultarLocal($_GET['id_local']);
 }
 ?>
 <div class="container mt-5">
@@ -39,6 +50,7 @@ if ($_SESSION['rol'] != "Administrador") {
                     <th># Nit</th>
                     <th>Dirección</th>
                     <th>Telefono</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +70,8 @@ if ($_SESSION['rol'] != "Administrador") {
                         <td>
                             <?php echo $value['telefono'] ?>
                         </td>
+                        <td><a href="index.php?action=local&id_local=<?php echo $value['id_local'] ?>"><i
+                                    class="fas fa-print fa-lg"></i></a></td>
                     </tr>
                     <?php
                 }
@@ -69,6 +83,7 @@ if ($_SESSION['rol'] != "Administrador") {
                     <th># Nit</th>
                     <th>Dirección</th>
                     <th>Telefono</th>
+                    <th>Acciones</th>
                 </tr>
             </tfoot>
         </table>
@@ -77,7 +92,7 @@ if ($_SESSION['rol'] != "Administrador") {
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar Cliente</h5>
@@ -112,6 +127,52 @@ if ($_SESSION['rol'] != "Administrador") {
                         </div>
                     </div>
                     <button type="submit" name="agregarLocal" class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Editar Local-->
+<div class="modal fade" id="local" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Agregar Cliente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Local</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['nombre_local'] ?>" name="localEdit" id="inputEmail4"
+                                placeholder="Primer nombre">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Nit</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['nit'] ?>" name="nitEdit" id="inputPassword4"
+                                placeholder="Segundo Nombre">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Dirección</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['direccion'] ?>" name="direEdit" id="inputEmail4"
+                                placeholder="Primer nombre">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Telefono</label>
+                            <input type="texr" class="form-control" value="<?php echo $listar[0]['telefono'] ?>" name="telEdit" id="inputPassword4"
+                                placeholder="Segundo Nombre">
+                        </div>
+                    </div>
+                    <button type="submit" name="actualizarLocal" class="btn btn-primary">Actualizar</button>
                 </form>
             </div>
             <div class="modal-footer">

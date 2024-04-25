@@ -82,8 +82,9 @@ class ModeloIngredienteProducto
         }
     }
 
-    function listarIngredienteId($id){
-        $sql = "SELECT * FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente INNER JOIN medida ON medida.id_medida = ingrediente.id_medida WHERE ingrediente_producto.id_producto = ?";
+    function listarIngredienteId($id)
+    {
+        $sql = "SELECT *, ingrediente_producto.cantidad AS can FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente INNER JOIN medida ON medida.id_medida = ingrediente.id_medida WHERE ingrediente_producto.id_producto = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $id, PDO::PARAM_INT);
@@ -98,7 +99,8 @@ class ModeloIngredienteProducto
         }
     }
 
-    function listarIngredienteProductoFacturaModelo($id){
+    function listarIngredienteProductoFacturaModelo($id)
+    {
         $sql = "SELECT * FROM $this->tabla  WHERE id_producto = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -106,6 +108,29 @@ class ModeloIngredienteProducto
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarIngredienteProductoModelo($id, $id_producto, $id_ingre, $cantidad)
+    {
+        $sql = "UPDATE $this->tabla SET id_producto=?,id_ingrediente=?,cantidad=? WHERE id_ingrediente=? AND id_producto=?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($cantidad != '') {
+            $stms->bindParam(1, $id_producto, PDO::PARAM_INT);
+            $stms->bindParam(2, $id_ingre, PDO::PARAM_INT);
+            $stms->bindParam(3, $cantidad, PDO::PARAM_INT);
+            $stms->bindParam(4, $id, PDO::PARAM_INT);
+            $stms->bindParam(5, $id_producto, PDO::PARAM_INT);
+        }
+        try {
+            if ($stms->execute()) {
+                return true;
             } else {
                 return false;
             }

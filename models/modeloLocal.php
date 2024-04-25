@@ -41,7 +41,8 @@ class ModeloLocal
         }
     }
 
-    function consultarLocalModelo($id){
+    function consultarLocalModelo($id)
+    {
 
         $sql = "SELECT * FROM $this->tabla WHERE id_local = ?";
         try {
@@ -79,6 +80,29 @@ class ModeloLocal
                 return $stms->fetchAll();
             } else {
                 return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarLocalModelo($dato)
+    {
+        $sql = "UPDATE $this->tabla SET nombre_local=?,nit=?,direccion=?,telefono=? WHERE id_local=?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($dato != '') {
+            $stms->bindParam(1, $dato['local'], PDO::PARAM_STR);
+            $stms->bindParam(2, $dato['nit'], PDO::PARAM_STR);
+            $stms->bindParam(3, $dato['dire'], PDO::PARAM_STR);
+            $stms->bindParam(4, $dato['tel'], PDO::PARAM_STR);
+            $stms->bindParam(5, $dato['id'], PDO::PARAM_INT);
+        }
+        try {
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
             }
         } catch (PDOException $e) {
             print_r($e->getMessage());

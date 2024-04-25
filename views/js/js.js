@@ -198,6 +198,48 @@ $(document).ready(function () {
 	});
 });
 
+//Autocomplete producto editar
+$(document).ready(function () {
+	$('body').on('keydown', '.nombrePro', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+		$(this).autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { producto: request.term },
+					success: function (data) {
+						response(data);
+						//console.log("el dato", data);
+
+					}
+
+				});
+			},
+			minLength: 1,
+			select: function (event, ui) {
+				$("#id_producto_" + index).val(ui.item.id);
+				$("#codigo_" + index).val(ui.item.codigo);
+				$("#producto_" + index).val(ui.item.label);
+				$("#precio_" + index).val(ui.item.precio);
+				$("#cantidad_" + index).val(ui.item.cantidad);
+				$("#id_categoria_" + index).val(ui.item.id_categoria);
+				$("#categoria_" + index).val(ui.item.nombre_categoria);
+				$("#id_medida_" + index).val(ui.item.id_medida);
+				$("#medida_" + index).val(ui.item.nombre_medida);
+				$("#id_local_" + index).val(ui.item.id_local);
+				$("#local_" + index).val(ui.item.nombre_local);
+				return false;
+
+			}
+
+		});
+	});
+});
+
 //Autocomplete promocio
 $(document).ready(function () {
 	$('body').on('keydown', '.prod', function () {
@@ -271,7 +313,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
-		$("#producto").append('<tr><td><input type="text" class="form-control" name="codigo[]"></td><td><input type="text" class="form-control" name="nombre[]"></td><td><input type="text" class="form-control" name="precio[]"></td><td><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?php if ($_SESSION["rol"] == "Administrador") { ?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local" id="local_' + index + '"></td><?php } ?></tr>');
+		$("#producto").append('<tr><td><input type="hidden" id="id_producto_'+index+'" name="id_producto[]"><input type="text" class="form-control" id="codigo_'+index+'" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_'+index+'" name="nombre[]"></td><td><input type="text" class="form-control" id="precio_'+index+'" name="precio[]"></td><td><input type="hidden" id="cantidad_'+index+'" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_'+index+'"><input type="text" class="form-control categoria"name="" id="categoria_'+index+'"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_'+index+'"><input type="text" class="form-control medida" name=""id="medida_'+index+'"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_'+index+'"><input type="text" class="form-control nom_local"id="local_'+index+'"></td><?php}?></tr>');
 		index++;
 	});
 });
@@ -281,7 +323,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarIngrediente").click(function () {
-		$("#ingrediente").append('<tr><td><input type="text" class="form-control" name="nom_ingre[]"></td><td><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td></tr>');
+		$("#ingrediente").append('<tr><td><input type="hidden" id="id_ingre_'+index+'" name="id_ingre[]"><input type="text" class="form-control ingre" id="ingre_'+index+'" name="nom_ingre[]"></td><td><input type="hidden" name="cantidadIngre[]" id="cantidad_'+index+'"><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_'+index+'"><input type="text" class="form-control medida" name=""id="medida_'+index+'"></td>phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_'+index+'"><input type="text" class="form-control nom_local"id="local_'+index+'"></td><?php}?></tr>');
 		index++;
 	});
 });
@@ -297,7 +339,7 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-	var index = 3;
+	var index = 40;
 	$("#agregarIngredienteProduct").click(function () {
 		$("#ingreprod").append('<tr><td><input type="hidden" name="id_ingre[]" id="id_ingre_' + index + '"><input type="text"class="form-control ingre" id="ingre_' + index + '"></td><td><input type="text" class="form-control" id="medida_' + index + '"></td><td><input type="text" class="form-control" name="cantidad[]"></td></tr>');
 		index++;
@@ -577,6 +619,44 @@ $(document).ready(function () {
 
 				return false;
 			}
+		});
+	});
+});
+
+//Autocomplete Ingrediente Editar
+$(document).ready(function () {
+	$('body').on('keydown', '.ingre', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+		$(this).autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { ingrediente: request.term },
+					success: function (data) {
+						response(data);
+						//console.log("el dato", data);
+
+					}
+
+				});
+			},
+			minLength: 1,
+			select: function (event, ui) {
+				$("#ingre_" + index).val(ui.item.label);
+				$("#id_ingre_" + index).val(ui.item.id);
+				$("#id_medida_" + index).val(ui.item.id_medida);
+				$("#medida_" + index).val(ui.item.medida);
+				$("#cantidad_" + index).val(ui.item.cantidad);
+				$("#id_local_" + index).val(ui.item.id_local);
+				$("#local_" + index).val(ui.item.local);
+				return false;
+
+			}
+
 		});
 	});
 });

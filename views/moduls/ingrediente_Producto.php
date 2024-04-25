@@ -16,6 +16,7 @@ if (isset($_GET['id'])) {
 
     $mostrarProducto = new ControladorIngredienteProducto();
     $resProducto = $mostrarProducto->listarIngredienteId($resProee[0]['id_producto']);
+
 }
 ///Usuario
 $user = new ControladorIngredienteProducto();
@@ -36,9 +37,6 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                     <path
                         d="M3.146 5.146a.5.5 0 0 1 .708 0L5.177 6.47a.75.75 0 0 1 0 1.06L3.854 8.854a.5.5 0 1 1-.708-.708L4.293 7 3.146 5.854a.5.5 0 0 1 0-.708M5.5 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5" />
                 </svg>
-            </button>
-            <button id="miBoton" onclick="habilitarInput()" class="btn btn-primary">
-                Habilitar Inputs
             </button>
         </div>
     </div>
@@ -69,13 +67,8 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             }
                             ?>
                         </td>
-                        <td><a href="index.php?action=ingrediente_Producto&id=<?php echo $value['id_producto'] ?>"><button
-                                    class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                        fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                        <path
-                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                    </svg></button></a></td>
+                        <td><a href="index.php?action=ingrediente_Producto&id=<?php echo $value['id_producto'] ?>"><i
+                                    class="fas fa-print fa-lg"></i></a></td>
                     </tr>
                     <?php
                 }
@@ -205,24 +198,28 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             <tbody id="ingreprod">
                                 <?php
                                 foreach ($resProducto as $key => $value) {
+                                    $conn = $key + 2;
                                     ?>
                                     <tr>
-                                        <td><input type="hidden" name="id_ingreEdit[]" id="id_ingre_1"
+                                        <td><input type="hidden" name="id_ingreEdit[]" id="id_ingre_<?php echo $conn ?>"
+                                                value="<?php echo $value['id_ingrediente'] ?>">
+                                            <input type="hidden" name="id[]"
                                                 value="<?php echo $value['id_ingrediente'] ?>"><input type="text"
-                                                class="form-control ingre" id="ingre_1"
-                                                value="<?php echo $value['nombre_ingrediente'] ?>"></td>
-                                        <td><input type="text" class="form-control" id="medida_1"
+                                                class="form-control ingre" id="ingre_<?php echo $conn ?>"
+                                                value="<?php echo $value['nombre_ingrediente'] ?>">
+                                        </td>
+                                        <td><input type="text" class="form-control" id="medida_<?php echo $conn ?>"
                                                 value="<?php echo $value['nombre_medida'] ?>"></td>
                                         <td><input type="text" class="form-control" name="cantidadEdit[]"
-                                                value="<?php echo $value['cantidad'] ?>"></td>
+                                                value="<?php echo $value['can'] ?>"></td>
                                     </tr>
                                     <?php
                                 }
                                 ?>
                                 <tr>
-                                    <td><input type="hidden" name="id_ingre[]" id="id_ingre_2"><input type="text"
-                                            class="form-control ingre" id="ingre_2"></td>
-                                    <td><input type="text" class="form-control" id="medida_2"></td>
+                                    <td><input type="hidden" name="id_ingre[]" id="id_ingre_39"><input type="text"
+                                            class="form-control ingre" id="ingre_39"></td>
+                                    <td><input type="text" class="form-control" id="medida_39"></td>
                                     <td><input type="text" class="form-control" name="cantidad[]"></td>
                                 </tr>
                             </tbody>

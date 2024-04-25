@@ -137,4 +137,31 @@ class ModeloUsuario
             print_r($e->getMessage());
         }
     }
+
+    function actualizarUsuarioModelo($dato){
+        $sql = "UPDATE $this->tabla SET primer_nombre=?,segundo_nombre=?,primer_apellido=?,segundo_apellido=?,usuario=?,clave=?,id_rol=?,id_activo=?,id_local= ? WHERE id_usuario = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($dato != '') {
+            $stms->bindParam(1, $dato['priNombre'], PDO::PARAM_STR);
+            $stms->bindParam(2, $dato['segNombre'], PDO::PARAM_STR);
+            $stms->bindParam(3, $dato['priApellido'], PDO::PARAM_STR);
+            $stms->bindParam(4, $dato['segApellido'], PDO::PARAM_STR);
+            $stms->bindParam(5, $dato['user'], PDO::PARAM_STR);
+            $stms->bindParam(6, $dato['clave'], PDO::PARAM_STR);
+            $stms->bindParam(7, $dato['rol'], PDO::PARAM_INT);
+            $stms->bindParam(8, $dato['activo'], PDO::PARAM_INT);
+            $stms->bindParam(9, $dato['local'], PDO::PARAM_INT);
+            $stms->bindParam(10, $dato['id'], PDO::PARAM_INT);
+        }
+        try {
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

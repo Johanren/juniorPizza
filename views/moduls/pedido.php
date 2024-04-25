@@ -455,8 +455,8 @@ if ($_SESSION['impresionPos'] == 'true') {
                                         .Feed(3)
                                         .Corte(1)
                                         .Pulso(48, 60, 120)
-                                        //.imprimirEn("prueba1");
-                                        .imprimirEnImpresoraRemota("prueba1", "http://192.168.80.25:8000" + "/imprimir");
+                                        .imprimirEn("prueba1");
+                                        //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.25:8000" + "/imprimir");
                                     if (respuesta === true) {
                                         $.ajax({
                                             url: 'views/ajax.php',

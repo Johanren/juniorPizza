@@ -45,7 +45,7 @@ class ControladorUsuario
                     'activo' => $_POST['activo'],
                     'local' => $_POST['local']
                 );
-            }else{
+            } else {
                 $dato = array(
                     'priNombre' => $_POST['priNombre'],
                     'segNombre' => $_POST['segNombre'],
@@ -56,13 +56,46 @@ class ControladorUsuario
                     'rol' => $_POST['rol'],
                     'activo' => $_POST['activo'],
                     'local' => $_SESSION['id_local']
-                ); 
+                );
             }
 
             $agregar = new ModeloUsuario();
             $res = $agregar->agregarUsuarioModelo($dato);
             if ($res == true) {
                 echo '<script>window.location="agregarUsuario"</script>';
+            }
+        } elseif (isset($_POST['ActualizarUsuario'])) {
+            if ($_SESSION['rol'] == "Administrador") {
+                $dato = array(
+                    'id' => $_GET['id_usuario'],
+                    'priNombre' => $_POST['priNombreEdit'],
+                    'segNombre' => $_POST['segNombreEdit'],
+                    'priApellido' => $_POST['priApellidoEdit'],
+                    'segApellido' => $_POST['segApellidoEdit'],
+                    'user' => $_POST['userEdit'],
+                    'clave' => $_POST['claveEdit'],
+                    'rol' => $_POST['rolEdit'],
+                    'activo' => $_POST['activoEdit'],
+                    'local' => $_POST['localEdit']
+                );
+            } else {
+                $dato = array(
+                    'id' => $_GET['id_usuario'],
+                    'priNombre' => $_POST['priNombre'],
+                    'segNombre' => $_POST['segNombre'],
+                    'priApellido' => $_POST['priApellido'],
+                    'segApellido' => $_POST['segApellido'],
+                    'user' => $_POST['user'],
+                    'clave' => $_POST['clave'],
+                    'rol' => $_POST['rol'],
+                    'activo' => $_POST['activo'],
+                    'local' => $_SESSION['id_local']
+                );
+            }
+            $actualizr = new ModeloUsuario();
+            $res = $actualizr->actualizarUsuarioModelo($dato);
+            if ($res == true) {
+                echo '<script>window.location="actualizarUsuario"</script>';
             }
         }
     }
@@ -74,19 +107,22 @@ class ControladorUsuario
         return $res;
     }
 
-    function consultarUsuarioPerfil(){
+    function consultarUsuarioPerfil()
+    {
         $listar = new ModeloUsuario();
         $res = $listar->consultarUsuarioPerfilModelo($_SESSION['id_usuario']);
         return $res;
     }
 
-    function listarUsuarioNomina(){
+    function listarUsuarioNomina()
+    {
         $listar = new ModeloUsuario();
         $res = $listar->listarUsuarioNominaModelo();
         return $res;
     }
 
-    function listarUsuarioId(){
+    function listarUsuarioId()
+    {
         $id = $_GET['id_usuario'];
         $listar = new ModeloUsuario();
         $res = $listar->listarUsuarioIdModelo($id);

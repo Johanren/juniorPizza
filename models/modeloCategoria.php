@@ -1,8 +1,10 @@
 <?php
 
-class ModeloCategoria{
+class ModeloCategoria
+{
     public $tabla = "categoria";
-    function agregarCategoriaModelo($dato){
+    function agregarCategoriaModelo($dato)
+    {
         $sql = "INSERT INTO $this->tabla (nombre_categoria, id_activo) VALUES (?,?)";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -21,7 +23,8 @@ class ModeloCategoria{
         }
     }
 
-    function listarCategoriaModelo(){
+    function listarCategoriaModelo()
+    {
         $sql = "SELECT * FROM $this->tabla INNER JOIN activo ON activo.id_activo = categoria.id_activo";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -36,7 +39,8 @@ class ModeloCategoria{
         }
     }
 
-    function consultarCategoriaAjaxModelo($dato){
+    function consultarCategoriaAjaxModelo($dato)
+    {
         if ($dato != '') {
             $dato = '%' . $dato . '%';
             $sql = "SELECT * FROM $this->tabla WHERE nombre_categoria like ? ORDER BY id_categoria ";
@@ -54,6 +58,44 @@ class ModeloCategoria{
                 return $stms->fetchAll();
             } else {
                 return [];
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarCategoriaIdModelo($id)
+    {
+        $sql = "SELECT * FROM $this->tabla INNER JOIN activo ON activo.id_activo = categoria.id_activo WHERE id_categoria = ?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $id, PDO::PARAM_STR);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarCategoriaModelo($dato)
+    {
+        $sql = "UPDATE $this->tabla SET nombre_categoria=?,id_activo=? WHERE id_categoria=?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        if ($dato != '') {
+            $stms->bindParam(1, $dato['cate'], PDO::PARAM_STR);
+            $stms->bindParam(2, $dato['activo'], PDO::PARAM_INT);
+            $stms->bindParam(3, $dato['id'], PDO::PARAM_INT);
+        }
+        try {
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
             }
         } catch (PDOException $e) {
             print_r($e->getMessage());

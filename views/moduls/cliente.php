@@ -6,6 +6,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "El usuario ha sido generado correctamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "actualizarCliente") {
+        print '<script>
+        swal("Hurra!!!", "El usuario ha sido actualizado correctamente", "success");
+    </script>';
+    }
 }
 //local
 $activo = new ControladorLocal();
@@ -16,6 +21,12 @@ $user->agregarCLiente();
 $res = $user->listarCliente();
 if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
     echo '<script>window.location="inicio"</script>';
+}
+if (isset($_GET['id_cliente'])) {
+    print "<script>$(document).ready(function() {
+        $('#clienteEdit').modal('toggle')
+    });</script>";
+    $listar = $user->listarClienteId();
 }
 ?>
 <div class="container mt-5">
@@ -44,6 +55,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                     <th>Número documento</th>
                     <th>Email</th>
                     <th>Establecimiento</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,6 +84,8 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                         <td>
                             <?php echo $value['nombre_local'] ?>
                         </td>
+                        <td><a href="index.php?action=cliente&id_cliente=<?php echo $value['id_cliente'] ?>"><i
+                                    class="fas fa-print fa-lg"></i></a></td>
                     </tr>
                     <?php
                 }
@@ -86,6 +100,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                     <th>Número documento</th>
                     <th>Email</th>
                     <th>Establecimiento</th>
+                    <th>Acciones</th>
                 </tr>
             </tfoot>
         </table>
@@ -94,7 +109,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Agregar Cliente</h5>
@@ -143,25 +158,110 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                     <?php
                     if ($_SESSION['rol'] == "Administrador") {
                         ?>
-                        <div class="form-group col-md-4">
-                            <label for="">Establecimiento</label>
-                            <select id="" name="local" class="form-control">
-                                <option selected>Choose...</option>
-                                <?php
-                                foreach ($resLocal as $key => $value) {
-                                    ?>
-                                    <option value="<?php echo $value['id_local'] ?>">
-                                        <?php echo $value['nombre_local'] ?>
-                                    </option>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="">Establecimiento</label>
+                                <select id="" name="local" class="form-control">
+                                    <option selected>Choose...</option>
                                     <?php
-                                }
-                                ?>
-                            </select>
+                                    foreach ($resLocal as $key => $value) {
+                                        ?>
+                                        <option value="<?php echo $value['id_local'] ?>">
+                                            <?php echo $value['nombre_local'] ?>
+                                        </option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                         </div>
                         <?php
                     }
                     ?>
                     <button type="submit" name="agregarCliente" class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Actualizar Cliente-->
+<div class="modal fade" id="clienteEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Editar Cliente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Primer Nombre</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['primer_nombre'] ?>"
+                                name="priNombreEdit" id="inputEmail4" placeholder="Primer nombre">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Segundo Nombre</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['segundo_nombre'] ?>"
+                                name="segNombreEdit" id="inputPassword4" placeholder="Segundo Nombre">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Primer Apellido</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['primer_apellido'] ?>"
+                                name="priApellidoEdit" id="inputEmail4" placeholder="Primer nombre">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Segundo Apellido</label>
+                            <input type="texr" class="form-control" value="<?php echo $listar[0]['segundo_apellido'] ?>"
+                                name="segApellidoEdit" id="inputPassword4" placeholder="Segundo Nombre">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Número de Documento</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['numero_cc'] ?>"
+                                name="ccEdit" id="inputEmail4" placeholder="Número de Documento">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Email</label>
+                            <input type="email" class="form-control" value="<?php echo $listar[0]['correo'] ?>"
+                                name="emailEdit" id="inputPassword4" placeholder="Correo">
+                        </div>
+                    </div>
+                    <?php
+                    if ($_SESSION['rol'] == "Administrador") {
+                        ?>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="">Establecimiento</label>
+                                <select id="" name="localEdit" class="form-control">
+                                    <option selected>Choose...</option>
+                                    <?php
+                                    foreach ($resLocal as $key => $value) {
+                                        ?>
+                                        <option value="<?php echo $value['id_local'] ?>" <?php if ($value['id_local'] == $listar[0]['id_local']) {
+                                               echo 'selected';
+                                           } ?>>
+                                            <?php echo $value['nombre_local'] ?>
+                                        </option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    <button type="submit" name="actualizarCliente" class="btn btn-primary">Actualizar</button>
                 </form>
             </div>
             <div class="modal-footer">

@@ -66,6 +66,22 @@ class modeloViews
             $modulo = 'views/moduls/pedido.php';
         } elseif ($enlace == 'agregarNomina') {
             $modulo = 'views/moduls/nomina.php';
+        } elseif ($enlace == 'actualizarUsuario') {
+            $modulo = 'views/moduls/usuario.php';
+        } elseif ($enlace == 'actualizarCliente') {
+            $modulo = 'views/moduls/cliente.php';
+        } elseif ($enlace == 'actualizarLocal') {
+            $modulo = 'views/moduls/local.php';
+        } elseif ($enlace == 'actualizarProeevedor') {
+            $modulo = 'views/moduls/proeevedor.php';
+        } elseif ($enlace == 'actualizarIngrediente') {
+            $modulo = 'views/moduls/ingredientes.php';
+        } elseif ($enlace == 'actualizarProducto') {
+            $modulo = 'views/moduls/productos.php';
+        } elseif ($enlace == 'actualizarCategoria') {
+            $modulo = 'views/moduls/categoria.php';
+        } elseif ($enlace == 'actualizarMedida') {
+            $modulo = 'views/moduls/medida.php';
         } else {
             $modulo = 'views/moduls/404.php';
         }

@@ -6,6 +6,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "Producto agregado exitosamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "actualizarProducto") {
+        print '<script>
+        swal("Hurra!!!", "Producto actualizado exitosamente", "success");
+    </script>';
+    }
 }
 ///Usuario
 $user = new ControladorProducto();
@@ -26,9 +31,6 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                     <path
                         d="M3.146 5.146a.5.5 0 0 1 .708 0L5.177 6.47a.75.75 0 0 1 0 1.06L3.854 8.854a.5.5 0 1 1-.708-.708L4.293 7 3.146 5.854a.5.5 0 0 1 0-.708M5.5 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5" />
                 </svg>
-            </button>
-            <button id="miBoton" onclick="habilitarInput()" class="btn btn-primary">
-                Habilitar Inputs
             </button>
         </div>
     </div>
@@ -53,36 +55,28 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                     ?>
                     <tr>
                         <td>
-                            <input type="text" class="form-control inputs" name="proeevedor[]"
-                                value="<?php echo $value['nombre_proeevedor'] ?>" disabled>
+                            <?php echo $value['nombre_proeevedor'] ?>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputs" name="codigo[]"
-                                value="<?php echo $value['codigo_producto'] ?>" disabled>
+                            <?php echo $value['codigo_producto'] ?>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputs" name="nombre[]"
-                                value="<?php echo $value['nombre_producto'] ?>" disabled>
+                            <?php echo $value['nombre_producto'] ?>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputs" name="precio[]"
-                                value="<?php echo $value['precio_unitario'] ?>" disabled>
+                            <?php echo $value['precio_unitario'] ?>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputs" name="cantidad[]"
-                                value="<?php echo $value['cantidad_producto'] ?>" disabled>
+                            <?php echo $value['cantidad_producto'] ?>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputs" name="categoria[]"
-                                value="<?php echo $value['nombre_categoria'] ?>" disabled>
+                            <?php echo $value['nombre_categoria'] ?>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputs" name="medida[]"
-                                value="<?php echo $value['nombre_medida'] ?>" disabled>
+                            <?php echo $value['nombre_medida'] ?>
                         </td>
                         <td>
-                            <input type="text" class="form-control inputs" name="local[]"
-                                value="<?php echo $value['nombre_local'] ?>" disabled>
+                            <?php echo $value['nombre_local'] ?>
                         </td>
                     </tr>
                     <?php
@@ -163,10 +157,10 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             </thead>
                             <tbody id="producto">
                                 <tr>
-                                    <td><input type="text" class="form-control" name="codigo[]"></td>
-                                    <td><input type="text" class="form-control" name="nombre[]"></td>
-                                    <td><input type="text" class="form-control" name="precio[]"></td>
-                                    <td><input type="text" class="form-control" name="cantidad[]"></td>
+                                    <td><input type="hidden" id="id_producto_1" name="id_producto[]"><input type="text" class="form-control" id="codigo_1" name="codigo[]"></td>
+                                    <td><input type="text" class="form-control nombrePro" id="producto_1" name="nombre[]"></td>
+                                    <td><input type="text" class="form-control" id="precio_1" name="precio[]"></td>
+                                    <td><input type="hidden" id="cantidad_1" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td>
                                     <td><input type="hidden" class="form-control" name="id_categoria[]"
                                             id="id_categoria_1"><input type="text" class="form-control categoria"
                                             name="" id="categoria_1"></td>

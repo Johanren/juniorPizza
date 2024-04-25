@@ -27,6 +27,31 @@ class ControladorProeevedor
             if ($res == true) {
                 echo '<script>window.location="agregarProeevedor"</script>';
             }
+        }elseif (isset($_POST['actualizarProeevedor'])) {
+            if ($_SESSION['rol'] == "Administrador") {
+                $dato = array(
+                    'id' => $_GET['id'],
+                    'proe' => $_POST['proeEdit'],
+                    'nit' => $_POST['nitEdit'],
+                    'dire' => $_POST['direEdit'],
+                    'tel' => $_POST['telEdit'],
+                    'id_local' => $_POST['localEdit']
+                );
+            } else {
+                $dato = array(
+                    'id' => $_GET['id'],
+                    'proe' => $_POST['proeEdit'],
+                    'nit' => $_POST['nitEdit'],
+                    'dire' => $_POST['direEdit'],
+                    'tel' => $_POST['telEdit'],
+                    'id_local' => $_SESSION['id_local']
+                );
+            }
+            $agregar = new ModeloProeevedor();
+            $res = $agregar->actualizarProeevedorModelo($dato);
+            if ($res == true) {
+                echo '<script>window.location="actualizarProeevedor"</script>';
+            }
         }
     }
 

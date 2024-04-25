@@ -114,7 +114,14 @@ class Ajax
                 'label' => $value['nombre_producto'],
                 'id' => $value['id_producto'],
                 'precio' => $value['precio_unitario'],
-                'codigo' => $value['codigo_producto']
+                'codigo' => $value['codigo_producto'],
+                'cantidad' => $value['cantidad_producto'],
+                'id_categoria' => $value['id_categoria'],
+                'nombre_categoria' => $value['nombre_categoria'],
+                'id_medida' => $value['id_medida'],
+                'nombre_medida' => $value['nombre_medida'],
+                'id_local' => $value['id_local'],
+                'nombre_local' => $value['nombre_local']
             );
         }
 
@@ -129,7 +136,11 @@ class Ajax
             $datos[] = array(
                 'label' => $value['nombre_ingrediente'],
                 'id' => $value['id_ingrediente'],
-                'medida' => $value['nombre_medida']
+                'medida' => $value['nombre_medida'],
+                'id_medida' => $value['id_medida'],
+                'local' => $value['nombre_local'],
+                'id_local' => $value['id_local'],
+                'cantidad' => $value['cantidad']
             );
         }
 

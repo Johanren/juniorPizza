@@ -32,6 +32,36 @@ class ControladorCliente
             if ($res == true) {
                 echo '<script>window.location="agregarCliente"</script>';
             }
+        } elseif (isset($_POST['actualizarCliente'])) {
+            if ($_SESSION['rol'] == "Administrador") {
+                $dato = array(
+                    'id' => $_GET['id_cliente'],
+                    'priNombre' => $_POST['priNombreEdit'],
+                    'segNombre' => $_POST['segNombreEdit'],
+                    'priApellido' => $_POST['priApellidoEdit'],
+                    'segApellido' => $_POST['segApellidoEdit'],
+                    'cc' => $_POST['ccEdit'],
+                    'email' => $_POST['emailEdit'],
+                    'local' => $_POST['localEdit']
+                );
+            } else {
+                $dato = array(
+                    'id' => $_GET['id_cliente'],
+                    'priNombre' => $_POST['priNombreEdit'],
+                    'segNombre' => $_POST['segNombreEdit'],
+                    'priApellido' => $_POST['priApellidoEdit'],
+                    'segApellido' => $_POST['segApellidoEdit'],
+                    'cc' => $_POST['ccEdit'],
+                    'email' => $_POST['emailEdit'],
+                    'local' => $_SESSION['id_local']
+                );
+            }
+
+            $agregar = new ModeloCliente();
+            $res = $agregar->actualizarClienteModelo($dato);
+            if ($res == true) {
+                echo '<script>window.location="actualizarCliente"</script>';
+            }
         }
     }
 
@@ -42,9 +72,18 @@ class ControladorCliente
         return $res;
     }
 
-    function consultarClienteAjax($dato){
+    function consultarClienteAjax($dato)
+    {
         $consultar = new ModeloCliente();
         $res = $consultar->consultarClienteAjaxModelo($dato);
+        return $res;
+    }
+
+    function listarClienteId()
+    {
+        $id = $_GET['id_cliente'];
+        $listar = new ModeloCliente();
+        $res = $listar->mostrarClienteFacturaVentaModelo($id);
         return $res;
     }
 }

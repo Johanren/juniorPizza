@@ -11,11 +11,11 @@ if (isset($_GET['id'])) {
     print "<script>$(document).ready(function() {
         $('#editar').modal('toggle')
     });</script>";
-    $mostrarProee = new ControladorProeevedor();
-    $resProee = $mostrarProee->consultarProeevedor();
+    $mostrarProee = new ControladorProducto();
+    $resProee = $mostrarProee->consultarProducto();
 
     $mostrarProducto = new ControladorFacturaProeevedor();
-    $resProducto = $mostrarProducto->listarFacturaProducto();
+    //$resProducto = $mostrarProducto->listarFacturaProducto();
 }
 ///Usuario
 $user = new ControladorPromocion();
@@ -68,13 +68,8 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             ?>
                         </td>
                         <td><?php echo $value['nombre_activo'] ?></td>
-                        <td><a href="index.php?action=ingrediente_Producto&id=<?php echo $value['id_producto'] ?>"><button
-                                    class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                        fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
-                                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                        <path
-                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                    </svg></button></a></td>
+                        <td><a href="index.php?action=promocion&id=<?php echo $value['id_producto'] ?>"><i
+                                    class="fas fa-print fa-lg"></i></a></td>
                     </tr>
                     <?php
                 }
@@ -177,10 +172,15 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="hidden" name="id_producto" id="id_producto"><input type="text"
-                                            class="form-control" id="codigo"></td>
-                                    <td><input type="text" class="form-control" id="nombreProducto"></td>
-                                    <td><input type="text" class="form-control" id="precio"></td>
+                                    <td><input type="hidden" name="id_producto"
+                                            value="<?php echo $resProee[0]['id_producto'] ?> " id="id_producto"><input
+                                            type="text" class="form-control"
+                                            value="<?php echo $resProee[0]['codigo_producto'] ?> " id="codigo"></td>
+                                    <td><input type="text" class="form-control"
+                                            value="<?php echo $resProee[0]['nombre_producto'] ?> " id="nombreProducto">
+                                    </td>
+                                    <td><input type="text" class="form-control"
+                                            value="<?php echo $resProee[0]['precio_unitario'] ?> " id="precio"></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -190,12 +190,12 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     <th>Cantidad</th>
                                 </tr>
                             </thead>
-                            <tbody id="ingreprodu">
+                            <tbody id="produc">
                                 <tr>
-                                    <td><input type="hidden" name="id_ingre[]" id="id_ingre_1"><input type="text"
-                                            class="form-control ingre" id="ingre_1"></td>
-                                    <td><input type="text" class="form-control" id="medida_1"></td>
-                                    <td><input type="text" class="form-control" name="cantidad[]"></td>
+                                    <td><input type="hidden" name="id_prodcu[]" id="id_prodcu_1"><input type="text"
+                                            class="form-control prod" id="produc_1"></td>
+                                    <td><input type="text" name="" id="codigoProd_1" class="form-control"></td>
+                                    <td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td>
                                 </tr>
                             </tbody>
                         </table>

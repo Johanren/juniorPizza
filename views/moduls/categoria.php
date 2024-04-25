@@ -6,6 +6,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "Categoria agregada exitosamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "actualizarCategoria") {
+        print '<script>
+        swal("Hurra!!!", "Categoria actualizada exitosamente", "success");
+    </script>';
+    }
 }
 ///Usuario
 $user = new ControladorCategoria();
@@ -16,6 +21,12 @@ $activo = new ControladorActivo();
 $resActivo = $activo->listarActivo();
 if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
     echo '<script>window.location="inicio"</script>';
+}
+if (isset($_GET['id'])) {
+    print "<script>$(document).ready(function() {
+        $('#categoria').modal('toggle')
+    });</script>";
+    $listar = $user->listarCategoriaId();
 }
 ?>
 <div class="container mt-5">
@@ -39,6 +50,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                 <tr>
                     <th>Categoria</th>
                     <th>Activo</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,6 +64,8 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                         <td>
                             <?php echo $value['nombre_activo'] ?>
                         </td>
+                        <td><a href="index.php?action=categoria&id=<?php echo $value['id_categoria'] ?>"><i
+                                    class="fas fa-print fa-lg"></i></a></td>
                     </tr>
                     <?php
                 }
@@ -61,6 +75,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                 <tr>
                     <th>Categoria</th>
                     <th>Activo</th>
+                    <th>Acciones</th>
                 </tr>
             </tfoot>
         </table>
@@ -102,6 +117,52 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                         </div>
                     </div>
                     <button type="submit" name="agregarCategoria" class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Editar Categoria-->
+<div class="modal fade" id="categoria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar Categoria</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Categoria</label>
+                            <input type="text" class="form-control" value="<?php echo $listar[0]['nombre_categoria'] ?>"
+                                name="cate" id="inputEmail4" placeholder="Categoria">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Activo</label>
+                            <select id="" name="activo" class="form-control">
+                                <option selected>Choose...</option>
+                                <?php
+                                foreach ($resActivo as $key => $value) {
+                                    ?>
+                                    <option value="<?php echo $value['id_activo'] ?>" <?php if ($value['id_activo'] == $listar[0]['id_activo']) {
+                                           echo 'selected';
+                                       } ?>>
+                                        <?php echo $value['nombre_activo'] ?>
+                                    </option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" name="actualizarCategoria" class="btn btn-primary">Actualizar</button>
                 </form>
             </div>
             <div class="modal-footer">

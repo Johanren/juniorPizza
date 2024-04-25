@@ -11,6 +11,13 @@ class ControladorLocal
             if ($res == true) {
                 echo '<script>window.location="agregarLocal"</script>';
             }
+        } elseif (isset($_POST['actualizarLocal'])) {
+            $dato = array('id' => $_GET['id_local'], 'local' => $_POST['localEdit'], 'nit' => $_POST['nitEdit'], 'dire' => $_POST['direEdit'], 'tel' => $_POST['telEdit']);
+            $agregar = new ModeloLocal();
+            $res = $agregar->actualizarLocalModelo($dato);
+            if ($res == true) {
+                echo '<script>window.location="actualizarLocal"</script>';
+            }
         }
 
     }
@@ -22,13 +29,15 @@ class ControladorLocal
         return $res;
     }
 
-    function consultarLocal($id){
+    function consultarLocal($id)
+    {
         $consultar = new ModeloLocal();
         $res = $consultar->consultarLocalModelo($id);
         return $res;
     }
 
-    function consultarLocalAjaxControlador($dato){
+    function consultarLocalAjaxControlador($dato)
+    {
         $consultar = new ModeloLocal();
         $res = $consultar->consultarModeloAjaxModelo($dato);
         return $res;

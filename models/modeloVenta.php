@@ -1,6 +1,7 @@
 <?php
 
-class ModeloVenta{
+class ModeloVenta
+{
     public $tabla = "venta";
     function agregarVentaModelo($dato)
     {
@@ -54,19 +55,19 @@ class ModeloVenta{
         $fechaActal = date('Y-m-d');
 
         if ($fecha != null) {
-            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, valor_unitario FROM $this->tabla INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like ?";
+            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')) FROM $this->tabla INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like ?";
         } else {
-            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, valor_unitario FROM $this->tabla INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like ?";
+            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')) FROM $this->tabla INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like ?";
         }
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($fecha != null) {
-                $fecha = $fecha."%";
+                $fecha = $fecha . "%";
                 $stms->bindParam(1, $fecha, PDO::PARAM_STR);
             } else {
-                $fechaActal = $fechaActal."%";
+                $fechaActal = $fechaActal . "%";
                 $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
             }
             if ($stms->execute()) {
@@ -79,24 +80,25 @@ class ModeloVenta{
         }
     }
 
-    function consultarVentaTotalDia($fecha){
+    function consultarVentaTotalDia($fecha)
+    {
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
 
         if ($fecha != null) {
-            $sql = "SELECT SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
+            $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
         } else {
-            $sql = "SELECT SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
+            $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
         }
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($fecha != null) {
-                $fecha = $fecha."%";
+                $fecha = $fecha . "%";
                 $stms->bindParam(1, $fecha, PDO::PARAM_STR);
             } else {
-                $fechaActal = $fechaActal."%";
+                $fechaActal = $fechaActal . "%";
                 $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
             }
             if ($stms->execute()) {
@@ -115,20 +117,20 @@ class ModeloVenta{
         $fechaActal = date('Y-m-d');
 
         if ($fecha != null) {
-            $sql = "SELECT SUM(cantidad), SUM(precio_compra), SUM(peso) FROM $this->tabla WHERE id_producto = ? AND fecha_ingreso like ?";
+            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla WHERE id_producto = ? AND fecha_ingreso like ?";
         } else {
-            $sql = "SELECT SUM(cantidad), SUM(precio_compra), SUM(peso) FROM $this->tabla WHERE id_producto = ? AND fecha_ingreso like ?";
+            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla WHERE id_producto = ? AND fecha_ingreso like ?";
         }
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($fecha != null) {
-                $fecha = $fecha."%";
+                $fecha = $fecha . "%";
                 $stms->bindParam(1, $id, PDO::PARAM_INT);
                 $stms->bindParam(2, $fecha, PDO::PARAM_STR);
             } else {
-                $fechaActal = $fechaActal."%";
+                $fechaActal = $fechaActal . "%";
                 $stms->bindParam(1, $id, PDO::PARAM_INT);
                 $stms->bindParam(2, $fechaActal, PDO::PARAM_STR);
             }
@@ -136,6 +138,69 @@ class ModeloVenta{
                 return $stms->fetchAll();
             } else {
                 return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function ganaciasMensualesVentaModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')) FROM `venta` WHERE fecha_ingreso like ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function ganaciasAnualesVentaModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')) FROM `venta` WHERE fecha_ingreso like ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarPorMesModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT SUM(precio_compra) AS total, MONTHNAME(fecha_ingreso) AS mes FROM `venta` WHERE fecha_ingreso like ? GROUP BY MONTH(fecha_ingreso)";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
             }
         } catch (PDOException $e) {
             print_r($e->getMessage());

@@ -50,4 +50,16 @@ class ControladorVenta
             return $res;
         }
     }
+
+    function ganaciasMensualesVenta(){
+        $ganancia = new ModeloVenta();
+        $res = $ganancia->ganaciasMensualesVentaModelo();
+        return $res;
+    }
+
+    function ganaciasAnualesVenta(){
+        $ganancia = new ModeloVenta();
+        $res = $ganancia->ganaciasAnualesVentaModelo();
+        return $res;
+    }
 }

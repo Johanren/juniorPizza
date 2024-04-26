@@ -6,21 +6,27 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "Promocion agregada con exito", "success");
     </script>';
     }
+    if ($_GET['action'] == "actualizarPromocion") {
+        print '<script>
+        swal("Hurra!!!", "Promocion actualizada con exito", "success");
+    </script>';
+    }
 }
+///Usuario
+$user = new ControladorPromocion();
+$user->agregarPromocion();
+$res = $user->listarPromocionId();
 if (isset($_GET['id'])) {
     print "<script>$(document).ready(function() {
         $('#editar').modal('toggle')
     });</script>";
     $mostrarProee = new ControladorProducto();
     $resProee = $mostrarProee->consultarProducto();
-
-    $mostrarProducto = new ControladorFacturaProeevedor();
-    //$resProducto = $mostrarProducto->listarFacturaProducto();
+    $resProduct = $user->listarPromocionProductoFactura($_GET['id']);
+    //activo
+    $activo = new ControladorActivo();
+    $resActivo = $activo->listarActivo();
 }
-///Usuario
-$user = new ControladorPromocion();
-$user->agregarPromocion();
-$res = $user->listarPromocionId();
 if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
     echo '<script>window.location="inicio"</script>';
 }
@@ -162,12 +168,20 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
             <div class="modal-body">
                 <form action="" method="post">
                     <div class="table-responsive">
+                        <a id="agregarPromocio" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                class="bi bi-node-plus" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M11 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8M6.025 7.5a5 5 0 1 1 0 1H4A1.5 1.5 0 0 1 2.5 10h-1A1.5 1.5 0 0 1 0 8.5v-1A1.5 1.5 0 0 1 1.5 6h1A1.5 1.5 0 0 1 4 7.5zM11 5a.5.5 0 0 1 .5.5v2h2a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2h-2a.5.5 0 0 1 0-1h2v-2A.5.5 0 0 1 11 5M1.5 7a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z" />
+                            </svg>
+                        </a>
                         <table class="table table-striped table-bordered mt-2">
                             <thead>
                                 <tr>
                                     <th>Codigo</th>
                                     <th>Producto</th>
                                     <th>Precio</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -181,6 +195,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     </td>
                                     <td><input type="text" class="form-control"
                                             value="<?php echo $resProee[0]['precio_unitario'] ?> " id="precio"></td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -188,19 +203,56 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     <th>Ingredientes</th>
                                     <th>Medida</th>
                                     <th>Cantidad</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="produc">
+                            <tbody id="product">
+                                <?php
+                                foreach ($resProduct as $key => $value) {
+                                    $conn = $key + 1;
+                                    ?>
+                                    <tr>
+                                        <td><input type="hidden" name="id[]" id=""
+                                                value="<?php echo $value['id_promocion_articulo'] ?>"><input type="hidden"
+                                                name="id_prodcuEdit[]" id="id_prodcu_<?php echo $conn ?>"
+                                                value="<?php echo $value['id_promocion_articulo'] ?>"><input type="text"
+                                                class="form-control prod" value="<?php echo $value['nombre_producto'] ?>"
+                                                id="produc_<?php echo $conn ?>"></td>
+                                        <td><input type="text" name="" value="<?php echo $value['codigo_producto'] ?>"
+                                                id="codigoProd_<?php echo $conn ?>" class="form-control"></td>
+                                        <td><input type="text" id="" name="cantidadPromocionEdit[]"
+                                                value="<?php echo $value['cantidad_promocion_producto'] ?>"
+                                                class="form-control"></td>
+                                        <td><select id="" name="activoEdit[]" class="form-control">
+                                                <option selected>Choose...</option>
+                                                <?php
+                                                foreach ($resActivo as $key => $valu) {
+                                                    ?>
+                                                    <option value="<?php echo $valu['id_activo'] ?>" <?php if ($valu['id_activo'] == $value['id_activo']) {
+                                                           echo 'selected';
+                                                       } ?>>
+                                                        <?php echo $valu['nombre_activo'] ?>
+                                                    </option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select></td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
                                 <tr>
-                                    <td><input type="hidden" name="id_prodcu[]" id="id_prodcu_1"><input type="text"
-                                            class="form-control prod" id="produc_1"></td>
-                                    <td><input type="text" name="" id="codigoProd_1" class="form-control"></td>
+                                    <td><input type="hidden" name="id_prodcu[]" id="id_prodcu_39"><input type="text"
+                                            class="form-control prod" id="produc_39"></td>
+                                    <td><input type="text" name="" id="codigoProd_39" class="form-control"></td>
                                     <td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button type="submit" name="agregarIngredienteProducto" class="btn btn-primary">Agregar</button>
+                    <button type="submit" name="actualizarIngredienteProducto"
+                        class="btn btn-primary">Actualizar</button>
                 </form>
             </div>
             <div class="modal-footer">

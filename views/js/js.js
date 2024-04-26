@@ -356,6 +356,16 @@ $(document).ready(function () {
 	});
 });
 
+//editar promocion&procuto
+
+$(document).ready(function () {
+	var index = 40;
+	$("#agregarPromocio").click(function () {
+		$("#product").append('<tr><td><input type="hidden" name="id_prodcu[]" id="id_prodcu_' + index + '"><input type="text"class="form-control prod" id="produc_' + index + '"></td><td><input type="text" name="" id="codigoProd_' + index + '" class="form-control"></td><td><input type="text" id="" name="cantidadPromocion[]" class="form-control"></td></tr>');
+		index++;
+	});
+});
+
 //Agreagr pedido
 
 $(document).ready(function () {

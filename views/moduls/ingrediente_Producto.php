@@ -197,7 +197,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             </thead>
                             <tbody id="ingreprod">
                                 <?php
-                                foreach ($rejjjsProducto as $key => $value) {
+                                foreach ($resProducto as $key => $value) {
                                     $conn = $key + 2;
                                     ?>
                                     <tr>
@@ -225,7 +225,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             </tbody>
                         </table>
                     </div>
-                    <button type="submit" name="agregarIngredienteProducto" class="btn btn-primary">Agregar</button>
+                    <button type="submit" name="actualiarIngredienteProducto" class="btn btn-primary">Actualizar</button>
                 </form>
             </div>
             <div class="modal-footer">

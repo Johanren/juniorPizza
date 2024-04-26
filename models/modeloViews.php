@@ -82,6 +82,8 @@ class modeloViews
             $modulo = 'views/moduls/categoria.php';
         } elseif ($enlace == 'actualizarMedida') {
             $modulo = 'views/moduls/medida.php';
+        } elseif ($enlace == 'actualizarPromocion') {
+            $modulo = 'views/moduls/promocion.php';
         } else {
             $modulo = 'views/moduls/404.php';
         }

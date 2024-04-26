@@ -5,29 +5,27 @@ class ControladorIngredienteProducto
     function agregarIngredienteProducto()
     {
         if (isset($_POST['agregarIngredienteProducto'])) {
-            if ($_POST['id'] != "") {
-                $id = $_POST['id'];
-                $id_producto = $_POST['id_producto'];
-                $id_ingre = $_POST['id_ingreEdit'];
-                $cantidad = $_POST['cantidadEdit'];
-                for ($i = 0; $i < count($cantidad); $i++) {
-                    $agregar = new ModeloIngredienteProducto();
-                    $res = $agregar->actualizarIngredienteProductoModelo($id[$i], $id_producto, $id_ingre[$i], $cantidad[$i]);
-                    if ($res == true) {
-                        echo '<script>window.location="agregarIngredienteProducto"</script>';
-                    }
+            $id_producto = $_POST['id_producto'];
+            $id_ingre = $_POST['id_ingre'];
+            $cantidad = $_POST['cantidad'];
+            for ($i = 0; $i < count($cantidad); $i++) {
+                $agregar = new ModeloIngredienteProducto();
+                $res = $agregar->agregarIngredienteProductoModelo($id_producto, $id_ingre[$i], $cantidad[$i]);
+                if ($res == true) {
+                    echo '<script>window.location="agregarIngredienteProducto"</script>';
                 }
-            } else {
-                $id_producto = $_POST['id_producto'];
-                $id_ingre = $_POST['id_ingre'];
-                $cantidad = $_POST['cantidad'];
-                for ($i = 0; $i < count($cantidad); $i++) {
-                    $agregar = new ModeloIngredienteProducto();
-                    $res = $agregar->agregarIngredienteProductoModelo($id_producto, $id_ingre[$i], $cantidad[$i]);
-                    if ($res == true) {
-                        echo '<script>window.location="agregarIngredienteProducto"</script>';
-                    }
-                } 
+            }
+        } elseif (isset($_POST['actualiarIngredienteProducto'])) {
+            $id = $_POST['id'];
+            $id_producto = $_POST['id_producto'];
+            $id_ingre = $_POST['id_ingreEdit'];
+            $cantidad = $_POST['cantidadEdit'];
+            for ($i = 0; $i < count($cantidad); $i++) {
+                $agregar = new ModeloIngredienteProducto();
+                $res = $agregar->actualizarIngredienteProductoModelo($id[$i], $id_producto, $id_ingre[$i], $cantidad[$i]);
+                if ($res == true) {
+                    echo '<script>window.location="agregarIngredienteProducto"</script>';
+                }
             }
         }
     }

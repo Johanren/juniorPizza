@@ -362,11 +362,7 @@ if ($res != null) {
                 .Iniciar()
                 .DeshabilitarElModoDeCaracteresChinos()
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                /*.DescargarImagenDeInternetEImprimir("http://<?php echo $_SERVER['HTTP_HOST'] ?>/inventario/<?php if ($diseno != null) {
-                       echo $diseno[0]['icon_sistema'];
-                   } else {
-                       echo "Views/img/img.jpg";
-                   } ?>", 0, 216)*/
+                .DescargarImagenDeInternetEImprimir("http://<?php echo $_SERVER['HTTP_HOST'] ?>/puerto_magdalena/views/img/logo.png", 0, 216)
                 .Feed(1)
                 .EscribirTexto("<?php echo $nombreSistema ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
@@ -386,6 +382,7 @@ if ($res != null) {
                 .EscribirTexto("Cliente Final\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Nombre y apellido: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "CC: <?php echo $resCliente[0]['numero_cc'] ?>\n")
+                .EscribirTexto("Eslogan: Sabor de mi tierra\n")
                 .Feed(3)
                 .Corte(1)
                 .Pulso(48, 60, 120)

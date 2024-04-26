@@ -193,13 +193,13 @@ if (isset($_GET['id_usuario'])) {
             <div class="field">
                 <!--<label class="label">Máxima longitud para la cantidad</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudCantidad" value="8" class="input" type="number">
+                    <input hidden id="maximaLongitudCantidad" value="15" class="input" type="number">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
+                    <input hidden id="maximaLongitudPrecio" value="10" class="input" type="number">
                     <input hidden id="id_nomina" value="<?php if(isset($_GET['id_nomina'])){echo $_GET['id_nomina'];} ?>" class="input" type="number">
                 </div>
             </div>
@@ -306,11 +306,11 @@ if (isset($_GET['id_nomina'])) {
                             }));
                         }*/
                         $btnImprimir.addEventListener("click", () => {
-                            const nombreImpresora = "prueba1";
+                            const nombreImpresora = "Xprinter1";
                             if (!nombreImpresora) {
                                 return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
                             }
-                            imprimirTabla("prueba1");
+                            imprimirTabla("Xprinter1");
                         });
                     }
 
@@ -402,7 +402,7 @@ if (isset($_GET['id_nomina'])) {
                             .Feed(3)
                             .Corte(1)
                             .Pulso(48, 60, 120)
-                            .imprimirEn("prueba1");
+                            .imprimirEn("Xprinter1");
                         if (respuesta === true) {
                             alert("Impreso correctamente");
                         } else {

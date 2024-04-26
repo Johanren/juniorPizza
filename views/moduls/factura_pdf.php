@@ -267,11 +267,11 @@ if ($res != null) {
                 }));
             }*/
             $btnImprimir.addEventListener("click", () => {
-                const nombreImpresora = "prueba1";
+                const nombreImpresora = "Xprinter1";
                 if (!nombreImpresora) {
                     return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
                 }
-                imprimirTabla("prueba1");
+                imprimirTabla("Xprinter1");
             });
         }
 
@@ -389,7 +389,7 @@ if ($res != null) {
                 .Feed(3)
                 .Corte(1)
                 .Pulso(48, 60, 120)
-                .imprimirEn("prueba1");
+                .imprimirEn("Xprinter1");
             if (respuesta === true) {
                 alert("Impreso correctamente");
             } else {

@@ -245,7 +245,7 @@ if (isset($_GET['id'])) {
             <div class="field">
                 <!--<label class="label">Máxima longitud para la cantidad</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudCantidad" value="8" class="input" type="number">
+                    <input hidden id="maximaLongitudCantidad" value="5" class="input" type="number">
                 </div>
             </div>
             <div class="field">
@@ -356,11 +356,11 @@ if ($_SESSION['impresionPos'] == 'true') {
                             }));
                         }*/
                         $btnImprimir.addEventListener("click", () => {
-                            const nombreImpresora = "prueba1";
+                            const nombreImpresora = "Xprinter1";
                             if (!nombreImpresora) {
                                 return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
                             }
-                            imprimirTabla("prueba1");
+                            imprimirTabla("Xprinter1");
                         });
                     }
 
@@ -445,8 +445,8 @@ if ($_SESSION['impresionPos'] == 'true') {
                                         .Feed(1)
                                         .EscribirTexto("<?php echo $nombreSistema ?>\n")
                                         .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
-                                        .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                                        .TextoSegunPaginaDeCodigos(2, "cp850", "Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
+                                        .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
+                                        .TextoSegunPaginaDeCodigos(2, "cp850", " Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
                                         .Feed(1)
                                         .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
                                         .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
@@ -455,7 +455,7 @@ if ($_SESSION['impresionPos'] == 'true') {
                                         .Feed(3)
                                         .Corte(1)
                                         .Pulso(48, 60, 120)
-                                        .imprimirEn("prueba1");
+                                        .imprimirEn("Xprinter1");
                                         //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.25:8000" + "/imprimir");
                                     if (respuesta === true) {
                                         $.ajax({

@@ -86,6 +86,7 @@ $res = $user->listarProeevedorFactura();
                     <th># Nit</th>
                     <th>Nombre Proeevedor</th>
                     <th>Fecha Factura</th>
+                    <th>Total a pagar</th>
                     <th>Acciones</th>
                 </tr>
             </tfoot>

@@ -4,6 +4,7 @@
 <script src="views/js/fullcalendar.js"></script>
 <script src="views/js/es.js"></script>
 <script>
+    var host = window.location.hostname;
     $(document).ready(function () {
         $('#calendar').fullCalendar({
             header: {
@@ -15,7 +16,7 @@
                 $('#txtFecha').val(date.format());
                 $("#modalEventos").modal();
             },
-            events: 'http://localhost/juniorPizza/views/eventos.php',
+            events: 'http://'+host+'/juniorPizza/views/eventos.php',
             eventClick: function (calEvent, jsEvent, view) {
                 $('#tituloEvento').html(calEvent.title);
                 $('#txtDescripcion').val(calEvent.descripcion);

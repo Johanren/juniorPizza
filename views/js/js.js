@@ -1,14 +1,3 @@
-//Imprimir Pedido Cocina
-/*document.addEventListener('DOMContentLoaded', function () {
-	// Este código se ejecutará cuando la página haya cargado completamente
-	var boton = document.getElementById('btnImprimir');
-
-	// Simulamos un clic en el botón después de 3 segundos
-	setTimeout(function () {
-		boton.click(); // Desencadenamos el evento de clic en el botón
-	}, 3000); // 3000 milisegundos = 3 segundos
-});*/
-
 function hacerClic() {
 	document.getElementById('btnImprimir').click();
 	console.log("hizo clic");

@@ -41,6 +41,62 @@
         include("views/moduls/footer.php");
     }
     ?>
+
+    <div class="container">
+        <div class="columns">
+            <div class="column">
+            </div>
+        </div>
+        <div class="columns">
+            <div class="column">
+                <div class="select is-rounded">
+                    <select hidden id="listaDeImpresoras"></select>
+                </div>
+                <div class="field">
+                    <!--<label class="label">Separador</label>-->
+                    <div class="control">
+                        <input hidden id="separador" value=" " class="input" type="text" maxlength="1" placeholder="El separador de columnas">
+                    </div>
+                </div>
+                <div class="field">
+                    <!--<label class="label">Relleno</label>-->
+                    <div class="control">
+                        <input hidden id="relleno" value=" " class="input" type="text" maxlength="1" placeholder="El relleno de las celdas">
+                    </div>
+                </div>
+                <div class="field">
+                    <!--<label class="label">Máxima longitud para el nombre</label>-->
+                    <div class="control">
+                        <input hidden id="maximaLongitudNombre" value="20" class="input" type="number">
+                    </div>
+                </div>
+                <div class="field">
+                    <!--<label class="label">Máxima longitud para la cantidad</label>-->
+                    <div class="control">
+                        <input hidden id="maximaLongitudCantidad" value="5" class="input" type="number">
+                    </div>
+                </div>
+                <div class="field">
+                    <!--<label class="label">Máxima longitud para el precio</label>-->
+                    <div class="control">
+                        <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
+                    </div>
+                </div>
+                <?php
+                if (isset($_SESSION['impresionPos'])) {
+                    if ($_SESSION['impresionPos'] == 'true') {
+                ?>
+                        <div class="field">
+                            <div class="">
+                                <input type="hidden" id="<?php if ($_SESSION['impresionPos'] == 'true') { ?>btnImprimir<?php } ?>">
+                            </div>
+                        </div>
+                <?php
+                    }
+                } ?>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -87,59 +143,6 @@
 
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="columns">
-        <div class="column">
-        </div>
-    </div>
-    <div class="columns">
-        <div class="column">
-            <div class="select is-rounded">
-                <select hidden id="listaDeImpresoras"></select>
-            </div>
-            <div class="field">
-                <!--<label class="label">Separador</label>-->
-                <div class="control">
-                    <input hidden id="separador" value=" " class="input" type="text" maxlength="1" placeholder="El separador de columnas">
-                </div>
-            </div>
-            <div class="field">
-                <!--<label class="label">Relleno</label>-->
-                <div class="control">
-                    <input hidden id="relleno" value=" " class="input" type="text" maxlength="1" placeholder="El relleno de las celdas">
-                </div>
-            </div>
-            <div class="field">
-                <!--<label class="label">Máxima longitud para el nombre</label>-->
-                <div class="control">
-                    <input hidden id="maximaLongitudNombre" value="20" class="input" type="number">
-                </div>
-            </div>
-            <div class="field">
-                <!--<label class="label">Máxima longitud para la cantidad</label>-->
-                <div class="control">
-                    <input hidden id="maximaLongitudCantidad" value="5" class="input" type="number">
-                </div>
-            </div>
-            <div class="field">
-                <!--<label class="label">Máxima longitud para el precio</label>-->
-                <div class="control">
-                    <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
-                </div>
-            </div>
-            <?php
-            if (isset($_SESSION['impresionPos'])) {
-                if ($_SESSION['impresionPos'] == 'true') {
-            ?>
-                    <div class="field">
-                        <div class="">
-                            <input type="hidden" id="<?php if ($_SESSION['impresionPos'] == 'true') { ?>btnImprimir<?php } ?>">
-                        </div>
-                    </div>
-            <?php
-                }
-            } ?>
         </div>
     </div>
     <?php

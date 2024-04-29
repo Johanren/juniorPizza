@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Junior Pizza</title>
+    <title>Pizza Napoli</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="views/css/bootstrap.css">
     <link rel="stylesheet" href="views/css/dataTables.bootstrap4.min.css">
@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="views/css/cocina.css">
     <link rel="stylesheet" href="views/css/config.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link rel="icon" href="views/img/icon.jpg">
+    <link rel="icon" href="views/img/logo.png">
     <link rel="stylesheet" href="views/css/jquery-ui.css">
 
 </head>

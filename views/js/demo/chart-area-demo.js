@@ -28,7 +28,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 }
 var currentURL = window.location.href;
 var host = window.location.hostname;
-if (currentURL.includes("http://"+host+"/juniorPizza/inicio")) {
+if (currentURL.includes("http://"+host+"/pizza-napoli/inicio")) {
   // Función para obtener los datos mediante AJAX
   function getDataAndDrawChart() {
     // Realizar una solicitud AJAX al archivo PHP

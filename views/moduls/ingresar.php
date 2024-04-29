@@ -32,7 +32,7 @@
                                                 mí</label>
                                         </div>
                                     </div>
-                                    <button name="login" class="btn btn-primary">Acceder</button>
+                                    <button name="login" class="btn btn-success">Acceder</button>
                                     <hr>
                                 </form>
                             </div>

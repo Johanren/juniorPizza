@@ -1,35 +1,14 @@
 <?php
+$listar = new ControladorPropina();
+$res = $listar->listarPropinaInicioFin();
+///
 $local = new ControladorLocal();
-$res = $local->consultarLocal($_SESSION['id_local']);
-//
-$agregarFactura = new ModeloFactura();
-$resUltimoId = $agregarFactura->mostrarUltimoId();
-if (isset($_GET['id_factura'])) {
-    $id_factura = $_GET['id_factura'];
-} else {
-    $id_factura = $resUltimoId[0]['MAX(id_factura)'];
-}
-//
-$mostrarVenta = new ControladorVenta();
-$resVenta = $mostrarVenta->mostrarFacturaVenta($id_factura);
-//
-$mostrarPropina = new ControladorPropina();
-$resPropina = $mostrarPropina->listarPropina($id_factura);
-//
-$mostrarVenta = new ModeloFactura();
-$resFactura = $mostrarVenta->mostrarFacturaVentaModelo($id_factura);
-$id_cliente = $resFactura[0]['id_cliente'];
-//
-$mostrarCliente = new ModeloCliente();
-$resCliente = $mostrarCliente->mostrarClienteFacturaVentaModelo($id_cliente);
-
-date_default_timezone_set('America/Mexico_City');
-$fechaActal = date('Y-m-d');
-if ($res != null) {
-    $nombreSistema = $res[0]['nombre_local'];
-    $nit = $res[0]['nit'];
-    $tel = $res[0]['telefono'];
-    $dire = $res[0]['direccion'];
+$resLocal = $local->consultarLocal($_SESSION['id_local']);
+if ($resLocal != null) {
+    $nombreSistema = $resLocal[0]['nombre_local'];
+    $nit = $resLocal[0]['nit'];
+    $tel = $resLocal[0]['telefono'];
+    $dire = $resLocal[0]['direccion'];
 } else {
     $nombreSistema = "Inventario";
     $nit = "1111";
@@ -37,134 +16,57 @@ if ($res != null) {
     $dire = "NNNN";
 }
 ?>
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col">
-            <div style="text-align: right;">
-                <p>FACTURA N°<span id="nom_proeevedor">
-                        <?php echo $resFactura[0]['id_factura'] ?>
-                    </span></p>
-            </div>
-            <div style="text-align: right;">
-                Fecha:
-                <?php
-                print $fechaActal;
-                ?>
-            </div>
-            <div class="mt-3" style="text-align: center;">
-                Sistema: <span id="nom_proeevedor">
-                    <?php if ($res != null) {
-                        echo $res[0]['nombre_local'];
-                    } else {
-                        echo "Inventario";
-                    } ?>
-                </span><br>
-                Nit: <span id="nit_proeevedor">
-                    <?php if ($res != null) {
-                        echo $res[0]['nit'];
-                    } else {
-                        echo "1111";
-                    } ?>
-                </span><br>
-                Telefono: <span id="tel_proeevedor">
-                    <?php if ($res != null) {
-                        echo $res[0]['telefono'];
-                    } else {
-                        echo "11111";
-                    } ?>
-                </span><br>
-                Dirección: <span id="dir_proeevedor">
-                    <?php if ($res != null) {
-                        echo $res[0]['direccion'];
-                    } else {
-                        echo "NNNNN";
-                    } ?>
-                </span>
-            </div>
+            <form method="post" class="mt-3">
+                <div class="row">
+                    <div class="col">
+                        <label for="">Fecha Inicio</label>
+                        <input type="date" class="form-control" name="inicio">
+                    </div>
+                    <div class="col">
+                        <label for="">Fecha Fin</label>
+                        <input type="date" class="form-control" name="fin">
+                    </div>
+                    <div class="col">
+                        <button type="hidden" name="consultar" class="btn btn-primary">Buscar</button>
+                    </div>
+                    <div class="col">
+                        <a id="Imprimir" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+                                <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
+                                <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1" />
+                            </svg></a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    <table class="table mt-5">
-        <thead>
-            <tr>
-                <th>Codigo</th>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody id="factura">
-            <?php
-            foreach ($resVenta as $key => $value) {
-            ?>
-                <tr>
-                    <td>
-                        <?php echo $value['codigo_producto'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['nombre_producto'] ?>
-                    </td>
-                    <td>
-                        <?php echo number_format($value['valor_unitario'], 2) ?>
-                    </td>
-                    <td>
-                        <?php if ($value['cantidad'] > 0) {
-                            echo $value['cantidad'];
-                        } else {
-                            echo $value['peso'] . " GR";
-                        } ?>
-                    </td>
-                    <td>
-                        <?php echo number_format($value['precio_compra'], 2) ?>
-                    </td>
-                </tr>
-            <?php
-            }
-
-            ?>
-        </tbody>
-        <?php if (isset($_SESSION['propina'])) {
-            if ($_SESSION['propina'] == 'true') {
-        ?>
-                <tbody>
-                    <tr>
-                        <th>Propinas</th>
-                        <th></th>
-                        <!--<th></th>-->
-                        <!--<th></th>-->
-                        <th></th>
-                        <th></th>
-                        <th><?php echo number_format($resPropina[0]['valor_propinas'], 2) ?></th>
-                    </tr>
-                </tbody>
-        <?php }
-        } ?>
-        <tbody>
-            <tr>
-                <th>Total</th>
-                <th></th>
-                <!--<th></th>-->
-                <!--<th></th>-->
-                <th></th>
-                <th></th>
-                <th><?php echo number_format($resFactura[0]['total_factura'], 2) ?></th>
-            </tr>
-        </tbody>
-        <tbody>
-            <tr>
-                <th>Paga</th>
-                <th>
-                    <?php echo number_format($resFactura[0]['efectivo'], 2) ?>
-                </th>
-                <th></th>
-                <th>Cambio</th>
-                <th>
-                    <?php echo number_format($resFactura[0]['cambio'], 2) ?>
-                </th>
-            </tr>
-        </tbody>
-    </table>
 </div>
+<?php
+if (isset($res)) {
+?>
+    <div class="container">
+        <table class="table mt-5 table-hover">
+            <thead>
+                <tr>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha final</th>
+                    <th>Propina</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><?php echo $_POST['inicio'] ?></td>
+                    <td><?php echo $_POST['fin'] ?></td>
+                    <td><?php echo $res[0]['SUM(valor_propinas)'] ?></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<?php
+}
+?>
 <div class="container">
     <div class="columns">
         <div class="column">
@@ -190,22 +92,21 @@ if ($res != null) {
             <div class="field">
                 <!--<label class="label">Máxima longitud para el nombre</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudNombre" value="20" class="input" type="number">
+                    <input hidden id="maximaLongitudNombre" value="11" class="input" type="number">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Máxima longitud para la cantidad</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudCantidad" value="8" class="input" type="number">
+                    <input hidden id="maximaLongitudCantidad" value="11" class="input" type="number">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudPrecio" value="8" class="input" type="number">
+                    <input hidden id="maximaLongitudPrecio" value="11" class="input" type="number">
                 </div>
             </div>
-            <button id="Imprimir" class="btn btn-primary mt-2">Imprimir</button>
         </div>
     </div>
 </div>
@@ -277,7 +178,6 @@ if ($res != null) {
             $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
         $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
 
-
         const init = async () => {
             /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
             for (const impresora of impresoras) {
@@ -287,11 +187,11 @@ if ($res != null) {
                 }));
             }*/
             $btnImprimir.addEventListener("click", () => {
-                const nombreImpresora = "Xprinter1";
+                const nombreImpresora = "prueba1";
                 if (!nombreImpresora) {
                     return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
                 }
-                imprimirTabla("Xprinter1");
+                imprimirTabla("prueba1");
             });
         }
 
@@ -333,22 +233,11 @@ if ($res != null) {
             }
             // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
             // definir otras propiedades, etcétera
-            const listaDeProductos = [
-                <?php foreach ($resVenta as $key => $value) {
-                ?> {
-                        nombre: "<?php echo $value['nombre_producto'] ?>",
-                        cantidad: <?php if ($value['cantidad'] > 0) {
-                                        echo $value['cantidad'];
-                                    } else {
-                                        echo $value['peso'];
-                                    } ?>,
-                        precio: <?php echo $value['valor_unitario'] ?>,
-                        precioTotal: <?php echo $value['precio_compra'] ?>,
-                    },
-                <?php
-                }
-                ?>
-            ];
+            const listaDeProductos = [{
+                inicio: "<?php echo $_POST['inicio'] ?>",
+                fin: "<?php echo $_POST['fin'] ?>",
+                propina: "<?php echo number_format($res[0]['SUM(valor_propinas)'], 2) ?>",
+            }, ];
             // Comenzar a diseñar la tabla
             let tabla = obtenerLineaSeparadora() + "\n";
 
@@ -356,20 +245,16 @@ if ($res != null) {
             const lineasEncabezado = tabularDatos([
 
                     {
-                        contenido: "Nombre",
+                        contenido: "Inicio",
                         maximaLongitud: maximaLongitudNombre
                     },
                     {
-                        contenido: "Cantidad",
+                        contenido: "Fin",
                         maximaLongitud: maximaLongitudCantidad
                     },
                     {
-                        contenido: "Precio",
+                        contenido: "Propina",
                         maximaLongitud: maximaLongitudPrecio
-                    },
-                    {
-                        contenido: "Total",
-                        maximaLongitud: maximaLongitudPrecioTotal
                     },
                 ],
                 relleno,
@@ -383,19 +268,15 @@ if ($res != null) {
             for (const producto of listaDeProductos) {
                 const lineas = tabularDatos(
                     [{
-                            contenido: producto.nombre,
+                            contenido: producto.inicio,
                             maximaLongitud: maximaLongitudNombre
                         },
                         {
-                            contenido: producto.cantidad.toString(),
+                            contenido: producto.fin.toString(),
                             maximaLongitud: maximaLongitudCantidad
                         },
                         {
-                            contenido: producto.precio.toString(),
-                            maximaLongitud: maximaLongitudPrecio
-                        },
-                        {
-                            contenido: producto.precioTotal.toString(),
+                            contenido: producto.propina.toString(),
                             maximaLongitud: maximaLongitudPrecio
                         },
                     ],
@@ -426,25 +307,26 @@ if ($res != null) {
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: <?php echo $tel ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: <?php echo $dire ?>\n")
-                .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+            <?php
+            if (isset($_POST['buscar'])) {
+            ?>
+                    .EscribirTexto("Fecha: <?php echo $_POST['buscar'] ?>")
+            <?php
+            } else {
+            ?>
+                    .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+            <?php
+            }
+            ?>
                 .Feed(1)
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
                 .EscribirTexto("____________________\n")
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
                 .EscribirTexto(tabla)
-                .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Propina $<?php echo number_format($resPropina[0]['valor_propinas'], 2) ?>\n")
-                .EscribirTexto("Total $<?php echo number_format($resFactura[0]['total_factura'], 2) ?>\n")
-                .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Pago <?php echo $resFactura[0]['efectivo'] ?>   Cambio: <?php echo number_format($resFactura[0]['cambio'], 2) ?>\n")
-                .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Cliente Final\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "Nombre y apellido: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "CC: <?php echo $resCliente[0]['numero_cc'] ?>\n")
                 .Feed(3)
                 .Corte(1)
                 .Pulso(48, 60, 120)
-                .imprimirEn("Xprinter1");
+                .imprimirEn("prueba1");
             if (respuesta === true) {
                 alert("Impreso correctamente");
             } else {

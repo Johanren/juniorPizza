@@ -1,14 +1,10 @@
-//Imprimir Pedido Cocina
-document.addEventListener('DOMContentLoaded', function () {
-	// Este código se ejecutará cuando la página haya cargado completamente
-	var boton = document.getElementById('btnImprimir');
-
-	// Simulamos un clic en el botón después de 3 segundos
-	setTimeout(function () {
-		boton.click(); // Desencadenamos el evento de clic en el botón
-	}, 3000); // 3000 milisegundos = 3 segundos
-});
-
+function hacerClic() {
+	document.getElementById('btnImprimir').click();
+	//console.log("hizo clic");
+}
+window.onload = function () {
+	setInterval(hacerClic, 3000);
+};
 //Autocomplete
 $("#proeevedor").autocomplete({
 	source: function (request, response) {
@@ -313,7 +309,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
-		$("#producto").append('<tr><td><input type="hidden" id="id_producto_'+index+'" name="id_producto[]"><input type="text" class="form-control" id="codigo_'+index+'" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_'+index+'" name="nombre[]"></td><td><input type="text" class="form-control" id="precio_'+index+'" name="precio[]"></td><td><input type="hidden" id="cantidad_'+index+'" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_'+index+'"><input type="text" class="form-control categoria"name="" id="categoria_'+index+'"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_'+index+'"><input type="text" class="form-control medida" name=""id="medida_'+index+'"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_'+index+'"><input type="text" class="form-control nom_local"id="local_'+index+'"></td><?php}?></tr>');
+		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
 		index++;
 	});
 });
@@ -323,7 +319,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarIngrediente").click(function () {
-		$("#ingrediente").append('<tr><td><input type="hidden" id="id_ingre_'+index+'" name="id_ingre[]"><input type="text" class="form-control ingre" id="ingre_'+index+'" name="nom_ingre[]"></td><td><input type="hidden" name="cantidadIngre[]" id="cantidad_'+index+'"><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_'+index+'"><input type="text" class="form-control medida" name=""id="medida_'+index+'"></td>phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_'+index+'"><input type="text" class="form-control nom_local"id="local_'+index+'"></td><?php}?></tr>');
+		$("#ingrediente").append('<tr><td><input type="hidden" id="id_ingre_' + index + '" name="id_ingre[]"><input type="text" class="form-control ingre" id="ingre_' + index + '" name="nom_ingre[]"></td><td><input type="hidden" name="cantidadIngre[]" id="cantidad_' + index + '"><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td>phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
 		index++;
 	});
 });
@@ -457,12 +453,76 @@ $(document).ready(function () {
 		let cantidad = document.getElementById('cantidad_' + index + '');
 		cantidad.addEventListener("keyup", function () {
 			let valor_total_elems = document.querySelectorAll('.resultado')
-			let suma = 0
-			valor_total_elems.forEach(e => suma += parseInt(e.value))
-			console.log(suma);
-			document.querySelector('#total_1').value = suma
+			if (!document.getElementById('propina')) {
+				let propina = 0
+				let suma = 0
+				valor_total_elems.forEach(e => suma += parseInt(e.value))
+				//console.log(suma);
+				var total = suma + parseInt(propina);
+				document.querySelector('#total_1').value = total
+				document.querySelector('#total').value = suma
+			} else {
+				let propina = document.getElementById('propina').value
+				let suma = 0
+				valor_total_elems.forEach(e => suma += parseInt(e.value))
+				//console.log(suma);
+				var total = suma + parseInt(propina);
+				document.querySelector('#total_1').value = total
+				document.querySelector('#total').value = suma
+			}
 		});
 	});
+});
+
+//sumar factura propina
+$(document).ready(function () {
+	$(document).on('change', '.propina', function () {
+		let propina = document.getElementById('propina').value
+		let suma = document.getElementById('total').value
+		//console.log(suma);
+		//console.log(propina);
+		var total = parseInt(suma) + parseInt(propina);
+		//console.log(total);
+		document.querySelector('#total_1').value = total
+	});
+});
+
+//calcular propina
+$(document).ready(function () {
+	let valor_total_elems = document.querySelectorAll('.resultado')
+	let suma = 0
+	valor_total_elems.forEach(e => suma += parseInt(e.value))
+	//console.log(suma);
+	promocion = suma * 0.16;
+	if (!document.querySelector('#propina')) {
+
+	} else {
+		document.querySelector('#propina').value = promocion
+	}
+});
+
+//sumar factura auto con propina
+$(document).ready(function () {
+	let valor_total_elems = document.querySelectorAll('.resultado')
+	if (!document.getElementById('propina')) {
+		let propina = 0
+		let suma = 0
+		valor_total_elems.forEach(e => suma += parseInt(e.value))
+		//console.log(suma);
+		//console.log(propina);
+		var total = suma + parseInt(propina);
+
+		document.querySelector('#total_1').value = total
+	} else {
+		let propina = document.getElementById('propina').value
+		let suma = 0
+		valor_total_elems.forEach(e => suma += parseInt(e.value))
+		//console.log(suma);
+		//console.log(propina);
+		var total = suma + parseInt(propina);
+
+		document.querySelector('#total_1').value = total
+	}
 });
 
 //sumar factura auto
@@ -471,7 +531,8 @@ $(document).ready(function () {
 	let suma = 0
 	valor_total_elems.forEach(e => suma += parseInt(e.value))
 	//console.log(suma);
-	document.querySelector('#total_1').value = suma
+	//console.log(propina);
+	document.querySelector('#total').value = suma
 });
 
 //cambio
@@ -518,10 +579,21 @@ $(document).ready(function () {
 	function calcularTotal() {
 		// Recorrer todos los campos de resultado y sumar sus valores
 		let valor_total_elems = document.querySelectorAll('.resultado')
-		let suma = 0
-		valor_total_elems.forEach(e => suma += parseInt(e.value))
-		//console.log(suma);
-		return suma;
+		if (!document.getElementById('propina')) {
+			let propina = 0
+			let suma = 0
+			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			var total = suma + parseInt(propina);
+			//console.log(suma);
+			return total;
+		} else {
+			let propina = document.getElementById('propina').value
+			let suma = 0
+			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			var total = suma + parseInt(propina);
+			//console.log(suma);
+			return total;
+		}
 	}
 });
 

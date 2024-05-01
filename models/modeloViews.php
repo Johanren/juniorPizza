@@ -31,7 +31,8 @@ class modeloViews
             $enlace == 'venta_dia' ||
             $enlace == 'devoluciones' ||
             $enlace == 'nomina' ||
-            $enlace == 'factura_pdf'
+            $enlace == 'factura_pdf' ||
+            $enlace == 'propina'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
         } elseif ($enlace == 'agregarUsuario') {

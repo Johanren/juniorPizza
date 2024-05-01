@@ -1,6 +1,6 @@
 function hacerClic() {
 	document.getElementById('btnImprimir').click();
-	console.log("hizo clic");
+	//console.log("hizo clic");
 }
 window.onload = function () {
 	setInterval(hacerClic, 3000);
@@ -453,12 +453,76 @@ $(document).ready(function () {
 		let cantidad = document.getElementById('cantidad_' + index + '');
 		cantidad.addEventListener("keyup", function () {
 			let valor_total_elems = document.querySelectorAll('.resultado')
-			let suma = 0
-			valor_total_elems.forEach(e => suma += parseInt(e.value))
-			console.log(suma);
-			document.querySelector('#total_1').value = suma
+			if (!document.getElementById('propina')) {
+				let propina = 0
+				let suma = 0
+				valor_total_elems.forEach(e => suma += parseInt(e.value))
+				//console.log(suma);
+				var total = suma + parseInt(propina);
+				document.querySelector('#total_1').value = total
+				document.querySelector('#total').value = suma
+			} else {
+				let propina = document.getElementById('propina').value
+				let suma = 0
+				valor_total_elems.forEach(e => suma += parseInt(e.value))
+				//console.log(suma);
+				var total = suma + parseInt(propina);
+				document.querySelector('#total_1').value = total
+				document.querySelector('#total').value = suma
+			}
 		});
 	});
+});
+
+//sumar factura propina
+$(document).ready(function () {
+	$(document).on('change', '.propina', function () {
+		let propina = document.getElementById('propina').value
+		let suma = document.getElementById('total').value
+		//console.log(suma);
+		//console.log(propina);
+		var total = parseInt(suma) + parseInt(propina);
+		//console.log(total);
+		document.querySelector('#total_1').value = total
+	});
+});
+
+//calcular propina
+$(document).ready(function () {
+	let valor_total_elems = document.querySelectorAll('.resultado')
+	let suma = 0
+	valor_total_elems.forEach(e => suma += parseInt(e.value))
+	//console.log(suma);
+	promocion = suma * 0.16;
+	if (!document.querySelector('#propina')) {
+
+	} else {
+		document.querySelector('#propina').value = promocion
+	}
+});
+
+//sumar factura auto con propina
+$(document).ready(function () {
+	let valor_total_elems = document.querySelectorAll('.resultado')
+	if (!document.getElementById('propina')) {
+		let propina = 0
+		let suma = 0
+		valor_total_elems.forEach(e => suma += parseInt(e.value))
+		//console.log(suma);
+		//console.log(propina);
+		var total = suma + parseInt(propina);
+
+		document.querySelector('#total_1').value = total
+	} else {
+		let propina = document.getElementById('propina').value
+		let suma = 0
+		valor_total_elems.forEach(e => suma += parseInt(e.value))
+		//console.log(suma);
+		//console.log(propina);
+		var total = suma + parseInt(propina);
+
+		document.querySelector('#total_1').value = total
+	}
 });
 
 //sumar factura auto
@@ -467,7 +531,8 @@ $(document).ready(function () {
 	let suma = 0
 	valor_total_elems.forEach(e => suma += parseInt(e.value))
 	//console.log(suma);
-	document.querySelector('#total_1').value = suma
+	//console.log(propina);
+	document.querySelector('#total').value = suma
 });
 
 //cambio
@@ -514,10 +579,21 @@ $(document).ready(function () {
 	function calcularTotal() {
 		// Recorrer todos los campos de resultado y sumar sus valores
 		let valor_total_elems = document.querySelectorAll('.resultado')
-		let suma = 0
-		valor_total_elems.forEach(e => suma += parseInt(e.value))
-		//console.log(suma);
-		return suma;
+		if (!document.getElementById('propina')) {
+			let propina = 0
+			let suma = 0
+			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			var total = suma + parseInt(propina);
+			//console.log(suma);
+			return total;
+		} else {
+			let propina = document.getElementById('propina').value
+			let suma = 0
+			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			var total = suma + parseInt(propina);
+			//console.log(suma);
+			return total;
+		}
 	}
 });
 

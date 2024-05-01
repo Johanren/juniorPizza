@@ -156,7 +156,7 @@ $res = $listar->consultarUsuarioPerfil();
 
     } else {
         ?>
-        <li class="nav-item <?php if ($_GET['action'] == 'caja' || $_GET['action'] == 'nomina' || $_GET['action'] == 'venta_dia' || $_GET['action'] == 'devoluciones' || $_GET['action'] == 'deudores') {
+        <li class="nav-item <?php if ($_GET['action'] == 'caja' || $_GET['action'] == 'nomina' || $_GET['action'] == 'propina' || $_GET['action'] == 'venta_dia' || $_GET['action'] == 'devoluciones' || $_GET['action'] == 'deudores') {
             print 'active';
         } ?>">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#facutracion" aria-expanded="true"
@@ -170,6 +170,7 @@ $res = $listar->consultarUsuarioPerfil();
                     <a class="collapse-item" href="caja">Caja</a>
                     <a class="collapse-item" href="venta_dia">Venta dia</a>
                     <a class="collapse-item" href="nomina">Nomina</a>
+                    <a class="collapse-item" href="propina">Propina</a>
                     <!--<a class="collapse-item" href="devoluciones">Devoluciones</a>
                     <a class="collapse-item" href="deudores">Deudores</a>-->
                 </div>

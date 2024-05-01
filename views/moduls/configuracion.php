@@ -10,20 +10,16 @@ $funcion->listarFunciones();
         <div class="nav-wrapper d-flex align-items-center justify-content-between">
             <ul class="nav nav-pills d-none d-md-flex" id="pills-tab" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" id="pills-config-tab" data-toggle="pill" href="#pills-config" role="tab"
-                        aria-controls="pills-config" aria-selected="true">Configuracion</a>
+                    <a class="nav-link active" id="pills-config-tab" data-toggle="pill" href="#pills-config" role="tab" aria-controls="pills-config" aria-selected="true">Configuracion</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="pills-product-tab" data-toggle="pill" href="#pills-product" role="tab"
-                        aria-controls="pills-product" aria-selected="false">Product</a>
+                    <a class="nav-link" id="pills-product-tab" data-toggle="pill" href="#pills-product" role="tab" aria-controls="pills-product" aria-selected="false">Product</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="pills-news-tab" data-toggle="pill" href="#pills-news" role="tab"
-                        aria-controls="pills-news" aria-selected="false">News</a>
+                    <a class="nav-link" id="pills-news-tab" data-toggle="pill" href="#pills-news" role="tab" aria-controls="pills-news" aria-selected="false">News</a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab"
-                        aria-controls="pills-contact" aria-selected="false">Contact</a>
+                    <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
                 </li>
             </ul>
         </div>
@@ -40,7 +36,7 @@ $funcion->listarFunciones();
                             <div class="list-group-item">
                                 <?php
                                 foreach ($res as $key => $value) {
-                                    ?>
+                                ?>
                                     <div class="row align-items-center">
                                         <div class="col">
                                             <strong class="mb-0"><?php echo $value['nombre_confi'] ?></strong>
@@ -49,61 +45,20 @@ $funcion->listarFunciones();
                                         </div>
                                         <div class="col-auto">
                                             <div class="form-check form-switch">
-                                                <input class="form-check-input" name="<?php echo $value['nombre_campo'] ?>"
-                                                    <?php if ($value['estado'] == 'true') {
-                                                        echo "checked";
-                                                    } else {
-                                                    } ?>
-                                                    id="<?php echo $value['nombre_campo'] ?>" type="checkbox" role="switch"
-                                                    id="flexSwitchCheckDefault">
+                                                <input class="form-check-input" name="<?php echo $value['nombre_campo'] ?>" <?php if ($value['estado'] == 'true') {
+                                                                                                                                echo "checked";
+                                                                                                                            } else {
+                                                                                                                            } ?> id="<?php echo $value['nombre_campo'] ?>" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                                                 <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                                             </div>
                                         </div>
                                     </div>
-                                    <?php
+                                    <br>
+                                <?php
                                 }
                                 ?>
                             </div>
                             <div id="mensaje"></div>
-                        </div>
-                        <hr class="my-4" />
-                        <strong class="mb-0">Security</strong>
-                        <p>Control security alert you will be notified.</p>
-                        <div class="list-group mb-5 shadow">
-                            <div class="list-group-item">
-                                <div class="row align-items-center">
-                                    <div class="col">
-                                        <strong class="mb-0">Unusual activity notifications</strong>
-                                        <p class="text-muted mb-0">Donec in quam sed urna bibendum tincidunt quis mollis
-                                            mauris.</p>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckDefault">
-                                            <label class="form-check-label" for="flexSwitchCheckDefault"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="row align-items-center">
-                                    <div class="col">
-                                        <strong class="mb-0">Unauthorized financial activity</strong>
-                                        <p class="text-muted mb-0">Fusce lacinia elementum eros, sed vulputate urna
-                                            eleifend
-                                            nec.
-                                        </p>
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" role="switch"
-                                                id="flexSwitchCheckDefault">
-                                            <label class="form-check-label" for="flexSwitchCheckDefault"></label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </form>
                 </div>

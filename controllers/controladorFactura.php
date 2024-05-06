@@ -204,4 +204,33 @@ class ControladorFactura
             return $res;
         }
     }
+
+    function listarDeudoresFactura()
+    {
+        $agregarFactura = new ModeloFactura();
+        $res = $agregarFactura->listarDeudoresFacturaModelo();
+        return $res;
+    }
+
+    function actualizarDeudaFactura()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m-d');
+        if (isset($_POST['guardar'])) {
+            $total = $_POST['debe'] + $_POST['abono'];
+            $abono = $_POST['efectivo'] + $_POST['abono'];
+            $dato = array(
+                'pago' => $abono,
+                'total' => $total,
+                'id_factura' => $_GET['id_factura'],
+                'id_usuario' => $_SESSION['id_usuario'],
+                'fecha' => $fechaActal
+            );
+            $agregarFactura = new ModeloFactura();
+            $res = $agregarFactura->actualizarDeudaFacturaModelo($dato);
+            if ($res == true) {
+                echo '<script>window.location="deudores"</script>';
+            }
+        }
+    }
 }

@@ -433,7 +433,7 @@ if ($res != null) {
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
                 .EscribirTexto(tabla)
                 .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Propina $<?php echo number_format((isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 2, 2) ?>\n")
+                .EscribirTexto("Propina $<?php echo number_format((isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 2) ?>\n")
                 .EscribirTexto("Total $<?php echo number_format($resFactura[0]['total_factura'], 2) ?>\n")
                 .EscribirTexto("------------------------------------------------\n")
                 .EscribirTexto("Pago <?php echo $resFactura[0]['efectivo'] ?>   Cambio: <?php echo number_format($resFactura[0]['cambio'], 2) ?>\n")

@@ -39,21 +39,16 @@ if ($resLocal != null) {
                         <button type="hidden" name="consultar" class="btn btn-primary">Buscar</button>
                     </div>
                     <div class="col">
-                        <a id="Imprimir" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg"
-                                width="30" height="30" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+                        <a id="Imprimir" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
                                 <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
-                                <path
-                                    d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1" />
+                                <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1" />
                             </svg></a>
                     </div>
                     <div class="col">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                                class="bi bi-receipt-cutoff" viewBox="0 0 16 16">
-                                <path
-                                    d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />
-                                <path
-                                    d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-receipt-cutoff" viewBox="0 0 16 16">
+                                <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />
+                                <path d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z" />
                             </svg>
                         </button>
                     </div>
@@ -62,89 +57,191 @@ if ($resLocal != null) {
         </div>
     </div>
 </div>
-<table class="table mt-4">
-    <thead>
-        <tr>
-            <th>Productos Vendidos</th>
-            <th>Valor unitario</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Fecha</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        foreach ($res as $key => $value) {
-            $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto']);
-            foreach ($res_cantidad_total as $key => $valueCantidad) {
-                ?>
+<div class="container">
+    <div class="table-responsive">
+        <table class="table mt-4">
+            <thead>
                 <tr>
-                    <td>
-                        <?php echo $value['nombre_producto'] ?>
-                    </td>
-                    <td>
-                        <?php echo $value["CONCAT('$', FORMAT(valor_unitario, '$#,##0.00'))"] ?>
-                        </th>
-                    <td>
-                        <?php echo $valueCantidad['SUM(cantidad)'] ?>
-                    </td>
-                    <td>
-                        <?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
-                    </td>
-                    <td>
-                        <?php echo $value['fecha_ingreso'] ?>
-                    </td>   
+                    <th>Productos Vendidos</th>
+                    <th>Valor unitario</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Fecha</th>
                 </tr>
-                <?php
+            </thead>
+            <?php
+            foreach ($res as $key => $value) {
+                if ($value['metodo_pago'] == 'efectivo') {
+                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
+                    foreach ($res_cantidad_total as $key => $valueCantidad) {
+            ?>
+                        <thead>
+                            <tr>
+                                <th>Efectivo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <?php echo $value['nombre_producto'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value["CONCAT('$', FORMAT(valor_unitario, '$#,##0.00'))"] ?>
+                                    </th>
+                                <td>
+                                    <?php echo $valueCantidad['SUM(cantidad)'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value['fecha_ingreso'] ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    <?php
+                    }
+                } elseif ($value['metodo_pago'] == 'nequi') {
+                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
+                    foreach ($res_cantidad_total as $key => $valueCantidad) {
+                    ?>
+                        <thead>
+                            <tr>
+                                <th>Nequi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <?php echo $value['nombre_producto'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value["CONCAT('$', FORMAT(valor_unitario, '$#,##0.00'))"] ?>
+                                    </th>
+                                <td>
+                                    <?php echo $valueCantidad['SUM(cantidad)'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value['fecha_ingreso'] ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    <?php
+                    }
+                } elseif ($value['metodo_pago'] == 'daviplata') {
+                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
+                    foreach ($res_cantidad_total as $key => $valueCantidad) {
+                    ?>
+                        <thead>
+                            <tr>
+                                <th>Daviplata</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <?php echo $value['nombre_producto'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value["CONCAT('$', FORMAT(valor_unitario, '$#,##0.00'))"] ?>
+                                    </th>
+                                <td>
+                                    <?php echo $valueCantidad['SUM(cantidad)'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value['fecha_ingreso'] ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    <?php
+                    }
+                } elseif ($value['metodo_pago'] == 'transfferencia') {
+                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
+                    foreach ($res_cantidad_total as $key => $valueCantidad) {
+                    ?>
+                        <thead>
+                            <tr>
+                                <th>Transferencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <?php echo $value['nombre_producto'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value["CONCAT('$', FORMAT(valor_unitario, '$#,##0.00'))"] ?>
+                                    </th>
+                                <td>
+                                    <?php echo $valueCantidad['SUM(cantidad)'] ?>
+                                </td>
+                                <td>
+                                    <?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
+                                </td>
+                                <td>
+                                    <?php echo $value['fecha_ingreso'] ?>
+                                </td>
+                            </tr>
+                        </tbody>
+            <?php
+                    }
+                }
             }
-        }
-        ?>
-    </tbody>
-    <tbody>
-        <tr>
-            <th>SubTotal</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>
-                <?php echo $total[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
-            </th>
-        </tr>
-    </tbody>
-    <tbody>
-        <tr>
-            <th>Subtotal Proeevedores</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>
-                <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(pago_factura), '$#,##0.00'))"] ?>
-            </th>
-        </tr>
-    </tbody>
-    <tbody>
-        <tr>
-            <th>Subtotal Nomina</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>
-                <?php echo $resNomina[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"] ?>
-            </th>
-        </tr>
-    </tbody>
-    <tbody>
-        <tr>
-            <th>Total</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>
-                <?php $totalVenta = $total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(pago_factura)'] - $resNomina[0]['SUM(pago)']; echo '$' . number_format($totalVenta, 2) ?>
-            </th>
-        </tr>
-    </tbody>
-</table>
+            ?>
+            <tbody>
+                <tr>
+                    <th>SubTotal</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <?php echo $total[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>
+                    </th>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <th>Subtotal Proeevedores</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(pago_factura), '$#,##0.00'))"] ?>
+                    </th>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <th>Subtotal Nomina</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <?php echo $resNomina[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"] ?>
+                    </th>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <th>Total</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <?php $totalVenta = $total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(pago_factura)'] - $resNomina[0]['SUM(pago)'];
+                        echo '$' . number_format($totalVenta, 2) ?>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -182,7 +279,7 @@ if ($resLocal != null) {
                     <tbody>
                         <?php
                         foreach ($reslistar as $key => $value) {
-                            ?>
+                        ?>
                             <tr>
                                 <td>
                                     <?php echo $value['id_factura'] ?>
@@ -196,17 +293,12 @@ if ($resLocal != null) {
                                 <td>
                                     <?php echo $value['fecha_factura'] ?>
                                 </td>
-                                <td><a href="index.php?action=factura_pdf&id_factura=<?php echo $value['id_factura'] ?>"><button
-                                            class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30"
-                                                height="30" fill="currentColor" class="bi bi-receipt-cutoff"
-                                                viewBox="0 0 16 16">
-                                                <path
-                                                    d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />
-                                                <path
-                                                    d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z" />
+                                <td><a href="index.php?action=factura_pdf&id_factura=<?php echo $value['id_factura'] ?>"><button class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-receipt-cutoff" viewBox="0 0 16 16">
+                                                <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />
+                                                <path d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z" />
                                             </svg></button></a></td>
                             </tr>
-                            <?php
+                        <?php
                         }
                         ?>
                     </tbody>
@@ -231,15 +323,13 @@ if ($resLocal != null) {
             <div class="field">
                 <!--<label class="label">Separador</label>-->
                 <div class="control">
-                    <input hidden id="separador" value=" " class="input" type="text" maxlength="1"
-                        placeholder="El separador de columnas">
+                    <input hidden id="separador" value=" " class="input" type="text" maxlength="1" placeholder="El separador de columnas">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Relleno</label>-->
                 <div class="control">
-                    <input hidden id="relleno" value=" " class="input" type="text" maxlength="1"
-                        placeholder="El relleno de las celdas">
+                    <input hidden id="relleno" value=" " class="input" type="text" maxlength="1" placeholder="El relleno de las celdas">
                 </div>
             </div>
             <div class="field">
@@ -264,7 +354,6 @@ if ($resLocal != null) {
     </div>
 </div>
 <script>
-
     //Imprimir
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -286,7 +375,10 @@ if ($resLocal != null) {
             const cadenasSeparadas = [];
             for (const contenido of contenidosConMaximaLongitud) {
                 const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
-                cadenasSeparadas.push({ separadas, maximaLongitud: contenido.maximaLongitud });
+                cadenasSeparadas.push({
+                    separadas,
+                    maximaLongitud: contenido.maximaLongitud
+                });
                 if (separadas.length > mayorConteoDeCadenasSeparadas) {
                     mayorConteoDeCadenasSeparadas = separadas.length;
                 }
@@ -356,11 +448,22 @@ if ($resLocal != null) {
                 separadorColumnas = $separador.value;
             const obtenerLineaSeparadora = () => {
                 const lineasSeparador = tabularDatos(
-                    [
-                        { contenido: "-", maximaLongitud: maximaLongitudNombre },
-                        { contenido: "-", maximaLongitud: maximaLongitudCantidad },
-                        { contenido: "-", maximaLongitud: maximaLongitudPrecio },
-                        { contenido: "-", maximaLongitud: maximaLongitudPrecioTotal },
+                    [{
+                            contenido: "-",
+                            maximaLongitud: maximaLongitudNombre
+                        },
+                        {
+                            contenido: "-",
+                            maximaLongitud: maximaLongitudCantidad
+                        },
+                        {
+                            contenido: "-",
+                            maximaLongitud: maximaLongitudPrecio
+                        },
+                        {
+                            contenido: "-",
+                            maximaLongitud: maximaLongitudPrecioTotal
+                        },
                     ],
                     "-",
                     "+",
@@ -377,19 +480,19 @@ if ($resLocal != null) {
                 <?php
 
                 foreach ($res as $key => $value) {
-                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto']);
+                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
                     foreach ($res_cantidad_total as $key => $valueCantidad) {
-                        ?>{
+                ?> {
                             nombre: "<?php echo $value['nombre_producto'] ?>",
                             cantidad: <?php if ($valueCantidad['SUM(cantidad)'] > 0) {
-                                echo $valueCantidad['SUM(cantidad)'];
-                            } else {
-                                echo $valueCantidad['SUM(peso)'];
-                            } ?>,
-                            precio: <?php echo $value['valor_unitario'] ?>,
+                                            echo $valueCantidad['SUM(cantidad)'];
+                                        } else {
+                                            echo $valueCantidad['SUM(peso)'];
+                                        } ?>,
+                            metodoPago: "<?php echo $value['metodo_pago'] ?>",
                             precioTotal: "<?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>",
                         },
-                        <?php
+                <?php
                     }
                 }
                 ?>
@@ -400,11 +503,23 @@ if ($resLocal != null) {
 
             const lineasEncabezado = tabularDatos([
 
-                { contenido: "Nombre", maximaLongitud: maximaLongitudNombre },
-                { contenido: "Cantidad", maximaLongitud: maximaLongitudCantidad },
-                { contenido: "Precio", maximaLongitud: maximaLongitudPrecio },
-                { contenido: "Total", maximaLongitud: maximaLongitudPrecioTotal },
-            ],
+                    {
+                        contenido: "Nombre",
+                        maximaLongitud: maximaLongitudNombre
+                    },
+                    {
+                        contenido: "Cantidad",
+                        maximaLongitud: maximaLongitudCantidad
+                    },
+                    {
+                        contenido: "Metodo Pago",
+                        maximaLongitud: maximaLongitudPrecio
+                    },
+                    {
+                        contenido: "Total",
+                        maximaLongitud: maximaLongitudPrecioTotal
+                    },
+                ],
                 relleno,
                 separadorColumnas,
             );
@@ -415,11 +530,22 @@ if ($resLocal != null) {
             tabla += obtenerLineaSeparadora() + "\n";
             for (const producto of listaDeProductos) {
                 const lineas = tabularDatos(
-                    [
-                        { contenido: producto.nombre, maximaLongitud: maximaLongitudNombre },
-                        { contenido: producto.cantidad.toString(), maximaLongitud: maximaLongitudCantidad },
-                        { contenido: producto.precio.toString(), maximaLongitud: maximaLongitudPrecio },
-                        { contenido: producto.precioTotal.toString(), maximaLongitud: maximaLongitudPrecio },
+                    [{
+                            contenido: producto.nombre,
+                            maximaLongitud: maximaLongitudNombre
+                        },
+                        {
+                            contenido: producto.cantidad.toString(),
+                            maximaLongitud: maximaLongitudCantidad
+                        },
+                        {
+                            contenido: producto.metodoPago,
+                            maximaLongitud: maximaLongitudPrecio
+                        },
+                        {
+                            contenido: producto.precioTotal.toString(),
+                            maximaLongitud: maximaLongitudPrecio
+                        },
                     ],
                     relleno,
                     separadorColumnas
@@ -439,10 +565,10 @@ if ($resLocal != null) {
                 .DeshabilitarElModoDeCaracteresChinos()
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
                 /*.DescargarImagenDeInternetEImprimir("http://<?php echo $_SERVER['HTTP_HOST'] ?>/inventario/<?php if ($diseno != null) {
-                       echo $diseno[0]['icon_sistema'];
-                   } else {
-                       echo "Views/img/img.jpg";
-                   } ?>", 0, 216)*/
+                                                                                                                    echo $diseno[0]['icon_sistema'];
+                                                                                                                } else {
+                                                                                                                    echo "Views/img/img.jpg";
+                                                                                                                } ?>", 0, 216)*/
                 .Feed(1)
                 .EscribirTexto("<?php echo $nombreSistema ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
@@ -450,13 +576,13 @@ if ($resLocal != null) {
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: <?php echo $dire ?>\n")
             <?php
             if (isset($_POST['buscar'])) {
-                ?>
+            ?>
                     .EscribirTexto("Fecha: <?php echo $_POST['buscar'] ?>")
-                <?php
+            <?php
             } else {
-                ?>
+            ?>
                     .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                <?php
+            <?php
             }
             ?>
                 .Feed(1)

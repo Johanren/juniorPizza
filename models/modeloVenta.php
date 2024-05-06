@@ -55,9 +55,9 @@ class ModeloVenta
         $fechaActal = date('Y-m-d');
 
         if ($fecha != null) {
-            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')) FROM $this->tabla INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like ?";
+            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ?";
         } else {
-            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')) FROM $this->tabla INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like ?";
+            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ?";
         }
 
         try {
@@ -111,15 +111,15 @@ class ModeloVenta
         }
     }
 
-    function consultarVentaDiaCantidadTotalModelo($id, $fecha)
+    function consultarVentaDiaCantidadTotalModelo($id, $fecha, $metodo)
     {
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
 
         if ($fecha != null) {
-            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla WHERE id_producto = ? AND fecha_ingreso like ?";
+            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE id_producto = ? AND fecha_ingreso like ? AND metodo_pago = ?";
         } else {
-            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla WHERE id_producto = ? AND fecha_ingreso like ?";
+            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE id_producto = ? AND fecha_ingreso like ? AND metodo_pago = ?";
         }
 
         try {
@@ -129,10 +129,12 @@ class ModeloVenta
                 $fecha = $fecha . "%";
                 $stms->bindParam(1, $id, PDO::PARAM_INT);
                 $stms->bindParam(2, $fecha, PDO::PARAM_STR);
+                $stms->bindParam(3, $metodo, PDO::PARAM_STR);
             } else {
                 $fechaActal = $fechaActal . "%";
                 $stms->bindParam(1, $id, PDO::PARAM_INT);
                 $stms->bindParam(2, $fechaActal, PDO::PARAM_STR);
+                $stms->bindParam(3, $metodo, PDO::PARAM_STR);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();

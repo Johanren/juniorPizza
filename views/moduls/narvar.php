@@ -10,7 +10,7 @@ $res = $listar->consultarUsuarioPerfil();
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Puerto Magdalena</div>
+        <div class="sidebar-brand-text mx-3">Puerto Magdalena></div>
     </a>
 
     <!-- Divider -->
@@ -171,8 +171,8 @@ $res = $listar->consultarUsuarioPerfil();
                     <a class="collapse-item" href="venta_dia">Venta dia</a>
                     <a class="collapse-item" href="nomina">Nomina</a>
                     <a class="collapse-item" href="propina">Propina</a>
-                    <!--<a class="collapse-item" href="devoluciones">Devoluciones</a>
-                    <a class="collapse-item" href="deudores">Deudores</a>-->
+                    <!--<a class="collapse-item" href="devoluciones">Devoluciones</a>-->
+                    <a class="collapse-item" href="deudores">Deudores</a>
                 </div>
             </div>
         </li>

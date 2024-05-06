@@ -39,14 +39,14 @@ class ControladorVenta
         }
     }
 
-    function consultarVentaDiaCantidadTotal($id_producto){
+    function consultarVentaDiaCantidadTotal($id_producto, $metodo){
         if (isset($_POST['consultar'])) {
             $buscar = new ModeloVenta();
-            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, $_POST['buscar']);
+            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, $_POST['buscar'],$metodo);
             return $res;
         }else{
             $buscar = new ModeloVenta();
-            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, '');
+            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, '',$metodo);
             return $res;
         }
     }

@@ -774,3 +774,21 @@ $(document).ready(function () {
 		document.querySelector('#pago_dia').value = resta
 	});
 });
+//abono deuda
+$(document).ready(function () {
+	$(document).on('keydown', '#abono', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+
+		let cantidad = document.getElementById('abono');
+		cantidad.addEventListener("keyup", function () {
+			let valor_total_elems = document.querySelectorAll('#deuda')
+			let suma = 0
+			valor_total_elems.forEach(e => suma -= parseInt(e.value))
+			let resta = 0
+			resta = suma - parseInt(this.value);
+			document.querySelector('#Total').value = resta
+		});
+	});
+});

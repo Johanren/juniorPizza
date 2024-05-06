@@ -98,4 +98,43 @@ class ModeloFactura
             print_r($e->getMessage());
         }
     }
+
+    function listarDeudoresFacturaModelo()
+    {
+        $sql = "SELECT *, cliente.primer_nombre AS nomCli, cliente.primer_apellido AS apellCli, usuario.primer_nombre AS nomUsu, usuario.primer_apellido AS usuApell FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente INNER JOIN usuario ON usuario.id_usuario = factura.id_usuario";
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarDeudaFacturaModelo($dato)
+    {
+        $sql = "UPDATE $this->tabla SET efectivo = ?, cambio = ?, fecha_factura = ?, id_usuario = ? WHERE id_factura = ?";
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($dato != null) {
+                $stms->bindParam(1, $dato['pago'], PDO::PARAM_INT);
+                $stms->bindParam(2, $dato['total'], PDO::PARAM_INT);
+                $stms->bindParam(3, $dato['fecha'], PDO::PARAM_STR);
+                $stms->bindParam(4, $dato['id_usuario'], PDO::PARAM_INT);
+                $stms->bindParam(5, $dato['id_factura'], PDO::PARAM_INT);
+            }
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

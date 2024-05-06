@@ -18,7 +18,7 @@ $fechaActal = date('Y-m-d');
         <?php
         foreach ($res as $key => $value) {
             $respedido = $listarPedido->listarPedidoCocina($value['id_mesa'], $value['fecha_ingreso']);
-            ?>
+        ?>
             <div class="col-sm-3 mt-3">
                 <div class="comanda">
                     <div class="comanda-header">
@@ -28,7 +28,7 @@ $fechaActal = date('Y-m-d');
                     </div>
                     <?php
                     foreach ($respedido as $key => $pedido) {
-                        ?>
+                    ?>
                         <div class="comanda-body">
                             <div class="comanda-item">
                                 <span class="cantidad"><?php echo $pedido['cantidad'] ?></span>
@@ -37,36 +37,33 @@ $fechaActal = date('Y-m-d');
                                 <span class="descripcion"><?php echo $pedido['descripcion'] ?></span>
                             </div>
                         </div>
-                        <?php
+                    <?php
                     }
                     ?>
                     <div class="comanda-footer">
-                        <p>Atendido por: <span
-                                class="chef"><?php echo $value['primer_nombre'] . " " . $value['primer_apellido'] ?></span>
+                        <p>Atendido por: <span class="chef"><?php echo $value['primer_nombre'] . " " . $value['primer_apellido'] ?></span>
                         </p>
                         <br>
                         <a id="<?php if (isset($_GET['id_mesa'])) {
-                            if ($_GET['id_mesa'] == $pedido['id_mesa'] && $_GET['fecha'] == $value['fecha_ingreso']) {
-                                print "btnImprimir";
-                            } else {
-                                print "";
-                            }
-                        } ?>" href="<?php if (isset($_GET['id_mesa'])) {
-                             if ($_GET['id_mesa'] == $pedido['id_mesa'] && $_GET['fecha'] == $value['fecha_ingreso']) {
-                                 print "#";
-                             } else {
-                                 print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
-                             }
-                         } else {
-                             print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
-                         } ?>"><i class="fas fa-print fa-lg"></i></a>
-                        <a
-                            href="index.php?action=cocina&estado=<?php print $pedido['id_mesa'] ?>&fecha=<?php print $pedido['fecha_ingreso'] ?>"><i
-                                class="fas fa-hand-point-right fa-lg"></i></a>
+                                    if ($_GET['id_mesa'] == $pedido['id_mesa'] && $_GET['fecha'] == $value['fecha_ingreso']) {
+                                        print "btnImprimir";
+                                    } else {
+                                        print "";
+                                    }
+                                } ?>" href="<?php if (isset($_GET['id_mesa'])) {
+                                        if ($_GET['id_mesa'] == $pedido['id_mesa'] && $_GET['fecha'] == $value['fecha_ingreso']) {
+                                            print "#";
+                                        } else {
+                                            print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
+                                        }
+                                    } else {
+                                        print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
+                                    } ?>"><i class="fas fa-print fa-lg"></i></a>
+                        <a href="index.php?action=cocina&estado=<?php print $pedido['id_mesa'] ?>&fecha=<?php print $pedido['fecha_ingreso'] ?>"><i class="fas fa-hand-point-right fa-lg"></i></a>
                     </div>
                 </div>
             </div>
-            <?php
+        <?php
         }
         ?>
     </div>
@@ -84,15 +81,13 @@ $fechaActal = date('Y-m-d');
             <div class="field">
                 <!--<label class="label">Separador</label>-->
                 <div class="control">
-                    <input hidden id="separador" value=" " class="input" type="text" maxlength="1"
-                        placeholder="El separador de columnas">
+                    <input hidden id="separador" value=" " class="input" type="text" maxlength="1" placeholder="El separador de columnas">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Relleno</label>-->
                 <div class="control">
-                    <input hidden id="relleno" value=" " class="input" type="text" maxlength="1"
-                        placeholder="El relleno de las celdas">
+                    <input hidden id="relleno" value=" " class="input" type="text" maxlength="1" placeholder="El relleno de las celdas">
                 </div>
             </div>
             <div class="field">
@@ -116,13 +111,17 @@ $fechaActal = date('Y-m-d');
             <div class="field">
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
-                    <input hidden id="id_mesa" value="<?php if(isset($_GET['id_mesa'])){echo $_GET['id_mesa'];} ?>" class="input" type="text">
+                    <input hidden id="id_mesa" value="<?php if (isset($_GET['id_mesa'])) {
+                                                            echo $_GET['id_mesa'];
+                                                        } ?>" class="input" type="text">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
-                    <input hidden id="fecha" value="<?php if(isset($_GET['fecha'])){echo $_GET['fecha'];} ?>" class="input" type="text">
+                    <input hidden id="fecha" value="<?php if (isset($_GET['fecha'])) {
+                                                        echo $_GET['fecha'];
+                                                    } ?>" class="input" type="text">
                 </div>
             </div>
         </div>
@@ -134,21 +133,23 @@ if (isset($_GET['id_mesa'])) {
     $nombreSistema = "Comanda de Cocina";
     $mesa = "1111";
     $usuario = "1111";
-    ?>
+?>
     <script>
-
         var print = 0;
         var id_mesa = $('#id_mesa').val();
         var fecha = $('#fecha').val();
 
-        $.ajax({
-            url: 'views/ajax.php',
-            type: 'get',
-            dataType: 'json',
-            data: { id_mesa: id_mesa, fecha: fecha },
-            success: function (response) {
-                //console.log(response.nombre);
-                document.addEventListener("DOMContentLoaded", async () => {
+        document.addEventListener("DOMContentLoaded", async () => {
+            $.ajax({
+                url: 'views/ajax.php',
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    id_mesa: id_mesa,
+                    fecha: fecha
+                },
+                success: function(response) {
+                    //console.log(response.nombre);
                     // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
                     // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
                     // a cualquier lugar
@@ -167,7 +168,10 @@ if (isset($_GET['id_mesa'])) {
                         const cadenasSeparadas = [];
                         for (const contenido of contenidosConMaximaLongitud) {
                             const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
-                            cadenasSeparadas.push({ separadas, maximaLongitud: contenido.maximaLongitud });
+                            cadenasSeparadas.push({
+                                separadas,
+                                maximaLongitud: contenido.maximaLongitud
+                            });
                             if (separadas.length > mayorConteoDeCadenasSeparadas) {
                                 mayorConteoDeCadenasSeparadas = separadas.length;
                             }
@@ -236,10 +240,18 @@ if (isset($_GET['id_mesa'])) {
                             separadorColumnas = $separador.value;
                         const obtenerLineaSeparadora = () => {
                             const lineasSeparador = tabularDatos(
-                                [
-                                    { contenido: "-", maximaLongitud: maximaLongitudNombre },
-                                    { contenido: "-", maximaLongitud: maximaLongitudCantidad },
-                                    { contenido: "-", maximaLongitud: maximaLongitudPrecio },
+                                [{
+                                        contenido: "-",
+                                        maximaLongitud: maximaLongitudNombre
+                                    },
+                                    {
+                                        contenido: "-",
+                                        maximaLongitud: maximaLongitudCantidad
+                                    },
+                                    {
+                                        contenido: "-",
+                                        maximaLongitud: maximaLongitudPrecio
+                                    },
                                 ],
                                 "-",
                                 "+",
@@ -261,10 +273,19 @@ if (isset($_GET['id_mesa'])) {
 
                         const lineasEncabezado = tabularDatos([
 
-                            { contenido: "Nombre", maximaLongitud: maximaLongitudNombre },
-                            { contenido: "Cantidad", maximaLongitud: maximaLongitudCantidad },
-                            { contenido: "Descripcion", maximaLongitud: maximaLongitudPrecio },
-                        ],
+                                {
+                                    contenido: "Nombre",
+                                    maximaLongitud: maximaLongitudNombre
+                                },
+                                {
+                                    contenido: "Cantidad",
+                                    maximaLongitud: maximaLongitudCantidad
+                                },
+                                {
+                                    contenido: "Descripcion",
+                                    maximaLongitud: maximaLongitudPrecio
+                                },
+                            ],
                             relleno,
                             separadorColumnas,
                         );
@@ -275,10 +296,18 @@ if (isset($_GET['id_mesa'])) {
                         tabla += obtenerLineaSeparadora() + "\n";
                         for (const producto of listaDeProductos) {
                             const lineas = tabularDatos(
-                                [
-                                    { contenido: producto.nombre, maximaLongitud: maximaLongitudNombre },
-                                    { contenido: producto.cantidad.toString(), maximaLongitud: maximaLongitudCantidad },
-                                    { contenido: producto.descripcion.toString(), maximaLongitud: maximaLongitudPrecio },
+                                [{
+                                        contenido: producto.nombre,
+                                        maximaLongitud: maximaLongitudNombre
+                                    },
+                                    {
+                                        contenido: producto.cantidad.toString(),
+                                        maximaLongitud: maximaLongitudCantidad
+                                    },
+                                    {
+                                        contenido: producto.descripcion.toString(),
+                                        maximaLongitud: maximaLongitudPrecio
+                                    },
                                 ],
                                 relleno,
                                 separadorColumnas
@@ -295,8 +324,11 @@ if (isset($_GET['id_mesa'])) {
                             url: 'views/ajax.php',
                             type: 'GET',
                             dataType: 'json',
-                            data: { id_mesa: id_mesa, fechaActual: fecha },
-                            success: async function (response) {
+                            data: {
+                                id_mesa: id_mesa,
+                                fechaActual: fecha
+                            },
+                            success: async function(response) {
                                 const listarPedido = response;
                                 for (const producto of listarPedido) {
                                     // Extraer el valor específico del array devuelto
@@ -319,19 +351,22 @@ if (isset($_GET['id_mesa'])) {
                                         .Corte(1)
                                         .Pulso(48, 60, 120)
                                         .imprimirEn("Xprinter1");
-                                        //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.17:8000" + "/imprimir");
+                                    //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.17:8000" + "/imprimir");
                                     if (respuesta === true) {
                                         $.ajax({
                                             url: 'views/ajax.php',
                                             type: 'GET',
                                             dataType: 'json',
-                                            data: { respuestaPrint: print, id: id_mesa },
-                                            success: async function (response) {
+                                            data: {
+                                                respuestaPrint: print,
+                                                id: id_mesa
+                                            },
+                                            success: async function(response) {
                                                 if (response == true) {
                                                     alert("Impreso correctamente");
                                                 }
                                             },
-                                            error: function (xhr, status, error) {
+                                            error: function(xhr, status, error) {
                                                 // Mostrar error si hay algún problema con la solicitud AJAX
                                                 $('#valorEspecifico').text('Error: ' + error);
                                             }
@@ -343,22 +378,22 @@ if (isset($_GET['id_mesa'])) {
                                 }
 
                             },
-                            error: function (xhr, status, error) {
+                            error: function(xhr, status, error) {
                                 // Mostrar error si hay algún problema con la solicitud AJAX
                                 $('#valorEspecifico').text('Error: ' + error);
                             }
                         });
                     }
                     init();
-                });
 
-            },
-            error: function (xhr, status, error) {
-                // Mostrar error si hay algún problema con la solicitud AJAX
-                $('#respuestaServidor').text('Error: ' + error);
-            }
+
+                },
+                error: function(xhr, status, error) {
+                    // Mostrar error si hay algún problema con la solicitud AJAX
+                    $('#respuestaServidor').text('Error: ' + error);
+                }
+            });
         });
-
     </script>
     <script>
         /*document.addEventListener("DOMContentLoaded", async () => {
@@ -433,6 +468,6 @@ if (isset($_GET['id_mesa'])) {
             init();
         });*/
     </script>
-    <?php
+<?php
 }
 ?>

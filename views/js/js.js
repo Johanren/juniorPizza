@@ -418,6 +418,8 @@ $('input[type="checkbox"]').on('change', function () {
 		}
 	});
 });
+
+
 //Multiplicar factura valor * cantidad
 $(document).ready(function () {
 	$(document).on('keydown', '.cantidad', function () {
@@ -503,36 +505,42 @@ $(document).ready(function () {
 
 //sumar factura auto con propina
 $(document).ready(function () {
-	let valor_total_elems = document.querySelectorAll('.resultado')
-	if (!document.getElementById('propina')) {
-		let propina = 0
-		let suma = 0
-		valor_total_elems.forEach(e => suma += parseInt(e.value))
-		//console.log(suma);
-		//console.log(propina);
-		var total = suma + parseInt(propina);
+	if (document.getElementById('total_1')) {
+		let valor_total_elems = document.querySelectorAll('.resultado')
+		if (!document.getElementById('propina')) {
+			let propina = 0
+			let suma = 0
+			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			//console.log(suma);
+			//console.log(propina);
+			var total = suma + parseInt(propina);
 
-		document.querySelector('#total_1').value = total
-	} else {
-		let propina = document.getElementById('propina').value
-		let suma = 0
-		valor_total_elems.forEach(e => suma += parseInt(e.value))
-		//console.log(suma);
-		//console.log(propina);
-		var total = suma + parseInt(propina);
+			document.querySelector('#total_1').value = total
+		} else {
+			let propina = document.getElementById('propina').value
+			let suma = 0
+			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			//console.log(suma);
+			//console.log(propina);
+			var total = suma + parseInt(propina);
 
-		document.querySelector('#total_1').value = total
+			document.querySelector('#total_1').value = total
+		}
 	}
 });
 
 //sumar factura auto
 $(document).ready(function () {
-	let valor_total_elems = document.querySelectorAll('.resultado')
-	let suma = 0
-	valor_total_elems.forEach(e => suma += parseInt(e.value))
-	//console.log(suma);
-	//console.log(propina);
-	document.querySelector('#total').value = suma
+	if (!document.getElementById('total')) {
+
+	} else {
+		let valor_total_elems = document.querySelectorAll('.resultado')
+		let suma = 0
+		valor_total_elems.forEach(e => suma += parseInt(e.value))
+		//console.log(suma);
+		//console.log(propina);
+		document.querySelector('#total').value = suma
+	}
 });
 
 //cambio
@@ -596,6 +604,7 @@ $(document).ready(function () {
 		}
 	}
 });
+
 
 //agregar factura
 
@@ -792,3 +801,4 @@ $(document).ready(function () {
 		});
 	});
 });
+

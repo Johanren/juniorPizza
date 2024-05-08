@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 08-05-2024 a las 06:05:29
+-- Tiempo de generación: 08-05-2024 a las 06:09:03
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 7.3.31
 
@@ -238,7 +238,7 @@ CREATE TABLE `local` (
 --
 
 INSERT INTO `local` (`id_local`, `nombre_local`, `nit`, `direccion`, `telefono`) VALUES
-(1, 'local 1', '1111', 'Mz J Casa 15', 111111);
+(1, 'La Banca Carne', '1070600724-4', 'Transversal 9 № 31-33', 3142811872);
 
 -- --------------------------------------------------------
 

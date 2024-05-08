@@ -16,7 +16,7 @@
                 $('#txtFecha').val(date.format());
                 $("#modalEventos").modal();
             },
-            events: 'http://'+host+'/juniorPizza/views/eventos.php',
+            events: 'http://'+host+'/beer/views/eventos.php',
             eventClick: function (calEvent, jsEvent, view) {
                 $('#tituloEvento').html(calEvent.title);
                 $('#txtDescripcion').val(calEvent.descripcion);

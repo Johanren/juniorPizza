@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2024 a las 18:07:29
+-- Tiempo de generación: 08-05-2024 a las 06:06:30
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 7.3.31
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `junior`
+-- Base de datos: `beer`
 --
 
 -- --------------------------------------------------------
@@ -58,9 +58,12 @@ CREATE TABLE `categoria` (
 
 INSERT INTO `categoria` (`id_categoria`, `nombre_categoria`, `id_activo`) VALUES
 (1, '', 1),
-(2, 'Bebidas', 1),
-(3, 'Comida Rapida', 1),
-(4, 'Ejecutivo', 1);
+(4, 'Fast Food', 1),
+(5, 'Hamburguesa', 1),
+(11, 'Pizzas', 1),
+(12, 'Adicionales', 1),
+(13, 'Bebidas', 1),
+(14, 'Pizza', 1);
 
 -- --------------------------------------------------------
 
@@ -128,14 +131,6 @@ CREATE TABLE `eventos` (
   `end` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `eventos`
---
-
-INSERT INTO `eventos` (`id`, `title`, `descripcion`, `color`, `textColor`, `start`, `end`) VALUES
-(1, 'Prueba Modificar', 'Prueba evento modificado', '#00ffb3', '#FFFFFF', '2024-04-12 10:03:00', '2024-04-12 10:03:00'),
-(2, 'asdasd', 'dsadas', '#99ff00', '#FFFFFF', '2024-04-13 15:56:00', '2024-04-13 15:56:00');
-
 -- --------------------------------------------------------
 
 --
@@ -152,18 +147,6 @@ CREATE TABLE `factura` (
   `cambio` int(11) NOT NULL,
   `id_cliente` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `factura`
---
-
-INSERT INTO `factura` (`id_factura`, `id_usuario`, `fecha_factura`, `total_factura`, `metodo_pago`, `efectivo`, `cambio`, `id_cliente`) VALUES
-(1, 23, '2024-04-19', 4000, 'nequi', 4000, 0, 4),
-(2, 23, '2024-04-19', 11000, 'nequi', 11000, 0, 5),
-(3, 23, '2024-04-23', 11000, 'nequi', 11000, 0, 3),
-(4, 23, '2024-04-23', 11000, 'nequi', 11000, 0, 3),
-(5, 23, '2024-04-23', 37000, 'nequi', 37000, 0, 3),
-(6, 23, '2024-04-25', 330000, 'nequi', 330000, 0, 5);
 
 -- --------------------------------------------------------
 
@@ -186,34 +169,6 @@ CREATE TABLE `factura_proeevedor` (
   `id_local` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `factura_proeevedor`
---
-
-INSERT INTO `factura_proeevedor` (`id_factura_proeevedor`, `id_categoria`, `id_proeevedor`, `id_usuario`, `id_medida`, `codigo_producto`, `nombre_producto`, `precio_unitario`, `cantidad_producto`, `fecha_ingreso`, `pago_factura`, `id_local`) VALUES
-(1, 1, 1, 23, 1, 1231, 'Prueba 2', 4000, 10, '2024-04-10', 0, 1),
-(2, 1, 1, 23, 1, 132131, 'Prueba 3', 11000, 10, '2024-04-10', 0, 1),
-(3, 1, 1, 23, 1, 32132131, 'Coca-cola 1.5 l', 11000, 10, '2024-04-10', 0, 1),
-(4, 1, 1, 23, 1, 13123, '2 Hambuerguesas', 13000, 10, '2024-04-10', 0, 1),
-(5, 1, 1, 23, 1, 132131, 'Promocion hamburguesa mas coca cola 400 ml', 15000, 10, '2024-04-11', 0, 1),
-(6, 1, 1, 23, 1, 31231, 'Bandeja', 13000, 0, '2024-04-12', 0, 1),
-(7, 2, 1, 23, 1, 1231231, 'fdfsfs', 1111, 20, '2024-04-16', 0, 1),
-(8, 1, 1, 23, 1, 0, 'cebolla larga', 0, 10, '2024-04-16', 0, 1),
-(9, 1, 1, 23, 1, 0, 'Agua', 0, 100, '2024-04-19', 10000, 1),
-(10, 2, 1, 23, 1, 99, 'Paisa', 20000, 10, '2024-04-19', 60000, 1),
-(11, 1, 1, 23, 1, 0, 'Agua', 0, 10, '2024-04-24', 0, 1),
-(12, 1, 1, 23, 1, 0, 'Tomate', 0, 10, '2024-04-24', 0, 1),
-(13, 1, 1, 23, 1, 0, 'Tomate', 0, 100, '2024-04-24', 0, 1),
-(14, 1, 1, 23, 1, 0, 'Tomate', 0, 1, '2024-04-24', 0, 1),
-(15, 1, 1, 23, 1, 0, 'Agua', 0, 1, '2024-04-24', 0, 1),
-(16, 1, 1, 23, 1, 0, 'lentejas', 0, 1, '2024-04-24', 0, 1),
-(17, 1, 1, 23, 1, 0, 'Jamón', 0, 1300, '2024-04-24', 0, 1),
-(18, 2, 1, 23, 1, 111, 'Pizza', 11000, 10, '2024-04-25', 0, 1),
-(19, 2, 1, 23, 1, 111, 'Pizzaaaaaaaa', 11000, 0, '2024-04-25', 0, 1),
-(20, 2, 1, 23, 1, 111, 'Pizza jamon', 11000, 0, '2024-04-25', 0, 1),
-(21, 1, 1, 23, 1, 0, 'Churrasco', 0, 0, '2024-04-25', 0, 1),
-(22, 2, 1, 23, 2, 2, 'coca cola 400 ml', 4000, 0, '2024-04-25', 0, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -234,7 +189,8 @@ CREATE TABLE `funiones` (
 --
 
 INSERT INTO `funiones` (`id_funciones`, `nombre_campo`, `nombre_confi`, `descripcion`, `Nota`, `estado`) VALUES
-(1, 'impresionPos', 'Configuración impresión POS Cocina', 'Al Habilitar esta función el sistema reconocerá cuando el mesero haya realizado una comanda.', 'Nota: Es recomendable usar esta función cuando no se tenga una pantalla en la cocina.', 'true');
+(1, 'impresionPos', 'Configuración impresión POS Cocina', 'Al Habilitar esta función el sistema reconocerá cuando el mesero haya realizado una comanda.', 'Nota: Es recomendable usar esta función cuando no se tenga una pantalla en la cocina.', 'true'),
+(3, 'propina', 'Configuración de propinas', 'Al habilitar esta función automáticamente el sistema cobrara una propina al usuario la cual se calcula según el precio de la factura y se cargara a la factura.', 'Nota: Esta propina podrá ser modificada por si el cliente quiere agregar o disminuir la propina.', 'false');
 
 -- --------------------------------------------------------
 
@@ -250,23 +206,6 @@ CREATE TABLE `ingrediente` (
   `id_local` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `ingrediente`
---
-
-INSERT INTO `ingrediente` (`id_ingrediente`, `nombre_ingrediente`, `id_medida`, `cantidad`, `id_local`) VALUES
-(3, 'Tomate', 1, 113, 1),
-(4, 'Array', 1, 10, 1),
-(5, 'Cebolla', 1, 216, 1),
-(6, 'lechuga', 1, -6264, 1),
-(7, 'Jamón', 1, -2900, 1),
-(8, 'Arroz', 1, 500, 1),
-(9, 'frijol', 1, 1000, 1),
-(11, 'lentejas', 1, 1001, 1),
-(12, 'cebolla larga', 1, 10, 1),
-(16, 'Churrasco', 1, 101, 1),
-(17, 'Agua', 1, 10, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -279,23 +218,6 @@ CREATE TABLE `ingrediente_producto` (
   `id_ingrediente` int(11) DEFAULT NULL,
   `cantidad` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `ingrediente_producto`
---
-
-INSERT INTO `ingrediente_producto` (`id_ingrediente_producto`, `id_producto`, `id_ingrediente`, `cantidad`) VALUES
-(1, 2, 3, 2),
-(2, 15, 5, 216),
-(3, 15, 6, 216),
-(4, 15, 7, 100),
-(5, 2, 6, 216),
-(6, 2, 5, 216),
-(7, 1, 7, 100),
-(8, 15, 7, 100),
-(9, 1, 6, 216),
-(10, 15, 16, 101),
-(11, 15, 17, 40);
 
 -- --------------------------------------------------------
 
@@ -316,7 +238,7 @@ CREATE TABLE `local` (
 --
 
 INSERT INTO `local` (`id_local`, `nombre_local`, `nit`, `direccion`, `telefono`) VALUES
-(1, 'local 1', '1111', 'Mz J Casa 15', 111111);
+(1, 'Point Beer', '1070600724-4', 'Transversal 9 № 31-33', 3219625704);
 
 -- --------------------------------------------------------
 
@@ -356,7 +278,7 @@ CREATE TABLE `mesa` (
 --
 
 INSERT INTO `mesa` (`id_mesa`, `nombre_mesa`, `id_estado_mesa`, `id_piso`) VALUES
-(5, 'Mesa 1', 1, 1),
+(5, 'Mesa 1', 4, 1),
 (6, 'Mesa 2', 1, 1),
 (7, 'Mesa 3', 1, 1),
 (8, 'Mesa 4', 1, 1),
@@ -382,17 +304,6 @@ CREATE TABLE `nomina` (
   `fecha_ingreso` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `nomina`
---
-
-INSERT INTO `nomina` (`id_nomina`, `id_usuario`, `nombre`, `apellido`, `rol`, `dias_trabajados`, `pago`, `fecha_ingreso`) VALUES
-(1, 24, 'Ana', 'Ochica', 'Gerente', 0, 50000, '2024-04-19'),
-(2, 24, 'Ana', 'Ochica', 'Gerente', 7, 420000, '2024-04-23'),
-(3, 23, 'Jogan', 'Rengifo', 'Administrador', 2, 90000, '2024-04-23'),
-(4, 25, 'Karen', 'Calderon', 'Gerente', 2, 100000, '2024-04-23'),
-(5, 24, 'Ana', 'Ochica', 'Gerente', 1, 40000, '2024-04-25');
-
 -- --------------------------------------------------------
 
 --
@@ -413,59 +324,6 @@ CREATE TABLE `pedido` (
   `cocina` int(11) NOT NULL,
   `pago` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `pedido`
---
-
-INSERT INTO `pedido` (`id_pedido`, `id_mesa`, `id_producto`, `producto`, `descripcion`, `cantidad`, `id_estado_mesa`, `fecha_ingreso`, `id_usuario`, `print`, `cocina`, `pago`) VALUES
-(8, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(9, 5, 2, 'Hamburguesa', 'Tomate, Cebolla', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(10, 5, 1, 'Pizza', 'Jamón', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(11, 5, 8, 'Coca-cola 1.5 l', '', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(12, 7, 1, 'Pizza', 'Jamón', 3, 4, '2024-04-11 01:07:46', 23, 1, 0, 0),
-(13, 7, 3, 'coca cola 400 ml', '', 1, 4, '2024-04-11 01:07:46', 23, 1, 0, 0),
-(14, 7, 2, 'Hamburguesa', 'Cebolla, lechuga', 1, 4, '2024-04-11 01:15:26', 23, 1, 0, 0),
-(15, 7, 3, 'coca cola 400 ml', '', 1, 4, '2024-04-11 01:15:27', 23, 1, 0, 0),
-(16, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 2, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(17, 5, 1, 'Pizza', 'Jamón', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(18, 5, 8, 'Coca-cola 1.5 l', '', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(19, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(20, 7, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '2024-04-11 11:00:07', 23, 1, 0, 0),
-(21, 7, 1, 'Pizza', 'Jamón', 1, 4, '2024-04-11 11:00:07', 23, 1, 0, 0),
-(22, 7, 3, 'coca cola 400 ml', '', 1, 4, '2024-04-11 11:00:07', 23, 1, 0, 0),
-(23, 7, 1, 'Pizza', 'Jamón', 1, 4, '2024-04-12 10:46:35', 23, 1, 0, 0),
-(24, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(25, 5, 15, 'Bandeja', '', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(26, 5, 13, '2 Hambuerguesas', '', 2, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(27, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 2, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(28, 7, 2, 'Hamburguesa', 'Tomate, Cebolla ', 1, 4, '2024-04-13 15:49:24', 23, 1, 0, 0),
-(29, 7, 1, 'Pizza', 'Jamón', 1, 4, '2024-04-13 15:49:24', 23, 1, 0, 0),
-(30, 7, 14, 'Promocion hamburguesa mas coca cola 400 ml', '', 1, 4, '2024-04-13 15:51:22', 23, 1, 0, 0),
-(31, 7, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '2024-04-13 15:52:36', 23, 1, 0, 0),
-(32, 7, 3, 'coca cola 400 ml', '', 1, 4, '2024-04-13 15:52:36', 23, 1, 0, 0),
-(33, 7, 15, 'Bandeja', '', 2, 4, '2024-04-13 15:52:36', 23, 1, 0, 0),
-(34, 5, 2, 'Hamburguesa', 'Cebolla, lechuga', 1, 4, '0000-00-00 00:00:00', 23, 1, 0, 0),
-(35, 7, 1, 'Pizza', 'Jamón', 1, 4, '2024-04-15 07:10:35', 23, 1, 1, 0),
-(36, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '0000-00-00 00:00:00', 23, 1, 1, 0),
-(37, 5, 3, 'coca cola 400 ml', '', 1, 4, '2024-04-19 12:00:32', 23, 1, 1, 0),
-(38, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 2, 4, '2024-04-19 12:26:41', 23, 1, 0, 1),
-(39, 5, 1, 'Pizza', 'Jamón', 1, 4, '2024-04-19 12:26:41', 23, 1, 0, 1),
-(40, 5, 8, 'Coca-cola 1.5 l', '', 1, 4, '2024-04-19 12:26:41', 23, 1, 0, 1),
-(41, 7, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '2024-04-19 16:54:39', 23, 1, 0, 0),
-(42, 7, 13, '2 Hambuerguesas', '', 1, 4, '2024-04-19 10:36:13', 23, 1, 0, 0),
-(43, 8, 14, 'Promocion hamburguesa mas coca cola 400 ml', '', 2, 3, '2024-04-19 10:40:30', 23, 1, 0, 1),
-(44, 5, 3, 'coca cola 400 ml', '', 1, 3, '2024-04-19 12:26:41', 23, 1, 0, 1),
-(45, 8, 3, 'coca cola 400 ml', '', 1, 4, '2024-04-19 15:42:44', 23, 1, 1, 1),
-(46, 8, 1, 'Pizza', 'Jamón', 1, 4, '2024-04-19 15:42:44', 23, 1, 1, 1),
-(47, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '2024-04-23 15:21:36', 23, 1, 0, 1),
-(48, 5, 2, 'Hamburguesa', 'Tomate, lechuga', 1, 4, '2024-04-23 15:21:36', 23, 1, 0, 1),
-(49, 5, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '2024-04-23 15:34:03', 23, 1, 0, 0),
-(50, 5, 1, 'Pizza', 'Jamón', 1, 4, '2024-04-23 15:34:03', 23, 1, 0, 0),
-(51, 7, 2, 'Hamburguesa', 'Tomate, Cebolla', 1, 4, '2024-04-23 21:43:39', 23, 1, 0, 1),
-(52, 7, 2, 'Hamburguesa', ' Cebolla, lechuga', 1, 4, '2024-04-23 21:43:39', 23, 1, 0, 1),
-(53, 7, 2, 'Hamburguesa', 'Tomate, Cebolla, lechuga', 1, 4, '2024-04-23 21:43:39', 23, 1, 0, 1),
-(54, 7, 3, 'coca cola 400 ml', '', 1, 4, '2024-04-23 21:43:39', 23, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -508,25 +366,6 @@ CREATE TABLE `producto` (
   `id_local` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `producto`
---
-
-INSERT INTO `producto` (`id_producto`, `id_proeevedor`, `codigo_producto`, `nombre_producto`, `precio_unitario`, `cantidad_producto`, `id_categoria`, `id_medida`, `id_local`) VALUES
-(1, 1, 111, 'Pizza jamon', 11000, -10, 2, 1, 1),
-(2, 1, 1, 'Hamburguesa', 11000, 30, 1, 1, 1),
-(3, 1, 2, 'coca cola 400 ml', 4000, 50, 2, 2, 1),
-(4, 1, 635, 'Jgtt', 777, 2, 1, 1, 1),
-(5, 1, 1231, 'Prueba 2', 4000, 10, 1, 1, 1),
-(6, 1, 1231, 'Prueba 2', 4000, 10, 1, 1, 1),
-(7, 1, 132131, 'Prueba 3', 11000, 10, 1, 1, 1),
-(8, 1, 32132131, 'Coca-cola 1.5 l', 11000, 0, 1, 1, 1),
-(13, 1, 13123, '2 Hambuerguesas', 13000, 10, 1, 1, 1),
-(14, 1, 132131, 'Promocion hamburguesa mas coca cola 400 ml', 15000, 20, 1, 1, 1),
-(15, 1, 31231, 'Bandeja', 13000, 10, 1, 1, 1),
-(16, 1, 1231231, 'fdfsfs', 1111, 20, 2, 1, 1),
-(17, 1, 99, 'Paisa', 20000, 10, 2, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -563,14 +402,18 @@ CREATE TABLE `promocion` (
   `id_activo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `promocion`
+-- Estructura de tabla para la tabla `propinas`
 --
 
-INSERT INTO `promocion` (`id_promocion`, `id_producto`, `id_promocion_articulo`, `cantidad_promocion_producto`, `id_activo`) VALUES
-(2, 13, 2, 2, 1),
-(3, 14, 2, 1, 1),
-(4, 14, 3, 1, 1);
+CREATE TABLE `propinas` (
+  `id_propinas` int(11) NOT NULL,
+  `id_factura` int(11) NOT NULL,
+  `valor_propinas` int(11) NOT NULL,
+  `fecha_ingreso` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -640,21 +483,6 @@ CREATE TABLE `venta` (
   `precio_compra` int(11) NOT NULL,
   `fecha_ingreso` date NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `venta`
---
-
-INSERT INTO `venta` (`id_venta`, `id_factura`, `id_usuario`, `id_producto`, `peso`, `cantidad`, `valor_unitario`, `precio_compra`, `fecha_ingreso`) VALUES
-(1, 1, 23, 3, NULL, 1, 4000, 4000, '2024-04-25'),
-(2, 2, 23, 1, NULL, 1, 11000, 11000, '2024-03-01'),
-(3, 3, 23, 8, NULL, 1, 11000, 11000, '2024-03-01'),
-(4, 4, 23, 2, NULL, 1, 11000, 11000, '2024-04-23'),
-(5, 5, 23, 2, NULL, 1, 11000, 11000, '2024-04-23'),
-(6, 5, 23, 2, NULL, 1, 11000, 11000, '2024-04-23'),
-(7, 5, 23, 2, NULL, 1, 11000, 11000, '2024-04-23'),
-(8, 5, 23, 3, NULL, 1, 4000, 4000, '2024-02-07'),
-(9, 6, 23, 1, NULL, 30, 11000, 330000, '2024-04-25');
 
 --
 -- Índices para tablas volcadas
@@ -804,6 +632,12 @@ ALTER TABLE `promocion`
   ADD KEY `id_activo` (`id_activo`);
 
 --
+-- Indices de la tabla `propinas`
+--
+ALTER TABLE `propinas`
+  ADD PRIMARY KEY (`id_propinas`);
+
+--
 -- Indices de la tabla `rol`
 --
 ALTER TABLE `rol`
@@ -841,7 +675,7 @@ ALTER TABLE `activo`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `cliente`
@@ -859,37 +693,37 @@ ALTER TABLE `estado_mesa`
 -- AUTO_INCREMENT de la tabla `eventos`
 --
 ALTER TABLE `eventos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_proeevedor`
 --
 ALTER TABLE `factura_proeevedor`
-  MODIFY `id_factura_proeevedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_factura_proeevedor` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `funiones`
 --
 ALTER TABLE `funiones`
-  MODIFY `id_funciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_funciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `ingrediente`
 --
 ALTER TABLE `ingrediente`
-  MODIFY `id_ingrediente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_ingrediente` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `ingrediente_producto`
 --
 ALTER TABLE `ingrediente_producto`
-  MODIFY `id_ingrediente_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_ingrediente_producto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `local`
@@ -913,13 +747,13 @@ ALTER TABLE `mesa`
 -- AUTO_INCREMENT de la tabla `nomina`
 --
 ALTER TABLE `nomina`
-  MODIFY `id_nomina` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_nomina` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `piso`
@@ -931,7 +765,7 @@ ALTER TABLE `piso`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `proeevedor`
@@ -943,7 +777,13 @@ ALTER TABLE `proeevedor`
 -- AUTO_INCREMENT de la tabla `promocion`
 --
 ALTER TABLE `promocion`
-  MODIFY `id_promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_promocion` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `propinas`
+--
+ALTER TABLE `propinas`
+  MODIFY `id_propinas` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -961,7 +801,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `venta`
 --
 ALTER TABLE `venta`
-  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -987,94 +827,10 @@ ALTER TABLE `factura`
   ADD CONSTRAINT `factura_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id_cliente`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `factura_proeevedor`
---
-ALTER TABLE `factura_proeevedor`
-  ADD CONSTRAINT `factura_proeevedor_ibfk_1` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `factura_proeevedor_ibfk_2` FOREIGN KEY (`id_proeevedor`) REFERENCES `proeevedor` (`id_proeevedor`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `factura_proeevedor_ibfk_3` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `factura_proeevedor_ibfk_4` FOREIGN KEY (`id_medida`) REFERENCES `medida` (`id_medida`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `factura_proeevedor_ibfk_5` FOREIGN KEY (`id_local`) REFERENCES `local` (`id_local`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Filtros para la tabla `ingrediente`
 --
 ALTER TABLE `ingrediente`
   ADD CONSTRAINT `ingrediente_ibfk_1` FOREIGN KEY (`id_medida`) REFERENCES `medida` (`id_medida`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `ingrediente_producto`
---
-ALTER TABLE `ingrediente_producto`
-  ADD CONSTRAINT `ingrediente_producto_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ingrediente_producto_ibfk_2` FOREIGN KEY (`id_ingrediente`) REFERENCES `ingrediente` (`id_ingrediente`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `medida`
---
-ALTER TABLE `medida`
-  ADD CONSTRAINT `medida_ibfk_1` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `mesa`
---
-ALTER TABLE `mesa`
-  ADD CONSTRAINT `mesa_ibfk_1` FOREIGN KEY (`id_estado_mesa`) REFERENCES `estado_mesa` (`id_estado_mesa`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `mesa_ibfk_2` FOREIGN KEY (`id_piso`) REFERENCES `piso` (`id_piso`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `nomina`
---
-ALTER TABLE `nomina`
-  ADD CONSTRAINT `nomina_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `pedido`
---
-ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`id_estado_mesa`) REFERENCES `estado_mesa` (`id_estado_mesa`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pedido_ibfk_3` FOREIGN KEY (`id_mesa`) REFERENCES `mesa` (`id_mesa`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pedido_ibfk_4` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `producto`
---
-ALTER TABLE `producto`
-  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`id_medida`) REFERENCES `medida` (`id_medida`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `producto_ibfk_2` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `producto_ibfk_3` FOREIGN KEY (`id_proeevedor`) REFERENCES `proeevedor` (`id_proeevedor`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `producto_ibfk_4` FOREIGN KEY (`id_local`) REFERENCES `local` (`id_local`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `proeevedor`
---
-ALTER TABLE `proeevedor`
-  ADD CONSTRAINT `proeevedor_ibfk_1` FOREIGN KEY (`id_local`) REFERENCES `local` (`id_local`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `promocion`
---
-ALTER TABLE `promocion`
-  ADD CONSTRAINT `promocion_ibfk_1` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `promocion_ibfk_2` FOREIGN KEY (`id_promocion_articulo`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `promocion_ibfk_3` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `usuario_ibfk_3` FOREIGN KEY (`id_local`) REFERENCES `local` (`id_local`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `usuario_ibfk_4` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id_rol`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `usuario_ibfk_5` FOREIGN KEY (`id_activo`) REFERENCES `activo` (`id_activo`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `venta`
---
-ALTER TABLE `venta`
-  ADD CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`id_factura`) REFERENCES `factura` (`id_factura`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `venta_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `venta_ibfk_3` FOREIGN KEY (`id_producto`) REFERENCES `producto` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

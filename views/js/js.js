@@ -309,7 +309,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
-		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
+		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
 		index++;
 	});
 });
@@ -429,13 +429,18 @@ $(document).ready(function () {
 
 		var valor_descuento = 0/*document.getElementById('descuento_' + index + '').value*/;
 		var valor = document.getElementById('valor_' + index + '').value;
+		//eliminar miles
+		var valorSinDesimal = valor.replace(/,/g, '');
 		let cantidad = document.getElementById('cantidad_' + index + '');
 		cantidad.addEventListener("keyup", function () {
 			if (valor_descuento > 0) {
 
 			} else {
-				var result = parseInt(valor) * parseInt(this.value);
-				document.getElementById('resultado_' + index).value = result;
+				var result = valorSinDesimal * this.value;
+				//agregar miles
+				result = result.toString();
+				resultado = result.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.getElementById('resultado_' + index).value = resultado;
 				let valor_total_elems = document.querySelectorAll('#resultado_' + index + '')
 				let suma = 0
 				valor_total_elems.forEach(e => suma += parseInt(e.value))
@@ -454,51 +459,70 @@ $(document).ready(function () {
 
 		let cantidad = document.getElementById('cantidad_' + index + '');
 		cantidad.addEventListener("keyup", function () {
-			let valor_total_elems = document.querySelectorAll('.resultado')
+			let valor_total_elems = document.querySelectorAll('.resultado');
+			let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+				return elem.value.replace(/,/g, '');
+			});
+
 			if (!document.getElementById('propina')) {
-				let propina = 0
-				let suma = 0
-				valor_total_elems.forEach(e => suma += parseInt(e.value))
-				//console.log(suma);
+				let propina = 0;
+				let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 				var total = suma + parseInt(propina);
-				document.querySelector('#total_1').value = total
-				document.querySelector('#total').value = suma
+				suma = suma.toString();
+				total = total.toString();
+				suma = suma.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.querySelector('#total_1').value = total;
+				document.querySelector('#total').value = suma;
 			} else {
-				let propina = document.getElementById('propina').value
-				let suma = 0
-				valor_total_elems.forEach(e => suma += parseInt(e.value))
-				//console.log(suma);
+				let propina = document.getElementById('propina').value;
+				let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 				var total = suma + parseInt(propina);
-				document.querySelector('#total_1').value = total
-				document.querySelector('#total').value = suma
+				//agregar miles
+				suma = suma.toString();
+				total = total.toString();
+				suma = suma.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.querySelector('#total_1').value = total;
+				document.querySelector('#total').value = suma;
 			}
 		});
 	});
 });
+
 
 //sumar factura propina
 $(document).ready(function () {
 	$(document).on('change', '.propina', function () {
 		let propina = document.getElementById('propina').value
 		let suma = document.getElementById('total').value
+		var valorSinDesimalpropina = propina.replace(/,/g, '');
+		var valorSinDesimalsuma = suma.replace(/,/g, '');
 		//console.log(suma);
 		//console.log(propina);
-		var total = parseInt(suma) + parseInt(propina);
+		var total = parseInt(valorSinDesimalsuma) + parseInt(valorSinDesimalpropina);
 		//console.log(total);
+		total = total.toString();
+		total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		document.querySelector('#total_1').value = total
 	});
 });
 
 //calcular propina
 $(document).ready(function () {
-	let valor_total_elems = document.querySelectorAll('.resultado')
-	let suma = 0
-	valor_total_elems.forEach(e => suma += parseInt(e.value))
+	let valor_total_elems = document.querySelectorAll('.resultado');
+	let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+		return elem.value.replace(/,/g, '');
+	});
+	let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 	//console.log(suma);
-	promocion = suma * 0.16;
+	promocion = suma * 0.10;
+	promocion = promocion.toString();
+	promocion = promocion.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	if (!document.querySelector('#propina')) {
 
 	} else {
+
 		document.querySelector('#propina').value = promocion
 	}
 });
@@ -506,24 +530,28 @@ $(document).ready(function () {
 //sumar factura auto con propina
 $(document).ready(function () {
 	if (document.getElementById('total_1')) {
-		let valor_total_elems = document.querySelectorAll('.resultado')
+		let valor_total_elems = document.querySelectorAll('.resultado');
+		let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+			return elem.value.replace(/,/g, '');
+		});
 		if (!document.getElementById('propina')) {
 			let propina = 0
-			let suma = 0
-			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 			//console.log(suma);
 			//console.log(propina);
 			var total = suma + parseInt(propina);
-
+			total = total.toString();
+			total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 			document.querySelector('#total_1').value = total
 		} else {
 			let propina = document.getElementById('propina').value
-			let suma = 0
-			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			var valorSinDesimalPropina = propina.replace(/,/g, '');
+			let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 			//console.log(suma);
-			//console.log(propina);
-			var total = suma + parseInt(propina);
-
+			console.log(valorSinDesimalPropina);
+			var total = suma + parseInt(valorSinDesimalPropina);
+			total = total.toString();
+			total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 			document.querySelector('#total_1').value = total
 		}
 	}
@@ -534,11 +562,15 @@ $(document).ready(function () {
 	if (!document.getElementById('total')) {
 
 	} else {
-		let valor_total_elems = document.querySelectorAll('.resultado')
-		let suma = 0
-		valor_total_elems.forEach(e => suma += parseInt(e.value))
+		let valor_total_elems = document.querySelectorAll('.resultado');
+		let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+			return elem.value.replace(/,/g, '');
+		});
+		let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 		//console.log(suma);
 		//console.log(propina);
+		suma = suma.toString();
+		suma = suma.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		document.querySelector('#total').value = suma
 	}
 });
@@ -548,11 +580,17 @@ $(document).ready(function () {
 	$(document).on('change', '#pago_1', function () {
 
 		var valorCampo = $('#total_1').val();
+		var valorSinDesimalTotal = valorCampo.replace(/,/g, '');
 		var pago = $('#pago_1').val();
 		//console.log(pago);
-		resta = parseInt(this.value) - valorCampo;
+		resta = parseInt(this.value) - valorSinDesimalTotal;
+		resta = resta.toString();
+		resta = resta.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		//console.log(resta)
 		document.querySelector('#cambio_1').value = resta
+		pago = pago.toString();
+		pago = pago.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#pago_1').val(pago);
 	});
 });
 
@@ -574,31 +612,39 @@ $(document).ready(function () {
 			// Calcular el total y establecerlo como el monto a pagar
 			var total = calcularTotal();
 			//console.log(total);
+			total = total.toString();
+			total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 			$('#pago_1').val(total);
 			var valorCampo = $('#total_1').val();
 			var pago = $('#pago_1').val();
+			var valorSinDesimalPago = pago.replace(/,/g, '');
+			var valorSinDesimalTotal = total.replace(/,/g, '');
 			//console.log(pago);
-			resta = parseInt(pago) - total;
+			resta = parseInt(valorSinDesimalPago) - valorSinDesimalTotal;
 			//console.log(resta)
+			resta = resta.toString();
+			resta = resta.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 			document.querySelector('#cambio_1').value = resta
 		}
 	});
 
 	function calcularTotal() {
 		// Recorrer todos los campos de resultado y sumar sus valores
-		let valor_total_elems = document.querySelectorAll('.resultado')
+		let valor_total_elems = document.querySelectorAll('.resultado');
+		let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+			return elem.value.replace(/,/g, '');
+		});
 		if (!document.getElementById('propina')) {
 			let propina = 0
-			let suma = 0
-			valor_total_elems.forEach(e => suma += parseInt(e.value))
+			let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 			var total = suma + parseInt(propina);
 			//console.log(suma);
 			return total;
 		} else {
 			let propina = document.getElementById('propina').value
-			let suma = 0
-			valor_total_elems.forEach(e => suma += parseInt(e.value))
-			var total = suma + parseInt(propina);
+			var valorSinDesimalPropina = propina.replace(/,/g, '');
+			let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
+			var total = suma + parseInt(valorSinDesimalPropina);
 			//console.log(suma);
 			return total;
 		}
@@ -619,12 +665,80 @@ $(document).ready(function () {
 for (let index = 0; index < 30; index++) {
 
 	$(document).on('click', '.eliminar', function () {
-		let valor_total_elems = document.querySelectorAll('.resultado')
-		let suma = 0
-		valor_total_elems.forEach(e => suma += parseInt(e.value))
+		let valor_total_elems = document.querySelectorAll('.resultado');
+		let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+			return elem.value.replace(/,/g, '');
+		});
+		let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
+		suma = suma.toString();
+		suma = suma.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		//console.log(suma);
 		document.querySelector('#total_1').value = suma
+		document.querySelector('#total').value = suma
 		$(this).parents('.eliminar_' + index + '').remove();
+		// Calcular el total y establecerlo como el monto a pagar
+		var total = calcularTotal();
+		//console.log(total);
+		total = total.toString();
+		total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#pago_1').val(total);
+		var valorCampo = $('#total_1').val();
+		var pago = $('#pago_1').val();
+		var valorSinDesimalPago = pago.replace(/,/g, '');
+		var valorSinDesimalTotal = total.replace(/,/g, '');
+		//console.log(pago);
+		resta = parseInt(valorSinDesimalPago) - valorSinDesimalTotal;
+		//console.log(resta)
+		resta = resta.toString();
+		resta = resta.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		document.querySelector('#cambio_1').value = resta
+		function calcularTotal() {
+			// Recorrer todos los campos de resultado y sumar sus valores
+			let valor_total_elems = document.querySelectorAll('.resultado');
+			let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+				return elem.value.replace(/,/g, '');
+			});
+			if (!document.getElementById('propina')) {
+				let propina = 0
+				let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
+				var total = suma + parseInt(propina);
+				//console.log(suma);
+				return total;
+			} else {
+				let propina = document.getElementById('propina').value
+				var valorSinDesimalPropina = propina.replace(/,/g, '');
+				let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
+				var total = suma + parseInt(valorSinDesimalPropina);
+				//console.log(suma);
+				return total;
+			}
+		}
+		if (document.getElementById('total_1')) {
+			let valor_total_elems = document.querySelectorAll('.resultado');
+			let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+				return elem.value.replace(/,/g, '');
+			});
+			if (!document.getElementById('propina')) {
+				let propina = 0
+				let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
+				//console.log(suma);
+				//console.log(propina);
+				var total = suma + parseInt(propina);
+				total = total.toString();
+				total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.querySelector('#total_1').value = total
+			} else {
+				let propina = document.getElementById('propina').value
+				var valorSinDesimalPropina = propina.replace(/,/g, '');
+				let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
+				//console.log(suma);
+				//console.log(propina);
+				var total = suma + parseInt(valorSinDesimalPropina);
+				total = total.toString();
+				total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.querySelector('#total_1').value = total
+			}
+		}
 	})
 }
 
@@ -697,12 +811,14 @@ $(document).ready(function () {
 							var id = data[0]['id_producto'];
 							var codigo = data[0]['codigo_producto'];
 							var name = data[0]['nombre_producto'];
+							//agregar miles
 							var valor = data[0]['precio_unitario'];
+							value = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 							document.getElementById('id_articulo_' + index).value = id;
 							document.getElementById('codigo_' + index).value = codigo;
 							document.getElementById('nombre_' + index).value = name;
-							document.getElementById('valor_' + index).value = valor;
+							document.getElementById('valor_' + index).value = value;
 						}
 
 					}
@@ -793,12 +909,113 @@ $(document).ready(function () {
 		let cantidad = document.getElementById('abono');
 		cantidad.addEventListener("keyup", function () {
 			let valor_total_elems = document.querySelectorAll('#deuda')
+			let abono = document.getElementById('abono').value
+			var valorSinDesimalabono = abono.replace(/,/g, '');
 			let suma = 0
 			valor_total_elems.forEach(e => suma -= parseInt(e.value))
 			let resta = 0
-			resta = suma - parseInt(this.value);
+			resta = suma - valorSinDesimalabono;
+			resta = resta.toString();
+			resta = resta.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 			document.querySelector('#Total').value = resta
 		});
 	});
 });
 
+
+$(document).ready(function () {
+	$(document).on('keydown', '.precio', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+
+		let cantidad = document.getElementById('precio_' + index + '');
+		cantidad.addEventListener("keyup", function () {
+			// Eliminar caracteres no numéricos
+			let value = cantidad.value.replace(/\D/g, '');
+
+			// Añadir coma para separar miles
+			value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+			// Agregar el símbolo de la moneda o unidad
+			value = value; // Puedes cambiar 'kg' por el símbolo que desees
+
+			// Establecer el valor formateado en el campo de entrada
+			cantidad.value = value;
+		});
+	});
+});
+//peso propina
+$(document).ready(function () {
+	$(document).on('keydown', '.propina', function () {
+
+		let cantidad = document.getElementById('propina');
+		cantidad.addEventListener("keyup", function () {
+			// Eliminar caracteres no numéricos
+			let value = cantidad.value.replace(/\D/g, '');
+
+			// Añadir coma para separar miles
+			value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+			// Agregar el símbolo de la moneda o unidad
+			value = value; // Puedes cambiar 'kg' por el símbolo que desees
+
+			// Establecer el valor formateado en el campo de entrada
+			cantidad.value = value;
+		});
+	});
+
+	/*$(document).on('keydown', '.pago', function () {
+
+		let cantidad = document.getElementById('pago_1');
+		cantidad.addEventListener("keyup", function () {
+			// Eliminar caracteres no numéricos
+			let value = cantidad.value.replace(/\D/g, '');
+
+			// Añadir coma para separar miles
+			value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+			// Agregar el símbolo de la moneda o unidad
+			value = value; // Puedes cambiar 'kg' por el símbolo que desees
+
+			// Establecer el valor formateado en el campo de entrada
+			cantidad.value = value;
+		});
+	});*/
+
+	$(document).on('keydown', '.abono', function () {
+
+		let cantidad = document.getElementById('abono');
+		cantidad.addEventListener("keyup", function () {
+			// Eliminar caracteres no numéricos
+			let value = cantidad.value.replace(/\D/g, '');
+
+			// Añadir coma para separar miles
+			value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+			// Agregar el símbolo de la moneda o unidad
+			value = value; // Puedes cambiar 'kg' por el símbolo que desees
+
+			// Establecer el valor formateado en el campo de entrada
+			cantidad.value = value;
+		});
+	});
+
+	$(document).on('keydown', '.totalFactura', function () {
+
+		let cantidad = document.getElementById('totalFactura');
+		cantidad.addEventListener("keyup", function () {
+			// Eliminar caracteres no numéricos
+			let value = cantidad.value.replace(/\D/g, '');
+
+			// Añadir coma para separar miles
+			value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+			// Agregar el símbolo de la moneda o unidad
+			value = value; // Puedes cambiar 'kg' por el símbolo que desees
+
+			// Establecer el valor formateado en el campo de entrada
+			cantidad.value = value;
+		});
+	});
+});

@@ -9,57 +9,77 @@ class ControladorVenta
         return $res;
     }
 
-    function mostrarFacturaVenta($id){
+    function mostrarFacturaVenta($id)
+    {
         $mostrar = new ModeloVenta();
         $res = $mostrar->mostrarFacturaVentaModelo($id);
         return $res;
     }
 
-    function consultarVentaDia(){
+    function consultarVentaDia()
+    {
         if (isset($_POST['consultar'])) {
             $buscar = new ModeloVenta();
             $res = $buscar->consultarVentaDia($_POST['buscar']);
             return $res;
-        }else{
+        } else {
             $buscar = new ModeloVenta();
             $res = $buscar->consultarVentaDia('');
             return $res;
         }
     }
 
-    function ventaTotalDia(){
+    function ventaTotalDia()
+    {
         if (isset($_POST['consultar'])) {
             $buscar = new ModeloVenta();
             $res = $buscar->consultarVentaTotalDia($_POST['buscar']);
             return $res;
-        }else{
+        } else {
             $buscar = new ModeloVenta();
             $res = $buscar->consultarVentaTotalDia('');
             return $res;
         }
     }
 
-    function consultarVentaDiaCantidadTotal($id_producto, $metodo){
+    function consultarVentaDiaCantidadTotal($id_producto, $metodo)
+    {
         if (isset($_POST['consultar'])) {
             $buscar = new ModeloVenta();
-            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, $_POST['buscar'],$metodo);
+            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, $_POST['buscar'], $metodo);
             return $res;
-        }else{
+        } else {
             $buscar = new ModeloVenta();
-            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, '',$metodo);
+            $res = $buscar->consultarVentaDiaCantidadTotalModelo($id_producto, '', $metodo);
             return $res;
         }
     }
 
-    function ganaciasMensualesVenta(){
+    function ganaciasMensualesVenta()
+    {
         $ganancia = new ModeloVenta();
         $res = $ganancia->ganaciasMensualesVentaModelo();
         return $res;
     }
 
-    function ganaciasAnualesVenta(){
+    function ganaciasAnualesVenta()
+    {
         $ganancia = new ModeloVenta();
         $res = $ganancia->ganaciasAnualesVentaModelo();
+        return $res;
+    }
+
+    function listarMetodosPago()
+    {
+        $metodos = new ModeloVenta();
+        $res = $metodos->listarMetodosPagoModelo(null);
+        return $res;
+    }
+
+    function metodosPagoTotal($metodo)
+    {
+        $metodos = new ModeloVenta();
+        $res = $metodos->listarMetodosPagoModelo($metodo);
         return $res;
     }
 }

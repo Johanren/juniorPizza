@@ -208,4 +208,34 @@ class ModeloVenta
             print_r($e->getMessage());
         }
     }
+
+    function listarMetodosPagoModelo($metodo)
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m-d');
+        $fechaActal = $fechaActal . "%";
+        if ($metodo == null) {
+            $sql = "SELECT DISTINCT(metodo_pago) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura  WHERE fecha_factura like ?";
+        } else {
+            $sql = "SELECT SUM(venta.precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_factura like ? AND metodo_pago = ?";
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($metodo == null) {
+                $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            }else{
+                $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                $stms->bindParam(2, $metodo, PDO::PARAM_STR);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

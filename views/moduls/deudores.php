@@ -36,7 +36,7 @@ if (isset($_GET['id_factura'])) {
                             <?php echo $value['numero_cc'] ?>
                         </td>
                         <td>
-                            <?php echo $value['cambio'] ?>
+                            <?php echo number_format($value['cambio'], 0) ?>
                         </td>
                         <td>
                             <?php echo $value['nomUsu'] . " " . $value['usuApell'] ?>
@@ -132,101 +132,101 @@ if (isset($_GET['id_factura'])) {
                             </div>
                         </div>
                         <table class="table mt-5">
-                        <thead>
-                            <tr>
-                                <th>Codigo</th>
-                                <th>Producto</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="factura">
-                            <?php
-                            foreach ($resVenta as $key => $value) {
-                            ?>
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <?php echo $value['codigo_producto'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $value['nombre_producto'] ?>
-                                    </td>
-                                    <td>
-                                        <?php echo number_format($value['valor_unitario'], 2) ?>
-                                    </td>
-                                    <td>
-                                        <?php if ($value['cantidad'] > 0) {
-                                            echo $value['cantidad'];
-                                        } else {
-                                            echo $value['peso'] . " GR";
-                                        } ?>
-                                    </td>
-                                    <td>
-                                        <?php echo number_format($value['precio_compra'], 2) ?>
-                                    </td>
+                                    <th>Codigo</th>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Total</th>
                                 </tr>
-                            <?php
-                            }
-
-                            ?>
-                        </tbody>
-                        <?php if (isset($_SESSION['propina'])) {
-                            if ($_SESSION['propina'] == 'true') {
-                        ?>
-                                <tbody>
+                            </thead>
+                            <tbody id="factura">
+                                <?php
+                                foreach ($resVenta as $key => $value) {
+                                ?>
                                     <tr>
-                                        <th>Propinas</th>
-                                        <th></th>
-                                        <!--<th></th>-->
-                                        <!--<th></th>-->
-                                        <th></th>
-                                        <th></th>
-                                        <th><?php echo number_format((isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 2) ?></th>
+                                        <td>
+                                            <?php echo $value['codigo_producto'] ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $value['nombre_producto'] ?>
+                                        </td>
+                                        <td>
+                                            <?php echo number_format($value['valor_unitario'], 2) ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($value['cantidad'] > 0) {
+                                                echo $value['cantidad'];
+                                            } else {
+                                                echo $value['peso'] . " GR";
+                                            } ?>
+                                        </td>
+                                        <td>
+                                            <?php echo number_format($value['precio_compra'], 2) ?>
+                                        </td>
                                     </tr>
-                                </tbody>
-                        <?php }
-                        } ?>
-                        <tbody>
-                            <tr>
-                                <th>Total</th>
-                                <th></th>
-                                <!--<th></th>-->
-                                <!--<th></th>-->
-                                <th></th>
-                                <th></th>
-                                <th><?php echo number_format($resFactura[0]['total_factura'], 2) ?></th>
-                            </tr>
-                        </tbody>
-                        <tbody>
-                            <tr>
-                                <th>Pago</th>
-                                <th>
-                                    <?php echo number_format($resFactura[0]['efectivo'],2) ?><input type="hidden" id="" name="efectivo" class="form-control" value="<?php echo number_format($resFactura[0]['efectivo'],2) ?>">
-                                </th>
-                                <th></th>
-                                <th>Debe</th>
-                                <th>
-                                    <input type="text" id="" name="" class="form-control" disabled value="<?php echo number_format($resFactura[0]['cambio'],2) ?>">
-                                    <input type="hidden" id="deuda" name="debe" class="form-control" value="<?php echo $resFactura[0]['cambio'] ?>">
-                                </th>
-                            </tr>
-                        </tbody>
-                        <tbody>
+                                <?php
+                                }
 
-                            <tr>
-                                <th>Abono deuda</th>
-                                <th>
-                                    <input type="text" name="abono" id="abono" class="form-control" required>
-                                </th>
-                                <th></th>
-                                <th>Total a deber</th>
-                                <th>
-                                    <input type="text" id="Total" class="form-control" disabled>
-                                </th>
-                            </tr>
+                                ?>
+                            </tbody>
+                            <?php if (isset($_SESSION['propina'])) {
+                                if ($_SESSION['propina'] == 'true') {
+                            ?>
+                                    <tbody>
+                                        <tr>
+                                            <th>Propinas</th>
+                                            <th></th>
+                                            <!--<th></th>-->
+                                            <!--<th></th>-->
+                                            <th></th>
+                                            <th></th>
+                                            <th><?php echo number_format((isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 2) ?></th>
+                                        </tr>
+                                    </tbody>
+                            <?php }
+                            } ?>
+                            <tbody>
+                                <tr>
+                                    <th>Total</th>
+                                    <th></th>
+                                    <!--<th></th>-->
+                                    <!--<th></th>-->
+                                    <th></th>
+                                    <th></th>
+                                    <th><?php echo number_format($resFactura[0]['total_factura'], 2) ?></th>
+                                </tr>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <th>Pago</th>
+                                    <th>
+                                        <?php echo number_format($resFactura[0]['efectivo'], 2) ?><input type="hidden" id="" name="efectivo" class="form-control" value="<?php echo number_format($resFactura[0]['efectivo'], 2) ?>">
+                                    </th>
+                                    <th></th>
+                                    <th>Debe</th>
+                                    <th>
+                                        <input type="text" id="" name="" class="form-control" disabled value="<?php echo number_format($resFactura[0]['cambio'], 2) ?>">
+                                        <input type="hidden" id="deuda" name="debe" class="form-control" value="<?php echo $resFactura[0]['cambio'] ?>">
+                                    </th>
+                                </tr>
+                            </tbody>
+                            <tbody>
 
-                        </tbody>
+                                <tr>
+                                    <th>Abono deuda</th>
+                                    <th>
+                                        <input type="text" name="abono" id="abono" class="form-control abono" required>
+                                    </th>
+                                    <th></th>
+                                    <th>Total a deber</th>
+                                    <th>
+                                        <input type="text" id="Total" class="form-control" disabled>
+                                    </th>
+                                </tr>
+
+                            </tbody>
                         </table>
                         <div style="text-align: right;">
                             <button name="guardar" class="btn btn-primary"><i class="fas fa-save fa-lg"></i></button>

@@ -86,4 +86,10 @@ class ControladorCliente
         $res = $listar->mostrarClienteFacturaVentaModelo($id);
         return $res;
     }
+
+    function consumidorFinalCompra(){
+        $listar = new ModeloCliente();
+        $res = $listar->consumidorFinalCompraModelo();
+        return $res;
+    }
 }

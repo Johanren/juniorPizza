@@ -73,13 +73,15 @@ if ($resLocal != null) {
             foreach ($res as $key => $value) {
                 if ($value['metodo_pago'] == 'efectivo') {
                     $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
-                    foreach ($res_cantidad_total as $key => $valueCantidad) {
             ?>
-                        <thead>
-                            <tr>
-                                <th>Efectivo</th>
-                            </tr>
-                        </thead>
+                    <thead>
+                        <tr>
+                            <th>Efectivo</th>
+                        </tr>
+                    </thead>
+                    <?php
+                    foreach ($res_cantidad_total as $key => $valueCantidad) {
+                    ?>
                         <tbody>
                             <tr>
                                 <td>
@@ -103,13 +105,15 @@ if ($resLocal != null) {
                     }
                 } elseif ($value['metodo_pago'] == 'nequi') {
                     $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
+                    ?>
+                    <thead>
+                        <tr>
+                            <th>Nequi</th>
+                        </tr>
+                    </thead>
+                    <?php
                     foreach ($res_cantidad_total as $key => $valueCantidad) {
                     ?>
-                        <thead>
-                            <tr>
-                                <th>Nequi</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <tr>
                                 <td>
@@ -133,13 +137,15 @@ if ($resLocal != null) {
                     }
                 } elseif ($value['metodo_pago'] == 'daviplata') {
                     $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
+                    ?>
+                    <thead>
+                        <tr>
+                            <th>Daviplata</th>
+                        </tr>
+                    </thead>
+                    <?php
                     foreach ($res_cantidad_total as $key => $valueCantidad) {
                     ?>
-                        <thead>
-                            <tr>
-                                <th>Daviplata</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <tr>
                                 <td>
@@ -163,13 +169,15 @@ if ($resLocal != null) {
                     }
                 } elseif ($value['metodo_pago'] == 'transfferencia') {
                     $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
+                    ?>
+                    <thead>
+                        <tr>
+                            <th>Transferencia</th>
+                        </tr>
+                    </thead>
+                    <?php
                     foreach ($res_cantidad_total as $key => $valueCantidad) {
                     ?>
-                        <thead>
-                            <tr>
-                                <th>Transferencia</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             <tr>
                                 <td>
@@ -194,6 +202,26 @@ if ($resLocal != null) {
                 }
             }
             ?>
+            <?php
+            $agrupar = new   ControladorVenta();
+            $listarAgru  = $agrupar->listarMetodosPago();
+            foreach ($listarAgru as $key => $value) {
+            ?>
+                <tbody>
+                    <tr>
+                        <th><?php echo "Pagos con " . $value['metodo_pago'] ?></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            <?php $totalmedio = $agrupar->metodosPagoTotal($value['metodo_pago']);
+                            echo "$".number_format($totalmedio[0]['SUM(venta.precio_compra)'],0) ?>
+                        </th>
+                    </tr>
+                </tbody>
+            <?php
+            }
+            ?>
             <tbody>
                 <tr>
                     <th>SubTotal</th>
@@ -212,7 +240,7 @@ if ($resLocal != null) {
                     <th></th>
                     <th></th>
                     <th>
-                        <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(pago_factura), '$#,##0.00'))"] ?>
+                        <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00'))"] ?>
                     </th>
                 </tr>
             </tbody>
@@ -229,13 +257,25 @@ if ($resLocal != null) {
             </tbody>
             <tbody>
                 <tr>
+                    <th>Base Caja</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <?php echo '$' . number_format("300000", 0);
+                        $base = "300000" ?>
+                    </th>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
                     <th>Total</th>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th>
-                        <?php $totalVenta = $total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(pago_factura)'] - $resNomina[0]['SUM(pago)'];
-                        echo '$' . number_format($totalVenta, 2) ?>
+                        <?php $totalVenta = ($total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(DISTINCT(pago_factura))'] - $resNomina[0]['SUM(pago)']) + $base;
+                        echo '$' . number_format($totalVenta, 0) ?>
                     </th>
                 </tr>
             </tbody>
@@ -484,11 +524,11 @@ if ($resLocal != null) {
                     foreach ($res_cantidad_total as $key => $valueCantidad) {
                 ?> {
                             nombre: "<?php echo $value['nombre_producto'] ?>",
-                            cantidad: <?php if ($valueCantidad['SUM(cantidad)'] > 0) {
+                            cantidad: "<?php if ($valueCantidad['SUM(cantidad)'] > 0) {
                                             echo $valueCantidad['SUM(cantidad)'];
                                         } else {
                                             echo $valueCantidad['SUM(peso)'];
-                                        } ?>,
+                                        } ?>",
                             metodoPago: "<?php echo $value['metodo_pago'] ?>",
                             precioTotal: "<?php echo $valueCantidad["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>",
                         },
@@ -591,10 +631,21 @@ if ($resLocal != null) {
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
                 .EscribirTexto(tabla)
                 .EscribirTexto("------------------------------------------------\n")
+            <?php
+            $agrupar = new   ControladorVenta();
+            $listarAgru  = $agrupar->listarMetodosPago();
+            foreach ($listarAgru as $key => $value) {
+            ?>
+                    .EscribirTexto("<?php echo "Pagos con " . $value['metodo_pago'] ?> <?php $totalmedio = $agrupar->metodosPagoTotal($value['metodo_pago']);
+                                                                                        echo "$".number_format($totalmedio[0]['SUM(venta.precio_compra)'],0) ?>\n")
+            <?php
+            }
+            ?>
                 .EscribirTexto("SubTotal <?php echo $total[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>\n")
-                .EscribirTexto("Subtotal Proeevedores <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(pago_factura), '$#,##0.00'))"] ?>\n")
+                .EscribirTexto("Subtotal Proeevedores <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Subtotal Nomina <?php echo $resNomina[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"] ?>\n")
-                .EscribirTexto("Total $<?php echo number_format($totalVenta, 2) ?>\n")
+                .EscribirTexto("Base Caja $<?php echo number_format($base, 0) ?>\n")
+                .EscribirTexto("Total $<?php echo number_format($totalVenta, 0) ?>\n")
                 .Feed(3)
                 .Corte(1)
                 .Pulso(48, 60, 120)

@@ -10,6 +10,8 @@ class ControladorProducto
             $codigo = $_POST['codigo'];
             $nombre = $_POST['nombre'];
             $precio = str_replace(',', '',$_POST['precio']);
+            $precioUnita = str_replace(',', '',$_POST['precioUnita']);
+            $total = str_replace(',', '',$_POST['total']);
             $cantidad = $_POST['cantidad'];
             $cant = $_POST['cant'];
             $id_categoria = $_POST['id_categoria'];
@@ -27,7 +29,7 @@ class ControladorProducto
                     $res = $agreagr->actualizarProductoModelo($id[$i], $id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad_producto, $id_categoria[$i], $id_medida[$i], $id_local[$i]);
                     if ($res == true) {
                         $agregarFactura = new ControladorFacturaProeevedor();
-                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura);
+                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura, $precioUnita[$i], $total[$i]);
                         if ($resFactura == true) {
                             echo '<script>window.location="actualizarProducto"</script>';
                         }
@@ -37,7 +39,7 @@ class ControladorProducto
                     $res = $agreagr->agregarProductoModelo($id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_categoria[$i], $id_medida[$i], $id_local[$i]);
                     if ($res == true) {
                         $agregarFactura = new ControladorFacturaProeevedor();
-                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura);
+                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura, $precioUnita[$i], $total[$i]);
                         if ($resFactura == true) {
                             echo '<script>window.location="agregarProducto"</script>';
                         }

@@ -33,6 +33,9 @@
         <?php
         $mvc = new controladorViews();
         $mvc->enlacesPaginaControlador();
+
+        $caja  = new ControladorAbrirCaja();
+        $caja->abrirYCerrarCaja();
         ?>
     </div>
     <?php

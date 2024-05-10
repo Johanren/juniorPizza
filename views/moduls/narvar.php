@@ -171,7 +171,7 @@ $res = $listar->consultarUsuarioPerfil();
                     <a class="collapse-item" href="venta_dia">Venta dia</a>
                     <a class="collapse-item" href="nomina">Nomina</a>
                     <a class="collapse-item" href="propina">Propina</a>
-                    <!--<a class="collapse-item" href="devoluciones">Devoluciones</a>-->
+                    <a class="collapse-item" href="devoluciones">Devoluciones</a>
                     <a class="collapse-item" href="deudores">Deudores</a>
                 </div>
             </div>

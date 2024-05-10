@@ -25,6 +25,10 @@ if ($resLocal != null) {
     $tel = "1111";
     $dire = "NNNN";
 }
+if (isset($_POST['cierre'])) {
+    unset($_SESSION['caja']);
+    echo '<script>window.location</script>';
+}
 ?>
 <h1 style="text-align: center; color: black; font-weight: 500;">VENTA DEL DIA</h1>
 <div class="container mt-5">
@@ -39,7 +43,7 @@ if ($resLocal != null) {
                         <button type="hidden" name="consultar" class="btn btn-primary">Buscar</button>
                     </div>
                     <div class="col">
-                        <a id="Imprimir" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
+                        <a id="<?php if(!isset($_SESSION['caja'])){ echo "disabled";}else{ echo "Imprimir"; } ?>" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
                                 <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1" />
                                 <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1" />
                             </svg></a>
@@ -50,6 +54,11 @@ if ($resLocal != null) {
                                 <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />
                                 <path d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z" />
                             </svg>
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" name="cierre">
+                            <i class="fas fa-door-open fa-lg"></i>
                         </button>
                     </div>
                 </div>
@@ -215,7 +224,7 @@ if ($resLocal != null) {
                         <th></th>
                         <th>
                             <?php $totalmedio = $agrupar->metodosPagoTotal($value['metodo_pago']);
-                            echo "$".number_format($totalmedio[0]['SUM(venta.precio_compra)'],0) ?>
+                            echo "$" . number_format($totalmedio[0]['SUM(venta.precio_compra)'], 0) ?>
                         </th>
                     </tr>
                 </tbody>
@@ -262,8 +271,8 @@ if ($resLocal != null) {
                     <th></th>
                     <th></th>
                     <th>
-                        <?php echo '$' . number_format("300000", 0);
-                        $base = "300000" ?>
+                        <?php $base = isset($_SESSION['caja']['monto_inicial']) ? $_SESSION['caja']['monto_inicial'] : 0;
+                        echo '$' . number_format($base, 0); ?>
                     </th>
                 </tr>
             </tbody>
@@ -637,7 +646,7 @@ if ($resLocal != null) {
             foreach ($listarAgru as $key => $value) {
             ?>
                     .EscribirTexto("<?php echo "Pagos con " . $value['metodo_pago'] ?> <?php $totalmedio = $agrupar->metodosPagoTotal($value['metodo_pago']);
-                                                                                        echo "$".number_format($totalmedio[0]['SUM(venta.precio_compra)'],0) ?>\n")
+                                                                                        echo "$" . number_format($totalmedio[0]['SUM(venta.precio_compra)'], 0) ?>\n")
             <?php
             }
             ?>

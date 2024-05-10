@@ -10,7 +10,7 @@ class ControladorFactura
             $id_cliente = $_POST['id_cliente'];
             $id_articulo = $_POST['id_articulo'];
             $cantidad = $_POST['cantidad'];
-            $pago = str_replace(',', '',$_POST['pago']);
+            $pago = str_replace(',', '', $_POST['pago']);
             $metodo = $_POST['metodo'];
             $total_factura = 0;
             $cambio = 0;
@@ -22,7 +22,7 @@ class ControladorFactura
             }
             $total_factura;
             if (isset($_POST['propina'])) {
-                $total_factura = str_replace(',', '',$_POST['propina']) + $total_factura;
+                $total_factura = str_replace(',', '', $_POST['propina']) + $total_factura;
             }
             $cambio = $pago - $total_factura;
             $dato = array(
@@ -40,7 +40,7 @@ class ControladorFactura
                 if (isset($_POST['propina'])) {
                     $dato = array(
                         'id_factura' => $resUltimoId[0]['MAX(id_factura)'],
-                        'propina' => str_replace(',', '',$_POST['propina'])
+                        'propina' => str_replace(',', '', $_POST['propina'])
                     );
                 }
                 $agregarpropitan = new ControladorPropina();
@@ -217,8 +217,8 @@ class ControladorFactura
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
         if (isset($_POST['guardar'])) {
-            $total = $_POST['debe'] + str_replace(',', '',$_POST['abono']);
-            $abono = $_POST['efectivo'] + str_replace(',', '',$_POST['abono']);
+            $total = $_POST['debe'] + str_replace(',', '', $_POST['abono']);
+            $abono = $_POST['efectivo'] + str_replace(',', '', $_POST['abono']);
             $dato = array(
                 'pago' => $abono,
                 'total' => $total,
@@ -232,5 +232,18 @@ class ControladorFactura
                 echo '<script>window.location="deudores"</script>';
             }
         }
+    }
+
+    function restarEfectivoFactura($id, $efectivo)
+    {
+        $resFactura = new ModeloFactura();
+        $res = $resFactura->restarEfectivoFacturaModelo($id, $efectivo);
+        return $res;
+    }
+
+    function eliminarFactura($id){
+        $eliminar = new ModeloFactura();
+        $res = $eliminar->eliminarFacturaModelo($id);
+        return $res;
     }
 }

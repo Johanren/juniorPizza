@@ -85,7 +85,11 @@ class modeloViews
             $modulo = 'views/moduls/medida.php';
         } elseif ($enlace == 'actualizarPromocion') {
             $modulo = 'views/moduls/promocion.php';
-        } else {
+        } elseif ($enlace == 'productoDevuelto') {
+            $modulo = 'views/moduls/devoluciones.php';
+        }elseif ($enlace == 'FacturaCancelada') {
+            $modulo = 'views/moduls/devoluciones.php';
+        }else {
             $modulo = 'views/moduls/404.php';
         }
         return $modulo;

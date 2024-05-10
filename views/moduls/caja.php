@@ -184,8 +184,8 @@ $resConsu = $consumidor->consumidorFinalCompra();
                     </thead>
                     <tbody id="factura">
                         <tr class="eliminar_1">
-                            <td><input type="hidden" name="id_articulo[]" id="id_articulo_1"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_1" placeholder="Codigo producto"></td>
-                            <td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_1" placeholder="Nombre producto"></td>
+                            <td><input type="hidden" name="id_articulo[]" id="id_articulo_1"><input type="text" name="codigo" <?php if(!isset($_SESSION['caja'])){ echo "disabled";} ?> class="form-control codigo_articulo" id="codigo_1" placeholder="Codigo producto"></td>
+                            <td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_1" placeholder="Nombre producto" <?php if(!isset($_SESSION['caja'])){ echo "disabled";} ?>></td>
                             <td><input type="text" name="precio" class="form-control" id="valor_1" disabled></td>
                             <!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_1" value="0"></td>-->
                             <!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_1" value="0" required>-->

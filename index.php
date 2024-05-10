@@ -26,6 +26,7 @@ require_once 'controllers/controladorFactura.php';
 require_once 'controllers/controladorVenta.php';
 require_once 'controllers/controladorNomina.php';
 require_once 'controllers/controladorPropina.php';
+require_once 'controllers/controladorAbrirCaja.php';
 //Modelo
 require_once 'Models/conexion.php';
 require_once 'Models/modeloViews.php';

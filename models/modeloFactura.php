@@ -64,8 +64,6 @@ class ModeloFactura
         } catch (PDOException $e) {
             print_r($e->getMessage());
         }
-
-
     }
 
     function listarFacturaClienteModelo($dato)
@@ -130,6 +128,55 @@ class ModeloFactura
             }
             if ($stms->execute()) {
                 return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function restarEfectivoFacturaModelo($id, $efectivo)
+    {
+        $sql = "UPDATE $this->tabla SET total_factura=? WHERE id_factura = ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $efectivo, PDO::PARAM_INT);
+            $stms->bindParam(2, $id, PDO::PARAM_INT);
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function eliminarFacturaModelo($id)
+    {
+        $sql = "SET FOREIGN_KEY_CHECKS=1";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($stms->execute()) {
+                $sql = "DELETE FROM $this->tabla WHERE id_factura = ?";
+
+                try {
+                    $conn = new Conexion();
+                    $stms = $conn->conectar()->prepare($sql);
+                    $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    if ($stms->execute()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (PDOException $e) {
+                    print_r($e->getMessage());
+                }
             } else {
                 return false;
             }

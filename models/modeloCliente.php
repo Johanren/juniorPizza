@@ -84,7 +84,6 @@ class ModeloCliente
         } catch (PDOException $e) {
             print_r($e->getMessage());
         }
-
     }
 
     function actualizarClienteModelo($dato)
@@ -105,6 +104,22 @@ class ModeloCliente
         try {
             if ($stms->execute()) {
                 return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consumidorFinalCompraModelo()
+    {
+        $sql = "SELECT * FROM $this->tabla WHERE numero_cc LIKE '1111%'";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();;
             } else {
                 return false;
             }

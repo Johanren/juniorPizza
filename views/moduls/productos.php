@@ -64,7 +64,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             <?php echo $value['nombre_producto'] ?>
                         </td>
                         <td>
-                            <?php echo $value['precio_unitario'] ?>
+                            <?php echo number_format($value['precio_unitario'],2) ?>
                         </td>
                         <td>
                             <?php echo $value['cantidad_producto'] ?>
@@ -159,7 +159,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                 <tr>
                                     <td><input type="hidden" id="id_producto_1" name="id_producto[]"><input type="text" class="form-control" id="codigo_1" name="codigo[]"></td>
                                     <td><input type="text" class="form-control nombrePro" id="producto_1" name="nombre[]"></td>
-                                    <td><input type="text" class="form-control" id="precio_1" name="precio[]"></td>
+                                    <td><input type="text" class="form-control precio" id="precio_1" name="precio[]"></td>
                                     <td><input type="hidden" id="cantidad_1" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td>
                                     <td><input type="hidden" class="form-control" name="id_categoria[]"
                                             id="id_categoria_1"><input type="text" class="form-control categoria"
@@ -180,8 +180,8 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             </tbody>
                             <tbody>
                                 <tr>
-                                    <td><input type="number" name="totalFactura" placeholder="Total a Pagar" required
-                                            class="form-control"></td>
+                                    <td><input type="text" name="totalFactura" id="totalFactura" placeholder="Total a Pagar" required
+                                            class="form-control totalFactura"></td>
                                 </tr>
                             </tbody>
                         </table>

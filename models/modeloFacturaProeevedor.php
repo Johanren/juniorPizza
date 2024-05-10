@@ -105,7 +105,7 @@ class ModeloFacturaProeevedor
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
         $fechaActal = $fechaActal . "%";
-        $sql = "SELECT CONCAT('$', FORMAT(SUM(pago_factura), '$#,##0.00')),SUM(pago_factura) FROM $this->tabla WHERE fecha_ingreso like ?";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')),SUM(DISTINCT(pago_factura)) FROM $this->tabla WHERE fecha_ingreso like ?";
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);

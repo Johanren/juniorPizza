@@ -113,7 +113,7 @@ class Ajax
             $datos[] = array(
                 'label' => $value['nombre_producto'],
                 'id' => $value['id_producto'],
-                'precio' => $value['precio_unitario'],
+                'precio' => number_format($value['precio_unitario'],0),
                 'codigo' => $value['codigo_producto'],
                 'cantidad' => $value['cantidad_producto'],
                 'id_categoria' => $value['id_categoria'],

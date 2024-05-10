@@ -1,6 +1,8 @@
 <?php
 $local = new ControladorLocal();
 $res = $local->consultarLocal($_SESSION['id_local']);
+$consumidor = new ControladorCliente();
+$resConsu = $consumidor->consumidorFinalCompra();
 ?>
 <div class="container mt-2">
     <div class="row">
@@ -23,11 +25,11 @@ $res = $local->consultarLocal($_SESSION['id_local']);
     <form action="" method="post">
         <div class="row mt-3">
             <div class="col">
-                <input type="hidden" name="id_cliente" id="id_cliente">
-                <input type="text" name="cc" id="cc" placeholder="Ingresar número cc" class="form-control" required>
+                <input type="hidden" name="id_cliente" id="id_cliente" value="<?php echo $resConsu[0]['id_cliente'] ?>">
+                <input type="text" name="cc" id="cc" placeholder="Ingresar número cc" class="form-control" required value="<?php echo $resConsu[0]['numero_cc'] ?>">
             </div>
             <div class="col">
-                <input type="text" name="cliente" id="cliente" class="form-control" disabled>
+                <input type="text" name="cliente" id="cliente" class="form-control" disabled value="<?php echo $resConsu[0]['primer_nombre'] ." " . $resConsu[0]['primer_apellido']?>">
             </div>
         </div>
         <div class="row">
@@ -90,14 +92,14 @@ $res = $local->consultarLocal($_SESSION['id_local']);
                         foreach ($litarProducto as $key => $value) {
                         ?>
                             <tr class="eliminar_<?php echo $key + 1 ?>">
-                                <td><input type="hidden" name="id_articulo[]" id="id_articulo_1" value="<?php echo $value['id_producto'] ?>"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_1" placeholder="Codigo producto" value="<?php echo $value['codigo_producto'] ?>"></td>
-                                <td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_1" placeholder="Nombre producto" value="<?php echo $value['nombre_producto'] ?>"></td>
-                                <td><input type="text" name="precio" class="form-control" id="valor_1" value="<?php echo $value['precio_unitario'] ?>" disabled></td>
+                                <td><input type="hidden" name="id_articulo[]" id="id_articulo_<?php echo $key + 1 ?>" value="<?php echo $value['id_producto'] ?>"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_1" placeholder="Codigo producto" value="<?php echo $value['codigo_producto'] ?>"></td>
+                                <td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_<?php echo $key + 1 ?>" placeholder="Nombre producto" value="<?php echo $value['nombre_producto'] ?>"></td>
+                                <td><input type="text" name="precio" class="form-control" id="valor_<?php echo $key + 1 ?>" value="<?php echo number_format($value['precio_unitario'], 0) ?>" disabled></td>
                                 <!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_1" value="0"></td>-->
                                 <!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_1" value="0" required>-->
-                                <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_1" value="<?php echo $value['cantidad'] ?>" value="0" required>
+                                <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_<?php echo $key + 1 ?>" value="<?php echo $value['cantidad'] ?>" value="0" required>
                                 </td>
-                                <td><input type="text" name="total" class="form-control resultado" value="<?php echo $value['precio_unitario'] * $value['cantidad'] ?>" id="resultado_1" disabled>
+                                <td><input type="text" name="total" class="form-control resultado" value="<?php echo number_format($value['precio_unitario'] * $value['cantidad'],0) ?>" id="resultado_<?php echo $key + 1 ?>" disabled>
                                 </td>
                                 <td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
                             </tr>

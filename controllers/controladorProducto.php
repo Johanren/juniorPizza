@@ -9,12 +9,12 @@ class ControladorProducto
             $id_proeevedor = $_POST['id_proeevedor'];
             $codigo = $_POST['codigo'];
             $nombre = $_POST['nombre'];
-            $precio = $_POST['precio'];
+            $precio = str_replace(',', '',$_POST['precio']);
             $cantidad = $_POST['cantidad'];
             $cant = $_POST['cant'];
             $id_categoria = $_POST['id_categoria'];
             $id_medida = $_POST['id_medida'];
-            $totalFactura = $_POST['totalFactura'];
+            $totalFactura = str_replace(',','',$_POST['totalFactura']);
             if ($_SESSION['rol'] == "Administrador") {
                 $id_local = $_POST['id_local'];
             } else {

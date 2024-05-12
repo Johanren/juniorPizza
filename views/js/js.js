@@ -310,6 +310,15 @@ $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
 		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
+		$("#productol").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td>');
+		index++;
+	});
+});
+
+$(document).ready(function () {
+	var index = 2;
+	$("#agreProducto").click(function () {
+		$("#productol").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td>');
 		index++;
 	});
 });
@@ -1113,6 +1122,41 @@ $(document).ready(function () {
 
 			}
 
+		});
+	});
+});
+
+$(document).ready(function () {
+	$('#miTabla').on('click', 'th', function () {
+		// Obtener el valor actual del td
+		var valor = $(this).text().trim();
+
+		// Crear un input y asignarle el valor del td
+		var input = $('<input type="text" class="form-control">').val(valor);
+
+		// Reemplazar el contenido del td con el input
+		$(this).html(input);
+
+		// Enfocar el input
+		input.focus();
+
+		// Escuchar el evento blur en el input para actualizar el valor
+		input.blur(function () {
+			var nuevoValor = $(this).val().trim();
+			$(this).parent().text(nuevoValor);
+
+			// Aquí puedes realizar la llamada AJAX para actualizar el valor en el servidor
+			$.ajax({
+				url: 'views/actualizar.php',
+				method: 'GET',
+				data: { nuevo_valor: nuevoValor },
+				success: function (response) {
+					// Manejar la respuesta del servidor si es necesario
+				},
+				error: function (xhr, status, error) {
+					// Manejar errores si es necesario
+				}
+			});
 		});
 	});
 });

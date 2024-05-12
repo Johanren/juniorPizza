@@ -47,6 +47,7 @@ class Ajax
     public $idArticulo;
     public $id_nomina;
     public $factura;
+    public $propina;
 
     function consultarProeevedorAjax()
     {
@@ -192,7 +193,7 @@ class Ajax
         $resPedido = new ControladorPedido();
         $respe = $resPedido->listarPedidoPrintAjaxControlador($this->print);
         foreach ($respe as $key => $value) {
-            $datos[] = array('nombre' => $value['producto'], 'cantidad' => $value['cantidad'], 'descripcion' => (isset($value['descripcion'])) ? $value['descripcion'] : " ");
+            $datos[] = array('nombre' => $value['producto'], 'cantidad' => $value['cantidad'], 'descripcion' => (isset($value['descripcion'])) ? $value['descripcion'] : " ", 'categoria' => $value['nombre_categoria']);
         }
         header('Content-Type: text/html; charset=UTF-8');
         print json_encode($datos);
@@ -274,6 +275,10 @@ class Ajax
             $datos[] = array('label' => $value['nombre_producto'], 'label1' => $value['codigo_producto'], 'label2' => $value['cantidad'], 'precio' => $value['valor_unitario'], 'total' => $value['precio_compra'], 'id' => $value['id_producto'], 'efectivo' => $value['total_factura'], 'id_factura' => $value['id_factura']);
         }
         print json_encode($datos);
+    }
+
+    function actualizarPropinaFacturaAjax(){
+        
     }
 }
 
@@ -374,3 +379,8 @@ if ($request == 2) {
     }
 
 }
+
+if (isset($_GET['nuevo_valor'])) {
+    $ajax->propina = $_GET['nuevo_valor'];
+    $ajax->actualizarPropinaFacturaAjax();
+}  

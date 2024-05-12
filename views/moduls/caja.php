@@ -151,7 +151,7 @@ $resConsu = $consumidor->consumidorFinalCompra();
                     <tbody>
                         <tr>
                             <th>Metodo Pago</th>
-                            <th><select name="metodo" id="metodo" class="form-control">
+                            <th><select name="metodo" id="metodo" class="form-control" required>
                                     <option value="">Seleccionar...</option>
                                     <option value="efectivo">Efectivo</option>
                                     <option value="nequi">Nequi</option>
@@ -211,7 +211,7 @@ $resConsu = $consumidor->consumidorFinalCompra();
                     <tbody>
                         <tr>
                             <th>Metodo Pago</th>
-                            <th><select name="metodo" id="metodo" class="form-control">
+                            <th><select name="metodo" id="metodo" class="form-control" required>
                                     <option value="">Seleccionar...</option>
                                     <option value="efectivo">Efectivo</option>
                                     <option value="nequi">Nequi</option>

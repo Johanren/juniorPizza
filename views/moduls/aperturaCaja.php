@@ -12,8 +12,6 @@
                 <form action="" method="post">
                     <label for="monto">Monto Inicial:</label>
                     <input type="text" id="monto" class="form-control monto" name="monto" required>
-                    <label for="monto">Fecha:</label>
-                    <input type="datetime-local" id="" class="form-control monto" name="fecha" required>
                     <button class="btn btn-primary mt-2 abrir" name="abrir">Abrir Caja</button>
                 </form>
             </div>

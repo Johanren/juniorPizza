@@ -83,7 +83,7 @@ if ($res != null) {
             </div>
         </div>
     </div>
-    <table class="table mt-5">
+    <table class="table mt-5" id="miTabla">
         <thead>
             <tr>
                 <th>Codigo</th>

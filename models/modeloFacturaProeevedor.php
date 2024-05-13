@@ -4,9 +4,9 @@ class ModeloFacturaProeevedor
 {
     public $tabla = "factura_proeevedor";
 
-    function agregarFacturaModelo($id_categoria, $id_proeevedor, $id_usuario, $id_medida, $codigo, $nombre, $precio, $cantidad, $id_local, $totalFactura)
+    function agregarFacturaModelo($id_categoria, $id_proeevedor, $id_usuario, $id_medida, $codigo, $nombre, $precio, $cantidad, $id_local, $totalFactura, $precioUnita, $total)
     {
-        $sql = "INSERT INTO $this->tabla (id_categoria, id_proeevedor, id_usuario, id_medida, codigo_producto, nombre_producto, precio_unitario, cantidad_producto, id_local, pago_factura) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO $this->tabla (id_categoria, id_proeevedor, id_usuario, id_medida, codigo_producto, nombre_producto, precio_unitario, cantidad_producto, id_local, pago_factura, unitario, total) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($id_categoria != '') {
@@ -20,6 +20,8 @@ class ModeloFacturaProeevedor
             $stms->bindParam(8, $cantidad, PDO::PARAM_INT);
             $stms->bindParam(9, $id_local, PDO::PARAM_INT);
             $stms->bindParam(10, $totalFactura, PDO::PARAM_INT);
+            $stms->bindParam(11, $precioUnita, PDO::PARAM_INT);
+            $stms->bindParam(12, $total, PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {

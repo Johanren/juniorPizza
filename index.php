@@ -26,6 +26,8 @@ require_once 'controllers/controladorFactura.php';
 require_once 'controllers/controladorVenta.php';
 require_once 'controllers/controladorNomina.php';
 require_once 'controllers/controladorPropina.php';
+require_once 'controllers/controladorAbrirCaja.php';
+require_once 'controllers/controladorGasto.php';
 //Modelo
 require_once 'Models/conexion.php';
 require_once 'Models/modeloViews.php';
@@ -53,6 +55,7 @@ require_once 'models/modeloFactura.php';
 require_once 'models/modeloVenta.php';
 require_once 'models/modeloNomina.php';
 require_once 'models/modeloPropina.php';
+require_once 'models/modeloGasto.php';
 //fpdf
 
 

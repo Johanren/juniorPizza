@@ -309,7 +309,16 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
-		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
+		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
+		$("#productol").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td>');
+		index++;
+	});
+});
+
+$(document).ready(function () {
+	var index = 2;
+	$("#agreProducto").click(function () {
+		$("#productol").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td>');
 		index++;
 	});
 });
@@ -944,6 +953,26 @@ $(document).ready(function () {
 			cantidad.value = value;
 		});
 	});
+	$(document).on('keydown', '.precio_uni', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+
+		let cantidad = document.getElementById('precioUni_' + index + '');
+		cantidad.addEventListener("keyup", function () {
+			// Eliminar caracteres no numéricos
+			let value = cantidad.value.replace(/\D/g, '');
+
+			// Añadir coma para separar miles
+			value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+			// Agregar el símbolo de la moneda o unidad
+			value = value; // Puedes cambiar 'kg' por el símbolo que desees
+
+			// Establecer el valor formateado en el campo de entrada
+			cantidad.value = value;
+		});
+	});
 });
 //peso propina
 $(document).ready(function () {
@@ -965,9 +994,9 @@ $(document).ready(function () {
 		});
 	});
 
-	/*$(document).on('keydown', '.pago', function () {
+	$(document).on('keydown', '.monto', function () {
 
-		let cantidad = document.getElementById('pago_1');
+		let cantidad = document.getElementById('monto');
 		cantidad.addEventListener("keyup", function () {
 			// Eliminar caracteres no numéricos
 			let value = cantidad.value.replace(/\D/g, '');
@@ -981,7 +1010,7 @@ $(document).ready(function () {
 			// Establecer el valor formateado en el campo de entrada
 			cantidad.value = value;
 		});
-	});*/
+	});
 
 	$(document).on('keydown', '.abono', function () {
 
@@ -1018,4 +1047,118 @@ $(document).ready(function () {
 			cantidad.value = value;
 		});
 	});
+});
+//gastos precio unitario * cantidad
+$(document).ready(function () {
+	$(document).on('change', '.cant', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+
+		var cantidad = parseFloat(document.getElementById('cant_' + index).value);
+		var precioUnitario = parseFloat(document.getElementById('precioUni_' + index).value.replace(/,/g, ''));
+
+		// Dividir el precio unitario por la cantidad para obtener el precio por unidad
+		var precioPorUnidad = precioUnitario / cantidad;
+		//console.log(precioPorUnidad);
+		// Calcular el total por cada elemento
+		var totalPorElemento = precioPorUnidad * cantidad;
+		//console.log(totalPorElemento);
+		// Obtener el campo de total de factura
+		var totalFacturaInput = document.getElementById('totalFactura');
+		var totalInput = document.getElementById('total_' + index);
+		//console.log(totalFacturaInput);
+		// Convertir el valor actual del total de factura a número
+		var totalFactura = parseFloat(totalFacturaInput.value.replace(/,/g, ''));
+		var total = parseFloat(totalInput.value.replace(/,/g, ''));
+		// Sumar el total por elemento al total de factura
+		totalFactura += totalPorElemento;
+		//console.log(totalFactura);
+		// Formatear el total de factura con comas
+		var totalFacturaFormateado = totalFactura.toLocaleString('en-US');
+		var totalFormateado = precioPorUnidad.toLocaleString('en-US');
+		//console.log(totalFacturaFormateado);
+		// Actualizar el campo de total de factura con el nuevo total formateado
+		totalFacturaInput.value = totalFacturaFormateado;
+		totalInput.value = totalFormateado;
+	});
+});
+
+//agregar factura devolucion
+
+$(document).ready(function () {
+	$('body').on('keydown', '.factura', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+		console.log();
+		$(this).autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { factura: request.term },
+					success: function (data) {
+						response(data);
+						//console.log("el dato", data);
+
+					}
+
+				});
+			},
+			minLength: 1,
+			select: function (event, ui) {
+				$("#producto_" + index).val(ui.item.label);
+				$("#codigoProducto_" + index).val(ui.item.label1);
+				$("#cant").val(ui.item.label2);
+				$("#cantidad_" + index).val(ui.item.label2);
+				$("#precio_" + index).val(ui.item.precio);
+				$("#total_" + index).val(ui.item.total);
+				$("#id").val(ui.item.id);
+				$("#efectivo").val(ui.item.efectivo);
+				$("#factura").val(ui.item.id_factura);
+				return false;
+
+			}
+
+		});
+	});
+});
+
+
+$(document).ready(function () {
+    $('.miTabla').on('click', function () {
+        var $td = $(this);
+        var valorActual = $td.text().replace(",", ""); // Eliminar comas
+        var $input = $('<input type="text" class="form-control propina" id="propina">').val(valorActual);
+
+        $td.empty().append($input);
+        $input.focus();
+        var factura = $('#num_factura').text(); // Usar jQuery para seleccionar el elemento
+
+        $input.blur(function () {
+            var nuevoValor = $(this).val();
+			var sindecimal = nuevoValor.replace(",", "");
+            // Formatear el valor con comas cuando el campo pierde el foco
+            $td.text(nuevoValor.toLocaleString('es'));
+
+            // Hacer la llamada AJAX solo con los números enteros (sin comas)
+            $.ajax({
+                url: 'views/ajax.php',
+                method: 'GET',
+                data: { nuevo_valor: sindecimal, id_factura: factura },
+                success: function (response) {
+                    // Manejar la respuesta del servidor si es necesario
+					location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores si es necesario
+                }
+            });
+
+            // Al hacer clic fuera del input, actualizar el valor de miTabla con el valor del input
+            $td.text(nuevoValor);
+        });
+    });
 });

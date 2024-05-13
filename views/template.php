@@ -342,6 +342,7 @@
                                         }
                                         tabla += obtenerLineaSeparadora() + "\n";
                                     }
+                                    console.log(tabla);
                                 }
                                 if (otrosProductos.length > 0) {
                                     for (const producto of otrosProductos) {
@@ -367,10 +368,8 @@
                                         }
                                         tabla1 += obtenerLineaSeparadora() + "\n";
                                     }
+                                    console.log(tabla1);
                                 }
-
-                                console.log(tabla);
-                                console.log(tabla1);
                                 const conector = new ConectorPluginV3(URLPlugin);
 
                                 $.ajax({
@@ -382,8 +381,9 @@
                                     },
                                     success: async function(response) {
                                         const listarPedido = response;
-                                        if (bebidas.length > 0) {
-                                            for (const producto of listarPedido) {
+                                        for (const producto of listarPedido) {
+                                            if (bebidas.length > 0) {
+
                                                 // Extraer el valor específico del array devuelto
                                                 const respuesta = await conector
                                                     .Iniciar()
@@ -429,10 +429,9 @@
                                                 } else {
                                                     alert("Error: " + respuesta);
                                                 }
+
                                             }
-                                        }
-                                        if (otrosProductos.length > 0) {
-                                            for (const producto of listarPedido) {
+                                            if (otrosProductos.length > 0) {
                                                 // Extraer el valor específico del array devuelto
                                                 const respuesta = await conector
                                                     .Iniciar()
@@ -477,6 +476,7 @@
                                                 } else {
                                                     alert("Error: " + respuesta);
                                                 }
+
                                             }
                                         }
 

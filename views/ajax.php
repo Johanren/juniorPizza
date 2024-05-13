@@ -11,6 +11,9 @@ require_once '../controllers/controladorPedido.php';
 require_once '../controllers/controladorMesa.php';
 require_once '../controllers/controladorCliente.php';
 require_once '../controllers/controladorNomina.php';
+require_once '../controllers/controladorVenta.php';
+require_once '../controllers/controladorPropina.php';
+require_once '../controllers/controladorFactura.php';
 //modelo
 require_once '../models/modeloProeevedor.php';
 require_once '../models/modeloMedida.php';
@@ -23,6 +26,9 @@ require_once '../models/modeloPedido.php';
 require_once '../models/modeloMesa.php';
 require_once '../models/modeloCliente.php';
 require_once '../models/modeloNomina.php';
+require_once '../models/modeloVenta.php';
+require_once '../models/modeloPropina.php';
+require_once '../models/modeloFactura.php';
 
 class Ajax
 {
@@ -44,6 +50,9 @@ class Ajax
     public $articulo;
     public $idArticulo;
     public $id_nomina;
+    public $factura;
+    public $propina;
+    public $id_factura;
 
     function consultarProeevedorAjax()
     {
@@ -189,7 +198,7 @@ class Ajax
         $resPedido = new ControladorPedido();
         $respe = $resPedido->listarPedidoPrintAjaxControlador($this->print);
         foreach ($respe as $key => $value) {
-            $datos[] = array('nombre' => $value['producto'], 'cantidad' => $value['cantidad'], 'descripcion' => (isset($value['descripcion'])) ? $value['descripcion'] : " ");
+            $datos[] = array('nombre' => $value['producto'], 'cantidad' => $value['cantidad'], 'descripcion' => (isset($value['descripcion'])) ? $value['descripcion'] : " ", 'categoria' => $value['nombre_categoria']);
         }
         header('Content-Type: text/html; charset=UTF-8');
         print json_encode($datos);
@@ -261,6 +270,22 @@ class Ajax
         }
         header('Content-Type: text/html; charset=UTF-8');
         print json_encode($datos);
+    }
+
+    function consultarFacturaDevolucionAjax()
+    {
+        $factura = new ControladorVenta();
+        $res = $factura->consultarFacturaDevolucionAjax($this->factura);
+        foreach ($res as $key => $value) {
+            $datos[] = array('label' => $value['nombre_producto'], 'label1' => $value['codigo_producto'], 'label2' => $value['cantidad'], 'precio' => $value['valor_unitario'], 'total' => $value['precio_compra'], 'id' => $value['id_producto'], 'efectivo' => $value['total_factura'], 'id_factura' => $value['id_factura']);
+        }
+        print json_encode($datos);
+    }
+
+    function actualizarPropinaFacturaAjax(){
+        $propina = new ControladorPropina();
+        $res = $propina->actualizarPropinaAjax(str_replace(',', '', $this->propina), $this->id_factura);
+        
     }
 }
 
@@ -344,6 +369,11 @@ if (isset($_GET['id_nomina'])) {
     $ajax->consultarNominaPedidoAjax();
 }  
 
+if (isset($_GET['factura'])) {
+    $ajax->factura = $_GET['factura'];
+    $ajax->consultarFacturaDevolucionAjax();
+}  
+
 $request = 0;
 if (isset($_GET['request'])) {
     $request = $_GET['request'];
@@ -356,3 +386,9 @@ if ($request == 2) {
     }
 
 }
+
+if (isset($_GET['nuevo_valor']) && isset($_GET['id_factura'])) {
+    $ajax->propina = $_GET['nuevo_valor'];
+    $ajax->id_factura = $_GET['id_factura'];
+    $ajax->actualizarPropinaFacturaAjax();
+}  

@@ -52,7 +52,7 @@ $res = $user->listarProeevedorFactura();
             <tbody>
                 <?php
                 foreach ($res as $key => $value) {
-                    ?>
+                ?>
                     <tr>
                         <td>
                             <?php echo $value['nit_proeevedor'] ?>
@@ -61,23 +61,19 @@ $res = $user->listarProeevedorFactura();
                             <?php echo $value['nombre_proeevedor'] ?>
                         </td>
                         <td>
-                            <?php echo number_format($value['pago_factura'],2) ?>
+                            <?php echo number_format($value['pago_factura'], 2) ?>
                         </td>
                         <td>
                             <?php echo $value['fecha_ingreso'] ?>
                         </td>
                         <td>
-                            <a
-                                href="index.php?action=facturaProeevedor&id=<?php echo $value['id_proeevedor'] ?>&fecha=<?php echo $value['fecha_ingreso'] ?>"><button
-                                    class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30"
-                                        fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <a href="index.php?action=facturaProeevedor&id=<?php echo $value['id_proeevedor'] ?>&fecha=<?php echo $value['fecha_ingreso'] ?>"><button class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
-                                        <path
-                                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
                                     </svg></button></a>
                         </td>
                     </tr>
-                    <?php
+                <?php
                 }
                 ?>
             </tbody>
@@ -94,9 +90,8 @@ $res = $user->listarProeevedorFactura();
     </div>
 </div>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Factura Proeevedor</h5>
@@ -133,23 +128,32 @@ $res = $user->listarProeevedorFactura();
                                     <th>Cantidad</th>
                                     <th>Categoria</th>
                                     <th>Medida</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Costo * Prod</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
                                 foreach ($resProducto as $key => $value) {
-                                    ?>
+                                ?>
                                     <tr>
                                         <td><?php echo $value['codigo_producto'] ?></td>
                                         <td><?php echo $value['nombre_producto'] ?></td>
-                                        <td><?php echo $value['precio_unitario'] ?></td>
+                                        <td><?php echo number_format($value['precio_unitario'],0) ?></td>
                                         <td><?php echo $value['cantidad_producto'] ?></td>
                                         <td><?php echo $value['nombre_categoria'] ?></td>
                                         <td><?php echo $value['nombre_medida'] ?></td>
+                                        <td><?php echo number_format($value['unitario'],0) ?></td>
+                                        <td><?php echo number_format($value['total'],0) ?></td>
                                     </tr>
-                                    <?php
+                                <?php
                                 }
                                 ?>
+                            </tbody>
+                            <tbody>
+                                <tr>
+                                    <td><?php echo number_format($resProducto[0]['pago_factura'],0) ?></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

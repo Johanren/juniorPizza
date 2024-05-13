@@ -225,7 +225,7 @@ class ModeloVenta
             $stms = $conn->conectar()->prepare($sql);
             if ($metodo == null) {
                 $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
-            }else{
+            } else {
                 $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
                 $stms->bindParam(2, $metodo, PDO::PARAM_STR);
             }
@@ -236,6 +236,74 @@ class ModeloVenta
             }
         } catch (PDOException $e) {
             print_r($e->getMessage());
+        }
+    }
+
+    function consultarFacturaDevolucionAjaxModelo($id)
+    {
+        $sql = "SELECT * FROM $this->tabla INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE venta.id_factura = ?";
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $id, PDO::PARAM_INT);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function devolverProductoModelo($id, $id_factura, $restarTotal, $totalCa)
+    {
+        $sql = "UPDATE $this->tabla SET cantidad=?,precio_compra=? WHERE id_factura = ? AND id_producto = ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $totalCa, PDO::PARAM_STR);
+            $stms->bindParam(2, $restarTotal, PDO::PARAM_STR);
+            $stms->bindParam(3, $id_factura, PDO::PARAM_STR);
+            $stms->bindParam(4, $id, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function eliminarFacturaVenta($id)
+    {
+        try {
+            // Establece la conexión a la base de datos
+            $conn = new Conexion();
+            $pdo = $conn->conectar();
+        
+            // Habilita la revisión de claves foráneas
+            $sql_enable_fk = "SET FOREIGN_KEY_CHECKS=1";
+            $stmt_enable_fk = $pdo->prepare($sql_enable_fk);
+            $stmt_enable_fk->execute();
+        
+            // Consulta para eliminar registros
+            $sql_delete = "DELETE FROM {$this->tabla} WHERE id_factura = ?";
+            $stmt_delete = $pdo->prepare($sql_delete);
+            $stmt_delete->bindParam(1, $id, PDO::PARAM_INT);
+        
+            // Ejecuta la consulta para eliminar registros
+            if ($stmt_delete->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Manejo de excepciones
+            echo "Error: " . $e->getMessage();
+            return false;
         }
     }
 }

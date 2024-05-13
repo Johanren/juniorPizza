@@ -40,7 +40,8 @@ class ModeloPropina
         }
     }
 
-    function listarPropinaInicioFinModelo($inicio, $fin){
+    function listarPropinaInicioFinModelo($inicio, $fin)
+    {
         $sql = "SELECT SUM(valor_propinas) FROM $this->tabla WHERE fecha_ingreso = ? AND fecha_ingreso = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -49,6 +50,24 @@ class ModeloPropina
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarPropinaAjaxModelo($propina, $id)
+    {
+        $sql = "UPDATE $this->tabla SET valor_propinas=? WHERE id_factura=?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $propina, PDO::PARAM_INT);
+        $stms->bindParam(2, $id, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return true;
             } else {
                 return false;
             }

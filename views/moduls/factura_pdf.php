@@ -41,9 +41,7 @@ if ($res != null) {
     <div class="row">
         <div class="col">
             <div style="text-align: right;">
-                <p>FACTURA N°<span id="nom_proeevedor">
-                        <?php echo $resFactura[0]['id_factura'] ?>
-                    </span></p>
+                <p>FACTURA N°<span id="num_factura"><?php echo $resFactura[0]['id_factura'] ?></span></p>
             </div>
             <div style="text-align: right;">
                 Fecha:
@@ -105,7 +103,7 @@ if ($res != null) {
                         <?php echo $value['nombre_producto'] ?>
                     </td>
                     <td>
-                        <?php echo number_format($value['valor_unitario'], 2) ?>
+                        <?php echo number_format($value['valor_unitario'], 0) ?>
                     </td>
                     <td>
                         <?php if ($value['cantidad'] > 0) {
@@ -115,7 +113,7 @@ if ($res != null) {
                         } ?>
                     </td>
                     <td>
-                        <?php echo number_format($value['precio_compra'], 2) ?>
+                        <?php echo number_format($value['precio_compra'], 0) ?>
                     </td>
                 </tr>
             <?php
@@ -134,7 +132,9 @@ if ($res != null) {
                         <!--<th></th>-->
                         <th></th>
                         <th></th>
-                        <th><?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 2) ?></th>
+                        <th <?php if (isset($_GET['id_factura'])) {
+                                    echo 'class="miTabla"';
+                                } ?>><?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0) ?></th>
                     </tr>
                 </tbody>
         <?php }
@@ -147,19 +147,19 @@ if ($res != null) {
                 <!--<th></th>-->
                 <th></th>
                 <th></th>
-                <th><?php echo number_format($resFactura[0]['total_factura'], 2) ?></th>
+                <th><?php echo number_format($resFactura[0]['total_factura'], 0) ?></th>
             </tr>
         </tbody>
         <tbody>
             <tr>
                 <th>Paga</th>
                 <th>
-                    <?php echo number_format($resFactura[0]['efectivo'], 2) ?>
+                    <?php echo number_format($resFactura[0]['efectivo'], 0) ?>
                 </th>
                 <th></th>
                 <th>Cambio</th>
                 <th>
-                    <?php echo number_format($resFactura[0]['cambio'], 2) ?>
+                    <?php echo number_format($resFactura[0]['cambio'], 0) ?>
                 </th>
             </tr>
         </tbody>
@@ -422,6 +422,7 @@ if ($res != null) {
                                                                                                                     echo "Views/img/img.jpg";
                                                                                                                 } ?>", 0, 216)*/
                 .Feed(1)
+                .TextoSegunPaginaDeCodigos(2, "cp850", "Número Factura: <?php echo $resFactura[0]['id_factura'] ?>\n")
                 .EscribirTexto("<?php echo $nombreSistema ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: <?php echo $tel ?>\n")

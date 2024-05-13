@@ -11,21 +11,25 @@ class ControladorUsuario
             );
             $consultarUsuario = new ModeloUsuario();
             $res = $consultarUsuario->ModeloLoginIngresar($dato);
-            if ($res[0]['nombre_activo'] != 'Inactivo') {
-                if ($res[0]['usuario'] == $_POST['user'] && $res[0]['clave'] == $_POST['clave']) {
-                    session_start();
-                    $_SESSION['id_usuario'] = $res[0]['id_usuario'];
-                    $_SESSION['id_local'] = $res[0]['id_local'];
-                    $_SESSION['usuario'] = $res[0]['usuario'];
-                    $_SESSION['rol'] = $res[0]['nombre_rol'];
-                    $_SESSION['validar'] = true;
-                    $funcion = new ControladorFuncion();
-                    $funcion->listarFunciones();
+            if ($res != []) {
+                if ($res[0]['nombre_activo'] != 'Inactivo') {
+                    if ($res[0]['usuario'] == $_POST['user'] && $res[0]['clave'] == $_POST['clave']) {
+                        session_start();
+                        $_SESSION['id_usuario'] = $res[0]['id_usuario'];
+                        $_SESSION['id_local'] = $res[0]['id_local'];
+                        $_SESSION['usuario'] = $res[0]['usuario'];
+                        $_SESSION['rol'] = $res[0]['nombre_rol'];
+                        $_SESSION['validar'] = true;
+                        $funcion = new ControladorFuncion();
+                        $funcion->listarFunciones();
+                    } else {
+                        header('location:loginFallido');
+                    }
                 } else {
-                    header('location:loginFallido');
+                    header('location:loginInactivo');
                 }
             } else {
-                header('location:loginInactivo');
+                header('location:loginFallido');
             }
         }
     }
@@ -81,14 +85,14 @@ class ControladorUsuario
             } else {
                 $dato = array(
                     'id' => $_GET['id_usuario'],
-                    'priNombre' => $_POST['priNombre'],
-                    'segNombre' => $_POST['segNombre'],
-                    'priApellido' => $_POST['priApellido'],
-                    'segApellido' => $_POST['segApellido'],
-                    'user' => $_POST['user'],
-                    'clave' => $_POST['clave'],
-                    'rol' => $_POST['rol'],
-                    'activo' => $_POST['activo'],
+                    'priNombre' => $_POST['priNombreEdit'],
+                    'segNombre' => $_POST['segNombreEdit'],
+                    'priApellido' => $_POST['priApellidoEdit'],
+                    'segApellido' => $_POST['segApellidoEdit'],
+                    'user' => $_POST['userEdit'],
+                    'clave' => $_POST['claveEdit'],
+                    'rol' => $_POST['rolEdit'],
+                    'activo' => $_POST['activoEdit'],
                     'local' => $_SESSION['id_local']
                 );
             }

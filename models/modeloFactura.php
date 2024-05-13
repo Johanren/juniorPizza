@@ -71,9 +71,9 @@ class ModeloFactura
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
         if ($dato != null) {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE cliente.numero_cc = ? AND fecha_factura like ?";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE cliente.numero_cc = ? AND factura.fecha_factura like ?";
         } else {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE fecha_factura like ?";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE factura.fecha_factura like ?";
         }
 
         try {
@@ -177,6 +177,24 @@ class ModeloFactura
                 } catch (PDOException $e) {
                     print_r($e->getMessage());
                 }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function actualizarTotalFacturaPropinaModelo($totalsinpropina, $id)
+    {
+        $sql = "UPDATE $this->tabla SET total_factura=? WHERE id_factura=?";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $totalsinpropina, PDO::PARAM_INT);
+        $stms->bindParam(2, $id, PDO::PARAM_INT);
+        try {
+            if ($stms->execute()) {
+                return true;
             } else {
                 return false;
             }

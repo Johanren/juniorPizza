@@ -48,14 +48,21 @@ if (isset($_GET['action'])) {
                 </table>
                 <button type="submit" class="btn btn-primary" name="devolucion"> Registrar Devolución</button>
             </form>
-            <hr>
-            <!-- Formulario para cancelación de factura -->
-            <h3>Cancelar Factura</h3>
-            <form action="" method="post">
-                <input type="text" class="form-control factura mt-2" id="factura" name="id_factura" required>
-                <input type="hidden" name="cancelar_factura" value="true">
-                <button type="submit" class="btn btn-danger mt-2">Cancelar Factura</button>
-            </form>
+            <?php
+            if ($_SESSION['rol'] == "Cajero" || $_SESSION['rol'] == "Mesero" || $_SESSION['rol'] == "Cocina") {
+            } else {
+            ?>
+                <hr>
+                <!-- Formulario para cancelación de factura -->
+                <h3>Cancelar Factura</h3>
+                <form action="" method="post">
+                    <input type="text" class="form-control factura mt-2" id="factura" name="id_factura" required>
+                    <input type="hidden" name="cancelar_factura" value="true">
+                    <button type="submit" class="btn btn-danger mt-2">Cancelar Factura</button>
+                </form>
+            <?php
+            }
+            ?>
         </div>
     </div>
 </div>

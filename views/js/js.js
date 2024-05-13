@@ -1126,37 +1126,39 @@ $(document).ready(function () {
 	});
 });
 
+
 $(document).ready(function () {
-	$('#miTabla').on('click', 'th', function () {
-		// Obtener el valor actual del td
-		var valor = $(this).text().trim();
+    $('.miTabla').on('click', function () {
+        var $td = $(this);
+        var valorActual = $td.text().replace(",", ""); // Eliminar comas
+        var $input = $('<input type="text" class="form-control propina" id="propina">').val(valorActual);
 
-		// Crear un input y asignarle el valor del td
-		var input = $('<input type="text" class="form-control">').val(valor);
+        $td.empty().append($input);
+        $input.focus();
+        var factura = $('#num_factura').text(); // Usar jQuery para seleccionar el elemento
 
-		// Reemplazar el contenido del td con el input
-		$(this).html(input);
+        $input.blur(function () {
+            var nuevoValor = $(this).val();
+			var sindecimal = nuevoValor.replace(",", "");
+            // Formatear el valor con comas cuando el campo pierde el foco
+            $td.text(nuevoValor.toLocaleString('es'));
 
-		// Enfocar el input
-		input.focus();
+            // Hacer la llamada AJAX solo con los números enteros (sin comas)
+            $.ajax({
+                url: 'views/ajax.php',
+                method: 'GET',
+                data: { nuevo_valor: sindecimal, id_factura: factura },
+                success: function (response) {
+                    // Manejar la respuesta del servidor si es necesario
+					location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Manejar errores si es necesario
+                }
+            });
 
-		// Escuchar el evento blur en el input para actualizar el valor
-		input.blur(function () {
-			var nuevoValor = $(this).val().trim();
-			$(this).parent().text(nuevoValor);
-
-			// Aquí puedes realizar la llamada AJAX para actualizar el valor en el servidor
-			$.ajax({
-				url: 'views/actualizar.php',
-				method: 'GET',
-				data: { nuevo_valor: nuevoValor },
-				success: function (response) {
-					// Manejar la respuesta del servidor si es necesario
-				},
-				error: function (xhr, status, error) {
-					// Manejar errores si es necesario
-				}
-			});
-		});
-	});
+            // Al hacer clic fuera del input, actualizar el valor de miTabla con el valor del input
+            $td.text(nuevoValor);
+        });
+    });
 });

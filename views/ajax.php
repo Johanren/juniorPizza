@@ -12,6 +12,8 @@ require_once '../controllers/controladorMesa.php';
 require_once '../controllers/controladorCliente.php';
 require_once '../controllers/controladorNomina.php';
 require_once '../controllers/controladorVenta.php';
+require_once '../controllers/controladorPropina.php';
+require_once '../controllers/controladorFactura.php';
 //modelo
 require_once '../models/modeloProeevedor.php';
 require_once '../models/modeloMedida.php';
@@ -25,6 +27,8 @@ require_once '../models/modeloMesa.php';
 require_once '../models/modeloCliente.php';
 require_once '../models/modeloNomina.php';
 require_once '../models/modeloVenta.php';
+require_once '../models/modeloPropina.php';
+require_once '../models/modeloFactura.php';
 
 class Ajax
 {
@@ -48,6 +52,7 @@ class Ajax
     public $id_nomina;
     public $factura;
     public $propina;
+    public $id_factura;
 
     function consultarProeevedorAjax()
     {
@@ -278,6 +283,8 @@ class Ajax
     }
 
     function actualizarPropinaFacturaAjax(){
+        $propina = new ControladorPropina();
+        $res = $propina->actualizarPropinaAjax(str_replace(',', '', $this->propina), $this->id_factura);
         
     }
 }
@@ -380,7 +387,8 @@ if ($request == 2) {
 
 }
 
-if (isset($_GET['nuevo_valor'])) {
+if (isset($_GET['nuevo_valor']) && isset($_GET['id_factura'])) {
     $ajax->propina = $_GET['nuevo_valor'];
+    $ajax->id_factura = $_GET['id_factura'];
     $ajax->actualizarPropinaFacturaAjax();
 }  

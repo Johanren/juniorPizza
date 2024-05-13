@@ -109,12 +109,11 @@ class ControladorVenta
             $totalCan = $cant - $cantidades_devueltas;
             $efectivoTotal = $efectivo - $totalDevolver;
             $devolverProducto = new ModeloVenta();
-            $resDevol = $devolverProducto->devolverProductoModelo($id,$id_factura,$restarTotal,$totalCan);
+            $resDevol = $devolverProducto->devolverProductoModelo($id, $id_factura, $restarTotal, $totalCan);
             if ($resDevol == true) {
                 $devovlerFactura = new ControladorFactura();
                 $resFac  = $devovlerFactura->restarEfectivoFactura($id_factura, $efectivoTotal);
                 if ($resFac == true) {
-                    
                 }
             }
         }
@@ -135,4 +134,6 @@ class ControladorVenta
             }
         }
     }
+
+    
 }

@@ -241,9 +241,17 @@ class ControladorFactura
         return $res;
     }
 
-    function eliminarFactura($id){
+    function eliminarFactura($id)
+    {
         $eliminar = new ModeloFactura();
         $res = $eliminar->eliminarFacturaModelo($id);
         return $res;
+    }
+
+    function actualizarTotalFacturaPropina($totalsinpropina, $id)
+    {
+        $actualizarFactura = new ModeloFactura();
+        $act = $actualizarFactura->actualizarTotalFacturaPropinaModelo($totalsinpropina, $id);
+        return $act;
     }
 }

@@ -2,10 +2,10 @@
 
 class ControladorFacturaProeevedor
 {
-    function agregarFacturaProeevedor($id_categoria, $id_proeevedor, $id_usuario, $id_medida, $codigo, $nombre, $precio, $cantidad, $id_local, $totalFactura)
+    function agregarFacturaProeevedor($id_categoria, $id_proeevedor, $id_usuario, $id_medida, $codigo, $nombre, $precio, $cantidad, $id_local, $totalFactura, $precioUnita, $total)
     {
         $agregar = new ModeloFacturaProeevedor();
-        $res = $agregar->agregarFacturaModelo($id_categoria, $id_proeevedor, $id_usuario, $id_medida, $codigo, $nombre, $precio, $cantidad, $id_local, $totalFactura);
+        $res = $agregar->agregarFacturaModelo($id_categoria, $id_proeevedor, $id_usuario, $id_medida, $codigo, $nombre, $precio, $cantidad, $id_local, $totalFactura, $precioUnita, $total);
         return $res;
     }
 

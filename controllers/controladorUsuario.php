@@ -85,14 +85,14 @@ class ControladorUsuario
             } else {
                 $dato = array(
                     'id' => $_GET['id_usuario'],
-                    'priNombre' => $_POST['priNombre'],
-                    'segNombre' => $_POST['segNombre'],
-                    'priApellido' => $_POST['priApellido'],
-                    'segApellido' => $_POST['segApellido'],
-                    'user' => $_POST['user'],
-                    'clave' => $_POST['clave'],
-                    'rol' => $_POST['rol'],
-                    'activo' => $_POST['activo'],
+                    'priNombre' => $_POST['priNombreEdit'],
+                    'segNombre' => $_POST['segNombreEdit'],
+                    'priApellido' => $_POST['priApellidoEdit'],
+                    'segApellido' => $_POST['segApellidoEdit'],
+                    'user' => $_POST['userEdit'],
+                    'clave' => $_POST['claveEdit'],
+                    'rol' => $_POST['rolEdit'],
+                    'activo' => $_POST['activoEdit'],
                     'local' => $_SESSION['id_local']
                 );
             }

@@ -129,7 +129,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             Dirección: <span id="dir_proeevedor"></span>
                         </div>
                     </div>
-                    <a id="agregarProducto" class="btn btn-primary">
+                    <a id="<?php if($_SESSION['rol'] == "Administrador"){ print "agregarProducto"; }else{ print "agreProducto";} ?>" class="btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                             class="bi bi-node-plus" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -142,8 +142,10 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                 <tr>
                                     <th>Codigo</th>
                                     <th>Producto</th>
+                                    <th>Precio Unitario</th>
                                     <th>Precio</th>
                                     <th>Cantidad</th>
+                                    <th>Costo * Prod</th>
                                     <th>Categoria</th>
                                     <th>Medida</th>
                                     <?php
@@ -155,12 +157,14 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                                     ?>
                                 </tr>
                             </thead>
-                            <tbody id="producto">
+                            <tbody id="<?php if($_SESSION['rol'] == "Administrador"){ print "producto"; }else{ print "productol";} ?>">
                                 <tr>
                                     <td><input type="hidden" id="id_producto_1" name="id_producto[]"><input type="text" class="form-control" id="codigo_1" name="codigo[]"></td>
                                     <td><input type="text" class="form-control nombrePro" id="producto_1" name="nombre[]"></td>
+                                    <td><input type="text" class="form-control precio_uni" id="precioUni_1" name="precioUnita[]" value="0"></td>
                                     <td><input type="text" class="form-control precio" id="precio_1" name="precio[]"></td>
-                                    <td><input type="hidden" id="cantidad_1" name="cant[]"><input type="text" class="form-control" name="cantidad[]"></td>
+                                    <td><input type="hidden" id="cantidad_1" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_1"></td>
+                                    <td><input type="text" class="form-control Total" id="total_1" name="total[]" value="0"></td>
                                     <td><input type="hidden" class="form-control" name="id_categoria[]"
                                             id="id_categoria_1"><input type="text" class="form-control categoria"
                                             name="" id="categoria_1"></td>
@@ -181,7 +185,7 @@ if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
                             <tbody>
                                 <tr>
                                     <td><input type="text" name="totalFactura" id="totalFactura" placeholder="Total a Pagar" required
-                                            class="form-control totalFactura"></td>
+                                            class="form-control totalFactura" value="0"></td>
                                 </tr>
                             </tbody>
                         </table>

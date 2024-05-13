@@ -32,7 +32,9 @@ class modeloViews
             $enlace == 'devoluciones' ||
             $enlace == 'nomina' ||
             $enlace == 'factura_pdf' ||
-            $enlace == 'propina'
+            $enlace == 'propina' ||
+            $enlace == 'ayuda' ||
+            $enlace == 'gastos'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
         } elseif ($enlace == 'agregarUsuario') {
@@ -85,7 +87,13 @@ class modeloViews
             $modulo = 'views/moduls/medida.php';
         } elseif ($enlace == 'actualizarPromocion') {
             $modulo = 'views/moduls/promocion.php';
-        } else {
+        } elseif ($enlace == 'productoDevuelto') {
+            $modulo = 'views/moduls/devoluciones.php';
+        }elseif ($enlace == 'FacturaCancelada') {
+            $modulo = 'views/moduls/devoluciones.php';
+        }elseif ($enlace == 'agregarGasto' || $enlace == 'actualizarGasto') {
+            $modulo = 'views/moduls/gastos.php';
+        }else {
             $modulo = 'views/moduls/404.php';
         }
         return $modulo;

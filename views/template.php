@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="views/css/cocina.css">
     <link rel="stylesheet" href="views/css/config.css">
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link rel="icon" href="views/img/icon.jpg">
+    <link rel="icon" href="views/img/logo.png">
     <link rel="stylesheet" href="views/css/jquery-ui.css">
 
 </head>

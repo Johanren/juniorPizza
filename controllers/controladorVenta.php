@@ -82,4 +82,58 @@ class ControladorVenta
         $res = $metodos->listarMetodosPagoModelo($metodo);
         return $res;
     }
+
+    function consultarFacturaDevolucionAjax($id)
+    {
+        $metodos = new ModeloVenta();
+        $res = $metodos->consultarFacturaDevolucionAjaxModelo($id);
+        return $res;
+    }
+
+    function realizarDevolucionCancelacion()
+    {
+
+        // Verifica si se está procesando una devolución de producto
+        if (isset($_POST["id_factura"]) && isset($_POST["codigo_producto"]) && isset($_POST["cantidad_devuelta"])) {
+            // Recupera los datos del formulario
+            $id_factura = $_POST["id_factura"];
+            $id = $_POST['id'];
+            $codigos_productos = $_POST["codigo_producto"];
+            $cantidades_devueltas = $_POST["cantidad_devuelta"];
+            $cant = $_POST["cant"];
+            $precio = $_POST["precio"];
+            $total = $_POST["total"];
+            $efectivo = $_POST["efectivo"];
+            $totalDevolver = $cantidades_devueltas * $precio;
+            $restarTotal = $total - $totalDevolver;
+            $totalCan = $cant - $cantidades_devueltas;
+            $efectivoTotal = $efectivo - $totalDevolver;
+            $devolverProducto = new ModeloVenta();
+            $resDevol = $devolverProducto->devolverProductoModelo($id, $id_factura, $restarTotal, $totalCan);
+            if ($resDevol == true) {
+                $devovlerFactura = new ControladorFactura();
+                $resFac  = $devovlerFactura->restarEfectivoFactura($id_factura, $efectivoTotal);
+                if ($resFac == true) {
+                }
+            }
+        }
+
+        // Verifica si se está procesando la cancelación de factura
+        elseif (isset($_POST["cancelar_factura"]) && $_POST["cancelar_factura"] == "true") {
+            // Recupera el número de factura a cancelar
+            $id_factura = $_POST["id_factura"];
+
+            $elimianrFactura = new ControladorFactura();
+            $elim = $elimianrFactura->eliminarFactura($id_factura);
+            if ($elim == true) {
+                $eliminarVentaFac  = new ModeloVenta();
+                $ventaElim = $eliminarVentaFac->eliminarFacturaVenta($id_factura);
+                if ($ventaElim == true) {
+                    echo '<script>window.location="FacturaCancelada"</script>';
+                }
+            }
+        }
+    }
+
+    
 }

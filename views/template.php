@@ -33,6 +33,9 @@
         <?php
         $mvc = new controladorViews();
         $mvc->enlacesPaginaControlador();
+
+        $caja  = new ControladorAbrirCaja();
+        $caja->abrirYCerrarCaja();
         ?>
     </div>
     <?php
@@ -280,11 +283,15 @@
                                 }
                                 // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
                                 // definir otras propiedades, etcétera
+                                // Filtrar los productos por categoría
                                 const listaDeProductos = response;
-                                //console.log(listaDeProductos);
-
+                                const bebidas = listaDeProductos.filter(producto => producto.categoria === 'Bebidas');
+                                const otrosProductos = listaDeProductos.filter(producto => producto.categoria !== 'Bebidas');
+                                //console.log(bebidas);
+                                //console.log(otrosProductos);
                                 // Comenzar a diseñar la tabla
                                 let tabla = obtenerLineaSeparadora() + "\n";
+                                let tabla1 = obtenerLineaSeparadora() + "\n";
 
 
                                 const lineasEncabezado = tabularDatos([
@@ -308,32 +315,61 @@
 
                                 for (const linea of lineasEncabezado) {
                                     tabla += linea + "\n";
+                                    tabla1 += linea + "\n";
                                 }
                                 tabla += obtenerLineaSeparadora() + "\n";
-                                for (const producto of listaDeProductos) {
-                                    const lineas = tabularDatos(
-                                        [{
-                                                contenido: producto.nombre,
-                                                maximaLongitud: maximaLongitudNombre
-                                            },
-                                            {
-                                                contenido: producto.cantidad.toString(),
-                                                maximaLongitud: maximaLongitudCantidad
-                                            },
-                                            {
-                                                contenido: producto.descripcion.toString(),
-                                                maximaLongitud: maximaLongitudPrecio
-                                            },
-                                        ],
-                                        relleno,
-                                        separadorColumnas
-                                    );
-                                    for (const linea of lineas) {
-                                        tabla += linea + "\n";
+                                if (bebidas.length > 0) {
+                                    for (const producto of bebidas) {
+                                        const lineas = tabularDatos(
+                                            [{
+                                                    contenido: producto.nombre,
+                                                    maximaLongitud: maximaLongitudNombre
+                                                },
+                                                {
+                                                    contenido: producto.cantidad.toString(),
+                                                    maximaLongitud: maximaLongitudCantidad
+                                                },
+                                                {
+                                                    contenido: producto.descripcion.toString(),
+                                                    maximaLongitud: maximaLongitudPrecio
+                                                },
+                                            ],
+                                            relleno,
+                                            separadorColumnas
+                                        );
+                                        for (const linea of lineas) {
+                                            tabla += linea + "\n";
+                                        }
+                                        tabla += obtenerLineaSeparadora() + "\n";
                                     }
-                                    tabla += obtenerLineaSeparadora() + "\n";
+                                    console.log(tabla);
                                 }
-                                console.log(tabla);
+                                if (otrosProductos.length > 0) {
+                                    for (const producto of otrosProductos) {
+                                        const lineas = tabularDatos(
+                                            [{
+                                                    contenido: producto.nombre,
+                                                    maximaLongitud: maximaLongitudNombre
+                                                },
+                                                {
+                                                    contenido: producto.cantidad.toString(),
+                                                    maximaLongitud: maximaLongitudCantidad
+                                                },
+                                                {
+                                                    contenido: producto.descripcion.toString(),
+                                                    maximaLongitud: maximaLongitudPrecio
+                                                },
+                                            ],
+                                            relleno,
+                                            separadorColumnas
+                                        );
+                                        for (const linea of lineas) {
+                                            tabla1 += linea + "\n";
+                                        }
+                                        tabla1 += obtenerLineaSeparadora() + "\n";
+                                    }
+                                    console.log(tabla1);
+                                }
                                 const conector = new ConectorPluginV3(URLPlugin);
 
                                 $.ajax({
@@ -346,49 +382,101 @@
                                     success: async function(response) {
                                         const listarPedido = response;
                                         for (const producto of listarPedido) {
-                                            // Extraer el valor específico del array devuelto
-                                            const respuesta = await conector
-                                                .Iniciar()
-                                                .DeshabilitarElModoDeCaracteresChinos()
-                                                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                                                //.DescargarImagenDeInternetEImprimir("", 0, 216)
-                                                .Feed(1)
-                                                .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                                                .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
-                                                .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
-                                                .TextoSegunPaginaDeCodigos(2, "cp850", " Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
-                                                .Feed(1)
-                                                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                                                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                                                .EscribirTexto(tabla)
-                                                .EscribirTexto("------------------------------------------------\n")
-                                                .Feed(3)
-                                                .Corte(1)
-                                                .Pulso(48, 60, 120)
-                                                .imprimirEn("prueba1");
-                                            //.imprimirEnImpresoraRemota("prueba1", "http://192.168.10.11:8000" + "/imprimir");
-                                            if (respuesta === true) {
-                                                $.ajax({
-                                                    url: 'views/ajax.php',
-                                                    type: 'GET',
-                                                    dataType: 'json',
-                                                    data: {
-                                                        respuestaPrint: print,
-                                                        id: id_mesa
-                                                    },
-                                                    success: async function(response) {
-                                                        if (response == true) {
-                                                            location.reload();
-                                                        }
-                                                    },
-                                                    error: function(xhr, status, error) {
-                                                        // Mostrar error si hay algún problema con la solicitud AJAX
-                                                        $('#valorEspecifico').text('Error: ' + error);
-                                                    }
-                                                });
+                                            if (bebidas.length > 0) {
 
-                                            } else {
-                                                alert("Error: " + respuesta);
+                                                // Extraer el valor específico del array devuelto
+                                                const respuesta = await conector
+                                                    .Iniciar()
+                                                    .EstablecerTamañoFuente(1, 1)
+                                                    .DeshabilitarElModoDeCaracteresChinos()
+                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                                                    //.DescargarImagenDeInternetEImprimir("", 0, 216)
+                                                    .Feed(1)
+                                                    .EscribirTexto("<?php echo $nombreSistema ?>\n")
+                                                    .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
+                                                    .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
+                                                    .TextoSegunPaginaDeCodigos(2, "cp850", " Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
+                                                    .Feed(1)
+                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+                                                    .EscribirTexto(tabla)
+                                                    .EscribirTexto("------------------------------------------------\n")
+                                                    .Feed(3)
+                                                    .Corte(1)
+                                                    .Pulso(48, 60, 120)
+                                                    .imprimirEn("prueba1");
+                                                //.imprimirEnImpresoraRemota("prueba1", "http://192.168.10.11:8000" + "/imprimir");
+                                                if (respuesta === true) {
+                                                    $.ajax({
+                                                        url: 'views/ajax.php',
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        data: {
+                                                            respuestaPrint: print,
+                                                            id: id_mesa
+                                                        },
+                                                        success: async function(response) {
+                                                            if (response == true) {
+                                                                location.reload();
+                                                            }
+                                                        },
+                                                        error: function(xhr, status, error) {
+                                                            // Mostrar error si hay algún problema con la solicitud AJAX
+                                                            $('#valorEspecifico').text('Error: ' + error);
+                                                        }
+                                                    });
+
+                                                } else {
+                                                    alert("Error: " + respuesta);
+                                                }
+
+                                            }
+                                            if (otrosProductos.length > 0) {
+                                                // Extraer el valor específico del array devuelto
+                                                const respuesta = await conector
+                                                    .Iniciar()
+                                                    .DeshabilitarElModoDeCaracteresChinos()
+                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                                                    //.DescargarImagenDeInternetEImprimir("", 0, 216)
+                                                    .Feed(1)
+                                                    .EscribirTexto("<?php echo $nombreSistema ?>\n")
+                                                    .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
+                                                    .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
+                                                    .TextoSegunPaginaDeCodigos(2, "cp850", " Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
+                                                    .Feed(1)
+                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+                                                    .EscribirTexto(tabla1)
+                                                    .EscribirTexto("------------------------------------------------\n")
+                                                    .Feed(3)
+                                                    .Corte(1)
+                                                    .Pulso(48, 60, 120)
+                                                    .imprimirEn("prueba1");
+                                                //.imprimirEnImpresoraRemota("prueba1", "http://192.168.10.11:8000" + "/imprimir");
+                                                if (respuesta === true) {
+                                                    $.ajax({
+                                                        url: 'views/ajax.php',
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        data: {
+                                                            respuestaPrint: print,
+                                                            id: id_mesa
+                                                        },
+                                                        success: async function(response) {
+                                                            if (response == true) {
+                                                                location.reload();
+                                                            }
+                                                        },
+                                                        error: function(xhr, status, error) {
+                                                            // Mostrar error si hay algún problema con la solicitud AJAX
+                                                            $('#valorEspecifico').text('Error: ' + error);
+                                                        }
+                                                    });
+
+                                                } else {
+                                                    alert("Error: " + respuesta);
+                                                }
+
                                             }
                                         }
 

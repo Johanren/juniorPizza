@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.2.0/tailwind.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.2.0/tailwind.min.css">
+<link rel="stylesheet" href="views/css/tailwind.min.css">
 <div class="bg-gray-100 font-display">
     <div>
         <div class="mt-8 opacity-75">

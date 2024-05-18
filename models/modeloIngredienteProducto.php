@@ -60,8 +60,7 @@ class ModeloIngredienteProducto
     function consultarIngredeinteAjaxModelo($dato)
     {
         if ($dato != '') {
-            $dato = '%' . $dato . '%';
-            $sql = "SELECT producto.id_producto, producto.nombre_producto, GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ') FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente WHERE producto.nombre_producto like ? ORDER BY producto.id_producto";
+            $sql = "SELECT producto.id_producto, producto.nombre_producto, GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ') FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente WHERE ingrediente_producto.id_producto = ? ORDER BY producto.id_producto";
         } else {
             $sql = "SELECT producto.id_producto, producto.nombre_producto, GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ') FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente ORDER BY producto.id_producto";
         }
@@ -70,7 +69,7 @@ class ModeloIngredienteProducto
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($dato != '') {
-                $stms->bindParam(1, $dato, PDO::PARAM_STR);
+                $stms->bindParam(1, $dato, PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();

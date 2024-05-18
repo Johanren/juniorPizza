@@ -122,7 +122,7 @@ class Ajax
             $datos[] = array(
                 'label' => $value['nombre_producto'],
                 'id' => $value['id_producto'],
-                'precio' => number_format($value['precio_unitario'],0),
+                'precio' => number_format($value['precio_unitario'], 0),
                 'codigo' => $value['codigo_producto'],
                 'cantidad' => $value['cantidad_producto'],
                 'id_categoria' => $value['id_categoria'],
@@ -160,12 +160,24 @@ class Ajax
     {
         $consultar = new ControladorIngredienteProducto();
         $respuesta = $consultar->consultarIngredeinteAjaxControlador($this->productoPedido);
+        $consultar = new ModeloIngredienteProducto();
         foreach ($respuesta as $key => $value) {
-            $datos[] = array(
-                'label' => $value['nombre_producto'],
-                'id' => $value['id_producto'],
-                'descripcion' => (isset($value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null
-            );
+            $res = $consultar->consultarIngredeinteAjaxModelo($value['id_producto']);
+            if ($res == null) {
+                $datos[] = array(
+                    'label' => $value['nombre_producto'],
+                    'id' => $value['id_producto'],
+                    'descripcion' => (isset($value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null
+                );
+            } else {
+                foreach ($res as $key => $value) {
+                    $datos[] = array(
+                        'label' => $value['nombre_producto'],
+                        'id' => $value['id_producto'],
+                        'descripcion' => (isset($value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null
+                    );
+                }
+            }
         }
 
         print json_encode($datos);
@@ -226,7 +238,7 @@ class Ajax
     {
         $consultar_cliente = new ControladorCLiente();
         $res = $consultar_cliente->consultarClienteAjax($this->cc);
-        foreach ($res as $key => $value) {  
+        foreach ($res as $key => $value) {
             $datos[] = array(
                 'label1' => $value['numero_cc'],
                 'label' => $value['primer_nombre'] . " " . $value['primer_apellido'],
@@ -249,7 +261,6 @@ class Ajax
         }
 
         print json_encode($datos);
-
     }
 
     function consultarAritucloProeevedor()
@@ -258,7 +269,6 @@ class Ajax
         $res = $consultar_id->consultarAritucloProeevedorAjax($this->idArticulo);
 
         print json_encode($res);
-
     }
 
     function consultarNominaPedidoAjax()
@@ -282,10 +292,10 @@ class Ajax
         print json_encode($datos);
     }
 
-    function actualizarPropinaFacturaAjax(){
+    function actualizarPropinaFacturaAjax()
+    {
         $propina = new ControladorPropina();
         $res = $propina->actualizarPropinaAjax(str_replace(',', '', $this->propina), $this->id_factura);
-        
     }
 }
 
@@ -362,17 +372,17 @@ if (isset($_GET['cc'])) {
 if (isset($_GET['nombre'])) {
     $ajax->articulo = $_GET['nombre'];
     $ajax->consultarAritucloProeevedorNombre();
-}  
+}
 
 if (isset($_GET['id_nomina'])) {
     $ajax->id_nomina = $_GET['id_nomina'];
     $ajax->consultarNominaPedidoAjax();
-}  
+}
 
 if (isset($_GET['factura'])) {
     $ajax->factura = $_GET['factura'];
     $ajax->consultarFacturaDevolucionAjax();
-}  
+}
 
 $request = 0;
 if (isset($_GET['request'])) {
@@ -384,11 +394,10 @@ if ($request == 2) {
         $ajax->idArticulo = $_GET['userid'];
         $ajax->consultarAritucloProeevedor();
     }
-
 }
 
 if (isset($_GET['nuevo_valor']) && isset($_GET['id_factura'])) {
     $ajax->propina = $_GET['nuevo_valor'];
     $ajax->id_factura = $_GET['id_factura'];
     $ajax->actualizarPropinaFacturaAjax();
-}  
+}

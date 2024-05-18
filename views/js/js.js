@@ -666,7 +666,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarFactura").click(function () {
-		$("#factura").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_articulo[]" id="id_articulo_' + index + '"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_' + index + '" placeholder="Codigo producto"></td><td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_' + index + '" placeholder="Nombre producto"></td><td><input type="text" name="precio" class="form-control" id="valor_' + index + '" disabled></td><!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_' + index + '" value="0"></td>--><!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_' + index + '" value="0" required>--><td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_' + index + '" value="0" required></td><td><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></td><td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td></tr>');
+		$("#factura").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_articulo[]" id="id_articulo_' + index + '"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_' + index + '" placeholder="Codigo producto"></td><td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_' + index + '" placeholder="Nombre producto"></td><td><input type="text" name="precio" class="form-control valor" id="valor_' + index + '" disabled></td><!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_' + index + '" value="0"></td>--><!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_' + index + '" value="0" required>--><td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_' + index + '" value="0" required></td><td><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></td><td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td></tr>');
 		index++;
 	});
 });
@@ -1128,37 +1128,304 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-    $('.miTabla').on('click', function () {
-        var $td = $(this);
-        var valorActual = $td.text().replace(",", ""); // Eliminar comas
-        var $input = $('<input type="text" class="form-control propina" id="propina">').val(valorActual);
+	$('.miTabla').on('click', function () {
+		var $td = $(this);
+		var valorActual = $td.text().replace(",", ""); // Eliminar comas
+		var $input = $('<input type="text" class="form-control propina" id="propina">').val(valorActual);
 
-        $td.empty().append($input);
-        $input.focus();
-        var factura = $('#num_factura').text(); // Usar jQuery para seleccionar el elemento
+		$td.empty().append($input);
+		$input.focus();
+		var factura = $('#num_factura').text(); // Usar jQuery para seleccionar el elemento
 
-        $input.blur(function () {
-            var nuevoValor = $(this).val();
+		$input.blur(function () {
+			var nuevoValor = $(this).val();
 			var sindecimal = nuevoValor.replace(",", "");
-            // Formatear el valor con comas cuando el campo pierde el foco
-            $td.text(nuevoValor.toLocaleString('es'));
+			// Formatear el valor con comas cuando el campo pierde el foco
+			$td.text(nuevoValor.toLocaleString('es'));
 
-            // Hacer la llamada AJAX solo con los números enteros (sin comas)
-            $.ajax({
-                url: 'views/ajax.php',
-                method: 'GET',
-                data: { nuevo_valor: sindecimal, id_factura: factura },
-                success: function (response) {
-                    // Manejar la respuesta del servidor si es necesario
+			// Hacer la llamada AJAX solo con los números enteros (sin comas)
+			$.ajax({
+				url: 'views/ajax.php',
+				method: 'GET',
+				data: { nuevo_valor: sindecimal, id_factura: factura },
+				success: function (response) {
+					// Manejar la respuesta del servidor si es necesario
 					location.reload();
-                },
-                error: function (xhr, status, error) {
-                    // Manejar errores si es necesario
-                }
-            });
+				},
+				error: function (xhr, status, error) {
+					// Manejar errores si es necesario
+				}
+			});
 
-            // Al hacer clic fuera del input, actualizar el valor de miTabla con el valor del input
-            $td.text(nuevoValor);
-        });
-    });
+			// Al hacer clic fuera del input, actualizar el valor de miTabla con el valor del input
+			$td.text(nuevoValor);
+		});
+	});
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+	// Función para calcular el total de una fila
+	// Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
+	// No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
+	// a cualquier lugar
+	const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
+		const resultado = [];
+		let indice = 0;
+		while (indice < cadena.length) {
+			const pedazo = cadena.substring(indice, indice + maximaLongitud);
+			indice += maximaLongitud;
+			resultado.push(pedazo);
+		}
+		return resultado;
+	}
+	const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
+		let mayorConteoDeCadenasSeparadas = 0;
+		const cadenasSeparadas = [];
+		for (const contenido of contenidosConMaximaLongitud) {
+			const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
+			cadenasSeparadas.push({
+				separadas,
+				maximaLongitud: contenido.maximaLongitud
+			});
+			if (separadas.length > mayorConteoDeCadenasSeparadas) {
+				mayorConteoDeCadenasSeparadas = separadas.length;
+			}
+		}
+		return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
+	}
+	const tabularDatos = (cadenas, relleno, separadorColumnas) => {
+		const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
+		let indice = 0;
+		const lineas = [];
+		while (indice < mayorConteoDeBloques) {
+			let linea = "";
+			for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
+				let cadena = "";
+				if (indice < contenidos.separadas.length) {
+					cadena = contenidos.separadas[indice];
+				}
+				if (cadena.length < contenidos.maximaLongitud) {
+					cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
+				}
+				linea += cadena + separadorColumnas;
+			}
+			lineas.push(linea);
+			indice++;
+		}
+		return lineas;
+	}
+
+
+	const obtenerListaDeImpresoras = async () => {
+		return await ConectorPluginV3.obtenerImpresoras();
+	}
+	const URLPlugin = "http://localhost:8000"
+	const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
+		$btnImprimir = document.querySelector("#Imprimir"),
+		$separador = document.querySelector("#separador"),
+		$relleno = document.querySelector("#relleno"),
+		$maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
+		$maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
+		$maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
+	$maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
+
+
+	const init = async () => {
+		/*const impresoras = await ConectorPluginV3.obtenerImpresoras();
+		for (const impresora of impresoras) {
+			$listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
+				value: impresora,
+				text: impresora,
+			}));
+		}*/
+		$btnImprimir.addEventListener("click", () => {
+			const nombreImpresora = "Xprinter1";
+			if (!nombreImpresora) {
+				return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
+			}
+			imprimirTabla("Xprinter1");
+		});
+	}
+
+
+	const imprimirTabla = async (nombreImpresora) => {
+		const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
+			maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
+			maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
+			maximaLongitudPrecioTotal = parseInt($maximaLongitudPrecio.value),
+			relleno = $relleno.value,
+			separadorColumnas = $separador.value;
+		const obtenerLineaSeparadora = () => {
+			const lineasSeparador = tabularDatos(
+				[{
+					contenido: "-",
+					maximaLongitud: maximaLongitudNombre
+				},
+				{
+					contenido: "-",
+					maximaLongitud: maximaLongitudCantidad
+				},
+				{
+					contenido: "-",
+					maximaLongitud: maximaLongitudPrecio
+				},
+				{
+					contenido: "-",
+					maximaLongitud: maximaLongitudPrecioTotal
+				},
+				],
+				"-",
+				"+",
+			);
+			let separadorDeLineas = "";
+			if (lineasSeparador.length > 0) {
+				separadorDeLineas = lineasSeparador[0]
+			}
+			return separadorDeLineas;
+		}
+		// Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
+		// definir otras propiedades, etcétera
+
+		function calcularTotal(fila) {
+			var precio = fila.find('.resultado').val();
+			var total = precio
+			return total;
+		}
+
+		// Función para obtener los campos nombre, cantidad y total de la factura
+		function obtenerCamposFactura() {
+			var camposFactura = [];
+			$('#factura tr').each(function () {
+				var fila = $(this);
+				var nombre = fila.find('.nombre_articulo').val();
+				var cantidad = fila.find('.cantidad').val();
+				var precio = fila.find('.valor').val();
+				var total = calcularTotal(fila);
+				camposFactura.push({
+					nombre: nombre,
+					cantidad: cantidad,
+					precio: precio,
+					precioTotal: total
+				});
+			});
+			return camposFactura;
+		}
+
+		// Ejemplo de uso
+		var factura = obtenerCamposFactura();
+		console.log(factura);
+		var nom_proeevedor = document.getElementById('nom_proeevedor').textContent;
+		var nit_proeevedor = document.getElementById('nit_proeevedor').textContent;
+		var tel_proeevedor = document.getElementById('tel_proeevedor').textContent;
+		var dir_proeevedor = document.getElementById('dir_proeevedor').textContent;
+		if (document.getElementById('propina')) {
+			var propina = document.getElementById('propina')
+		}else{
+			var propina = 0
+		}
+		if (document.getElementById('total')) {
+			var total = document.getElementById('total')
+		}else{
+			var total = 0
+		}
+		var total_1 = document.getElementById('total_1')
+		const listaDeProductos = factura;
+		// Comenzar a diseñar la tabla
+		let tabla = obtenerLineaSeparadora() + "\n";
+
+
+		const lineasEncabezado = tabularDatos([
+
+			{
+				contenido: "Nombre",
+				maximaLongitud: maximaLongitudNombre
+			},
+			{
+				contenido: "Cantidad",
+				maximaLongitud: maximaLongitudCantidad
+			},
+			{
+				contenido: "Precio",
+				maximaLongitud: maximaLongitudPrecio
+			},
+			{
+				contenido: "Total",
+				maximaLongitud: maximaLongitudPrecioTotal
+			},
+		],
+			relleno,
+			separadorColumnas,
+		);
+
+		for (const linea of lineasEncabezado) {
+			tabla += linea + "\n";
+		}
+		tabla += obtenerLineaSeparadora() + "\n";
+		for (const producto of listaDeProductos) {
+			const lineas = tabularDatos(
+				[{
+					contenido: producto.nombre,
+					maximaLongitud: maximaLongitudNombre
+				},
+				{
+					contenido: producto.cantidad.toString(),
+					maximaLongitud: maximaLongitudCantidad
+				},
+				{
+					contenido: producto.precio.toString(),
+					maximaLongitud: maximaLongitudPrecio
+				},
+				{
+					contenido: producto.precioTotal.toString(),
+					maximaLongitud: maximaLongitudPrecio
+				},
+				],
+				relleno,
+				separadorColumnas
+			);
+			for (const linea of lineas) {
+				tabla += linea + "\n";
+			}
+			tabla += obtenerLineaSeparadora() + "\n";
+		}
+		console.log(tabla);
+
+
+
+		const conector = new ConectorPluginV3(URLPlugin);
+		const respuesta = await conector
+			.Iniciar()
+			.DeshabilitarElModoDeCaracteresChinos()
+			.EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+			/*.DescargarImagenDeInternetEImprimir("http://<?php echo $_SERVER['HTTP_HOST'] ?>/inventario/<?php if ($diseno != null) {
+																												echo $diseno[0]['icon_sistema'];
+																											} else {
+																												echo "Views/img/img.jpg";
+																											} ?>", 0, 216)*/
+			.Feed(1)
+			.EscribirTexto(nom_proeevedor+"\n")
+			.TextoSegunPaginaDeCodigos(2, "cp850", "Nit: "+nit_proeevedor+"\n")
+			.TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: "+tel_proeevedor+">\n")
+			.TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: "+dir_proeevedor+"\n")
+			.EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+			.Feed(1)
+			.EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+			.EscribirTexto("____________________\n")
+			.EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+			.EscribirTexto(tabla)
+			.EscribirTexto("------------------------------------------------\n")
+			.EscribirTexto("SubTotal $"+total+"\n")
+			.EscribirTexto("Propina $"+propina+"\n")
+			.EscribirTexto("Total $"+total_1+"\n")
+			.Feed(3)
+			.Corte(1)
+			.Pulso(48, 60, 120)
+			.imprimirEn("Xprinter1");
+		if (respuesta === true) {
+			alert("Impreso correctamente");
+		} else {
+			alert("Error: " + respuesta);
+		}
+	}
+	init();
 });

@@ -822,6 +822,7 @@ $(document).ready(function () {
 							var name = data[0]['nombre_producto'];
 							//agregar miles
 							var valor = data[0]['precio_unitario'];
+							valor = valor.toString();
 							value = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 							document.getElementById('id_articulo_' + index).value = id;
@@ -1319,16 +1320,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 		var tel_proeevedor = document.getElementById('tel_proeevedor').textContent;
 		var dir_proeevedor = document.getElementById('dir_proeevedor').textContent;
 		if (document.getElementById('propina')) {
-			var propina = document.getElementById('propina')
+			var propina = document.getElementById('propina').value
 		}else{
 			var propina = 0
 		}
 		if (document.getElementById('total')) {
-			var total = document.getElementById('total')
+			var total = document.getElementById('total').value
 		}else{
 			var total = 0
 		}
-		var total_1 = document.getElementById('total_1')
+		var total_1 = document.getElementById('total_1').value
 		const listaDeProductos = factura;
 		// Comenzar a diseñar la tabla
 		let tabla = obtenerLineaSeparadora() + "\n";

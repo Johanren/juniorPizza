@@ -126,6 +126,17 @@ if ($res != null) {
         ?>
                 <tbody>
                     <tr>
+                        <th>SubTotal</th>
+                        <th></th>
+                        <!--<th></th>-->
+                        <!--<th></th>-->
+                        <th></th>
+                        <th></th>
+                        <th><?php echo number_format($resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0) ?></th>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
                         <th>Propinas</th>
                         <th></th>
                         <!--<th></th>-->
@@ -133,8 +144,8 @@ if ($res != null) {
                         <th></th>
                         <th></th>
                         <th <?php if (isset($_GET['id_factura'])) {
-                                    echo 'class="miTabla"';
-                                } ?>><?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0) ?></th>
+                                echo 'class="miTabla"';
+                            } ?>><?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0) ?></th>
                     </tr>
                 </tbody>
         <?php }
@@ -337,11 +348,11 @@ if ($res != null) {
                 <?php foreach ($resVenta as $key => $value) {
                 ?> {
                         nombre: "<?php echo $value['nombre_producto'] ?>",
-                        cantidad: <?php if ($value['cantidad'] > 0) {
+                        cantidad: "<?php if ($value['cantidad'] > 0) {
                                         echo $value['cantidad'];
                                     } else {
                                         echo $value['peso'];
-                                    } ?>,
+                                    } ?>",
                         precio: <?php echo $value['valor_unitario'] ?>,
                         precioTotal: <?php echo $value['precio_compra'] ?>,
                     },
@@ -434,10 +445,11 @@ if ($res != null) {
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
                 .EscribirTexto(tabla)
                 .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Propina $<?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 2) ?>\n")
+                .EscribirTexto("SubTotal $<?php echo number_format($resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0) ?>\n")
+                .EscribirTexto("Propina $<?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0) ?>\n")
                 .EscribirTexto("Total $<?php echo number_format($resFactura[0]['total_factura'], 2) ?>\n")
                 .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Pago <?php echo $resFactura[0]['efectivo'] ?>   Cambio: <?php echo number_format($resFactura[0]['cambio'], 2) ?>\n")
+                .EscribirTexto("Pago <?php echo $resFactura[0]['efectivo'] ?>   Cambio: <?php echo number_format($resFactura[0]['cambio'], 0) ?>\n")
                 .EscribirTexto("------------------------------------------------\n")
                 .EscribirTexto("Cliente Final\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Nombre y apellido: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")

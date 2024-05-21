@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.2.0/tailwind.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.2.0/tailwind.min.css">
+<link rel="stylesheet" href="views/css/tailwind.min.css">
 <div class="bg-gray-100 font-display">
     <div>
         <div class="mt-8 opacity-75">
@@ -51,12 +50,131 @@
         <div>
             <div class="mx-auto text-center px-4 mt-12 text-2xl text-indigo-900 font-semibold">Preguntas frecuentes</div>
             <dl class="mt-8 mx-auto max-w-screen-sm lg:max-w-screen-lg flex flex-col lg:flex-row lg:flex-wrap">
+                <?php
+                if ($_SESSION['rol'] == "Mesero" || $_SESSION['rol'] == "Administrador" || $_SESSION['rol'] == "Gerente") {
+                ?>
+                    <div class="lg:w-1/2">
+                        <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
+                            <dt class="question">
+                                <div class="flex justify-between">
+                                    <div class="text-indigo-800 font-semibold">
+                                        Como generar un pedido ?
+                                    </div>
+                                    <div>
+                                        <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </dt>
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Ingresar al modulo <strong>Mesero</strong>, dar clic en <strong>Mesas</strong> luego seleccionar el número de mesa que desea generar el pedido;
+                            </dd>
+                            <img src="views/img/mesas.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                En el campo <strong>producto</strong>, se busca el nombre del producto para generar el pedido si el producto lleva <strong>descripcion</strong> el campo se llenara con los ingredientes para dicho producto y el campo <strong>Cantidad</strong> se agrega la cantidad de productos que saldrian para dicho pedido; el botón <strong>+</strong> es para agregar más pedidos para dicha mesa. El botón <strong>eliminar</strong> es para eliminar un producto del pedido antes de enviarlo a pedidos.
+                            </dd>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
+                            <dt class="question">
+                                <div class="flex justify-between">
+                                    <div class="text-indigo-800 font-semibold">
+                                        Como cambiar el estado a una mesa ?
+                                    </div>
+                                    <div>
+                                        <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </dt>
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Para realizar el cambio de un estado se debe dirigir al modulo <strong>Mesero</strong>, dar clic en <strong>pedido</strong>.
+                            </dd>
+                            <img src="views/img/pedidoestado.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Dar clic en el icono de la piz luego se abre una ventana.
+                            </dd>
+                            <img src="views/img/estado.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Se debe seleccionar el estado al cual cambiar en este cado <strong>Entregado</strong> y dar clic en <strong>Actualizar</strong>
+                            </dd>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
+                            <dt class="question">
+                                <div class="flex justify-between">
+                                    <div class="text-indigo-800 font-semibold">
+                                        Como cambiar un pedido a otra mesa ?
+                                    </div>
+                                    <div>
+                                        <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                        <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                                </g>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </dt>
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Para realizar el cambio de un estado se debe dirigir al modulo <strong>Mesero</strong>, dar clic en <strong>pedido</strong>.
+                            </dd>
+                            <img src="views/img/pedidocambio.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Dar clic en el icono de las fechas luego se abre una ventana.
+                            </dd>
+                            <img src="views/img/cambio.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Se debe seleccionar la mesa al cual se deba cambiar el pedido y dar clic en <strong>Actualizar</strong>
+                            </dd>
+                        </div>
+                    </div>
+                <?php
+                }
+                ?>
+                <?php
+                if ($_SESSION['rol'] == "Cajero" || $_SESSION['rol'] == "Administrador" || $_SESSION['rol'] == "Gerente") {
+                ?>
                 <div class="lg:w-1/2">
                     <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
                         <dt class="question">
                             <div class="flex justify-between">
                                 <div class="text-indigo-800 font-semibold">
-                                    Do you accept Paypal?
+                                    Como genera una factura individual ?
                                 </div>
                                 <div>
                                     <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -77,8 +195,13 @@
                             </div>
                         </dt>
                         <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Yes, we do, along with AliPay, PayTM, and Payoneer.
+                            Para realizar una factura individual debe ingresar al modulo <strong>Facturación</strong>, luego dar clic en <strong>Caja</strong>
                         </dd>
+                        <img src="views/img/facturacionindividual.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                            Para realizar una factura de varios productos se debe dar buscar el articulo en el campo <strong>Producto</strong>, agregar la cantidad; si desea agregar otro articulo se debe dar clic en el botón <strong>Agregar</strong> o en la tecla <strong>F2</strong> de su teclado; para terminar la factura se debe seleccionar el metodo de pago el valor a pagar y dar clic en el icono <strong>imprimir</strong> y el sistema los llevara a la factura generada donde podran dar clic en <strong>Imprimir</strong> para imprimir el ticket
+                        </dd>
+                        <img src="views/img/factura_pdf.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
                     </div>
                 </div>
                 <div class="lg:w-1/2">
@@ -86,7 +209,7 @@
                         <dt class="question">
                             <div class="flex justify-between">
                                 <div class="text-indigo-800 font-semibold">
-                                    What is your SLA Guarantee ?
+                                    Como genera una factura por mesa ?
                                 </div>
                                 <div>
                                     <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -107,8 +230,13 @@
                             </div>
                         </dt>
                         <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Yes, we do, along with AliPay, PayTM, and Payoneer.
+                            Para realizar una factura individual debe ingresar al modulo <strong>Facturación</strong>, luego dar clic en <strong>Caja</strong>, para realiza un pedido por mesa se debe dar clic en el icono <strong>+</strong> este abrira una ventana donde se visualiza las mesas que tenga como estado <strong>Entregado</strong> o <strong>Pago parcial</strong> de lo contrario no se visualizara aun asi si el pedido exista.
                         </dd>
+                        <img src="views/img/ver mesa.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                            Desúes de haber dado clic a la mesa el sistema traera todo el pedido de la mesa con los articulos y su cantidad, se visualizara la propina si es el caso que la hayan activado de lo contrario no se visualizara; el siguiente paso es como una facturación individual.
+                        </dd>
+                        <img src="views/img/facturamesa.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
                     </div>
                 </div>
                 <div class="lg:w-1/2">
@@ -116,7 +244,7 @@
                         <dt class="question">
                             <div class="flex justify-between">
                                 <div class="text-indigo-800 font-semibold">
-                                    Are there more Tailwind templates ?
+                                    Como ver las facturas de hoy y las de dias anteriores ?
                                 </div>
                                 <div>
                                     <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -137,40 +265,18 @@
                             </div>
                         </dt>
                         <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Yes, we do, along with AliPay, PayTM, and Payoneer.
+                            Para ver las factura se debe ingresar al modulo <strong>Facturación</strong> y dar clic en <strong>Venta del dia</strong> luego dar clic en el icono <strong>Imprimir</strong>, se abre una ventana donde se visualiza las factura generadas el dia de hoy.
                         </dd>
-                    </div>
-                </div>
-                <div class="lg:w-1/2">
-                    <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
-                        <dt class="question">
-                            <div class="flex justify-between">
-                                <div class="text-indigo-800 font-semibold">
-                                    Is this template free for commercial use ?
-                                </div>
-                                <div>
-                                    <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                    <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
-                                            </g>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                        </dt>
+                        <img src="views/img/factura.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
                         <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Yes, we do, along with AliPay, PayTM, and Payoneer.
+                            Para buscar una factura de un dia anterior en especifico se debe ingresar el numero de documento de la persona <strong>"Por defecto el numero es "11111111""</strong> y la fecha anterior.
                         </dd>
+                        <img src="views/img/facturaanterior.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
                     </div>
                 </div>
+                <?php
+                }
+                ?>
             </dl>
         </div>
     </div>

@@ -53,14 +53,14 @@ class ControladorIngredienteProducto
 
     function consultarIngredeinteAjaxControlador($dato)
     {
-        $consultar = new ModeloIngredienteProducto();
-        $res = $consultar->consultarIngredeinteAjaxModelo($dato);
-        if ($res[0]['id_producto'] == null) {
-            $consultarPro = new ControladorProducto();
-            $res = $consultarPro->consultarProductoAjaxControlador($dato);
-            return $res;
-        }
+        //$consultar = new ModeloIngredienteProducto();
+        //$res = $consultar->consultarIngredeinteAjaxModelo($dato);
+        //if ($res[0]['id_producto'] == null) {
+        $consultarPro = new ControladorProducto();
+        $res = $consultarPro->consultarProductoAjaxControlador($dato);
         return $res;
+        //}
+        //return $res;
     }
 
     function listarIngredienteProductoFactura($id)

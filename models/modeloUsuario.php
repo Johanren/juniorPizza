@@ -60,7 +60,6 @@ class ModeloUsuario
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
-
         } else {
             $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         }
@@ -104,7 +103,6 @@ class ModeloUsuario
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
-
         } else {
             $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         }
@@ -138,7 +136,8 @@ class ModeloUsuario
         }
     }
 
-    function actualizarUsuarioModelo($dato){
+    function actualizarUsuarioModelo($dato)
+    {
         $sql = "UPDATE $this->tabla SET primer_nombre=?,segundo_nombre=?,primer_apellido=?,segundo_apellido=?,usuario=?,clave=?,id_rol=?,id_activo=?,id_local= ? WHERE id_usuario = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -157,6 +156,36 @@ class ModeloUsuario
         try {
             if ($stms->execute()) {
                 return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function eliminarUsuarioIdModelo($id)
+    {
+        $sql = "SET FOREIGN_KEY_CHECKS=1";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($stms->execute()) {
+                $sql = "DELETE FROM $this->tabla WHERE id_usuario = ?";
+
+                try {
+                    $conn = new Conexion();
+                    $stms = $conn->conectar()->prepare($sql);
+                    $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    if ($stms->execute()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (PDOException $e) {
+                    print_r($e->getMessage());
+                }
             } else {
                 return false;
             }

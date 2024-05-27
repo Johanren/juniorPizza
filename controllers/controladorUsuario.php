@@ -132,4 +132,13 @@ class ControladorUsuario
         $res = $listar->listarUsuarioIdModelo($id);
         return $res;
     }
+
+    function eliminarUsuarioId(){
+        $id = $_GET['id'];
+        $listar = new ModeloUsuario();
+        $res = $listar->eliminarUsuarioIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarUsuario"</script>';
+        }
+    }
 }

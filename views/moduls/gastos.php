@@ -11,6 +11,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "Gasto actualizado exitosamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "eliminarGasto") {
+        print '<script>
+        swal("Hurra!!!", "Gasto eliminado exitosamente", "success");
+    </script>';
+    }
 }
 ///Usuario
 $user = new ControladorGasto();
@@ -22,15 +27,28 @@ if (isset($_GET['id_gasto'])) {
     });</script>";
     $listar = $user->listarGastoId();
 }
+if (isset($_GET['id'])) {
+    $listar = $user->eliminarGastoId();
+}
 ?>
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-sm-6">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                <i class="fas fa-comment-dollar fa-lg"></i>
-            </button>
+    <form method="post" class="mt-3">
+        <div class="row">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    <i class="fas fa-comment-dollar fa-lg"></i>
+                </button>
+            </div>
         </div>
-    </div>
+        <div class="row mt-3">
+            <div class="col-sm-3">
+                <input type="date" class="form-control" name="buscar">
+            </div>
+            <div class="col-sm-3">
+                <button type="hidden" name="consultar" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+    </form>
     <br>
     <div class="table-responsive">
         <table id="usuario" class="table table-striped table-bordered">
@@ -55,12 +73,12 @@ if (isset($_GET['id_gasto'])) {
                             <?php echo $value['descripcion'] ?>
                         </td>
                         <td>
-                            <?php echo number_format($value['total'],0) ?>
+                            <?php echo number_format($value['total'], 0) ?>
                         </td>
                         <td>
                             <?php echo $value['fecha_ingreso'] ?>
                         </td>
-                        <td><a href="index.php?action=gastos&id_gasto=<?php echo $value['id_gasto'] ?>"><i class="fas fa-print fa-lg"></i></a></td>
+                        <td><a href="index.php?action=gastos&id_gasto=<?php echo $value['id_gasto'] ?>"><i class="fas fa-print fa-lg"></i></a><a href="index.php?action=gastos&id_gasto=<?php echo $value['id_gasto'] ?>"><a href="index.php?action=gastos&id=<?php echo $value['id_gasto'] ?>"><i class="fas fa-trash-alt fa-lg"></i></a></a></td>
                     </tr>
                 <?php
                 }
@@ -134,7 +152,7 @@ if (isset($_GET['id_gasto'])) {
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Total Gastado</label>
-                            <input type="text" class="form-control monto" name="totalEdit" id="monto" placeholder="Total" value="<?php echo number_format($listar[0]['total'],0) ?>">
+                            <input type="text" class="form-control monto" name="totalEdit" id="monto" placeholder="Total" value="<?php echo number_format($listar[0]['total'], 0) ?>">
                         </div>
                     </div>
                     <div class="form-row">

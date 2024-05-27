@@ -57,7 +57,6 @@ class ControladorMesa
                 if ($res == true) {
                     echo '<script>window.location="actualizoMesa"</script>';
                 }
-
             }
         } else {
             $actualizar = new ModeloMesa();
@@ -78,5 +77,15 @@ class ControladorMesa
         $actualizar = new ModeloMesa();
         $res = $actualizar->actualizarEstadoMesaModelo($id, $id_esatdo);
         return $res;
+    }
+
+    function eliminarMesaId()
+    {
+        $id = $_GET['id'];
+        $listar = new ModeloMesa();
+        $res = $listar->eliminarMesaIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarMesa"</script>';
+        }
     }
 }

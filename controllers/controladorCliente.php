@@ -87,9 +87,20 @@ class ControladorCliente
         return $res;
     }
 
-    function consumidorFinalCompra(){
+    function consumidorFinalCompra()
+    {
         $listar = new ModeloCliente();
         $res = $listar->consumidorFinalCompraModelo();
         return $res;
+    }
+
+    function eliminarClienteId()
+    {
+        $id = $_GET['id'];
+        $listar = new ModeloCliente();
+        $res = $listar->eliminarClienteIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarCliente"</script>';
+        }
     }
 }

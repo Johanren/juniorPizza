@@ -42,4 +42,13 @@ class ControladorLocal
         $res = $consultar->consultarModeloAjaxModelo($dato);
         return $res;
     }
+
+    function eliminarLocalId(){
+        $id = $_GET['id'];
+        $listar = new ModeloLocal();
+        $res = $listar->eliminarLocalIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarLocal"</script>';
+        }
+    }
 }

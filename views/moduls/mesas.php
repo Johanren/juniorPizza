@@ -6,6 +6,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "Mesa agregada exitosamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "eliminarMesa") {
+        print '<script>
+        swal("Hurra!!!", "Mesa eliminada exitosamente", "success");
+    </script>';
+    }
 }
 ///Usuario
 $user = new ControladorMesa();
@@ -31,6 +36,9 @@ if (isset($_GET['id'])) {
 
 $agregarPedido = new ControladorPedido();
 $agregarPedido->agregarPedido();
+if (isset($_GET['id'])) {
+    $listar = $user->eliminarMesaId();
+}
 ?>
 
 <div class="container mt-5">
@@ -115,6 +123,7 @@ $agregarPedido->agregarPedido();
                                     <th>Nombre Mesa</th>
                                     <th>Estado Mesa</th>
                                     <th>Piso</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,6 +140,9 @@ $agregarPedido->agregarPedido();
                                         <td>
                                             <?php echo $value['piso_nombre'] ?>
                                         </td>
+                                        <td>
+                                            <!--<a href="index.php?action=mesas&id_mesa=<?php echo $value['id_mesa'] ?>"><i class="fas fa-print fa-lg"></i></a>--><a href="index.php?action=mesas&id=<?php echo $value['id_mesa'] ?>"><i class="fas fa-trash-alt fa-lg"></i></a>
+                                        </td>
                                     </tr>
                                 <?php
                                 }
@@ -141,6 +153,7 @@ $agregarPedido->agregarPedido();
                                     <th>Nombre Mesa</th>
                                     <th>Estado Mesa</th>
                                     <th>Piso</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -236,6 +249,63 @@ $agregarPedido->agregarPedido();
                         </table>
                     </div>
                     <button type="submit" name="agregarPedido" class="btn btn-primary">Agregar</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="actualizarMesa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar Mesa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Nombre Mesa</label>
+                            <input type="text" class="form-control" name="mesa" id="inputEmail4" placeholder="Nombre_mesa">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Activo</label>
+                            <select id="" name="id_piso" class="form-control">
+                                <option selected>Choose...</option>
+                                <?php
+                                foreach ($resPiso as $key => $value) {
+                                ?>
+                                    <option value="<?php echo $value['id_piso'] ?>">
+                                        <?php echo $value['piso_nombre'] ?>
+                                    </option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Estado</label>
+                            <select id="" name="id_piso" class="form-control">
+                                <option selected>Choose...</option>
+                                <?php
+                                foreach ($resPiso as $key => $value) {
+                                ?>
+                                    <option value="<?php echo $value['id_piso'] ?>">
+                                        <?php echo $value['piso_nombre'] ?>
+                                    </option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" name="agregarMesa" class="btn btn-primary">Agregar</button>
                 </form>
             </div>
             <div class="modal-footer">

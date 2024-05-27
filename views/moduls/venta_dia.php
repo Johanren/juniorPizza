@@ -336,6 +336,7 @@ if (isset($_POST['cierre'])) {
                             <th>Cedula cliente</th>
                             <th>Nombre cliente</th>
                             <th>Fecha factura</th>
+                            <th>Total Compra</th>
                             <th>Imprimir</th>
                         </tr>
                     </thead>
@@ -355,6 +356,9 @@ if (isset($_POST['cierre'])) {
                                 </td>
                                 <td>
                                     <?php echo $value['fecha_factura'] ?>
+                                </td>
+                                <td>
+                                    <?php echo number_format($value['total_factura'],0) ?>
                                 </td>
                                 <td><a href="index.php?action=factura_pdf&id_factura=<?php echo $value['id_factura'] ?>"><button class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-receipt-cutoff" viewBox="0 0 16 16">
                                                 <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />

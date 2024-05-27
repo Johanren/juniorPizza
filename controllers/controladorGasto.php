@@ -33,7 +33,13 @@ class ControladorGasto
     function listarGasto()
     {
         $agrear = new ModeloGasto();
-        $res = $agrear->listarGastoModelo();
+        if (isset($_POST['consultar'])) {
+            $res = $agrear->listarGastoModelo($_POST['buscar']);
+        } else {
+            date_default_timezone_set('America/Mexico_City');
+            $fechaActal = date('Y-m-d');
+            $res = $agrear->listarGastoModelo($fechaActal);
+        }
         return $res;
     }
 
@@ -50,7 +56,21 @@ class ControladorGasto
     function TotalGasto()
     {
         $sum = new ModeloGasto();
-        $res = $sum->TotalGastoModelo();
+        if (isset($_POST['consultar'])) {
+            $res = $sum->TotalGastoModelo($_POST['buscar']);
+        } else {
+            $res = $sum->TotalGastoModelo('');
+        }
         return $res;
+    }
+
+    function eliminarGastoId()
+    {
+        $id = $_GET['id'];
+        $listar = new ModeloGasto();
+        $res = $listar->eliminarGastoIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarGasto"</script>';
+        }
     }
 }

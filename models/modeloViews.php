@@ -37,15 +37,15 @@ class modeloViews
             $enlace == 'gastos'
         ) {
             $modulo = 'views/moduls/' . $enlace . '.php';
-        } elseif ($enlace == 'agregarUsuario') {
+        } elseif ($enlace == 'agregarUsuario' || $enlace == 'eliminarUsuario') {
             $modulo = 'views/moduls/usuario.php';
-        } elseif ($enlace == 'agregarCliente') {
+        } elseif ($enlace == 'agregarCliente' || $enlace == 'eliminarCliente') {
             $modulo = 'views/moduls/cliente.php';
         } elseif ($enlace == 'loginFallido') {
             $modulo = 'views/moduls/ingresar.php';
         } elseif ($enlace == 'loginInactivo') {
             $modulo = 'views/moduls/ingresar.php';
-        } elseif ($enlace == 'agregarLocal') {
+        } elseif ($enlace == 'agregarLocal' || $enlace == 'eliminarLocal') {
             $modulo = 'views/moduls/local.php';
         } elseif ($enlace == 'agregarProeevedor') {
             $modulo = 'views/moduls/proeevedor.php';
@@ -61,7 +61,7 @@ class modeloViews
             $modulo = 'views/moduls/ingrediente_Producto.php';
         } elseif ($enlace == 'agregarPromocion') {
             $modulo = 'views/moduls/promocion.php';
-        } elseif ($enlace == 'agregarMesa') {
+        } elseif ($enlace == 'agregarMesa' || $enlace == 'eliminarMesa') {
             $modulo = 'views/moduls/mesas.php';
         } elseif ($enlace == 'agregarPedidor') {
             $modulo = 'views/moduls/pedido.php';
@@ -91,7 +91,7 @@ class modeloViews
             $modulo = 'views/moduls/devoluciones.php';
         }elseif ($enlace == 'FacturaCancelada') {
             $modulo = 'views/moduls/devoluciones.php';
-        }elseif ($enlace == 'agregarGasto' || $enlace == 'actualizarGasto') {
+        }elseif ($enlace == 'agregarGasto' || $enlace == 'actualizarGasto' || $enlace == 'eliminarGasto') {
             $modulo = 'views/moduls/gastos.php';
         }else {
             $modulo = 'views/moduls/404.php';

@@ -217,8 +217,8 @@ class ControladorFactura
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
         if (isset($_POST['guardar'])) {
-            $total = $_POST['debe'] + str_replace(',', '', $_POST['abono']);
-            $abono = $_POST['efectivo'] + str_replace(',', '', $_POST['abono']);
+            $total = str_replace(',', '', $_POST['debe']) + str_replace(',', '', $_POST['abono']);
+            $abono = str_replace(',', '', $_POST['efectivo']) + str_replace(',', '', $_POST['abono']);
             $dato = array(
                 'pago' => $abono,
                 'total' => $total,

@@ -42,7 +42,7 @@ class ModeloPropina
 
     function listarPropinaInicioFinModelo($inicio, $fin)
     {
-        $sql = "SELECT SUM(valor_propinas) FROM $this->tabla WHERE fecha_ingreso = ? AND fecha_ingreso = ?";
+        $sql = "SELECT SUM(valor_propinas) FROM $this->tabla WHERE fecha_ingreso = ? OR fecha_ingreso = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $inicio, PDO::PARAM_STR);

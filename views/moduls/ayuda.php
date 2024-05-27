@@ -169,114 +169,161 @@
                 <?php
                 if ($_SESSION['rol'] == "Cajero" || $_SESSION['rol'] == "Administrador" || $_SESSION['rol'] == "Gerente") {
                 ?>
-                <div class="lg:w-1/2">
-                    <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
-                        <dt class="question">
-                            <div class="flex justify-between">
-                                <div class="text-indigo-800 font-semibold">
-                                    Como genera una factura individual ?
-                                </div>
-                                <div>
-                                    <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                    <div class="lg:w-1/2">
+                        <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
+                            <dt class="question">
+                                <div class="flex justify-between">
+                                    <div class="text-indigo-800 font-semibold">
+                                        Como genera una factura individual ?
+                                    </div>
+                                    <div>
+                                        <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                                                </g>
                                             </g>
-                                        </g>
-                                    </svg>
-                                    <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                        </svg>
+                                        <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                                </g>
                                             </g>
-                                        </g>
-                                    </svg>
+                                        </svg>
+                                    </div>
                                 </div>
-                            </div>
-                        </dt>
-                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Para realizar una factura individual debe ingresar al modulo <strong>Facturación</strong>, luego dar clic en <strong>Caja</strong>
-                        </dd>
-                        <img src="views/img/facturacionindividual.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
-                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Para realizar una factura de varios productos se debe dar buscar el articulo en el campo <strong>Producto</strong>, agregar la cantidad; si desea agregar otro articulo se debe dar clic en el botón <strong>Agregar</strong> o en la tecla <strong>F2</strong> de su teclado; para terminar la factura se debe seleccionar el metodo de pago el valor a pagar y dar clic en el icono <strong>imprimir</strong> y el sistema los llevara a la factura generada donde podran dar clic en <strong>Imprimir</strong> para imprimir el ticket
-                        </dd>
-                        <img src="views/img/factura_pdf.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            </dt>
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Para realizar una factura individual debe ingresar al modulo <strong>Facturación</strong>, luego dar clic en <strong>Caja</strong>
+                            </dd>
+                            <img src="views/img/facturacionindividual.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Para realizar una factura de varios productos se debe dar buscar el articulo en el campo <strong>Producto</strong>, agregar la cantidad; si desea agregar otro articulo se debe dar clic en el botón <strong>Agregar</strong> o en la tecla <strong>F2</strong> de su teclado; para terminar la factura se debe seleccionar el metodo de pago el valor a pagar y dar clic en el icono <strong>imprimir</strong> y el sistema los llevara a la factura generada donde podran dar clic en <strong>Imprimir</strong> para imprimir el ticket
+                            </dd>
+                            <img src="views/img/factura_pdf.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        </div>
                     </div>
-                </div>
-                <div class="lg:w-1/2">
-                    <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
-                        <dt class="question">
-                            <div class="flex justify-between">
-                                <div class="text-indigo-800 font-semibold">
-                                    Como genera una factura por mesa ?
-                                </div>
-                                <div>
-                                    <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                    <div class="lg:w-1/2">
+                        <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
+                            <dt class="question">
+                                <div class="flex justify-between">
+                                    <div class="text-indigo-800 font-semibold">
+                                        Como genera una factura por mesa ?
+                                    </div>
+                                    <div>
+                                        <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                                                </g>
                                             </g>
-                                        </g>
-                                    </svg>
-                                    <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                        </svg>
+                                        <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                                </g>
                                             </g>
-                                        </g>
-                                    </svg>
+                                        </svg>
+                                    </div>
                                 </div>
-                            </div>
-                        </dt>
-                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Para realizar una factura individual debe ingresar al modulo <strong>Facturación</strong>, luego dar clic en <strong>Caja</strong>, para realiza un pedido por mesa se debe dar clic en el icono <strong>+</strong> este abrira una ventana donde se visualiza las mesas que tenga como estado <strong>Entregado</strong> o <strong>Pago parcial</strong> de lo contrario no se visualizara aun asi si el pedido exista.
-                        </dd>
-                        <img src="views/img/ver mesa.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
-                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Desúes de haber dado clic a la mesa el sistema traera todo el pedido de la mesa con los articulos y su cantidad, se visualizara la propina si es el caso que la hayan activado de lo contrario no se visualizara; el siguiente paso es como una facturación individual.
-                        </dd>
-                        <img src="views/img/facturamesa.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            </dt>
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Para realizar una factura individual debe ingresar al modulo <strong>Facturación</strong>, luego dar clic en <strong>Caja</strong>, para realiza un pedido por mesa se debe dar clic en el icono <strong>+</strong> este abrira una ventana donde se visualiza las mesas que tenga como estado <strong>Entregado</strong> o <strong>Pago parcial</strong> de lo contrario no se visualizara aun asi si el pedido exista.
+                            </dd>
+                            <img src="views/img/ver mesa.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Desúes de haber dado clic a la mesa el sistema traera todo el pedido de la mesa con los articulos y su cantidad, se visualizara la propina si es el caso que la hayan activado de lo contrario no se visualizara; el siguiente paso es como una facturación individual.
+                            </dd>
+                            <img src="views/img/facturamesa.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        </div>
                     </div>
-                </div>
-                <div class="lg:w-1/2">
-                    <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
-                        <dt class="question">
-                            <div class="flex justify-between">
-                                <div class="text-indigo-800 font-semibold">
-                                    Como ver las facturas de hoy y las de dias anteriores ?
-                                </div>
-                                <div>
-                                    <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                    <div class="lg:w-1/2">
+                        <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
+                            <dt class="question">
+                                <div class="flex justify-between">
+                                    <div class="text-indigo-800 font-semibold">
+                                        Como ver las facturas de hoy y las de dias anteriores ?
+                                    </div>
+                                    <div>
+                                        <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                                                </g>
                                             </g>
-                                        </g>
-                                    </svg>
-                                    <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
-                                            <g>
-                                                <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                        </svg>
+                                        <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                            <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                                <g>
+                                                    <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                                </g>
                                             </g>
-                                        </g>
-                                    </svg>
+                                        </svg>
+                                    </div>
                                 </div>
-                            </div>
-                        </dt>
-                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Para ver las factura se debe ingresar al modulo <strong>Facturación</strong> y dar clic en <strong>Venta del dia</strong> luego dar clic en el icono <strong>Imprimir</strong>, se abre una ventana donde se visualiza las factura generadas el dia de hoy.
-                        </dd>
-                        <img src="views/img/factura.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
-                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
-                            Para buscar una factura de un dia anterior en especifico se debe ingresar el numero de documento de la persona <strong>"Por defecto el numero es "11111111""</strong> y la fecha anterior.
-                        </dd>
-                        <img src="views/img/facturaanterior.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            </dt>
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Para ver las factura se debe ingresar al modulo <strong>Facturación</strong> y dar clic en <strong>Venta del dia</strong> luego dar clic en el icono <strong>Imprimir</strong>, se abre una ventana donde se visualiza las factura generadas el dia de hoy.
+                            </dd>
+                            <img src="views/img/factura.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                            <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                                Para buscar una factura de un dia anterior en especifico se debe ingresar el numero de documento de la persona <strong>"Por defecto el numero es "11111111""</strong> y la fecha anterior.
+                            </dd>
+                            <img src="views/img/facturaanterior.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        </div>
                     </div>
-                </div>
                 <?php
                 }
                 ?>
+                <div class="lg:w-1/2">
+                    <div class="question-and-answer select-none cursor-pointer border-2 mx-8 my-3 px-6 py-4 rounded-lg text-sm group">
+                        <dt class="question">
+                            <div class="flex justify-between">
+                                <div class="text-indigo-800 font-semibold">
+                                    Como saber la nueva dirección ip para poder ingresar al sistema en un dispositivo movil e impresora ?
+                                </div>
+                                <div>
+                                    <svg fill=currentColor class="question-chevron group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                            <g>
+                                                <polygon points="9.29289322 12.9497475 10 13.6568542 15.6568542 8 14.2426407 6.58578644 10 10.8284271 5.75735931 6.58578644 4.34314575 8"></polygon>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                    <svg fill=currentColor class="question-chevron hidden group-hover:bg-gray-500 h-5 block text-indigo-800 bg-gray-400 rounded-full p-1" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <g stroke="currentColor" stroke-width="1" fill=currentColor fill-rule="evenodd">
+                                            <g>
+                                                <polygon points="10.7071068 7.05025253 10 6.34314575 4.34314575 12 5.75735931 13.4142136 10 9.17157288 14.2426407 13.4142136 15.6568542 12"></polygon>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </dt>
+                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                            Para poder ver la ip de nuestro equipo debemos seleccionar las teclas <strong> Windows + R</strong> se abrira la siguiente venta donde se debe escribrir <strong>cmd</strong> y dar en <strong>Aceptar</strong>.
+                        </dd>
+                        <img src="views/img/winr.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                            Cuando abra el cmd escribimos lo siguiente <strong>ipconfig</strong> este comando nos dara la información de la dirección ipv4 la cual se utilizara para ingresar al sistema en otros dispositivos y la impresera.
+                        </dd>
+                        <img src="views/img/ipconfig.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                            Luego ingresamos al navegador y escribimos la ipv4 que nos muestra el comando con el nombre del sistema Ejemplo: <strong>192.168.0.21/Nombre sistema</strong>.
+                        </dd>
+                        <img src="views/img/navegadorip.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                            Para cambiar la dirección ip de la impresora debemos ingresar a sublime text <strong>(Estara fijado en la barra inferiror de busqueda)</strong> donde ingresaremos al template y cambiariamos la dirección antigua por la nueva arrojada por el sistema.
+                        </dd>
+                        <img src="views/img/sublimeip.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                        <dd class="answer hidden mt-2 leading-snug text-gray-700">
+                            Luego de cambiar la dirección ip con la actual se debe seleccionar las teclas <strong>Ctrl + s</strong> para guardar cambios y por ultimo se cierra el programa.
+                        </dd>
+                        <img src="views/img/cerrarsublime.png" alt="" class="answer hidden mt-2 leading-snug text-gray-700">
+                    </div>
+                </div>
             </dl>
         </div>
     </div>

@@ -59,7 +59,7 @@ if (isset($res)) {
                 <tr>
                     <td><?php echo $_POST['inicio'] ?></td>
                     <td><?php echo $_POST['fin'] ?></td>
-                    <td><?php echo $res[0]['SUM(valor_propinas)'] ?></td>
+                    <td><?php echo number_format($res[0]['SUM(valor_propinas)'],0) ?></td>
                 </tr>
             </tbody>
         </table>

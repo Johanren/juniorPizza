@@ -11,6 +11,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "El establecimiento ha sido actualizado exitosamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "eliminarLocal") {
+        print '<script>
+        swal("Hurra!!!", "El establecimiento ha sido eliminado exitosamente", "success");
+    </script>';
+    }
 }
 ///Usuario
 $user = new ControladorLocal();
@@ -25,6 +30,9 @@ if (isset($_GET['id_local'])) {
         $('#local').modal('toggle')
     });</script>";
     $listar = $user->consultarLocal($_GET['id_local']);
+}
+if (isset($_GET['id'])) {
+    $listar = $user->eliminarLocalId();
 }
 ?>
 <div class="container mt-5">
@@ -71,7 +79,7 @@ if (isset($_GET['id_local'])) {
                             <?php echo $value['telefono'] ?>
                         </td>
                         <td><a href="index.php?action=local&id_local=<?php echo $value['id_local'] ?>"><i
-                                    class="fas fa-print fa-lg"></i></a></td>
+                                    class="fas fa-print fa-lg"></i></a><a href="index.php?action=local&id=<?php echo $value['id_local'] ?>"><i class="fas fa-trash-alt fa-lg"></i></a></td>
                     </tr>
                     <?php
                 }

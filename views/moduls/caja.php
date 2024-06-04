@@ -170,6 +170,7 @@ if ($res != null) {
                                     <option value="nequi">Nequi</option>
                                     <option value="daviplata">Daviplata</option>
                                     <option value="transfferencia">Transferencia</option>
+                                    <option value="member">Membrecia</option>
                                 </select></th>
                             <th>Paga</th>
                             <th><input type="text" class="form-control pago" disabled name="pago" id="pago_1" required></th>
@@ -234,6 +235,7 @@ if ($res != null) {
                                     <option value="nequi">Nequi</option>
                                     <option value="daviplata">Daviplata</option>
                                     <option value="transfferencia">Transferencia</option>
+                                    <option value="member">Membrecia</option>
                                 </select></th>
                             <th>Paga</th>
                             <th><input type="text" class="form-control pago" name="pago" id="pago_1" required></th>

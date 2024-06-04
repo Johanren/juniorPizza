@@ -613,6 +613,9 @@ $(document).ready(function () {
 		if (metodoPago === 'efectivo') {
 			// Habilitar el campo de monto a pagar
 			$('#pago_1').prop('disabled', false);
+		} if (metodoPago === 'member') {
+			$('#pago_1').val(0);
+			document.querySelector('#cambio_1').value = 0
 		} else {
 			// Si es cualquier otro método de pago
 			// Inhabilitar el campo de monto a pagar
@@ -1321,12 +1324,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		var dir_proeevedor = document.getElementById('dir_proeevedor').textContent;
 		if (document.getElementById('propina')) {
 			var propina = document.getElementById('propina').value
-		}else{
+		} else {
 			var propina = 0
 		}
 		if (document.getElementById('total')) {
 			var total = document.getElementById('total').value
-		}else{
+		} else {
 			var total = 0
 		}
 		var total_1 = document.getElementById('total_1').value
@@ -1404,10 +1407,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 																												echo "Views/img/img.jpg";
 																											} ?>", 0, 216)*/
 			.Feed(1)
-			.EscribirTexto(nom_proeevedor+"\n")
-			.TextoSegunPaginaDeCodigos(2, "cp850", "Nit: "+nit_proeevedor+"\n")
-			.TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: "+tel_proeevedor+">\n")
-			.TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: "+dir_proeevedor+"\n")
+			.EscribirTexto(nom_proeevedor + "\n")
+			.TextoSegunPaginaDeCodigos(2, "cp850", "Nit: " + nit_proeevedor + "\n")
+			.TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: " + tel_proeevedor + ">\n")
+			.TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: " + dir_proeevedor + "\n")
 			.EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
 			.Feed(1)
 			.EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
@@ -1415,9 +1418,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 			.EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
 			.EscribirTexto(tabla)
 			.EscribirTexto("------------------------------------------------\n")
-			.EscribirTexto("SubTotal $"+total+"\n")
-			.EscribirTexto("Propina $"+propina+"\n")
-			.EscribirTexto("Total $"+total_1+"\n")
+			.EscribirTexto("SubTotal $" + total + "\n")
+			.EscribirTexto("Propina $" + propina + "\n")
+			.EscribirTexto("Total $" + total_1 + "\n")
 			.Feed(3)
 			.Corte(1)
 			.Pulso(48, 60, 120)

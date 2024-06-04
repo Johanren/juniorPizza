@@ -17,7 +17,11 @@ class ControladorFactura
             for ($i = 0; $i < count($id_articulo); $i++) {
                 $buscar = new ControladorProducto();
                 $res = $buscar->mostrarArticulo($id_articulo[$i]);
-                $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                if ($metodo == 'member') {
+                    $multiplicar = $res[0]['precio_unitario'] * 0;
+                } else {
+                    $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                }
                 $total_factura += $multiplicar;
             }
             $total_factura;
@@ -52,7 +56,11 @@ class ControladorFactura
                         $buscar = new ControladorProducto();
                         $res = $buscar->mostrarArticulo($id_articulo[$i]);
                         $valor_unitario = $res[0]['precio_unitario'];
-                        $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                        if ($metodo == 'member') {
+                            $multiplicar = $res[0]['precio_unitario'] * 0;
+                        }else {
+                            $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                        }
                         $datoVenta = array(
                             'id_factura' => $idFactura,
                             'id_usuario' => $id_usuario,

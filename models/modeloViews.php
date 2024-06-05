@@ -47,19 +47,19 @@ class modeloViews
             $modulo = 'views/moduls/ingresar.php';
         } elseif ($enlace == 'agregarLocal' || $enlace == 'eliminarLocal') {
             $modulo = 'views/moduls/local.php';
-        } elseif ($enlace == 'agregarProeevedor') {
+        } elseif ($enlace == 'agregarProeevedor' || $enlace == 'eliminarProeevedor') {
             $modulo = 'views/moduls/proeevedor.php';
         } elseif ($enlace == 'agregarCategoria') {
             $modulo = 'views/moduls/categoria.php';
         } elseif ($enlace == 'agregarMedida') {
             $modulo = 'views/moduls/medida.php';
-        } elseif ($enlace == 'agregarIngrediente') {
+        } elseif ($enlace == 'agregarIngrediente' || $enlace == 'eliminarIngredeinte') {
             $modulo = 'views/moduls/ingredientes.php';
-        } elseif ($enlace == 'agregarProducto') {
+        } elseif ($enlace == 'agregarProducto' || $enlace == 'eliminarProducto') {
             $modulo = 'views/moduls/productos.php';
-        } elseif ($enlace == 'agregarIngredienteProducto') {
+        } elseif ($enlace == 'agregarIngredienteProducto' || $enlace == 'eliminarProducto_ingrediente') {
             $modulo = 'views/moduls/ingrediente_Producto.php';
-        } elseif ($enlace == 'agregarPromocion') {
+        } elseif ($enlace == 'agregarPromocion' || $enlace == 'eliminarPromocion') {
             $modulo = 'views/moduls/promocion.php';
         } elseif ($enlace == 'agregarMesa' || $enlace == 'eliminarMesa') {
             $modulo = 'views/moduls/mesas.php';

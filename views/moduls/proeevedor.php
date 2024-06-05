@@ -11,6 +11,11 @@ if (isset($_GET['action'])) {
         swal("Hurra!!!", "El proeevedor ha sido actualizado correctamente", "success");
     </script>';
     }
+    if ($_GET['action'] == "eliminarProeevedor") {
+        print '<script>
+        swal("Hurra!!!", "El proeevedor ha sido eliminado correctamente", "success");
+    </script>';
+    }
 }
 ///Usuario
 $user = new ControladorProeevedor();
@@ -27,6 +32,9 @@ if (isset($_GET['id'])) {
         $('#proeevedor').modal('toggle')
     });</script>";
     $listar = $user->consultarProeevedor();
+}
+if (isset($_GET['ids'])) {
+    $listar = $user->eliminarProeevedorId();
 }
 ?>
 <div class="container mt-5">
@@ -77,7 +85,7 @@ if (isset($_GET['id'])) {
                             <?php echo $value['nombre_local'] ?>
                         </td>
                         <td><a href="index.php?action=proeevedor&id=<?php echo $value['id_proeevedor'] ?>"><i
-                                    class="fas fa-print fa-lg"></i></a></td>
+                                    class="fas fa-print fa-lg"></i></a><a href="index.php?action=proeevedor&ids=<?php echo $value['id_proeevedor'] ?>"><i class="fas fa-trash-alt fa-lg"></i></a></td>
                     </tr>
                     <?php
                 }

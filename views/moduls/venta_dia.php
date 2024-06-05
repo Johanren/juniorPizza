@@ -252,7 +252,7 @@ if (isset($_POST['cierre'])) {
                     <th></th>
                     <th></th>
                     <th>
-                        <?php echo $resGas[0]["CONCAT('$', FORMAT(SUM(DISTINCT(total)), '$#,##0.00'))"] ?>
+                        <?php echo $resGas[0]["CONCAT('$', FORMAT(SUM(total), '$#,##0.00'))"] ?>
                     </th>
                 </tr>
             </tbody>
@@ -297,7 +297,7 @@ if (isset($_POST['cierre'])) {
                     <th></th>
                     <th></th>
                     <th>
-                        <?php $totalVenta = ($total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(DISTINCT(pago_factura))'] - $resNomina[0]['SUM(pago)'] - $resGas[0]['SUM(DISTINCT(total))']) + $base;
+                        <?php $totalVenta = ($total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(DISTINCT(pago_factura))'] - $resNomina[0]['SUM(pago)'] - $resGas[0]['SUM(total)']) + $base;
                         echo '$' . number_format($totalVenta, 0) ?>
                     </th>
                 </tr>
@@ -669,7 +669,7 @@ if (isset($_POST['cierre'])) {
             }
             ?>
                 .EscribirTexto("SubTotal <?php echo $total[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>\n")
-                .EscribirTexto("Subtotal Gasto <?php echo $resGas[0]["CONCAT('$', FORMAT(SUM(DISTINCT(total)), '$#,##0.00'))"] ?>\n")
+                .EscribirTexto("Subtotal Gasto <?php echo $resGas[0]["CONCAT('$', FORMAT(SUM(total), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Subtotal Proeevedores <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Subtotal Nomina <?php echo $resNomina[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Base Caja $<?php echo number_format($base, 0) ?>\n")

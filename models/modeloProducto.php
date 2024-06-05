@@ -205,4 +205,55 @@ class ModeloProducto
             print_r($e->getMessage());
         }
     }
+
+    function alertarProductosFaltanteModelo()
+    {
+        if ($_SESSION['rol'] == "Administrador") {
+            $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local";
+        } else {
+            $id = $_SESSION['id_local'];
+            $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE producto.id_local = $id";
+        }
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function eliminaProductoIdModelo($id)
+    {
+        $sql = "SET FOREIGN_KEY_CHECKS=1";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($stms->execute()) {
+                $sql = "DELETE FROM $this->tabla WHERE id_producto = ?";
+
+                try {
+                    $conn = new Conexion();
+                    $stms = $conn->conectar()->prepare($sql);
+                    $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    if ($stms->execute()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (PDOException $e) {
+                    print_r($e->getMessage());
+                }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

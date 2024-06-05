@@ -118,5 +118,33 @@ class ModeloProeevedor
         }
     }
 
+    function eliminarProeevedorIdModelo($id)
+    {
+        $sql = "SET FOREIGN_KEY_CHECKS=1";
 
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($stms->execute()) {
+                $sql = "DELETE FROM $this->tabla WHERE id_proeevedor = ?";
+
+                try {
+                    $conn = new Conexion();
+                    $stms = $conn->conectar()->prepare($sql);
+                    $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    if ($stms->execute()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (PDOException $e) {
+                    print_r($e->getMessage());
+                }
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

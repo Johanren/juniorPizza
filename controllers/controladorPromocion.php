@@ -52,4 +52,14 @@ class ControladorPromocion
         $res = $consul->listarPromocionProductoFacturaModelo($id);
         return $res;
     }
+
+    function eliminarPromocionId()
+    {
+        $id = $_GET['ids'];
+        $listar = new ModeloPromocion();
+        $res = $listar->eliminarPromocionIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarPromocion"</script>';
+        }
+    }
 }

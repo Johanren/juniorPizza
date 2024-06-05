@@ -243,6 +243,19 @@ if ($res != null) {
                             <th>Cambio</th>
                             <th><input type="text" class="form-control" name="cambio" id="cambio_1" disabled></th>
                         </tr>
+                        <!--<tr>
+                            <th>Metodo Pago 2</th>
+                            <th><select name="metodo2" id="metodo2" class="form-control" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="nequi">Nequi</option>
+                                    <option value="daviplata">Daviplata</option>
+                                    <option value="transferencia">Transferencia</option>
+                                </select></th>
+                            <th>Paga</th>
+                            <th><input type="text" class="form-control pago" name="pago2" id="pago_2" required></th>
+                            <th>Cambio</th>
+                            <th><input type="text" class="form-control" name="cambio2" id="cambio_2" disabled></th>
+                        </tr>-->
                     </tbody>
                 </table>
             <?php

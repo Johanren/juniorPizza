@@ -121,4 +121,21 @@ class ControladorProducto
         $res = $buscar->actualizarProductoFacturaModelo($dato);
         return $res;
     }
+
+    function alertarProductosFaltante()
+    {
+        $alert = new ModeloProducto();
+        $res = $alert->alertarProductosFaltanteModelo();
+        return $res;
+    }
+
+    function eliminaProductoId()
+    {
+        $id = $_GET['id'];
+        $listar = new ModeloProducto();
+        $res = $listar->eliminaProductoIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarIngredeinte"</script>';
+        }
+    }
 }

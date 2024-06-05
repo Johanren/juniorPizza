@@ -69,4 +69,14 @@ class ControladorIngredienteProducto
         $res = $consultar->listarIngredienteProductoFacturaModelo($id);
         return $res;
     }
+
+    function eliminaIngrediente_productoId()
+    {
+        $id = $_GET['ids'];
+        $listar = new ModeloIngredienteProducto();
+        $res = $listar->eliminaIngrediente_productoIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarProducto_ingrediente"</script>';
+        }
+    }
 }

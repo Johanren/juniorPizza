@@ -27,7 +27,7 @@ class ControladorProeevedor
             if ($res == true) {
                 echo '<script>window.location="agregarProeevedor"</script>';
             }
-        }elseif (isset($_POST['actualizarProeevedor'])) {
+        } elseif (isset($_POST['actualizarProeevedor'])) {
             if ($_SESSION['rol'] == "Administrador") {
                 $dato = array(
                     'id' => $_GET['id'],
@@ -69,7 +69,8 @@ class ControladorProeevedor
         return $res;
     }
 
-    function consultarProeevedor(){
+    function consultarProeevedor()
+    {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $mostrar = new ModeloProeevedor();
@@ -78,5 +79,13 @@ class ControladorProeevedor
         }
     }
 
-    
+    function eliminarProeevedorId()
+    {
+        $id = $_GET['ids'];
+        $listar = new ModeloProeevedor();
+        $res = $listar->eliminarProeevedorIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarProeevedor"</script>';
+        }
+    }
 }

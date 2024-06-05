@@ -11,6 +11,7 @@ class ControladorFactura
             $id_articulo = $_POST['id_articulo'];
             $cantidad = $_POST['cantidad'];
             $pago = str_replace(',', '', $_POST['pago']);
+            $pago1 = str_replace(',', '', $_POST['pago2']);
             $metodo = $_POST['metodo'];
             $total_factura = 0;
             $cambio = 0;

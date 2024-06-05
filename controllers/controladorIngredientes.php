@@ -27,7 +27,7 @@ class ControladorIngredientes
                     $res = $agregar->actualizarIngredienteModelo($id[$i], $nom_ingre[$i], $id_medida[$i], $cantidad, $id_local[$i]);
                     if ($res == true) {
                         $agregarFactura = new ControladorFacturaProeevedor();
-                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria, $id_proeevedor, $_SESSION['id_usuario'], $id_medida, $codigo, $nom_ingre[$i], $precio, $cant[$i], $id_local[$i], $totalFactura);
+                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria, $id_proeevedor, $_SESSION['id_usuario'], $id_medida, $codigo, $nom_ingre[$i], $precio, $cant[$i], $id_local[$i], $totalFactura, 0, 0);
                         if ($resFactura == true) {
                             echo '<script>window.location="actualizarIngrediente"</script>';
                         }
@@ -37,14 +37,13 @@ class ControladorIngredientes
                     $res = $agregar->agregarIngredienteModelo($nom_ingre[$i], $id_medida[$i], $cant[$i], $id_local[$i]);
                     if ($res == true) {
                         $agregarFactura = new ControladorFacturaProeevedor();
-                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria, $id_proeevedor, $_SESSION['id_usuario'], $id_medida, $codigo, $nom_ingre[$i], $precio, $cant[$i], $id_local[$i], $totalFactura);
+                        $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria, $id_proeevedor, $_SESSION['id_usuario'], $id_medida, $codigo, $nom_ingre[$i], $precio, $cant[$i], $id_local[$i], $totalFactura, 0, 0);
                         if ($resFactura == true) {
                             echo '<script>window.location="agregarIngrediente"</script>';
                         }
                     }
                 }
             }
-
         }
     }
 
@@ -74,5 +73,15 @@ class ControladorIngredientes
         $buscar = new ModeloIngrediente();
         $res = $buscar->actualizarIngredienteFacturaModelo($dato);
         return $res;
+    }
+
+    function eliminaIngredienteId()
+    {
+        $id = $_GET['id'];
+        $listar = new ModeloIngrediente();
+        $res = $listar->eliminaIngredienteIdModelo($id);
+        if ($res == true) {
+            echo '<script>window.location="eliminarProducto"</script>';
+        }
     }
 }

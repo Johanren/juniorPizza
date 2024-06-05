@@ -601,6 +601,23 @@ $(document).ready(function () {
 		pago = pago.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 		$('#pago_1').val(pago);
 	});
+
+	$(document).on('change', '#pago_2', function () {
+
+		var valorCampo = $('#cambio_1').val();
+		var valorSinDesimalTotal = valorCampo.replace(/,/g, '');
+		var pago = $('#pago_2').val();
+		console.log(valorSinDesimalTotal);
+		console.log(pago);
+		resta = parseInt(this.value) - valorSinDesimalTotal;
+		resta = resta.toString();
+		resta = resta.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		//console.log(resta)
+		document.querySelector('#cambio_2').value = resta
+		pago = pago.toString();
+		pago = pago.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#pago_2').val(pago);
+	});
 });
 
 //Seleccion metodo de pago
@@ -663,6 +680,57 @@ $(document).ready(function () {
 	}
 });
 
+//Seleccion metodo de pago 2
+$(document).ready(function () {
+	// Cuando se cambia el método de pago
+	$('#metodo2').on('change', function () {
+		var metodoPago = $(this).val(); // Obtenemos el valor seleccionado del método de pago
+		//console.log(metodoPago);
+		// Si el método de pago es "efectivo"
+		if (metodoPago === 'efectivo') {
+			// Habilitar el campo de monto a pagar
+			$('#pago_2').prop('disabled', false);
+		} else {
+			// Si es cualquier otro método de pago
+			// Inhabilitar el campo de monto a pagar
+			$('#pago_2').prop('disabled', false);
+
+			// Calcular el total y establecerlo como el monto a pagar
+			var total = calcularTotal();
+			//console.log(total);
+			total = total.toString();
+			total = total.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			$('#pago_2').val(total);
+			var valorCampo = $('#total_1').val();
+			var pago = $('#pago_2').val();
+			var valorSinDesimalPago = pago.replace(/,/g, '');
+			var valorSinDesimalTotal = total.replace(/,/g, '');
+			//console.log(pago);
+			resta = parseInt(valorSinDesimalPago) - valorSinDesimalTotal;
+			//console.log(resta)
+			resta = resta.toString();
+			resta = resta.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+			document.querySelector('#cambio_2').value = resta
+		}
+	});
+
+	function calcularTotal() {
+		if (!document.getElementById('propina')) {
+			let propina = 0
+			let pago1 = document.getElementById('cambio_1').value
+			var valorSinDesimalpago1 = pago1.replace(/,/g, '');
+			var total = valorSinDesimalpago1
+			//console.log(valorSinDesimalpago1);
+			return total;
+		} else {
+			let pago1 = document.getElementById('cambio_1').value
+			var valorSinDesimalpago1 = pago1.replace(/,/g, '');
+			var total = valorSinDesimalpago1
+			//console.log(suma);
+			return total;
+		}
+	}
+});
 
 //agregar factura
 
@@ -766,7 +834,7 @@ $('body').on('click', '#cc', function () {
 				data: { cc: request.term },
 				success: function (data) {
 					response(data);
-					console.log("el dato", data);
+					//console.log("el dato", data);
 
 				}
 
@@ -802,7 +870,7 @@ $(document).ready(function () {
 					data: { nombre: request.term },
 					success: function (data) {
 						response(data);
-						console.log("el dato", data);
+						//console.log("el dato", data);
 					}
 
 				});
@@ -1433,3 +1501,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 	init();
 });
+
+
+/*const totalInput = document.getElementById('total_1');
+const pago1Input = document.getElementById('pago_1');
+const pago2Input = document.getElementById('pago_2');
+const metodo1Select = document.getElementById('metodo');
+const metodo2Select = document.getElementById('metodo2');
+
+
+pago1Input.addEventListener('change', function() {
+    const total = totalInput.value;
+    const pago1 = pago1Input.value;
+    
+    if (pago1 < total) {
+        
+        metodo2Select.disabled = false;
+        //console.log("Segundo método de pago activado.");
+    } else {
+        
+        metodo2Select.disabled = true;
+		pago2Input.disabled = true;
+        //console.log("Facturación normal.");
+    }
+});*/

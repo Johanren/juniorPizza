@@ -322,7 +322,7 @@ $res = $listar->consultarUsuarioPerfil();
                             }
                         }
                         ?>
-                        <span class="badge badge-danger badge-counter"> <?php if (isset($conn)) {print $conn . "+ "; } ?> </span>
+                        <?php if (isset($conn)){?><span class="badge badge-danger badge-counter"> <?php print $conn . "+ "?> </span> <?php }?>
                     </a>
                     <!-- Dropdown - Alerts -->
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">

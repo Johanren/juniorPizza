@@ -309,8 +309,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
-		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
-		$("#productol").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td>');
+		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]" required><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]" required></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]" required></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0" required></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]" required></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]" required><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '" required></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0" required></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '" required><input type="text" class="form-control categoria"name="" id="categoria_' + index + '" required></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '" required></td><?php}?></tr>');
 		index++;
 	});
 });
@@ -329,6 +328,14 @@ $(document).ready(function () {
 	var index = 2;
 	$("#agregarIngrediente").click(function () {
 		$("#ingrediente").append('<tr><td><input type="hidden" id="id_ingre_' + index + '" name="id_ingre[]"><input type="text" class="form-control ingre" id="ingre_' + index + '" name="nom_ingre[]"></td><td><input type="hidden" name="cantidadIngre[]" id="cantidad_' + index + '"><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td>phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '"></td><?php}?></tr>');
+		index++;
+	});
+});
+
+$(document).ready(function () {
+	var index = 2;
+	$("#agregIngrediente").click(function () {
+		$("#ingrediente1").append('<tr><td><input type="hidden" id="id_ingre_' + index + '" name="id_ingre[]"><input type="text" class="form-control ingre" id="ingre_' + index + '" name="nom_ingre[]"></td><td><input type="hidden" name="cantidadIngre[]" id="cantidad_' + index + '"><input type="text" class="form-control" name="cant[]"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td></tr>');
 		index++;
 	});
 });
@@ -956,10 +963,30 @@ document.addEventListener('keydown', function (event) {
 		var urlActual = window.location.href;
 		var hosting = window.location.hostname;
 		//console.log(hosting);
-		if (urlActual == "http://" + hosting + "/inventario/agregarArticulo") {
-			document.getElementById("agregarArticulo").click();
+		if (urlActual == "http://" + hosting + "/juniorPizza/productos") {
+			if (!document.getElementById('agregarProducto')) {
+				document.getElementById("agreProducto").click();
+			} else {
+				document.getElementById("agregarProducto").click();
+			}
+		} if (urlActual == "http://" + hosting + "/juniorPizza/ingredientes") {
+			if (!document.getElementById("agregarIngrediente")) {
+				document.getElementById("agregIngrediente").click();
+			} else {
+				document.getElementById("agregarIngrediente").click();
+			}
+		}if (urlActual == "http://" + hosting + "/juniorPizza/ingrediente_Producto") {
+			if (document.getElementById("agregarIngredienteProducto")) {
+				document.getElementById("agregarIngredienteProducto").click();
+			}
+		}if (urlActual == "http://" + hosting + "/juniorPizza/promocion") {
+			if (document.getElementById("agregarPromocion")) {
+				document.getElementById("agregarPromocion").click();
+			}
 		} else {
-			document.getElementById("agregarFactura").click();
+			if (document.getElementById("agregarFactura")) {
+				document.getElementById("agregarFactura").click();
+			}
 		}
 
 	}
@@ -1511,17 +1538,17 @@ const metodo2Select = document.getElementById('metodo2');
 
 
 pago1Input.addEventListener('change', function() {
-    const total = totalInput.value;
-    const pago1 = pago1Input.value;
+	const total = totalInput.value;
+	const pago1 = pago1Input.value;
     
-    if (pago1 < total) {
-        
-        metodo2Select.disabled = false;
-        //console.log("Segundo método de pago activado.");
-    } else {
-        
-        metodo2Select.disabled = true;
+	if (pago1 < total) {
+	    
+		metodo2Select.disabled = false;
+		//console.log("Segundo método de pago activado.");
+	} else {
+	    
+		metodo2Select.disabled = true;
 		pago2Input.disabled = true;
-        //console.log("Facturación normal.");
-    }
+		//console.log("Facturación normal.");
+	}
 });*/

@@ -125,7 +125,7 @@ if (isset($_GET['id'])) {
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Proeevedor</label>
                             <input type="hidden" name="id_proeevedor" id="id_proeevedor">
-                            <input type="text" class="form-control proeevedor" name="pro" id="proeevedor" placeholder="Numero de Nit" autocomplete="on">
+                            <input type="text" required class="form-control proeevedor" name="pro" id="proeevedor" placeholder="Numero de Nit" autocomplete="on">
                         </div>
                     </div>
                     <div class="form-row mt-2" style="text-align: center;">
@@ -173,14 +173,14 @@ if (isset($_GET['id'])) {
                                             print "productol";
                                         } ?>">
                                 <tr>
-                                    <td><input type="hidden" id="id_producto_1" name="id_producto[]"><input type="text" class="form-control" id="codigo_1" name="codigo[]"></td>
-                                    <td><input type="text" class="form-control nombrePro" id="producto_1" name="nombre[]"></td>
-                                    <td><input type="text" class="form-control precio_uni" id="precioUni_1" name="precioUnita[]" value="0"></td>
-                                    <td><input type="text" class="form-control precio" id="precio_1" name="precio[]"></td>
-                                    <td><input type="hidden" id="cantidad_1" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_1"></td>
-                                    <td><input type="text" class="form-control Total" id="total_1" name="total[]" value="0"></td>
-                                    <td><input type="hidden" class="form-control" name="id_categoria[]" id="id_categoria_1"><input type="text" class="form-control categoria" name="" id="categoria_1"></td>
-                                    <td><input type="hidden" class="form-control" name="id_medida[]" id="id_medida_1"><input type="text" class="form-control medida" name="" id="medida_1"></td>
+                                    <td><input type="hidden" id="id_producto_1" name="id_producto[]"><input type="text" class="form-control" id="codigo_1" required name="codigo[]"></td>
+                                    <td><input type="text" class="form-control nombrePro" id="producto_1" name="nombre[]" required></td>
+                                    <td><input type="text" class="form-control precio_uni" id="precioUni_1" name="precioUnita[]" value="0" required></td>
+                                    <td><input type="text" class="form-control precio" id="precio_1" name="precio[]" required></td>
+                                    <td><input type="hidden" id="cantidad_1" name="cant[]" required><input type="text" class="form-control cant" name="cantidad[]" id="cant_1" required></td>
+                                    <td><input type="text" class="form-control Total" id="total_1" name="total[]" value="0" required></td>
+                                    <td><input type="hidden" class="form-control" name="id_categoria[]" id="id_categoria_1" required><input type="text" required class="form-control categoria" name="" id="categoria_1"></td>
+                                    <td><input type="hidden" class="form-control" name="id_medida[]" id="id_medida_1" required><input type="text" required class="form-control medida" name="" id="medida_1"></td>
                                     <?php
                                     if ($_SESSION['rol'] == "Administrador") {
                                     ?>

@@ -173,7 +173,7 @@ if ($res != null) {
                                     <option value="member">Membrecia</option>
                                 </select></th>
                             <th>Paga</th>
-                            <th><input type="text" class="form-control pago" disabled name="pago" id="pago_1" required></th>
+                            <th><input type="text" class="form-control pago" name="pago" id="pago_1" required></th>
                             <!--<th></th>-->
                             <th>Cambio</th>
                             <th><input type="text" class="form-control" name="cambio" id="cambio_1" disabled></th>

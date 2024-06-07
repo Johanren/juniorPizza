@@ -163,7 +163,7 @@ class Ajax
         $consultar = new ModeloIngredienteProducto();
         foreach ($respuesta as $key => $value) {
             $res = $consultar->consultarIngredeinteAjaxModelo($value['id_producto']);
-            if ($res == null) {
+            if ($res[0]['id_producto'] == null) {
                 $datos[] = array(
                     'label' => $value['nombre_producto'],
                     'id' => $value['id_producto'],

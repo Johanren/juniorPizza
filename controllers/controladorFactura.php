@@ -10,6 +10,8 @@ class ControladorFactura
             $id_cliente = $_POST['id_cliente'];
             $id_articulo = $_POST['id_articulo'];
             $cantidad = $_POST['cantidad'];
+            $porciento = $_POST['porciento'];
+            $cuota = $_POST['cuota'];
             $pago = str_replace(',', '', $_POST['pago']);
             $pago1 = str_replace(',', '', $_POST['pago2']);
             $metodo = $_POST['metodo'];
@@ -21,7 +23,17 @@ class ControladorFactura
                 if ($metodo == 'member') {
                     $multiplicar = $res[0]['precio_unitario'] * 0;
                 } else {
-                    $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                    if (isset($_SESSION['dueda'])) {
+                        if ($_SESSION['dueda'] == 'true') {
+                            $porcentaje = $porciento / 100;
+                            $proje = $res[0]['precio_unitario'] * $porcentaje;
+                            $multiplicar = $res[0]['precio_unitario'] + $proje;
+                        } else {
+                            $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                        }
+                    } else {
+                        $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                    }
                 }
                 $total_factura += $multiplicar;
             }
@@ -36,6 +48,8 @@ class ControladorFactura
                 'metodo_pago' => $metodo,
                 'efectivo' => $pago,
                 'cambio' => $cambio,
+                'porcentaje' => (isset($porciento)) ? $porciento : 0,
+                'cuotas' => (isset($cuota)) ? $cuota : 0,
                 'id_cliente' => $id_cliente
             );
             $agreagrFactura = new ModeloFactura();
@@ -59,7 +73,7 @@ class ControladorFactura
                         $valor_unitario = $res[0]['precio_unitario'];
                         if ($metodo == 'member') {
                             $multiplicar = $res[0]['precio_unitario'] * 0;
-                        }else {
+                        } else {
                             $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
                         }
                         $datoVenta = array(
@@ -228,11 +242,13 @@ class ControladorFactura
         if (isset($_POST['guardar'])) {
             $total = str_replace(',', '', $_POST['debe']) + str_replace(',', '', $_POST['abono']);
             $abono = str_replace(',', '', $_POST['efectivo']) + str_replace(',', '', $_POST['abono']);
+            $cuota = (isset($_POST['cuota'])) ? $_POST['cuota'] - 1 : 0;
             $dato = array(
                 'pago' => $abono,
                 'total' => $total,
                 'id_factura' => $_GET['id_factura'],
                 'id_usuario' => $_SESSION['id_usuario'],
+                'cuota' => $cuota,
                 'fecha' => $fechaActal
             );
             $agregarFactura = new ModeloFactura();

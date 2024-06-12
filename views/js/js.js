@@ -858,6 +858,72 @@ $('body').on('click', '#cc', function () {
 	});
 });
 
+
+//codigo de barra factura
+$(document).ready(function () {
+	$(document).on('keydown', '.codigo_articulo', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+
+		var controladorTiempo = "";
+		var cantidad = 0;
+		var posicion = [];
+		var arrayQR = [];
+		function codigoAJAX() {
+			var codigo = $('#codigo_' + index + '').val();
+			var numero = (cantidad + 1) == 0 ? 1 : cantidad + 1;
+			//console.log(numero);
+			inicio = 0;
+			for (i = 0; i < numero; i++) {
+				codigobarra = codigo.substring(inicio, posicion[i]);
+				inicio = posicion[i];
+				arrayQR.push(codigobarra);
+				$.ajax({
+					url: 'Views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { codigo1: codigo },
+
+				})
+					.done(function (data) {
+						console.log("el dato", data);
+						var len = data.length;
+						if (len > 0) {
+							var id = data[0]['id_producto'];
+							var codigo = data[0]['codigo_producto'];
+							var name = data[0]['nombre_producto'];
+							//agregar miles
+							var valor = data[0]['precio_unitario'];
+							valor = valor.toString();
+							value = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+							document.getElementById('id_articulo_' + index).value = id;
+							document.getElementById('codigo_' + index).value = codigo;
+							document.getElementById('nombre_' + index).value = name;
+							document.getElementById('valor_' + index).value = value;
+						}
+					})
+
+			}
+			cantidad = 0;
+			posicion = [];
+			$('#codigo_' + index + '').val('');
+		}
+		$('#codigo_' + index + '').on("keyup", function (e) {
+			var codigo = $('#codigo_' + index + '').val();
+			largo = codigo.length;
+
+			if (e.which == 13) {
+				cantidad++;
+				posicion.push(largo);
+			}
+			clearTimeout(controladorTiempo);
+			controladorTiempo = setTimeout(codigoAJAX, 500);
+		});
+	});
+});
+
 //agregar factura nombre
 
 $(document).ready(function () {
@@ -975,11 +1041,11 @@ document.addEventListener('keydown', function (event) {
 			} else {
 				document.getElementById("agregarIngrediente").click();
 			}
-		}if (urlActual == "http://" + hosting + "/juniorPizza/ingrediente_Producto") {
+		} if (urlActual == "http://" + hosting + "/juniorPizza/ingrediente_Producto") {
 			if (document.getElementById("agregarIngredienteProducto")) {
 				document.getElementById("agregarIngredienteProducto").click();
 			}
-		}if (urlActual == "http://" + hosting + "/juniorPizza/promocion") {
+		} if (urlActual == "http://" + hosting + "/juniorPizza/promocion") {
 			if (document.getElementById("agregarPromocion")) {
 				document.getElementById("agregarPromocion").click();
 			}
@@ -1552,3 +1618,39 @@ pago1Input.addEventListener('change', function() {
 		//console.log("Facturación normal.");
 	}
 });*/
+
+//suma factura valor * porciento
+$(document).ready(function () {
+	$(document).on('keydown', '.porciento', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+
+		var valor_descuento = 0/*document.getElementById('descuento_' + index + '').value*/;
+		var valor = document.getElementById('valor_' + index + '').value;
+		//eliminar miles
+		var valorSinDesimal = valor.replace(/,/g, '');
+		let cantidad = document.getElementById('porciento_' + index + '');
+		cantidad.addEventListener("keyup", function () {
+			if (valor_descuento > 0) {
+
+			} else {
+				var procentaje = (valorSinDesimal * this.value) / 100;
+				//console.log(procentaje);
+				var result = parseFloat(valorSinDesimal) + parseFloat(procentaje);
+				//agregar miles
+				result = result.toString();
+				resultado = result.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.getElementById('resultado_' + index).value = resultado;
+				let valor_total_elems = document.querySelectorAll('#resultado_' + index + '')
+				let valor = Array.from(valor_total_elems).map(function (elem) {
+					return elem.value.replace(/,/g, '');
+				});
+				let suma = valor.reduce((acc, curr) => acc + parseInt(curr), 0);
+				suma = suma.toString();
+				suma = suma.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				document.querySelector('#total_1').value = suma;
+			}
+		});
+	});
+});

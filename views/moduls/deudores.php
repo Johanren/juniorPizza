@@ -16,6 +16,17 @@ if (isset($_GET['id_factura'])) {
                 <th>Deudor</th>
                 <th>Número Documento</th>
                 <th>Deuda</th>
+                <?php
+                if (isset($_SESSION['dueda'])) {
+                    if ($_SESSION['dueda'] == 'true') {
+
+                ?>
+                        <th>Cuotas</th>
+                        <th>Cuotas * dueda</th>
+                <?php
+                    }
+                }
+                ?>
                 <th>Usuario</th>
                 <th>Fecha</th>
                 <th>Acciones</th>
@@ -38,6 +49,23 @@ if (isset($_GET['id_factura'])) {
                         <td>
                             <?php echo number_format($value['cambio'], 0) ?>
                         </td>
+                        <?php
+                        if (isset($_SESSION['dueda'])) {
+                            if ($_SESSION['dueda'] == 'true') {
+
+                        ?>
+                                <td><?php echo $value['cuotas'] ?></td>
+                                <td><?php if ($value['cuotas'] == 0) {
+                                    echo number_format(0, 0);
+                                    } else {
+                                        $cuota = abs($value['cambio']) / $value['cuotas'];
+                                        echo number_format($cuota, 0);
+                                    }
+                                    ?></td>
+                        <?php
+                            }
+                        }
+                        ?>
                         <td>
                             <?php echo $value['nomUsu'] . " " . $value['usuApell'] ?>
                         </td>
@@ -153,7 +181,7 @@ if (isset($_GET['id_factura'])) {
                                             <?php echo $value['nombre_producto'] ?>
                                         </td>
                                         <td>
-                                            <?php echo number_format($value['valor_unitario'], 2) ?>
+                                            <?php echo number_format($value['valor_unitario'], 0) ?>
                                         </td>
                                         <td>
                                             <?php if ($value['cantidad'] > 0) {
@@ -163,7 +191,7 @@ if (isset($_GET['id_factura'])) {
                                             } ?>
                                         </td>
                                         <td>
-                                            <?php echo number_format($value['precio_compra'], 2) ?>
+                                            <?php echo number_format($value['precio_compra'], 0) ?>
                                         </td>
                                     </tr>
                                 <?php
@@ -182,7 +210,7 @@ if (isset($_GET['id_factura'])) {
                                             <!--<th></th>-->
                                             <th></th>
                                             <th></th>
-                                            <th><?php echo number_format((isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 2) ?></th>
+                                            <th><?php echo number_format((isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0) ?></th>
                                         </tr>
                                     </tbody>
                             <?php }
@@ -195,20 +223,30 @@ if (isset($_GET['id_factura'])) {
                                     <!--<th></th>-->
                                     <th></th>
                                     <th></th>
-                                    <th><?php echo number_format($resFactura[0]['total_factura'], 2) ?></th>
+                                    <th><?php echo number_format($resFactura[0]['total_factura'], 0) ?></th>
                                 </tr>
                             </tbody>
                             <tbody>
                                 <tr>
                                     <th>Pago</th>
                                     <th>
-                                        <?php echo number_format($resFactura[0]['efectivo'], 2) ?><input type="hidden" id="" name="efectivo" class="form-control" value="<?php echo number_format($resFactura[0]['efectivo'], 2) ?>">
+                                        <?php echo number_format($resFactura[0]['efectivo'], 0) ?><input type="hidden" id="" name="efectivo" class="form-control" value="<?php echo number_format($resFactura[0]['efectivo'], 0) ?>">
                                     </th>
                                     <th></th>
                                     <th>Debe</th>
                                     <th>
-                                        <input type="text" id="" name="" class="form-control" disabled value="<?php echo number_format($resFactura[0]['cambio'], 2) ?>">
+                                        <input type="text" id="" name="" class="form-control" disabled value="<?php echo number_format($resFactura[0]['cambio'], 0) ?>">
                                         <input type="hidden" id="deuda" name="debe" class="form-control" value="<?php echo $resFactura[0]['cambio'] ?>">
+                                        <?php
+                                        if (isset($_SESSION['dueda'])) {
+                                            if ($_SESSION['dueda'] == 'true') {
+
+                                        ?>
+                                                <input type="hidden" name="cuota" value="<?php echo $resFactura[0]['cuotas'] ?>">
+                                        <?php
+                                            }
+                                        }
+                                        ?>
                                     </th>
                                 </tr>
                             </tbody>

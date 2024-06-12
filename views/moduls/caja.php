@@ -192,6 +192,17 @@ if ($res != null) {
                             <!--<th>Precio descuento</th>-->
                             <!--<th>Peso</th>-->
                             <th>Cantidad</th>
+                            <?php
+                            if (isset($_SESSION['dueda'])) {
+                                if ($_SESSION['dueda'] == 'true') {
+
+                            ?>
+                                    <th>Porciento</th>
+                                    <th>Cuotas</th>
+                            <?php
+                                }
+                            }
+                            ?>
                             <th>Total</th>
                             <th>Acciones</th>
                         </tr>
@@ -209,9 +220,20 @@ if ($res != null) {
                             <!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_1" value="0" required>-->
                             <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_1" value="0" required>
                             </td>
-                            <td><input type="text" name="total" class="form-control resultado" id="resultado_1" disabled>
-                            </td>
-                            <td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
+                            <?php
+                            if (isset($_SESSION['dueda'])) {
+                                if ($_SESSION['dueda'] == 'true') {
+
+                            ?>
+                                    <td><input type="text" name="porciento" class="form-control porciento" id="porciento_1" placeholder="Porciento de ganancia" required>
+                                    <td><input type="text" name="cuota" class="form-control cuota" id="cuota_1" placeholder="Cuotas rediferida" required>
+                                <?php
+                                }
+                            }
+                                ?>
+                                    <td><input type="text" name="total" class="form-control resultado" id="resultado_1" disabled>
+                                    </td>
+                                    <td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
                         </tr>
                     </tbody>
                     <tbody>
@@ -221,6 +243,17 @@ if ($res != null) {
                             <!--<th></th>-->
                             <!--<th></th>-->
                             <th></th>
+                            <?php
+                            if (isset($_SESSION['dueda'])) {
+                                if ($_SESSION['dueda'] == 'true') {
+
+                            ?>
+                                    <th></th>
+                                    <th></th>
+                            <?php
+                                }
+                            }
+                            ?>
                             <th></th>
                             <th><input type="text" class="form-control factura" name="total_Factura" id="total_1" disabled>
                             </th>
@@ -237,6 +270,16 @@ if ($res != null) {
                                     <option value="transfferencia">Transferencia</option>
                                     <option value="member">Membrecia</option>
                                 </select></th>
+                            <?php
+                            if (isset($_SESSION['dueda'])) {
+                                if ($_SESSION['dueda'] == 'true') {
+
+                            ?>
+                                    <th></th>
+                            <?php
+                                }
+                            }
+                            ?>
                             <th>Paga</th>
                             <th><input type="text" class="form-control pago" name="pago" id="pago_1" required></th>
                             <!--<th></th>-->

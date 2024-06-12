@@ -6,7 +6,7 @@ class ModeloFactura
 
     function agregarFacturaModelo($dato)
     {
-        $sql = "INSERT INTO $this->tabla (id_usuario, total_factura, metodo_pago, efectivo, cambio, id_cliente) VALUES (?,?,?,?,?,?)";
+        $sql = "INSERT INTO $this->tabla (id_usuario, total_factura, metodo_pago, efectivo, cambio, porcentaje, cuotas, id_cliente) VALUES (?,?,?,?,?,?,?,?)";
 
         try {
             $conn = new Conexion();
@@ -17,7 +17,9 @@ class ModeloFactura
                 $stms->bindParam(3, $dato['metodo_pago'], PDO::PARAM_STR);
                 $stms->bindParam(4, $dato['efectivo'], PDO::PARAM_INT);
                 $stms->bindParam(5, $dato['cambio'], PDO::PARAM_INT);
-                $stms->bindParam(6, $dato['id_cliente'], PDO::PARAM_INT);
+                $stms->bindParam(6, $dato['porcentaje'], PDO::PARAM_INT);
+                $stms->bindParam(7, $dato['cuotas'], PDO::PARAM_INT);
+                $stms->bindParam(8, $dato['id_cliente'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return true;
@@ -115,7 +117,7 @@ class ModeloFactura
 
     function actualizarDeudaFacturaModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET efectivo = ?, cambio = ?, fecha_factura = ?, id_usuario = ? WHERE id_factura = ?";
+        $sql = "UPDATE $this->tabla SET efectivo = ?, cambio = ?, fecha_factura = ?, id_usuario = ?, cuotas = ? WHERE id_factura = ?";
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
@@ -124,7 +126,8 @@ class ModeloFactura
                 $stms->bindParam(2, $dato['total'], PDO::PARAM_INT);
                 $stms->bindParam(3, $dato['fecha'], PDO::PARAM_STR);
                 $stms->bindParam(4, $dato['id_usuario'], PDO::PARAM_INT);
-                $stms->bindParam(5, $dato['id_factura'], PDO::PARAM_INT);
+                $stms->bindParam(5, $dato['cuota'], PDO::PARAM_INT);
+                $stms->bindParam(6, $dato['id_factura'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return true;

@@ -297,6 +297,21 @@ class Ajax
         $propina = new ControladorPropina();
         $res = $propina->actualizarPropinaAjax(str_replace(',', '', $this->propina), $this->id_factura);
     }
+
+    function consultarAritucloProeevedorAgregarFactura()
+    {
+        $consultar_id = new ControladorProducto();
+        $res = $consultar_id->consultarAritucloProeevedoridAjax($this->articulo);
+        foreach ($res as $key => $value) {
+            $datos[] = array(
+                'value' => $value['id_producto'],
+                'label' => $value['codigo_producto'],
+            );
+        }
+        
+        print json_encode($res);
+
+    }
 }
 
 $ajax = new Ajax();
@@ -400,4 +415,9 @@ if (isset($_GET['nuevo_valor']) && isset($_GET['id_factura'])) {
     $ajax->propina = $_GET['nuevo_valor'];
     $ajax->id_factura = $_GET['id_factura'];
     $ajax->actualizarPropinaFacturaAjax();
+}
+
+if (isset($_GET['codigo1'])) {
+    $ajax->articulo = $_GET['codigo1'];
+    $ajax->consultarAritucloProeevedorAgregarFactura();
 }

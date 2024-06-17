@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
 
 $agregarPedido = new ControladorPedido();
 $agregarPedido->agregarPedido();
-if (isset($_GET['id'])) {
+if (isset($_GET['id_mesa'])) {
     $listar = $user->eliminarMesaId();
 }
 ?>
@@ -141,7 +141,7 @@ if (isset($_GET['id'])) {
                                             <?php echo $value['piso_nombre'] ?>
                                         </td>
                                         <td>
-                                            <!--<a href="index.php?action=mesas&id_mesa=<?php echo $value['id_mesa'] ?>"><i class="fas fa-print fa-lg"></i></a>--><a href="index.php?action=mesas&id=<?php echo $value['id_mesa'] ?>"><i class="fas fa-trash-alt fa-lg"></i></a>
+                                            <!--<a href="index.php?action=mesas&id_mesa=<?php echo $value['id_mesa'] ?>"><i class="fas fa-print fa-lg"></i></a>--><a href="index.php?action=mesas&id_mesa=<?php echo $value['id_mesa'] ?>"><i class="fas fa-trash-alt fa-lg"></i></a>
                                         </td>
                                     </tr>
                                 <?php

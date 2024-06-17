@@ -81,7 +81,7 @@ class ControladorMesa
 
     function eliminarMesaId()
     {
-        $id = $_GET['id'];
+        $id = $_GET['id_mesa'];
         $listar = new ModeloMesa();
         $res = $listar->eliminarMesaIdModelo($id);
         if ($res == true) {

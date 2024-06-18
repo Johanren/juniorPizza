@@ -10,10 +10,10 @@ class ControladorFactura
             $id_cliente = $_POST['id_cliente'];
             $id_articulo = $_POST['id_articulo'];
             $cantidad = $_POST['cantidad'];
-            $porciento = $_POST['porciento'];
-            $cuota = $_POST['cuota'];
+            $porciento = (isset($_POST['porciento'])) ? $_POST['porciento'] : 0;
+            $cuota = (isset($_POST['cuota'])) ? $_POST['cuota'] : 0;
             $pago = str_replace(',', '', $_POST['pago']);
-            $pago1 = str_replace(',', '', $_POST['pago2']);
+            $pago1 = (isset($_POST['pago2'])) ? str_replace(',', '', $_POST['pago2']) : 0;
             $metodo = $_POST['metodo'];
             $total_factura = 0;
             $cambio = 0;

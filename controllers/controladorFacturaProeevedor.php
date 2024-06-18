@@ -33,13 +33,27 @@ class ControladorFacturaProeevedor
             $mostrar = new ModeloFacturaProeevedor();
             $res = $mostrar->listarFacturaProductoModelo($id, $_GET['fecha']);
             return $res;
-
         }
     }
 
-    function DeudaProeevedor(){
+    function DeudaProeevedor()
+    {
         $sum = new ModeloFacturaProeevedor();
         $res = $sum->DeudaProeevedorModelo();
+        return $res;
+    }
+
+    function gastosMensualesFactura()
+    {
+        $gasto = new ModeloFacturaProeevedor();
+        $res = $gasto->gastosMensualesFacturaModelo();
+        return $res;
+    }
+
+    function gastosAnualesFactura()
+    {
+        $gasto = new ModeloFacturaProeevedor();
+        $res = $gasto->gastosAnualesFacturaModelo();
         return $res;
     }
 }

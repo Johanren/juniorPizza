@@ -1,14 +1,58 @@
 <?php
 if ($_SESSION['rol'] == "Mesero") {
     echo '<script>window.location="mesas"</script>';
-}if ($_SESSION['rol'] == "Cocina") {
+}
+if ($_SESSION['rol'] == "Cocina") {
     echo '<script>window.location="cocina"</script>';
-}if ($_SESSION['rol'] == "Cajero" || $_SESSION['rol'] == "Gerente") {
+}
+if ($_SESSION['rol'] == "Cajero" || $_SESSION['rol'] == "Gerente") {
     echo '<script>window.location="caja"</script>';
 }
+//Ventas mensuales y anuales
 $venta = new ControladorVenta();
 $mesual = $venta->ganaciasMensualesVenta();
 $anual = $venta->ganaciasAnualesVenta();
+//Gasto mensual
+$gastos = new ControladorGasto();
+$gastoMensual = $gastos->gastosMensuales();
+$gastoAnual = $gastos->gastosAnueales();
+//Factura mensual
+$proeevedor = new ControladorFacturaProeevedor();
+$gastoproeevedor = $proeevedor->gastosMensualesFactura();
+$gastoproeevedorAnual = $proeevedor->gastosAnualesFactura();
+//nomina mensual
+$nomina = new ControladorNomina();
+$nominaMes = $nomina->nominaMes();
+$nominaAnual = $nomina->nominaAnual();
+
+//calcular gastos reales ventas mensuales.
+// Función para convertir formato monetario a número
+function convertirMonedaANumero($monto)
+{
+    return floatval(str_replace(['$', ',', ' '], '', $monto));
+}
+
+// Convertir los valores de cadena a números
+$ventasMesNum = convertirMonedaANumero($mesual[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"]);
+$gastoproeevedorNum = convertirMonedaANumero($gastoproeevedor[0]["CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00'))"]);
+$gastoMensualNum = convertirMonedaANumero($gastoMensual[0]["CONCAT('$', FORMAT(SUM(total), '$#,##0.00'))"]);
+$nominaMensualNum = convertirMonedaANumero($nominaAnual[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"]);
+
+$ventasAnualNum = convertirMonedaANumero($anual[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"]);
+$gastoproeevedorAnualNum = convertirMonedaANumero($gastoproeevedorAnual[0]["CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00'))"]);
+$gastoAnualNum = convertirMonedaANumero($gastoAnual[0]["CONCAT('$', FORMAT(SUM(total), '$#,##0.00'))"]);
+$nominaAnualNum = convertirMonedaANumero($nominaAnual[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"]);
+
+// Realizar la resta mes
+$resultado = $ventasMesNum - $gastoproeevedorNum - $gastoMensualNum - $nominaMensualNum;
+//Realizar la suma gastos
+$resultado1 = $gastoproeevedorNum + $gastoMensualNum + $nominaMensualNum;
+//Realizar la resta anual 
+$resultado2 = $ventasAnualNum - $gastoproeevedorAnualNum - $gastoAnualNum - $nominaAnualNum;
+// Formatear el resultado de nuevo a formato monetario
+$ventasMes = '$' . number_format($resultado, 0, '.', ',');
+$gastosMes = '$' . number_format($resultado1, 0, '.', ',');
+$ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
 ?>
 <script>
     $(document).ready(function() {
@@ -29,14 +73,15 @@ $anual = $venta->ganaciasAnualesVenta();
     <div class="row">
 
         <!-- GANANCIAS (MENSUALES) Card Example -->
-        <div class="col-xl-6 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-4 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            GANANCIAS (MENSUALES)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $mesual[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?></div>
+                                GANANCIAS (MENSUALES)</div>
+                            <!--<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $mesual[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?></div>-->
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $ventasMes ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -46,15 +91,36 @@ $anual = $venta->ganaciasAnualesVenta();
             </div>
         </div>
 
+        <!-- GASTOS (MENSUALES) Card Example -->
+
+        <div class="col-xl-4 col-md-4 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                GASTOS (MENSUALES)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $gastosMes ?></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GASTOS (MENSUALES) Card Example -->
+
         <!-- Earnings (Monthly) Card Example -->
-        <div class="col-xl-6 col-md-6 mb-4">
+        <div class="col-xl-4 col-md-4 mb-4">
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                 GANANCIAS(ANUALES)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $anual[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?></div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $ventaAnual ?></div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -116,18 +182,16 @@ $anual = $venta->ganaciasAnualesVenta();
     <div class="row">
 
         <!-- Area Chart -->
-        <div class="col-xl-12 col-lg-12">
+        <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Grafica Ventas Mensuales</h6>
                     <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                            aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                             <div class="dropdown-header">Dropdown Header:</div>
                             <a class="dropdown-item" href="#">Action</a>
                             <a class="dropdown-item" href="#">Another action</a>
@@ -146,18 +210,16 @@ $anual = $venta->ganaciasAnualesVenta();
         </div>
 
         <!-- Pie Chart -->
-        <!--<div class="col-xl-4 col-lg-5">
-            <div class="card shadow mb-4">-->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
-                <!--<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Productos Más vendidos</h6>
                     <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                            aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                             <div class="dropdown-header">Dropdown Header:</div>
                             <a class="dropdown-item" href="#">Action</a>
                             <a class="dropdown-item" href="#">Another action</a>
@@ -165,9 +227,9 @@ $anual = $venta->ganaciasAnualesVenta();
                             <a class="dropdown-item" href="#">Something else here</a>
                         </div>
                     </div>
-                </div>-->
+                </div>
                 <!-- Card Body -->
-                <!--<div class="card-body">
+                <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
                         <canvas id="myPieChart"></canvas>
                     </div>
@@ -184,7 +246,7 @@ $anual = $venta->ganaciasAnualesVenta();
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
     </div>
 
     <!-- Content Row -->
@@ -300,7 +362,7 @@ $anual = $venta->ganaciasAnualesVenta();
 
         </div>-->
 
-        <!--<div class="col-lg-6 mb-4">
+            <!--<div class="col-lg-6 mb-4">
 
              Illustrations 
             <div class="card shadow mb-4">
@@ -336,10 +398,10 @@ $anual = $venta->ganaciasAnualesVenta();
             </div>
 
         </div>-->
-    </div>
+        </div>
 
-</div>
-<!-- /.container-fluid -->
+    </div>
+    <!-- /.container-fluid -->
 
 </div>
 <!-- End of Main Content -->
@@ -350,4 +412,3 @@ $anual = $venta->ganaciasAnualesVenta();
 
 </div>
 <!-- End of Page Wrapper -->
-

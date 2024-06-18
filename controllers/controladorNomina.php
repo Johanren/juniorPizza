@@ -41,4 +41,16 @@ class ControladorNomina
         $res = $sum->consultarNominaPedidoAjaxModelo($id);
         return $res;
     }
+
+    function nominaMes(){
+        $gasto = new ModeloNomina();
+        $res = $gasto->nominaMesModelo();
+        return $res;
+    }
+
+    function nominaAnual(){
+        $gasto = new ModeloNomina();
+        $res = $gasto->nominaAnualModelo();
+        return $res;
+    }
 }

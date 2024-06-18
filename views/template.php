@@ -521,7 +521,7 @@
 
 <!-- Page level custom scripts -->
 <script src="views/js/demo/chart-area-demo.js"></script>
-<!--<script src="views/js/demo/chart-pie-demo.js"></script>-->
+<script src="views/js/demo/chart-pie-demo.js"></script>
 <script src="views/js/jquery-ui.js"></script>
 <script src="Views/js/ConectorJavaScript.js"></script>
 <script src="views/js/js.js"></script>

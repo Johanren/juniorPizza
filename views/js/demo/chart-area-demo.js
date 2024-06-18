@@ -33,7 +33,7 @@ if (currentURL.includes("http://" + host + "/juniorPizza/inicio")) {
   function getDataAndDrawChart() {
     // Realizar una solicitud AJAX al archivo PHP
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'views/chart.php', true);
+    xhr.open('GET', 'views/chart.php?accion=ventas', true);
     xhr.onload = function () {
       if (xhr.status === 200) {
         // Convertir la respuesta JSON en un objeto JavaScript
@@ -140,6 +140,8 @@ if (currentURL.includes("http://" + host + "/juniorPizza/inicio")) {
     };
     xhr.send();
   }
+
+  
   // Llamar a la función para obtener los datos y dibujar el gráfico cuando se cargue la página
   getDataAndDrawChart();
 }

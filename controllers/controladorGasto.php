@@ -73,4 +73,18 @@ class ControladorGasto
             echo '<script>window.location="eliminarGasto"</script>';
         }
     }
+
+    function gastosMensuales()
+    {
+        $gasto = new ModeloGasto();
+        $res = $gasto->gastosMensualesModelo();
+        return $res;
+    }
+
+    function gastosAnueales()
+    {
+        $gasto = new ModeloGasto();
+        $res = $gasto->gastosAnuealesModelo();
+        return $res;
+    }
 }

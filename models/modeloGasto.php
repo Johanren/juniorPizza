@@ -136,4 +136,67 @@ class ModeloGasto
             print_r($e->getMessage());
         }
     }
+
+    function gastosMensualesModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(total), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function gastosAnuealesModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(total), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function listarPorMesModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT SUM(total) AS totalGasto, MONTHNAME(fecha_ingreso) AS mesGasto FROM gasto WHERE fecha_ingreso like ? GROUP BY MONTH(fecha_ingreso)";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

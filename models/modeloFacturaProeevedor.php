@@ -121,4 +121,46 @@ class ModeloFacturaProeevedor
             print_r($e->getMessage());
         }
     }
+
+    function gastosMensualesFacturaModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function gastosAnualesFacturaModelo()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

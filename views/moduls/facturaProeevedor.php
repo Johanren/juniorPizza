@@ -44,8 +44,8 @@ $res = $user->listarProeevedorFactura();
                 <tr>
                     <th># Nit</th>
                     <th>Nombre Proeevedor</th>
-                    <th>Fecha Factura</th>
                     <th>Total a pagar</th>
+                    <th>Fecha Factura</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -61,7 +61,7 @@ $res = $user->listarProeevedorFactura();
                             <?php echo $value['nombre_proeevedor'] ?>
                         </td>
                         <td>
-                            <?php echo number_format($value['pago_factura'], 2) ?>
+                            <?php echo number_format($value['pago_factura'], 0) ?>
                         </td>
                         <td>
                             <?php echo $value['fecha_ingreso'] ?>

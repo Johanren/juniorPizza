@@ -1,6 +1,20 @@
 <?php
 $listar = new ControladorUsuario();
 $res = $listar->consultarUsuarioPerfil();
+
+$local = new ControladorLocal();
+$ress = $local->consultarLocal($_SESSION['id_local']);
+if ($ress != null) {
+    $nombreSistema = $ress[0]['nombre_local'];
+    $nit = $ress[0]['nit'];
+    $tel = $ress[0]['telefono'];
+    $dire = $ress[0]['direccion'];
+} else {
+    $nombreSistema = "Inventario";
+    $nit = "1111";
+    $tel = "1111";
+    $dire = "NNNN";
+}
 ?>
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -10,7 +24,7 @@ $res = $listar->consultarUsuarioPerfil();
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Junior Pizza <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3"><?php echo $nombreSistema ?></div>
     </a>
 
     <!-- Divider -->

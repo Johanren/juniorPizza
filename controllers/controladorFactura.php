@@ -16,23 +16,42 @@ class ControladorFactura
             $pago1 = (isset($_POST['pago2'])) ? str_replace(',', '', $_POST['pago2']) : 0;
             $metodo = $_POST['metodo'];
             $total_factura = 0;
+            $precio = str_replace(',', '', $_POST['precio']);
             $cambio = 0;
             for ($i = 0; $i < count($id_articulo); $i++) {
                 $buscar = new ControladorProducto();
                 $res = $buscar->mostrarArticulo($id_articulo[$i]);
                 if ($metodo == 'member') {
-                    $multiplicar = $res[0]['precio_unitario'] * 0;
+                    if ($precio[$i] > 0) {
+                        $multiplicar = $precio[$i] * 0;
+                    } else {
+                        $multiplicar = $res[0]['precio_unitario'] * 0;
+                    }
                 } else {
                     if (isset($_SESSION['dueda'])) {
                         if ($_SESSION['dueda'] == 'true') {
-                            $porcentaje = $porciento / 100;
-                            $proje = $res[0]['precio_unitario'] * $porcentaje;
-                            $multiplicar = $res[0]['precio_unitario'] + $proje;
+                            if ($precio[$i] > 0) {
+                                $porcentaje = $porciento / 100;
+                                $proje = $precio[$i] * $porcentaje;
+                                $multiplicar = $precio[$i] + $proje;
+                            } else {
+                                $porcentaje = $porciento / 100;
+                                $proje = $res[0]['precio_unitario'] * $porcentaje;
+                                $multiplicar = $res[0]['precio_unitario'] + $proje;
+                            }
+                        } else {
+                            if ($precio[$i] > 0) {
+                                $multiplicar = $precio[$i] * $cantidad[$i];
+                            } else {
+                                $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                            }
+                        }
+                    } else {
+                        if ($precio[$i] > 0) {
+                            $multiplicar = $precio[$i] * $cantidad[$i];
                         } else {
                             $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
                         }
-                    } else {
-                        $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
                     }
                 }
                 $total_factura += $multiplicar;
@@ -72,9 +91,17 @@ class ControladorFactura
                         $res = $buscar->mostrarArticulo($id_articulo[$i]);
                         $valor_unitario = $res[0]['precio_unitario'];
                         if ($metodo == 'member') {
-                            $multiplicar = $res[0]['precio_unitario'] * 0;
+                            if ($precio[$i] > 0) {
+                                $multiplicar = $precio[$i] * 0;
+                            } else {
+                                $multiplicar = $res[0]['precio_unitario'] * 0;
+                            }
                         } else {
-                            $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                            if ($precio[$i] > 0) {
+                                $multiplicar = $precio[$i] * $cantidad[$i];
+                            } else {
+                                $multiplicar = $res[0]['precio_unitario'] * $cantidad[$i];
+                            }
                         }
                         $datoVenta = array(
                             'id_factura' => $idFactura,

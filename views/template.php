@@ -1,9 +1,24 @@
+<?php
+$local = new ControladorLocal();
+$res = $local->consultarLocal(1);
+if ($res != null) {
+    $nombreSistema = $res[0]['nombre_local'];
+    $nit = $res[0]['nit'];
+    $tel = $res[0]['telefono'];
+    $dire = $res[0]['direccion'];
+} else {
+    $nombreSistema = "Inventario";
+    $nit = "1111";
+    $tel = "1111";
+    $dire = "NNNN";
+}
+?>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Junior Pizza</title>
+    <title><?php echo $nombreSistema ?></title>
     <link rel="stylesheet" href="views/css/bootstrap.min.css">
     <link rel="stylesheet" href="views/css/bootstrap.css">
     <link rel="stylesheet" href="views/css/dataTables.bootstrap4.min.css">

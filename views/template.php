@@ -12,6 +12,7 @@ if ($res != null) {
     $tel = "1111";
     $dire = "NNNN";
 }
+ob_start();
 ?>
 <html lang="en">
 

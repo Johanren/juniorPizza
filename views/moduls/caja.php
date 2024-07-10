@@ -274,6 +274,15 @@ if ($res != null) {
                                     <option value="daviplata">Daviplata</option>
                                     <option value="transfferencia">Transferencia</option>
                                     <option value="member">Membrecia</option>
+                                    <?php
+                                    if (isset($_SESSION['taller'])) {
+                                        if ($_SESSION['taller'] == 'true') {
+                                    ?>
+                                            <option value="observacion">Observacion</option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
                                 </select></th>
                             <?php
                             if (isset($_SESSION['dueda'])) {
@@ -311,6 +320,38 @@ if ($res != null) {
             ?>
 
         </div>
+        <?php
+        if (isset($_SESSION['taller'])) {
+            if ($_SESSION['taller'] == 'true') {
+        ?>
+                <style>
+                    .hidden {
+                        display: none;
+                    }
+                </style>
+                <div id="fields" class="hidden col">
+                    <h1>Datós del vehiculo</h1>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Nombre</label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre encargado">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Número Placa</label>
+                            <input type="text" class="form-control" name="placa" id="plateNumber" placeholder="Número de placa">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Observación</label>
+                            <textarea name="observacion" class="form-control" id="observacion"></textarea>
+                        </div>
+                    </div>
+                </div>
+        <?php
+            }
+        }
+        ?>
         <div style="text-align: right;">
             <button id="Imprimir" class="btn btn-primary preFactrua"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-receipt-cutoff" viewBox="0 0 16 16">
                     <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z" />

@@ -156,6 +156,34 @@ if ($ress != null) {
     }
     ?>
     <?php
+    if (isset($_SESSION['taller'])) {
+        if ($_SESSION['taller'] == 'true') {
+            if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cajero") {
+            } else {
+    ?>
+                <li class="nav-item <?php if ($_GET['action'] == 'factura' || $_GET['action'] == 'ordenPedido') {
+                                        print 'active';
+                                    } ?>">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#historiataller" aria-expanded="true" aria-controls="collapseUtilities">
+                        <i class="fas fa-history"></i>
+                        <span>Historico Taller</span>
+                    </a>
+                    <div id="historiataller" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Menu:</h6>
+                            <a class="collapse-item" href="factura">Factura</a>
+                            <a class="collapse-item" href="ordenPedido">Orden Pedido</a>
+                            <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
+                <a class="collapse-item" href="utilities-other.html">Other</a>-->
+                        </div>
+                    </div>
+                </li>
+    <?php
+            }
+        }
+    }
+    ?>
+    <?php
     if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cajero") {
     } else {
     ?>
@@ -336,7 +364,7 @@ if ($ress != null) {
                             }
                         }
                         ?>
-                        <?php if (isset($conn)){?><span class="badge badge-danger badge-counter"> <?php print $conn . "+ "?> </span> <?php }?>
+                        <?php if (isset($conn)) { ?><span class="badge badge-danger badge-counter"> <?php print $conn . "+ " ?> </span> <?php } ?>
                     </a>
                     <!-- Dropdown - Alerts -->
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">

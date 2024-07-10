@@ -50,6 +50,22 @@ class ModeloProducto
         }
     }
 
+    function listarProductoExcelModelo()
+    {
+        $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local";
+        $conn = new Conexion();
+        $stms = $conn->conectar()->prepare($sql);
+        try {
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
     function consultarModeloProductoAjaxModelo($dato)
     {
         if ($dato != '') {

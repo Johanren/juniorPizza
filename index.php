@@ -28,6 +28,12 @@ require_once 'controllers/controladorNomina.php';
 require_once 'controllers/controladorPropina.php';
 require_once 'controllers/controladorAbrirCaja.php';
 require_once 'controllers/controladorGasto.php';
+require_once 'controllers/controladorObservacionFactura.php';
+require_once 'controllers/controladorClienteTaller.php';
+require_once 'controllers/controladorVehiculo.php';
+require_once 'controllers/controladorEstadoVehiculo.php';
+require_once 'controllers/controladorMateriales.php';
+require_once 'controllers/controladorFirma.php';
 //Modelo
 require_once 'Models/conexion.php';
 require_once 'Models/modeloViews.php';
@@ -56,6 +62,12 @@ require_once 'models/modeloVenta.php';
 require_once 'models/modeloNomina.php';
 require_once 'models/modeloPropina.php';
 require_once 'models/modeloGasto.php';
+require_once 'models/modeloObservacionFactura.php';
+require_once 'models/modeloClienteTaller.php';
+require_once 'models/modeloVehiculo.php';
+require_once 'models/modeloEstadoVehiculo.php';
+require_once 'models/modeloMateriales.php';
+require_once 'models/modeloFirma.php';
 //fpdf
 
 

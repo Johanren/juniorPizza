@@ -217,6 +217,7 @@ if ($res != null) {
                 </div>
             </div>
             <button id="Imprimir" class="btn btn-primary mt-2">Imprimir</button>
+            <a id="caja" href="caja" class="btn btn-primary mt-2">Caja</a>
         </div>
     </div>
 </div>

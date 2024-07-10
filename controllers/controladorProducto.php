@@ -80,6 +80,12 @@ class ControladorProducto
         return $res;
     }
 
+    function listarProductoExcel(){
+        $listar = new ModeloProducto();
+        $res = $listar->listarProductoExcelModelo();
+        return $res;
+    }
+
     function consultarProductoAjaxControlador($dato)
     {
         $consultar = new ModeloProducto();

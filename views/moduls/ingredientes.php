@@ -38,6 +38,10 @@ if (isset($_GET['id'])) {
                 </svg>
             </button>
         </div>
+        <div class="col-sm-5"></div>
+        <div class="col-sm-1">
+            <a href="views/excel.php?ingrediente=1" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel fa-lg"></i></a>
+        </div>
     </div>
     <br>
     <div class="table-responsive">

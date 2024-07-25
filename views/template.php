@@ -1,4 +1,5 @@
 <?php
+session_start();
 $local = new ControladorLocal();
 $res = $local->consultarLocal(1);
 if ($res != null) {
@@ -41,7 +42,7 @@ ob_start();
     <!-- Page Wrapper -->
     <div id="wrapper">
         <?php
-        session_start();
+        
         if (isset($_SESSION['validar'])) {
             include("views/moduls/narvar.php");
         }

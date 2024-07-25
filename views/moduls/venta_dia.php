@@ -29,8 +29,8 @@ if ($resLocal != null) {
     $dire = "NNNN";
 }
 if (isset($_POST['cierre'])) {
-    unset($_SESSION['caja']);
-    echo '<script>window.location</script>';
+    $cerrarCaja = new ControladorAbrirCaja();
+    $cerrarCaja->cerrarCajaControlador();
 }
 ?>
 <h1 style="text-align: center; color: black; font-weight: 500;">VENTA DEL DIA</h1>
@@ -83,6 +83,7 @@ if (isset($_POST['cierre'])) {
             </thead>
             <?php
             foreach ($res as $key => $value) {
+                
                 if ($value['metodo_pago'] == 'efectivo') {
                     $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal($value['id_producto'], $value['metodo_pago']);
             ?>

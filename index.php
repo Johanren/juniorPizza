@@ -68,6 +68,7 @@ require_once 'models/modeloVehiculo.php';
 require_once 'models/modeloEstadoVehiculo.php';
 require_once 'models/modeloMateriales.php';
 require_once 'models/modeloFirma.php';
+require_once 'models/modeloApertura.php';
 //fpdf
 
 

@@ -29,9 +29,21 @@ class ControladorAbrirCaja
                             ];
                         }
                     } else {
-                        print "<script>$(document).ready(function() {
-                            $('#abrirCaja').modal('toggle')
-                        });</script>";
+                        $consultarApertura = new ModeloApertura();
+                        $resCon = $consultarApertura->consultarAperturaModelo();
+                        if ($resCon) {
+                            echo '<script>window.location="venta_dia"</script>';
+                            $fecha_actual = new DateTime();
+                            $_SESSION['caja'] = [
+                                'id_apertura' => $resCon[0]['id_apertura'],
+                                'monto_inicial' => $resCon[0]['monto'],
+                                'fecha_apertura' => $resCon[0]['fecha_apertura']
+                            ];
+                        } else {
+                            print "<script>$(document).ready(function() {
+                                $('#abrirCaja').modal('toggle')
+                            });</script>";
+                        }
                     }
                 }
             }

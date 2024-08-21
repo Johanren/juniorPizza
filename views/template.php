@@ -18,23 +18,23 @@ ob_start();
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title><?php echo $nombreSistema ?></title>
-    <link rel="stylesheet" href="views/css/bootstrap.min.css">
-    <link rel="stylesheet" href="views/css/bootstrap.css">
-    <link rel="stylesheet" href="views/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="views/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="views/css/bootstrap.css"/>
+    <link rel="stylesheet" href="views/css/dataTables.bootstrap4.min.css"/>
     <script src="views/js/jquery-3.3.1.js"></script>
     <script src="views/js/jquery.dataTables.min.js"></script>
     <script src="views/js/dataTables.bootstrap4.min.js"></script>
     <script src="views/js/sweetalert.min.js"></script>
-    <link rel="stylesheet" href="views/css/login.css">
-    <link rel="stylesheet" href="views/css/perfil.css">
-    <link rel="stylesheet" href="views/css/cocina.css">
-    <link rel="stylesheet" href="views/css/config.css">
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link rel="icon" href="views/img/icon.jpg">
-    <link rel="stylesheet" href="views/css/jquery-ui.css">
+    <link rel="stylesheet" href="views/css/login.css"/>
+    <link rel="stylesheet" href="views/css/perfil.css"/>
+    <link rel="stylesheet" href="views/css/cocina.css"/>
+    <link rel="stylesheet" href="views/css/config.css"/>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="icon" href="views/img/icon.jpg"/>
+    <link rel="stylesheet" href="views/css/jquery-ui.css"/>
 
 </head>
 

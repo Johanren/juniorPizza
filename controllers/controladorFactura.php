@@ -6,6 +6,7 @@ class ControladorFactura
     {
         if (isset($_POST['agregarFactrua'])) {
             #Agregar Factura
+            $factura  = (isset($_POST['factrua'])) ? $_POST['factrua'] : "false";
             $nombre = $_POST['nombre'];
             $placa = $_POST['placa'];
             $observacion = $_POST['observacion'];
@@ -72,6 +73,7 @@ class ControladorFactura
                 'cambio' => $cambio,
                 'porcentaje' => (isset($porciento)) ? $porciento : 0,
                 'cuotas' => (isset($cuota)) ? $cuota : 0,
+                'factura' => $factura,
                 'id_cliente' => $id_cliente
             );
             $agreagrFactura = new ModeloFactura();

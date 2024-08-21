@@ -6,7 +6,7 @@ class ModeloFactura
 
     function agregarFacturaModelo($dato)
     {
-        $sql = "INSERT INTO $this->tabla (id_usuario, total_factura, metodo_pago, efectivo, cambio, porcentaje, cuotas, id_cliente) VALUES (?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO $this->tabla (id_usuario, total_factura, metodo_pago, efectivo, cambio, porcentaje, cuotas,factura, id_cliente) VALUES (?,?,?,?,?,?,?,?,?)";
 
         try {
             $conn = new Conexion();
@@ -19,7 +19,8 @@ class ModeloFactura
                 $stms->bindParam(5, $dato['cambio'], PDO::PARAM_INT);
                 $stms->bindParam(6, $dato['porcentaje'], PDO::PARAM_INT);
                 $stms->bindParam(7, $dato['cuotas'], PDO::PARAM_INT);
-                $stms->bindParam(8, $dato['id_cliente'], PDO::PARAM_INT);
+                $stms->bindParam(8, $dato['factura'], PDO::PARAM_STR);
+                $stms->bindParam(9, $dato['id_cliente'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return true;

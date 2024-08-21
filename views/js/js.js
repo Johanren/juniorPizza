@@ -1,9 +1,9 @@
 function hacerClic() {
-	
+
 	var urlActual = window.location.href;
 	var hosting = window.location.hostname;
 	if (urlActual == "http://" + hosting + "/juniorPizza/factura_pdf") {
-		//document.getElementById('caja').click();
+		document.getElementById('caja').click();
 	}
 	document.getElementById('btnImprimir').click();
 	//console.log("hizo clic");
@@ -422,30 +422,33 @@ function habilitarInput() {
 		}
 	}
 }
+var urlActual = window.location.href;
+var hosting = window.location.hostname;
+//console.log(hosting);
+if (urlActual == "http://" + hosting + "/juniorPizza/configuracion") {
+	//actualizar funciones
 
-//actualizar funciones
+	$('input[type="checkbox"]').on('change', function () {
+		var datos = {};
+		$('input[type="checkbox"]').each(function () {
+			datos[$(this).attr('id')] = $(this).is(':checked');
+			console.log(datos);
+		});
 
-$('input[type="checkbox"]').on('change', function () {
-	var datos = {};
-	$('input[type="checkbox"]').each(function () {
-		datos[$(this).attr('id')] = $(this).is(':checked');
-		console.log(datos);
+		$.ajax({
+			url: 'views/actualizar.php',
+			type: 'POST',
+			data: datos,
+			success: function (response) {
+				$('#mensaje').text(response);
+				window.location = "configuracion"
+			},
+			error: function (xhr, status, error) {
+				console.error(xhr.responseText);
+			}
+		});
 	});
-
-	$.ajax({
-		url: 'views/actualizar.php',
-		type: 'POST',
-		data: datos,
-		success: function (response) {
-			$('#mensaje').text(response);
-			window.location = "configuracion"
-		},
-		error: function (xhr, status, error) {
-			console.error(xhr.responseText);
-		}
-	});
-});
-
+}
 
 //Multiplicar factura valor * cantidad
 $(document).ready(function () {

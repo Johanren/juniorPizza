@@ -221,6 +221,442 @@ if ($res != null) {
         </div>
     </div>
 </div>
+<?php
+//if (isset($_POST['facturar'])) {
+$añoActual = date('Y');
+$mesActual = date('m');
+
+// Crear un objeto DateTime para el primer día del mes actual
+$inicioMes = new DateTime("$añoActual-$mesActual-01");
+
+// Clonar el objeto para obtener la fecha de fin y modificarlo al último día del mes
+$finMes = clone $inicioMes;
+$finMes->modify('last day of this month');
+///////////////////////////////////////////////////
+date_default_timezone_set('America/Mexico_City');
+$claveTecnica = "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c"; //esta clave es generada por la DIAn
+$InvoiceAuthorization = "18760000001"; //numeor de autorizacion por la dian
+$StartDate = "2019-01-19"; //fecha inico de factura por DIAN
+$EndDate = "2030-01-19"; // Fecha fin de factura por DIAN
+$Prefix = "SETG"; //Prefijo dado por DINA
+$From = "980000000"; // Inicio de facturas por DIAN
+$To = "985000000"; // Fin de facturas por Dian
+$companyNit = "11206481"; // Nit dado por DIAN
+$SoftwareID = "fa326ca7-c1f8-40d3-a6fc-24d7c1040607"; //ID software dado por DIAN
+$ping = "20191"; //Ping dado por DIan
+$AuthorizationProviderID = "800197268"; //Autorización Provider dado por DIAN
+
+
+$CustomizationID = "10"; //TIpo de Operación por DIAN
+$ProfileExecutionID = "2"; //1 si es produccion 2 si es pruebas
+$ID = $Prefix . $From;
+$IssueDate = $fechaActal = date('Y-m-d');
+$IssueTime = $fechaActal = date('H:i:s') . "-05:00";
+$InvoiceTypeCode = "01"; //Tipo de factura
+$LineCountNumeric = "1";
+$InvoiceStartDate = $inicioMes->format('Y-m-d');
+$InvoiceEndDate = $finMes->format('Y-m-d');
+
+//Información de la empresa
+$AdditionalAccountID = "1"; //1 si es natural 2 si es juridico
+$IndustryClasificationCode = "5440"; //codigo de la empresa
+$CompanyName = $res[0]['nombre_local'];
+$CompanyPostalCode = "252431"; //codigo postal ciudad
+$CompanyCity = "Girardot"; //nombre ciudad
+$CompanyDepto = "Cundinamarca"; //nombre departamento
+$CompanyDeptoCode = "97"; //codigo departamento
+$CompanyAddres = $res[0]['direccion'];
+$TaxLevelCode = "0-23"; //codigo significativo fiscal contribuyente, si son varios se pueden separar por ;
+$cityCode = "25307"; //codigo de la ciudad
+$TaxSchemeId = "01";
+$TaxSchemeName = "IVA";
+$MatriculaMercantil = "";
+//Información del cliente
+$AdditionalAccountID = "1"; //si la persona es natural es 1 si es juridio es 2
+$CustomerName = "25307"; //nombre cliente
+$CustomerCityCode = "25307"; //codigo postal ciudad clietne
+$CustomerCity = "Girardot"; //ciudad cliente cliente
+$CustomerDepto = "Cundinamarca"; //departamentyo cliente
+$customerDeptoCode  = "97"; //departamento codigo cliente
+$CustomerAddress = $res[0]['direccion']; //direcccion cliente
+$customerNit = $resCliente[0]['numero_cc'];
+$CostomerIdCode = "13"; //Tipo de Identificación clciente Nota: realizar modificacion para agregar codigo documento
+$SoftwareSecurityCode = hash('sha384', $SoftwareID . $ping . $customerNit);
+
+///////////Metodo de Pago
+
+$PaymentMeansID = "1"; // 1 si es contado 2 si es credito
+$PaymentMeansCode = "10"; //Agregar segun anexo tenico DIAN
+
+$TaxableAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
+$TaxAmount = $resFactura[0]['total_factura'];
+$Percent = 0;
+///
+$LineExtensionAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
+$AllowanceTotalAmount = "0";
+$TaxExclusiveAmount = "0";
+$TaxInclusiveAmount = $resFactura[0]['total_factura'];
+$PayableAmount = $resFactura[0]['total_factura'];
+
+
+///
+$codImpt1 = "01";
+$valorImpt1 = $TaxAmount;
+$codImpt2 = "04";
+$valorImpt2 = 0.00;
+$codImpt3 = "03";
+$valorImpt3 = 0.00;
+number_format($LineExtensionAmount, 2);
+$cufe = $ID . $IssueDate . $IssueTime . $LineExtensionAmount . $codImpt1 . $valorImpt1 . $codImpt2 . $valorImpt2 . $codImpt3 . $valorImpt3 . $PayableAmount . $companyNit . $customerNit . $claveTecnica . $ProfileExecutionID; //Concatenación cufe
+$UUID = hash('sha384', $cufe);
+////
+$QRCode = "NroFactura=$ID
+						NitFacturador=$companyNit
+						NitAdquiriente=$customerNit
+						FechaFactura=$IssueDate
+						ValorTotalFactura=$PayableAmount
+						CUFE=$UUID
+						URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=$UUID"; //Datos de la factura
+
+
+$xml = formHeadXML() .
+    formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix, $From, $To, $companyNit, $SoftwareID, $SoftwareSecurityCode, $AuthorizationProviderID, $QRCode) .
+    formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $IssueDate, $IssueTime, $InvoiceTypeCode, $LineCountNumeric, $InvoiceStartDate, $InvoiceEndDate) .
+    formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $CompanyName, $CompanyPostalCode, $companyNit, $CompanyCity, $CompanyDepto, $CompanyDeptoCode, $CompanyAddres, $TaxLevelCode, $cityCode, $TaxSchemeId, $TaxSchemeName) .
+    formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode, $CustomerCity, $CustomerDepto, $customerDeptoCode, $CustomerAddress, $CostomerIdCode, $customerNit) .
+    formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Percent, $TaxAmount, $LineExtensionAmount, $AllowanceTotalAmount, $TaxExclusiveAmount, $TaxInclusiveAmount, $PayableAmount) .
+    formLineXML($resVenta);
+
+validarXML($xml);
+
+function getErrors()
+{
+    $errors = libxml_get_errors();
+    $formattedErrors = '';
+
+    foreach ($errors as $error) {
+        $formattedErrors .= displayLibxmlError($error);
+    }
+
+    libxml_clear_errors();
+
+    return $formattedErrors;
+}
+
+function displayLibxmlError($error)
+{
+    $return = "";
+
+    switch ($error->level) {
+        case LIBXML_ERR_WARNING:
+            $return .= "Warning $error->code: ";
+            break;
+        case LIBXML_ERR_ERROR:
+            $return .= "Error $error->code: ";
+            break;
+        case LIBXML_ERR_FATAL:
+            $return .= "Fatal Error $error->code: ";
+            break;
+    }
+
+    $return .= trim($error->message);
+
+    if ($error->file) {
+        $return .= " in $error->file";
+    }
+
+    $return .= " on line $error->line\n";
+
+    return $return;
+}
+
+function validarXML($doc)
+{
+
+    libxml_use_internal_errors(true);
+
+    $xml = new DOMDocument();
+    $xml->loadXML($doc);
+    $doc_validator = "C:/xampp/htdocs/juniorPizza/views/xmlValidator/UBL-Invoice-2.1.xsd";
+
+    if ($xml->schemaValidate($doc_validator)) {
+        echo "enviado";
+    } else {
+        echo getErrors();
+        echo "fallo";
+    }
+}
+
+
+function formHeadXML()
+{
+    $xml = '<Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:sts="dian:gov:co:facturaelectronica:Structures-2-1" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd">';
+    return $xml;
+}
+
+function formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix, $From, $To, $companyNit, $SoftwareID, $SoftwareSecurityCode, $AuthorizationProviderID, $QRCode)
+{
+    $xml = "
+    <ext:UBLExtensions>
+      <ext:UBLExtension>
+         <ext:ExtensionContent>
+            <sts:DianExtensions>
+               <sts:InvoiceControl>
+                  <sts:InvoiceAuthorization>$InvoiceAuthorization</sts:InvoiceAuthorization>
+						<sts:AuthorizationPeriod>
+                     <cbc:StartDate>$StartDate</cbc:StartDate>
+                     <cbc:EndDate>$EndDate</cbc:EndDate>
+						</sts:AuthorizationPeriod>
+                  <sts:AuthorizedInvoices>
+							<sts:Prefix>
+								$Prefix
+							</sts:Prefix>
+                     <sts:From>
+								$From
+							</sts:From>
+                     <sts:To>
+								$To
+							</sts:To>
+                  </sts:AuthorizedInvoices>
+               </sts:InvoiceControl>
+               <sts:InvoiceSource>
+						 <cbc:IdentificationCode listAgencyID='6' listAgencyName='United Nations Economic Commission for Europe' listSchemeURI='urn:oasis:names:specification:ubl:codelist:gc:CountryIdentificationCode-2.1'>CO</cbc:IdentificationCode>
+               </sts:InvoiceSource>
+					<sts:SoftwareProvider>
+						<sts:ProviderID schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' schemeID='4' schemeName='31'>
+							$companyNit
+						</sts:ProviderID>
+                  <sts:SoftwareID schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)'>
+							$SoftwareID
+						</sts:SoftwareID>
+               </sts:SoftwareProvider>
+					<sts:SoftwareSecurityCode schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)'>
+						$SoftwareSecurityCode
+					</sts:SoftwareSecurityCode>
+					<sts:AuthorizationProvider>
+						<sts:AuthorizationProviderID schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' schemeID='4' schemeName='31'>
+							$AuthorizationProviderID
+						</sts:AuthorizationProviderID>
+					</sts:AuthorizationProvider>
+					<sts:QRCode>
+						$QRCode
+					</sts:QRCode>
+				</sts:DianExtensions>
+			</ext:ExtensionContent>
+		</ext:UBLExtension>
+		<ext:UBLExtension>
+			<ext:ExtensionContent>
+            
+			</ext:ExtensionContent>
+		</ext:UBLExtension>
+	</ext:UBLExtensions>
+    ";
+    return $xml;
+}
+
+function formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $IssueDate, $IssueTime, $InvoiceTypeCode, $LineCountNumeric, $InvoiceStartDate, $InvoiceEndDate)
+{
+    $xml = "<cbc:UBLVersionID>
+		UBL 2.1
+	</cbc:UBLVersionID>
+	<cbc:CustomizationID>$CustomizationID</cbc:CustomizationID>
+	<cbc:ProfileID>DIAN 2.1</cbc:ProfileID>
+	<cbc:ProfileExecutionID>$ProfileExecutionID</cbc:ProfileExecutionID>
+	<cbc:ID>$ID</cbc:ID>
+	<cbc:UUID schemeID='2' schemeName='CUFE-SHA384'>$UUID</cbc:UUID>
+	<cbc:IssueDate>$IssueDate</cbc:IssueDate>
+	<cbc:IssueTime>$IssueTime</cbc:IssueTime>
+	<cbc:InvoiceTypeCode>$InvoiceTypeCode</cbc:InvoiceTypeCode>
+	<cbc:DocumentCurrencyCode listAgencyID='6' listAgencyName='United Nations Economic Commission for Europe' listID='ISO 4217 Alpha'>COP</cbc:DocumentCurrencyCode>
+	<cbc:LineCountNumeric>$LineCountNumeric</cbc:LineCountNumeric>
+	<cac:InvoicePeriod>
+		<cbc:StartDate>$InvoiceStartDate</cbc:StartDate>
+		<cbc:EndDate>$InvoiceEndDate</cbc:EndDate>
+	</cac:InvoicePeriod>
+    ";
+    return $xml;
+}
+
+function formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $CompanyName, $CompanyPostalCode, $companyNit, $CompanyCity, $CompanyDepto, $CompanyDeptoCode, $CompanyAddres, $TaxLevelCode, $cityCode, $TaxSchemeId, $TaxSchemeName)
+{
+    $xml = "<cac:AccountingSupplierParty>
+		<cbc:AdditionalAccountID>$AdditionalAccountID</cbc:AdditionalAccountID>
+		<cac:Party>
+			<cac:PartyName>
+				<cbc:Name>$CompanyName</cbc:Name>
+			</cac:PartyName>
+			<cac:PhysicalLocation>
+				<cac:Address>
+					<cbc:ID>$CompanyPostalCode</cbc:ID>
+					<cbc:CityName>$CompanyCity</cbc:CityName>
+					<cbc:CountrySubentity>$CompanyDepto</cbc:CountrySubentity>
+					<cbc:CountrySubentityCode>$CompanyDeptoCode</cbc:CountrySubentityCode>
+					<cac:AddressLine>
+						<cbc:Line>$CompanyAddres</cbc:Line>
+					</cac:AddressLine>
+					<cac:Country>
+						<cbc:IdentificationCode>CO</cbc:IdentificationCode>
+						<cbc:Name languageID='es'>Colombia</cbc:Name>
+					</cac:Country>
+				</cac:Address>
+			</cac:PhysicalLocation>
+			<cac:PartyTaxScheme>
+				<cbc:RegistrationName>$CompanyName</cbc:RegistrationName>
+				<cbc:CompanyID schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' schemeID='4' schemeName='31'>$companyNit</cbc:CompanyID>
+				<cbc:TaxLevelCode listName='05'>$TaxLevelCode</cbc:TaxLevelCode>
+				<cac:RegistrationAddress>
+                    <cbc:ID>$cityCode</cbc:ID>
+					<cbc:CityName>$CompanyCity</cbc:CityName>
+					<cbc:CountrySubentity>$CompanyDepto</cbc:CountrySubentity>
+					<cbc:CountrySubentityCode>$CompanyDeptoCode</cbc:CountrySubentityCode>
+					<cac:AddressLine>
+						<cbc:Line>$CompanyAddres</cbc:Line>
+					</cac:AddressLine>
+					<cac:Country>
+                        <cbc:IdentificationCode>CO</cbc:IdentificationCode>
+						<cbc:Name languageID='es'>Colombia</cbc:Name>
+					</cac:Country>
+				</cac:RegistrationAddress>
+				<cac:TaxScheme>
+					<cbc:ID>$TaxSchemeId</cbc:ID>
+					<cbc:Name>$TaxSchemeName</cbc:Name>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>$companyNit</cbc:RegistrationName>
+				<cbc:CompanyID schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' schemeID='9' schemeName='31'>$companyNit</cbc:CompanyID>
+			</cac:PartyLegalEntity>
+		</cac:Party>
+	</cac:AccountingSupplierParty>";
+    return $xml;
+}
+
+function formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode, $CustomerCity, $CustomerDepto, $customerDeptoCode, $CustomerAddress, $CostomerIdCode, $customerNit)
+{
+    $xml = "
+    <cac:AccountingCustomerParty>
+		<cbc:AdditionalAccountID>$AdditionalAccountID</cbc:AdditionalAccountID>
+		<cac:Party>
+			<cac:PartyName>
+				<cbc:Name>$CustomerName</cbc:Name>
+			</cac:PartyName>
+			<cac:PhysicalLocation>
+				<cac:Address>
+					<cbc:ID>$CustomerCityCode</cbc:ID>
+					<cbc:CityName>$CustomerCity</cbc:CityName>
+					<cbc:CountrySubentity>$CustomerDepto</cbc:CountrySubentity>
+					<cbc:CountrySubentityCode>$customerDeptoCode</cbc:CountrySubentityCode>
+					<cac:AddressLine>
+						<cbc:Line>$CustomerAddress</cbc:Line>
+					</cac:AddressLine>
+					<cac:Country>
+						<cbc:IdentificationCode>CO</cbc:IdentificationCode>
+						<cbc:Name languageID='es'>Colombia</cbc:Name>
+					</cac:Country>
+				</cac:Address>
+			</cac:PhysicalLocation>
+			<cac:PartyTaxScheme>
+				<cbc:RegistrationName>$CustomerName</cbc:RegistrationName>
+				<cbc:CompanyID schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' schemeName='$CostomerIdCode'>$customerNit</cbc:CompanyID>
+				<cac:TaxScheme>
+					<cbc:ID>ZY</cbc:ID>
+					<cbc:Name>No Causa</cbc:Name>
+				</cac:TaxScheme>
+			</cac:PartyTaxScheme>
+			<cac:PartyLegalEntity>
+				<cbc:RegistrationName>$CustomerName</cbc:RegistrationName>
+				<cbc:CompanyID schemeAgencyID='195' schemeAgencyName='CO, DIAN (Dirección de Impuestos y Aduanas Nacionales)' schemeID='3' schemeName='$CostomerIdCode'>$customerNit</cbc:CompanyID>
+			</cac:PartyLegalEntity>
+		</cac:Party>
+	</cac:AccountingCustomerParty>";
+    return $xml;
+}
+
+function formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Percent, $TaxAmount, $LineExtensionAmount, $AllowanceTotalAmount, $TaxExclusiveAmount, $TaxInclusiveAmount, $PayableAmount)
+{
+    $xml = "
+    <cac:PaymentMeans>
+		<cbc:ID>$PaymentMeansID</cbc:ID>
+		<cbc:PaymentMeansCode>$PaymentMeansCode</cbc:PaymentMeansCode>
+	</cac:PaymentMeans>
+	<cac:TaxTotal>
+        <cbc:TaxAmount currencyID='COP'>$TaxAmount</cbc:TaxAmount>
+		<cac:TaxSubtotal>
+			<cbc:TaxableAmount currencyID='COP'>$TaxableAmount</cbc:TaxableAmount>
+            <cbc:TaxAmount currencyID='COP'>$TaxAmount</cbc:TaxAmount>
+			<cac:TaxCategory>
+				<cbc:Percent>$Percent</cbc:Percent>
+				<cac:TaxScheme>
+					<cbc:ID>01</cbc:ID>
+					<cbc:Name>IVA</cbc:Name>
+				</cac:TaxScheme>
+			</cac:TaxCategory>
+		</cac:TaxSubtotal>
+	</cac:TaxTotal>
+	<cac:LegalMonetaryTotal>
+		<cbc:LineExtensionAmount currencyID='COP'>$LineExtensionAmount</cbc:LineExtensionAmount>
+        <cbc:TaxExclusiveAmount currencyID='COP'>$TaxExclusiveAmount</cbc:TaxExclusiveAmount>
+		<cbc:TaxInclusiveAmount currencyID='COP'>$TaxInclusiveAmount</cbc:TaxInclusiveAmount>
+		<cbc:PayableAmount currencyID='COP'>$PayableAmount</cbc:PayableAmount>
+	</cac:LegalMonetaryTotal>";
+    return $xml;
+}
+
+function formLineXML($resVenta)
+{
+    $xml = "";
+    foreach ($resVenta as $key => $value) {
+        //Productosw
+        $lineID = $key + 1; //Consecutivo de cuantos productos hay en la factura
+        $lineQty = $value['cantidad']; //Cantidad de productos vendidos
+        $AllowanceCharge = "1"; //descuento por producto
+        //Descuentos
+        $LineBaseAmount = "0"; //valor antes de descuento
+        $AllowancePercentage = "0"; //Porcentaje de descuento
+        $LineAllowanceAmount = "0"; //Descuento
+        $LineTotal = $value['precio_compra']; // Total con descuento
+        ///
+        $LineTax = "0"; //Valor IVA
+        $LineTaxPercentage = "0"; //IVA
+        //
+        $LineItemName = $value['nombre_producto']; //Nombre Producto
+        $LineTotal = $value['precio_compra']; //Total producto
+
+        $xml .= "
+        <cac:InvoiceLine>
+		<cbc:ID>$lineID</cbc:ID>
+		<cbc:InvoicedQuantity unitCode='EA'>$lineQty</cbc:InvoicedQuantity>
+        <cbc:LineExtensionAmount currencyID='COP'>$LineTotal</cbc:LineExtensionAmount>
+        <cbc:FreeOfChargeIndicator>false</cbc:FreeOfChargeIndicator>
+		<cac:TaxTotal>
+            <cbc:TaxAmount currencyID='COP'>$LineTax</cbc:TaxAmount>
+			<cac:TaxSubtotal>
+				<cbc:TaxableAmount currencyID='COP'>$LineTotal</cbc:TaxableAmount>
+				<cbc:TaxAmount currencyID='COP'>$LineTax</cbc:TaxAmount>
+				<cac:TaxCategory>
+					<cbc:Percent>$LineTaxPercentage</cbc:Percent>
+					<cac:TaxScheme>
+						<cbc:ID>01</cbc:ID>
+						<cbc:Name>IVA</cbc:Name>
+					</cac:TaxScheme>
+				</cac:TaxCategory>
+			</cac:TaxSubtotal>
+		</cac:TaxTotal>
+		<cac:Item>
+			<cbc:Description>$LineItemName</cbc:Description>
+		</cac:Item>
+		<cac:Price>
+			<cbc:PriceAmount currencyID='COP'>$LineTotal</cbc:PriceAmount>
+			<cbc:BaseQuantity unitCode='EA'>$lineQty</cbc:BaseQuantity>
+		</cac:Price>
+	</cac:InvoiceLine>
+    ";
+        return $xml . "</Invoice>";
+    }
+}
+//}
+
+?>
 <script>
     //Imprimir
 

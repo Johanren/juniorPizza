@@ -18,9 +18,11 @@ if (isset($_GET['accion'])) {
 
             echo json_encode($listarGasto);
             break;
-        case 'eliminar':
-            // Lógica para la acción 'eliminar'
-            echo "Se seleccionó la acción 'eliminar'.";
+        case 'vendido':
+            $con = new ModeloVenta();
+            $listarProducto = $con->listarProductosVendidos();
+
+            echo json_encode($listarProducto);
             break;
         default:
             // Acción por defecto si no coincide con ninguno de los casos anteriores

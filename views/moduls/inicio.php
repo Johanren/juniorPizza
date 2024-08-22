@@ -58,6 +58,11 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
     $(document).ready(function() {
         $('#exampleModalCenter').modal('toggle')
     });
+    $(document).ready(function() {
+        $('#reportes').on('click', function() {
+            $('#reporte').modal('toggle')
+        });
+    });
 </script>
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -65,8 +70,37 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Panel</h1>
-        <!--<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>-->
+        <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" id="reportes" data-bs-toggle="modal" data-bs-target="#reporte">
+            <i class="fas fa-download fa-sm text-white-50">Generar Reporte</i>
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="reporte" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg
+        ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Generar Reportes</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-grid gap-2">
+                                <a href="views/excel.php?producto=1" class="btn btn-primary">Reporte Productos</a>
+                                <a href="views/excel.php?ingrediente=1" class="btn btn-primary" type="button">Reporte Ingredientes</a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-grid gap-2">
+                                <a href="views/excel.php?productoMes=1" class="btn btn-primary">Reporte Productos Vendos del Mes</a>
+                                <a href="views/excel.php?ventaMes=1" class="btn btn-primary" type="button">Reporte Ventas del Mes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Content Row -->
@@ -234,15 +268,16 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
                         <canvas id="myPieChart"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Direct
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Social
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Referral
-                        </span>
+                        <?php
+                        $con = new ModeloVenta();
+                        $listarProducto = $con->listarProductosVendidos();
+                        foreach ($listarProducto as $key => $value) {
+                            $nombre = $value['nombre'];
+                            print "<span class='mr-2'>
+                            <i class='fas fa-circle text-primary'></i> $nombre
+                        </span>";
+                        }
+                        ?>
                     </div>
                 </div>
             </div>

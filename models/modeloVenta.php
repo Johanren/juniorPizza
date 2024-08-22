@@ -283,17 +283,17 @@ class ModeloVenta
             // Establece la conexión a la base de datos
             $conn = new Conexion();
             $pdo = $conn->conectar();
-        
+
             // Habilita la revisión de claves foráneas
             $sql_enable_fk = "SET FOREIGN_KEY_CHECKS=1";
             $stmt_enable_fk = $pdo->prepare($sql_enable_fk);
             $stmt_enable_fk->execute();
-        
+
             // Consulta para eliminar registros
             $sql_delete = "DELETE FROM {$this->tabla} WHERE id_factura = ?";
             $stmt_delete = $pdo->prepare($sql_delete);
             $stmt_delete->bindParam(1, $id, PDO::PARAM_INT);
-        
+
             // Ejecuta la consulta para eliminar registros
             if ($stmt_delete->execute()) {
                 return true;
@@ -304,6 +304,27 @@ class ModeloVenta
             // Manejo de excepciones
             echo "Error: " . $e->getMessage();
             return false;
+        }
+    }
+
+    function listarProductosVendidos()
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m');
+        $fechaActal = $fechaActal . "%";
+        $sql = "SELECT producto.nombre_producto AS nombre, SUM(cantidad) AS total_vendido FROM `venta` INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso LIKE ? GROUP BY producto.nombre_producto ORDER BY total_vendido DESC LIMIT 5";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
         }
     }
 }

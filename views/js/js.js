@@ -1313,9 +1313,14 @@ $(document).ready(function () {
 		var total = parseFloat(totalInput.value.replace(/,/g, ''));
 		// Sumar el total por elemento al total de factura
 		totalFactura += totalPorElemento;
+		let valor_total_elems = document.querySelectorAll('.precio_uni');
+		let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
+			return elem.value.replace(/,/g, '');
+		});
+		let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
 		//console.log(totalFactura);
 		// Formatear el total de factura con comas
-		var totalFacturaFormateado = totalFactura.toLocaleString('en-US');
+		var totalFacturaFormateado = suma.toLocaleString('en-US');
 		var totalFormateado = precioPorUnidad.toLocaleString('en-US');
 		//console.log(totalFacturaFormateado);
 		// Actualizar el campo de total de factura con el nuevo total formateado

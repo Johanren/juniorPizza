@@ -141,7 +141,7 @@ class ControladorProducto
         $listar = new ModeloProducto();
         $res = $listar->eliminaProductoIdModelo($id);
         if ($res == true) {
-            echo '<script>window.location="eliminarIngredeinte"</script>';
+            echo '<script>window.location="eliminarProducto"</script>';
         }
     }
 }

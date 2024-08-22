@@ -306,11 +306,11 @@ if (isset($_GET['id_nomina'])) {
                             }));
                         }*/
                         $btnImprimir.addEventListener("click", () => {
-                            const nombreImpresora = "Xprinter1";
+                            const nombreImpresora = "caja";
                             if (!nombreImpresora) {
                                 return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
                             }
-                            imprimirTabla("Xprinter1");
+                            imprimirTabla("caja");
                         });
                     }
 

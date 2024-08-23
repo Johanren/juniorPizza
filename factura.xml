@@ -44,10 +44,10 @@
                                 NroFactura=SETG980000000
                                 NitFacturador=11206481
                                 NitAdquiriente=11111111
-                                FechaFactura=2024-08-21
-                                ValorTotalFactura=38000
-                                CUFE=a6f5031fe666089c083bddcd28930e190547f3e180b022c9193ab687edf3d26a6803b4a01908baaa150b86d51b17ce53
-                                URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=a6f5031fe666089c083bddcd28930e190547f3e180b022c9193ab687edf3d26a6803b4a01908baaa150b86d51b17ce53
+                                FechaFactura=2024-08-22
+                                ValorTotalFactura=83000
+                                CUFE=319e287fac287b0e5cfa7c03bb817556fabd2d08ecc2419bf82d97cdb49474d05a7771da926ed5dd1c30b9ce82b4be7b
+                                URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=319e287fac287b0e5cfa7c03bb817556fabd2d08ecc2419bf82d97cdb49474d05a7771da926ed5dd1c30b9ce82b4be7b
                             </sts:QRCode>
                         </sts:DianExtensions>
                     </ext:ExtensionContent>
@@ -136,9 +136,9 @@
             <cbc:ProfileID>DIAN 2.1</cbc:ProfileID>
             <cbc:ProfileExecutionID>2</cbc:ProfileExecutionID>
             <cbc:ID>SETG980000000</cbc:ID>
-            <cbc:UUID schemeID='2' schemeName='CUFE-SHA384'>a6f5031fe666089c083bddcd28930e190547f3e180b022c9193ab687edf3d26a6803b4a01908baaa150b86d51b17ce53</cbc:UUID>
-            <cbc:IssueDate>2024-08-21</cbc:IssueDate>
-            <cbc:IssueTime>15:31:18-05:00</cbc:IssueTime>
+            <cbc:UUID schemeID='2' schemeName='CUFE-SHA384'>319e287fac287b0e5cfa7c03bb817556fabd2d08ecc2419bf82d97cdb49474d05a7771da926ed5dd1c30b9ce82b4be7b</cbc:UUID>
+            <cbc:IssueDate>2024-08-22</cbc:IssueDate>
+            <cbc:IssueTime>15:41:22-05:00</cbc:IssueTime>
             <cbc:InvoiceTypeCode>01</cbc:InvoiceTypeCode>
             <cbc:DocumentCurrencyCode listAgencyID='6' listAgencyName='United Nations Economic Commission for Europe' listID='ISO 4217 Alpha'>COP</cbc:DocumentCurrencyCode>
             <cbc:LineCountNumeric>1</cbc:LineCountNumeric>
@@ -235,10 +235,10 @@
                 <cbc:PaymentMeansCode>10</cbc:PaymentMeansCode>
             </cac:PaymentMeans>
             <cac:TaxTotal>
-                <cbc:TaxAmount currencyID='COP'>38000</cbc:TaxAmount>
+                <cbc:TaxAmount currencyID='COP'>83000</cbc:TaxAmount>
                 <cac:TaxSubtotal>
-                    <cbc:TaxableAmount currencyID='COP'>38000</cbc:TaxableAmount>
-                    <cbc:TaxAmount currencyID='COP'>38000</cbc:TaxAmount>
+                    <cbc:TaxableAmount currencyID='COP'>83000</cbc:TaxableAmount>
+                    <cbc:TaxAmount currencyID='COP'>83000</cbc:TaxAmount>
                     <cac:TaxCategory>
                         <cbc:Percent>0</cbc:Percent>
                         <cac:TaxScheme>
@@ -249,20 +249,20 @@
                 </cac:TaxSubtotal>
             </cac:TaxTotal>
             <cac:LegalMonetaryTotal>
-                <cbc:LineExtensionAmount currencyID='COP'>38000</cbc:LineExtensionAmount>
+                <cbc:LineExtensionAmount currencyID='COP'>83000</cbc:LineExtensionAmount>
                 <cbc:TaxExclusiveAmount currencyID='COP'>0</cbc:TaxExclusiveAmount>
-                <cbc:TaxInclusiveAmount currencyID='COP'>38000</cbc:TaxInclusiveAmount>
-                <cbc:PayableAmount currencyID='COP'>38000</cbc:PayableAmount>
+                <cbc:TaxInclusiveAmount currencyID='COP'>83000</cbc:TaxInclusiveAmount>
+                <cbc:PayableAmount currencyID='COP'>83000</cbc:PayableAmount>
             </cac:LegalMonetaryTotal>
                 <cac:InvoiceLine>
                 <cbc:ID>1</cbc:ID>
                 <cbc:InvoicedQuantity unitCode='EA'>1</cbc:InvoicedQuantity>
-                <cbc:LineExtensionAmount currencyID='COP'>8000</cbc:LineExtensionAmount>
+                <cbc:LineExtensionAmount currencyID='COP'>83000</cbc:LineExtensionAmount>
                 <cbc:FreeOfChargeIndicator>false</cbc:FreeOfChargeIndicator>
                 <cac:TaxTotal>
                     <cbc:TaxAmount currencyID='COP'>0</cbc:TaxAmount>
                     <cac:TaxSubtotal>
-                        <cbc:TaxableAmount currencyID='COP'>8000</cbc:TaxableAmount>
+                        <cbc:TaxableAmount currencyID='COP'>83000</cbc:TaxableAmount>
                         <cbc:TaxAmount currencyID='COP'>0</cbc:TaxAmount>
                         <cac:TaxCategory>
                             <cbc:Percent>0</cbc:Percent>
@@ -274,39 +274,11 @@
                     </cac:TaxSubtotal>
                 </cac:TaxTotal>
                 <cac:Item>
-                    <cbc:Description>Gaseosa 1.5 l</cbc:Description>
+                    <cbc:Description>Pizza Grande</cbc:Description>
                 </cac:Item>
                 <cac:Price>
-                    <cbc:PriceAmount currencyID='COP'>8000</cbc:PriceAmount>
+                    <cbc:PriceAmount currencyID='COP'>83000</cbc:PriceAmount>
                     <cbc:BaseQuantity unitCode='EA'>1</cbc:BaseQuantity>
-                </cac:Price>
-            </cac:InvoiceLine>
-            
-                <cac:InvoiceLine>
-                <cbc:ID>2</cbc:ID>
-                <cbc:InvoicedQuantity unitCode='EA'>2</cbc:InvoicedQuantity>
-                <cbc:LineExtensionAmount currencyID='COP'>30000</cbc:LineExtensionAmount>
-                <cbc:FreeOfChargeIndicator>false</cbc:FreeOfChargeIndicator>
-                <cac:TaxTotal>
-                    <cbc:TaxAmount currencyID='COP'>0</cbc:TaxAmount>
-                    <cac:TaxSubtotal>
-                        <cbc:TaxableAmount currencyID='COP'>30000</cbc:TaxableAmount>
-                        <cbc:TaxAmount currencyID='COP'>0</cbc:TaxAmount>
-                        <cac:TaxCategory>
-                            <cbc:Percent>0</cbc:Percent>
-                            <cac:TaxScheme>
-                                <cbc:ID>01</cbc:ID>
-                                <cbc:Name>IVA</cbc:Name>
-                            </cac:TaxScheme>
-                        </cac:TaxCategory>
-                    </cac:TaxSubtotal>
-                </cac:TaxTotal>
-                <cac:Item>
-                    <cbc:Description>Super Perro Con Papas</cbc:Description>
-                </cac:Item>
-                <cac:Price>
-                    <cbc:PriceAmount currencyID='COP'>30000</cbc:PriceAmount>
-                    <cbc:BaseQuantity unitCode='EA'>2</cbc:BaseQuantity>
                 </cac:Price>
             </cac:InvoiceLine>
             </Invoice>

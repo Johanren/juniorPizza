@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Models/conexion.php';
+require_once '../models/conexion.php';
 require_once '../models/modeloVenta.php';
 require_once '../models/modeloGasto.php';
 

@@ -904,7 +904,7 @@ $('body').on('click', '#cc', function () {
 	$(this).autocomplete({
 		source: function (request, response) {
 			$.ajax({
-				url: 'Views/ajax.php',
+				url: 'views/ajax.php',
 				type: 'get',
 				dataType: 'json',
 				data: { cc: request.term },
@@ -949,7 +949,7 @@ $(document).ready(function () {
 				inicio = posicion[i];
 				arrayQR.push(codigobarra);
 				$.ajax({
-					url: 'Views/ajax.php',
+					url: 'views/ajax.php',
 					type: 'get',
 					dataType: 'json',
 					data: { codigo1: codigo },
@@ -1006,7 +1006,7 @@ $(document).ready(function () {
 		$('#' + id).autocomplete({
 			source: function (request, response) {
 				$.ajax({
-					url: 'Views/ajax.php',
+					url: 'views/ajax.php',
 					type: 'get',
 					dataType: 'json',
 					data: { nombre: request.term },
@@ -1022,7 +1022,7 @@ $(document).ready(function () {
 
 				// AJAX
 				$.ajax({
-					url: 'Views/ajax.php',
+					url: 'views/ajax.php',
 					type: 'get',
 					data: { userid: userid, request: 2 },
 					dataType: 'json',

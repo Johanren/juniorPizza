@@ -1,7 +1,7 @@
 <?php
 
 header('Content-Type: application/json');
-require_once '../Models/conexion.php';
+require_once '../models/conexion.php';
 $conn = new Conexion();
 $accion = (isset($_GET['accion'])) ? $_GET['accion'] : 'leer';
 switch ($accion) {

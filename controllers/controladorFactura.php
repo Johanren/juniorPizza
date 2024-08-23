@@ -6,7 +6,7 @@ class ControladorFactura
     {
         if (isset($_POST['agregarFactrua'])) {
             #Agregar Factura
-            $factura  = (isset($_POST['factrua'])) ? $_POST['factrua'] : "false";
+            $factura  = (isset($_POST['factura'])) ? $_POST['factura'] : "false";
             $nombre = $_POST['nombre'];
             $placa = $_POST['placa'];
             $observacion = $_POST['observacion'];

@@ -29,6 +29,19 @@ class ControladorVenta
         }
     }
 
+    function consultarVentaDiaFactura()
+    {
+        if (isset($_POST['consultar'])) {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaDiaFactura($_POST['buscar']);
+            return $res;
+        } else {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaDiaFactura('');
+            return $res;
+        }
+    }
+
     function ventaTotalDia()
     {
         if (isset($_POST['consultar'])) {
@@ -134,6 +147,4 @@ class ControladorVenta
             }
         }
     }
-
-    
 }

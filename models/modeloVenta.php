@@ -55,9 +55,17 @@ class ModeloVenta
         $fechaActal = date('Y-m-d');
 
         if ($fecha != null) {
-            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ?";
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ?";
+            } else {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_usuario = ?";
+            }
         } else {
-            $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ?";
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ?";
+            } else {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_usuario = ?";
+            }
         }
 
         try {
@@ -65,10 +73,69 @@ class ModeloVenta
             $stms = $conn->conectar()->prepare($sql);
             if ($fecha != null) {
                 $fecha = $fecha . "%";
-                $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
             } else {
                 $fechaActal = $fechaActal . "%";
-                $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function consultarVentaDiaFactura($fecha)
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m-d');
+
+        if ($fecha != null) {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND factura = 'true'";
+            } else {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_usuario = ? AND factura = 'true'";
+            }
+        } else {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND factura = 'true'";
+            } else {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_usuario = ? AND factura = 'true'";
+            }
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($fecha != null) {
+                $fecha = $fecha . "%";
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
+            } else {
+                $fechaActal = $fechaActal . "%";
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -86,9 +153,17 @@ class ModeloVenta
         $fechaActal = date('Y-m-d');
 
         if ($fecha != null) {
-            $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
+            } else {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_usuario = ?";
+            }
         } else {
-            $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ?";
+            } else {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_usuario = ?";
+            }
         }
 
         try {
@@ -96,10 +171,20 @@ class ModeloVenta
             $stms = $conn->conectar()->prepare($sql);
             if ($fecha != null) {
                 $fecha = $fecha . "%";
-                $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
             } else {
                 $fechaActal = $fechaActal . "%";
-                $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -213,21 +298,45 @@ class ModeloVenta
     {
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
-        $fechaActal = $fechaActal . "%";
-        if ($metodo == null) {
-            $sql = "SELECT DISTINCT(metodo_pago) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura  WHERE fecha_factura like ?";
+        if (isset($_POST['buscar'])) {
+            $fechaActal = $_POST['buscar'] . "%";
         } else {
-            $sql = "SELECT SUM(venta.precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_factura like ? AND metodo_pago = ?";
+            $fechaActal = $fechaActal . "%";
+        }
+
+        if ($metodo == null) {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT DISTINCT(metodo_pago) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura  WHERE fecha_factura like ?";
+            } else {
+                $sql = "SELECT DISTINCT(metodo_pago) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura  WHERE fecha_factura like ? AND venta.id_usuario = ?";
+            }
+        } else {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT SUM(venta.precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_factura like ? AND metodo_pago = ?";
+            } else {
+                $sql = "SELECT SUM(venta.precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_factura like ? AND metodo_pago = ? AND venta.id_usuario = ?";
+            }
         }
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($metodo == null) {
-                $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
             } else {
-                $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
-                $stms->bindParam(2, $metodo, PDO::PARAM_STR);
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $metodo, PDO::PARAM_STR);
+                } else {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $metodo, PDO::PARAM_STR);
+                    $stms->bindParam(3, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                }
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();

@@ -24,7 +24,7 @@ $resLocal = $activo->listarLocal();
 $user = new ControladorCliente();
 $user->agregarCLiente();
 $res = $user->listarCliente();
-if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cajero") {
     echo '<script>window.location="inicio"</script>';
 }
 if (isset($_GET['id_cliente'])) {

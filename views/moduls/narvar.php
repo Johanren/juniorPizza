@@ -52,7 +52,7 @@ if ($ress != null) {
         Interfas
     </div>
     <?php
-    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cajero") {
     } else {
     ?>
         <!-- Nav Item - Pages Collapse Menu -->
@@ -66,12 +66,27 @@ if ($ress != null) {
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Menú:</h6>
-                    <a class="collapse-item" href="ingredientes">Ingredientes</a>
-                    <a class="collapse-item" href="productos">Productos</a>
-                    <a class="collapse-item" href="ingrediente_Producto">Productos & ingredientes</a>
-                    <a class="collapse-item" href="promocion">Promociones</a>
-                    <a class="collapse-item" href="categoria">Categoria</a>
-                    <a class="collapse-item" href="medida">Medida</a>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    } else { ?><a class="collapse-item" href="ingredientes">Ingredientes</a>
+                    <?php } ?>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    ?>
+                        <a class="collapse-item" href="productos">Productos</a>
+                    <?php
+                    } else { ?><a class="collapse-item" href="productos">Productos</a>
+                    <?php } ?>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    } else { ?><a class="collapse-item" href="ingrediente_Producto">Productos & ingredientes</a>
+                    <?php } ?>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    } else { ?><a class="collapse-item" href="promocion">Promociones</a>
+                    <?php } ?>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    } else { ?><a class="collapse-item" href="categoria">Categoria</a>
+                    <?php } ?>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    } else { ?><a class="collapse-item" href="medida">Medida</a>
+                    <?php } ?>
                 </div>
             </div>
         </li>
@@ -104,7 +119,7 @@ if ($ress != null) {
     }
     ?>
     <?php
-    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+    if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cajero") {
     } else {
     ?>
         <!-- Nav Item - Utilities Collapse Menu -->
@@ -118,8 +133,17 @@ if ($ress != null) {
             <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Menu:</h6>
-                    <a class="collapse-item" href="usuario">Usuario</a>
-                    <a class="collapse-item" href="cliente">Cliente</a>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    ?>
+                    <?php
+                    } else { ?><a class="collapse-item" href="usuario">Usuario</a>
+                    <?php } ?>
+                    <?php if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+                    ?>
+                        <a class="collapse-item" href="cliente">Cliente</a>
+                    <?php
+                    } else { ?><a class="collapse-item" href="cliente">Cliente</a>
+                    <?php } ?>
                     <?php if ($_SESSION['rol'] != "Administrador") {
                     } else { ?><a class="collapse-item" href="local">local</a>
                     <?php } ?>

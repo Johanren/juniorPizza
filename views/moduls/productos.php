@@ -21,7 +21,7 @@ if (isset($_GET['action'])) {
 $user = new ControladorProducto();
 $user->agregarProducto();
 $res = $user->listarProducto();
-if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente") {
+if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cajero") {
     echo '<script>window.location="inicio"</script>';
 }
 if (isset($_GET['id'])) {

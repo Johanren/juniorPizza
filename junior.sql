@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-06-2024 a las 00:00:27
+-- Tiempo de generación: 27-08-2024 a las 20:36:42
 -- Versión del servidor: 10.4.21-MariaDB
 -- Versión de PHP: 7.3.31
 
@@ -39,6 +39,30 @@ CREATE TABLE `activo` (
 INSERT INTO `activo` (`id_activo`, `nombre_activo`) VALUES
 (1, 'Activo'),
 (2, 'Inactivo');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `apertura`
+--
+
+CREATE TABLE `apertura` (
+  `id_apertura` int(11) NOT NULL,
+  `monto` int(11) NOT NULL,
+  `fecha_apertura` datetime NOT NULL DEFAULT current_timestamp(),
+  `fecha_cierre` datetime DEFAULT NULL,
+  `cierre` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `apertura`
+--
+
+INSERT INTO `apertura` (`id_apertura`, `monto`, `fecha_apertura`, `fecha_cierre`, `cierre`) VALUES
+(9, 300000, '2024-08-21 15:09:17', '2024-08-21 15:42:39', 'true'),
+(10, 300000, '2024-08-21 15:42:52', '2024-08-21 15:44:13', 'true'),
+(11, 300000, '2024-08-21 15:44:17', '2024-08-21 15:45:36', 'true'),
+(12, 300000, '2024-08-21 15:45:40', NULL, 'false');
 
 -- --------------------------------------------------------
 
@@ -88,8 +112,61 @@ CREATE TABLE `cliente` (
 
 INSERT INTO `cliente` (`id_cliente`, `primer_nombre`, `segundo_nombre`, `primer_apellido`, `segundo_apellido`, `numero_cc`, `correo`, `id_local`) VALUES
 (3, 'Jogan', 'Felipe', 'Rengifo', 'Solarte', 1070586140, 'feliperenjifoz@gmail.com', 1),
-(5, 'NNNN', 'NNNN', 'NNNN', '', 11111111, 'feliperenjifoz@gmail.com', 1),
+(5, 'NNNN', 'NNNN', 'NNNN', '', 222222222222, 'feliperenjifoz@gmail.com', 1),
 (6, 'Cristian', '', 'Silva', '', 11111111, 'feliperenjifoz@gmail.com', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cliente_taller`
+--
+
+CREATE TABLE `cliente_taller` (
+  `id_cliente_taller` int(11) NOT NULL,
+  `nombre_cliente` text DEFAULT NULL,
+  `nombre_empresa` text DEFAULT NULL,
+  `telefono_cliente` bigint(20) DEFAULT NULL,
+  `recibido` text DEFAULT NULL,
+  `fecha_entrada` datetime NOT NULL DEFAULT current_timestamp(),
+  `fecha_salida` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `cliente_taller`
+--
+
+INSERT INTO `cliente_taller` (`id_cliente_taller`, `nombre_cliente`, `nombre_empresa`, `telefono_cliente`, `recibido`, `fecha_entrada`, `fecha_salida`) VALUES
+(1, 'Jogan', 'prueba', 111, 'julian', '2024-06-28 13:16:03', '0000-00-00 00:00:00'),
+(2, 'Jogan', '0', 111, '111', '2024-07-04 21:41:07', '2024-07-05 21:42:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `descripcion_factura`
+--
+
+CREATE TABLE `descripcion_factura` (
+  `id_descripcion_factura` int(11) NOT NULL,
+  `nombre` text NOT NULL,
+  `placa` text NOT NULL,
+  `observacion` text NOT NULL,
+  `id_factura` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `descripcion_factura`
+--
+
+INSERT INTO `descripcion_factura` (`id_descripcion_factura`, `nombre`, `placa`, `observacion`, `id_factura`) VALUES
+(1, '0', '0', 'Prueba', 35),
+(2, 'Jogan Felipe', 'OQV07G', 'Prueba 2', 36),
+(3, '', '', '', 37),
+(4, '', '', '', 38),
+(5, 'jksajKSHA', 'OQV07G', 'kjdjhasjkdhkjashdjkashkdjashkjda', 39),
+(6, '', '', '', 40),
+(7, '', '', '', 41),
+(8, '', '', '', 42),
+(9, '', '', '', 43);
 
 -- --------------------------------------------------------
 
@@ -113,6 +190,45 @@ INSERT INTO `estado_mesa` (`id_estado_mesa`, `nombre_estado`, `color_estado`) VA
 (3, 'Preparación', 'btn btn-info'),
 (4, 'Entregado', 'btn btn-success'),
 (5, 'Pago parcial', 'btn btn-danger');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estado_vehiculo`
+--
+
+CREATE TABLE `estado_vehiculo` (
+  `id_estado_vehiculo` int(11) NOT NULL,
+  `grasa` text DEFAULT NULL,
+  `aceite` text DEFAULT NULL,
+  `desvare` text DEFAULT NULL,
+  `electrico` text DEFAULT NULL,
+  `llantas` text DEFAULT NULL,
+  `lavado` text DEFAULT NULL,
+  `freno` text DEFAULT NULL,
+  `suspencion` text DEFAULT NULL,
+  `motor` text DEFAULT NULL,
+  `muelles` text DEFAULT NULL,
+  `pintura` text DEFAULT NULL,
+  `diferencial` text DEFAULT NULL,
+  `direccion` text DEFAULT NULL,
+  `vidrio` text DEFAULT NULL,
+  `tapizado` text DEFAULT NULL,
+  `luces` text DEFAULT NULL,
+  `soldadura` text DEFAULT NULL,
+  `caja` text DEFAULT NULL,
+  `descripcion` text DEFAULT NULL,
+  `observacion` text DEFAULT NULL,
+  `id_cliente_taller` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `estado_vehiculo`
+--
+
+INSERT INTO `estado_vehiculo` (`id_estado_vehiculo`, `grasa`, `aceite`, `desvare`, `electrico`, `llantas`, `lavado`, `freno`, `suspencion`, `motor`, `muelles`, `pintura`, `diferencial`, `direccion`, `vidrio`, `tapizado`, `luces`, `soldadura`, `caja`, `descripcion`, `observacion`, `id_cliente_taller`) VALUES
+(1, 'dasdasdasdasdasdasdsadasdas', '', '', '', '', '', '', 'dasdasdasdasdasdasdsadasdas', '', '', '', '', '', '', '', '', '', 'dasdasdasdasdasdasdsadasdas', 'dasda', 'dasda', 1),
+(2, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'xzx<', 'xz<x<', 2);
 
 -- --------------------------------------------------------
 
@@ -146,6 +262,7 @@ CREATE TABLE `factura` (
   `cambio` int(11) NOT NULL,
   `porcentaje` int(11) NOT NULL,
   `cuotas` int(11) NOT NULL,
+  `factura` text NOT NULL,
   `id_cliente` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -153,31 +270,54 @@ CREATE TABLE `factura` (
 -- Volcado de datos para la tabla `factura`
 --
 
-INSERT INTO `factura` (`id_factura`, `id_usuario`, `fecha_factura`, `total_factura`, `metodo_pago`, `efectivo`, `cambio`, `porcentaje`, `cuotas`, `id_cliente`) VALUES
-(1, 23, '2024-05-09', 19001, 'nequi', 20900, 1899, 0, 0, 5),
-(2, 23, '2024-05-09', 29700, 'transfferencia', 29700, 0, 0, 0, 5),
-(3, 23, '2024-05-09', 41800, 'efectivo', 821, 0, 0, 0, 5),
-(4, 23, '2024-05-09', 11000, 'efectivo', 20000, 9000, 0, 0, 5),
-(5, 23, '2024-05-09', 11000, 'nequi', 11000, 0, 0, 0, 5),
-(6, 23, '2024-05-10', 15000, 'daviplata', 15000, 0, 0, 0, 5),
-(8, 23, '2024-05-12', 11000, 'daviplata', 20000, 9000, 0, 0, 5),
-(9, 23, '2024-05-12', 22000, 'efectivo', 50000, 28000, 0, 0, 5),
-(10, 23, '2024-05-13', 60000, 'efectivo', 60500, 0, 0, 0, 5),
-(11, 23, '2024-05-16', 33000, 'efectivo', 50000, 17000, 0, 0, 5),
-(12, 23, '2024-05-21', 33000, 'efectivo', 40000, 7000, 0, 0, 5),
-(13, 23, '2024-06-05', 19000, 'efectivo', 50000, 31000, 0, 0, 5),
-(14, 23, '2024-06-12', 11000, 'efectivo', 1000, 0, 0, 0, 3),
-(15, 23, '2024-06-12', 66000, 'efectivo', 0, 0, 0, 0, 5),
-(16, 23, '2024-06-12', 66000, 'efectivo', 0, 0, 0, 0, 5),
-(17, 23, '2024-06-12', 11020, 'efectivo', 0, 0, 0, 0, 5),
-(18, 23, '2024-06-12', 8020, 'efectivo', 0, 0, 0, 0, 5),
-(19, 23, '2024-06-12', 8020, 'efectivo', 0, 0, 10, 0, 5),
-(20, 23, '2024-06-12', 48000, 'efectivo', 0, 0, 20, 32, 5),
-(21, 23, '2024-06-12', 40000, 'efectivo', 0, 0, 20, 32, 5),
-(22, 23, '2024-06-12', 0, 'efectivo', 0, 0, 20, 32, 5),
-(23, 23, '2024-06-12', 9600, 'efectivo', 300, -9600, 20, 32, 5),
-(24, 23, '2024-06-12', 11000, 'efectivo', 11000, 0, 0, -1, 5),
-(25, 23, '2024-06-12', 25000, 'nequi', 25000, 0, 0, 0, 5);
+INSERT INTO `factura` (`id_factura`, `id_usuario`, `fecha_factura`, `total_factura`, `metodo_pago`, `efectivo`, `cambio`, `porcentaje`, `cuotas`, `factura`, `id_cliente`) VALUES
+(1, 23, '2024-05-09', 19001, 'nequi', 20900, 1899, 0, 0, '', 5),
+(2, 23, '2024-05-09', 29700, 'transfferencia', 29700, 0, 0, 0, '', 5),
+(3, 23, '2024-05-09', 41800, 'efectivo', 821, 0, 0, 0, '', 5),
+(4, 23, '2024-05-09', 11000, 'efectivo', 20000, 9000, 0, 0, '', 5),
+(5, 23, '2024-05-09', 11000, 'nequi', 11000, 0, 0, 0, '', 5),
+(6, 23, '2024-05-10', 15000, 'daviplata', 15000, 0, 0, 0, '', 5),
+(8, 23, '2024-05-12', 11000, 'daviplata', 20000, 9000, 0, 0, '', 5),
+(9, 23, '2024-05-12', 22000, 'efectivo', 50000, 28000, 0, 0, '', 5),
+(10, 23, '2024-05-13', 60000, 'efectivo', 60500, 0, 0, 0, '', 5),
+(11, 23, '2024-05-16', 33000, 'efectivo', 50000, 17000, 0, 0, '', 5),
+(12, 23, '2024-05-21', 33000, 'efectivo', 40000, 7000, 0, 0, '', 5),
+(13, 23, '2024-06-05', 19000, 'efectivo', 50000, 31000, 0, 0, '', 5),
+(14, 23, '2024-06-12', 11000, 'efectivo', 1000, 0, 0, 0, '', 3),
+(15, 23, '2024-06-12', 66000, 'efectivo', 0, 0, 0, 0, '', 5),
+(16, 23, '2024-06-12', 66000, 'efectivo', 0, 0, 0, 0, '', 5),
+(17, 23, '2024-06-12', 11020, 'efectivo', 0, 0, 0, 0, '', 5),
+(18, 23, '2024-06-12', 8020, 'efectivo', 0, 0, 0, 0, '', 5),
+(19, 23, '2024-06-12', 8020, 'efectivo', 0, 0, 10, 0, '', 5),
+(20, 23, '2024-06-12', 48000, 'efectivo', 0, 0, 20, 32, '', 5),
+(21, 23, '2024-06-12', 40000, 'efectivo', 0, 0, 20, 32, '', 5),
+(22, 23, '2024-06-12', 0, 'efectivo', 0, 0, 20, 32, '', 5),
+(23, 23, '2024-06-25', 9600, 'efectivo', 600, -9300, 20, 0, '', 5),
+(24, 23, '2024-06-12', 11000, 'efectivo', 11000, 0, 0, -1, '', 5),
+(25, 23, '2024-06-12', 25000, 'nequi', 25000, 0, 0, 0, '', 5),
+(26, 23, '2024-06-17', 20900, 'efectivo', 50000, 29100, 0, 0, '', 5),
+(27, 23, '2024-06-19', 12100, 'daviplata', 12100, 0, 0, 0, '', 5),
+(28, 23, '2024-06-24', 90000, 'efectivo', 90000, 0, 0, 0, '', 5),
+(29, 23, '2024-06-24', 100000, 'efectivo', 100000, 0, 0, 0, '', 5),
+(30, 23, '2024-06-24', 100000, 'efectivo', 100000, 0, 0, 0, '', 5),
+(31, 23, '2024-06-25', 8, 'efectivo', 4000, 3992, 0, 0, '', 3),
+(32, 23, '2024-06-25', 8000, 'efectivo', 4000, -4000, 0, 0, '', 5),
+(33, 23, '2024-06-26', 16000, 'efectivo', 6000, -10000, 0, 0, '', 5),
+(34, 23, '2024-06-27', 22000, 'observacion', 22000, 0, 0, 0, '', 5),
+(35, 23, '2024-06-27', 22000, 'observacion', 22000, 0, 0, 0, '', 5),
+(36, 23, '2024-06-27', 8000, 'observacion', 8000, 0, 0, 0, '', 5),
+(37, 23, '2024-06-27', 11000, 'efectivo', 11000, 0, 0, 0, '', 5),
+(38, 23, '2024-06-27', 8000, 'efectivo', 8000, 0, 0, 0, '', 5),
+(39, 23, '2024-07-05', 8000, 'observacion', 8000, 0, 0, 0, '', 5),
+(40, 23, '2024-07-25', 8800, 'efectivo', 8800, 0, 0, 0, '', 5),
+(41, 23, '2024-08-13', 4000, 'efectivo', 4000, 0, 0, 0, 'true', 5),
+(42, 23, '2024-08-21', 38000, 'efectivo', 38000, 0, 0, 0, 'true', 6),
+(43, 23, '2024-08-22', 8000, 'efectivo', 8000, 0, 0, 0, 'false', 6),
+(44, 23, '2024-08-22', 8000, 'efectivo', 8000, 0, 0, 0, 'false', 6),
+(45, 23, '2024-08-22', 11000, 'efectivo', 11000, 0, 0, 0, 'false', 6),
+(46, 23, '2024-08-22', 83000, 'efectivo', 83000, 0, 0, 0, 'true', 6),
+(47, 23, '2024-08-27', 16000, 'efectivo', 16000, 0, 0, 0, 'true', 6),
+(48, 24, '2024-08-27', 16000, 'efectivo', 16000, 0, 0, 0, 'false', 6);
 
 -- --------------------------------------------------------
 
@@ -443,7 +583,41 @@ INSERT INTO `factura_proeevedor` (`id_factura_proeevedor`, `id_categoria`, `id_p
 (238, 14, 1, 23, 1, 1, 'Salchipizza Porcion', 11000, -54, 0, 0, '2024-05-27', 0, 1),
 (239, 14, 1, 23, 1, 1, 'Salchipizza Porcion', 11000, -10, 0, 0, '2024-05-27', 0, 1),
 (240, 5, 1, 23, 1, 57, 'Prueba', 0, 0, 0, 0, '2024-05-31', 0, 1),
-(241, 1, 1, 23, 1, 0, 'prueba 1', 0, 0, 0, 0, '2024-05-31', 0, 1);
+(241, 1, 1, 23, 1, 0, 'prueba 1', 0, 0, 0, 0, '2024-05-31', 0, 1),
+(242, 13, 1, 23, 2, 16, 'Gaseosa 400 ml', 4000, 20, 50000, 2500, '2024-07-22', 50000, 1),
+(243, 11, 1, 23, 1, 21, 'Prueba 1', 4000, 100, 0, 0, '2024-07-25', 0, 1),
+(244, 1, 1, 23, 1, 0, 'prueba', 0, 100, 0, 0, '2024-07-25', 0, 1),
+(245, 12, 1, 24, 1, 54554, 'Prueba 2', 1000, 0, 0, 0, '2024-08-21', 0, 1),
+(246, 12, 1, 24, 1, 54554, 'Prueba 2', 1000, 100, 0, 0, '2024-08-21', 0, 1),
+(247, 1, 1, 24, 1, 0, 'Prueba 2', 0, 0, 0, 0, '2024-08-21', 0, 1),
+(248, 14, 1, 26, 1, 1, 'Salchipizza Porcion', 11000, 100, 0, 0, '2024-08-27', 0, 1),
+(249, 14, 1, 26, 1, 1, 'Salchipizza Porcion', 11000, 100, 0, 0, '2024-08-27', 0, 1),
+(250, 14, 1, 26, 1, 1, 'Salchipizza Porcion', 11000, 100, 0, 0, '2024-08-27', 0, 1),
+(251, 14, 1, 23, 1, 1, 'Salchipizza Porcion', 11000, 100, 0, 0, '2024-08-27', 0, 1),
+(252, 4, 1, 23, 1, 100, 'prueba 3', 1000, 0, 0, 0, '2024-08-27', 0, 1),
+(253, 14, 1, 23, 1, 1, 'Salchipizza Porcion', 11000, -100, 0, 0, '2024-08-27', 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `firmas`
+--
+
+CREATE TABLE `firmas` (
+  `id_firma` int(11) NOT NULL,
+  `firmaCliente` text DEFAULT NULL,
+  `firmaTecnico` text DEFAULT NULL,
+  `firmaVehiculo` text DEFAULT NULL,
+  `id_cliente_taller` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `firmas`
+--
+
+INSERT INTO `firmas` (`id_firma`, `firmaCliente`, `firmaTecnico`, `firmaVehiculo`, `id_cliente_taller`) VALUES
+(1, 'Jogan', 'Jogan', 'Jogan', 1),
+(2, 'dasd', 'asdas', 'dsa', 2);
 
 -- --------------------------------------------------------
 
@@ -465,9 +639,13 @@ CREATE TABLE `funiones` (
 --
 
 INSERT INTO `funiones` (`id_funciones`, `nombre_campo`, `nombre_confi`, `descripcion`, `Nota`, `estado`) VALUES
-(1, 'impresionPos', 'Configuración impresión POS Cocina', 'Al Habilitar esta función el sistema reconocerá cuando el mesero haya realizado una comanda.', 'Nota: Es recomendable usar esta función cuando no se tenga una pantalla en la cocina.', 'true'),
-(3, 'propina', 'Configuración de propinas', 'Al habilitar esta función automáticamente el sistema cobrara una propina al usuario la cual se calcula según el precio de la factura y se cargara a la factura.', 'Nota: Esta propina podrá ser modificada por si el cliente quiere agregar o disminuir la propina.', 'true'),
-(4, 'dueda', 'Configuración para Deudas', 'Al habilitar esta configuración se visualizara el tema de prestamos o deuda sobre algún producto.', 'Nota: Solo se habilitara si prestas dinero o dejas productos a cuotas.', 'true');
+(1, 'impresionPos', 'Configuración impresión POS Cocina', 'Al Habilitar esta función el sistema reconocerá cuando el mesero haya realizado una comanda.', 'Nota: Es recomendable usar esta función cuando no se tenga una pantalla en la cocina.', 'false'),
+(3, 'propina', 'Configuración de propinas', 'Al habilitar esta función automáticamente el sistema cobrara una propina al usuario la cual se calcula según el precio de la factura y se cargara a la factura.', 'Nota: Esta propina podrá ser modificada por si el cliente quiere agregar o disminuir la propina.', 'false'),
+(4, 'dueda', 'Configuración para Deudas', 'Al habilitar esta configuración se visualizara el tema de prestamos o deuda sobre algún producto.', 'Nota: Solo se habilitara si prestas dinero o dejas productos a cuotas.', 'false'),
+(5, 'precio', 'Cambia el precio de los producto.', 'Se habilita esta funcion para realizar un pago más rapido.', 'Nota: Se aclara que esta función es solo para dar registrar más de prisa.', 'false'),
+(6, 'taller', 'Historial Taller', 'Al habilitar esta funcion se habilita las historias de trabajo, descripción de factura.', 'Nota: Esta funcion es netamente para talleres. ', 'false'),
+(7, 'factura', 'Factura Electrónica', 'Al activar esta funcion ahora podrás generar factura electrónica aun cliente que lo requiera o necesite.', '', 'true'),
+(8, 'envioCorreo', 'Configurar envió de facturas a administrador', 'Al habilitar esta función cada vez que se actualice o se registre un producto se enviara una copia la administrador de dicha factura.', 'Nota: Habilitar solo si se requiere.', 'false');
 
 -- --------------------------------------------------------
 
@@ -490,7 +668,9 @@ CREATE TABLE `gasto` (
 INSERT INTO `gasto` (`id_gasto`, `nombre_gasto`, `total`, `descripcion`, `fecha_ingreso`) VALUES
 (1, 'prueba1', 10000, 'dasdasd', '2024-05-13 12:29:54'),
 (3, 'prueba', 9000, '', '2024-05-27 10:36:25'),
-(4, 'dasd', 9000, '', '2024-05-27 10:36:34');
+(4, 'dasd', 9000, '', '2024-05-27 10:36:34'),
+(5, 'dsa', 1000, '', '2024-06-19 09:30:42'),
+(6, 'prueba', 2000, 'prueba\r\n', '2024-07-25 13:48:52');
 
 -- --------------------------------------------------------
 
@@ -556,7 +736,9 @@ INSERT INTO `ingrediente` (`id_ingrediente`, `nombre_ingrediente`, `id_medida`, 
 (43, 'Salchica', 1, 0, 1),
 (44, 'Peperoni', 1, 1000, 1),
 (45, 'Papas a la francesa', 1, 1000, 1),
-(46, 'Salsa bechamel', 1, 1000, 1);
+(46, 'Salsa bechamel', 1, 1000, 1),
+(48, 'prueba', 1, -20, 1),
+(49, 'Prueba 2', 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -824,7 +1006,9 @@ INSERT INTO `ingrediente_producto` (`id_ingrediente_producto`, `id_producto`, `i
 (246, 51, 45, 0),
 (247, 51, 42, 0),
 (248, 52, 15, 0),
-(249, 52, 46, 0);
+(249, 52, 46, 0),
+(250, 58, 48, 10),
+(251, 58, 48, 10);
 
 -- --------------------------------------------------------
 
@@ -845,7 +1029,30 @@ CREATE TABLE `local` (
 --
 
 INSERT INTO `local` (`id_local`, `nombre_local`, `nit`, `direccion`, `telefono`) VALUES
-(1, 'local 1', '1111', 'Mz J Casa 15', 111111);
+(1, 'local 2', '1111', 'Mz J Casa 15', 111111);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `material_vehiculo`
+--
+
+CREATE TABLE `material_vehiculo` (
+  `id_material_vehiculo` int(11) NOT NULL,
+  `material` text DEFAULT NULL,
+  `id_cliente_taller` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `material_vehiculo`
+--
+
+INSERT INTO `material_vehiculo` (`id_material_vehiculo`, `material`, `id_cliente_taller`) VALUES
+(1, 'Jamon y queso Porcion', 1),
+(2, 'Gaseosa 400 ml', 1),
+(3, 'Pollo y Maiz Porcion', 1),
+(4, 'Agua en Botella', 1),
+(5, '', 2);
 
 -- --------------------------------------------------------
 
@@ -885,7 +1092,6 @@ CREATE TABLE `mesa` (
 --
 
 INSERT INTO `mesa` (`id_mesa`, `nombre_mesa`, `id_estado_mesa`, `id_piso`) VALUES
-(5, 'Mesa 1', 1, 1),
 (6, 'Mesa 2', 1, 1),
 (7, 'Mesa 3', 1, 1),
 (8, 'Mesa 4', 1, 1),
@@ -937,23 +1143,10 @@ CREATE TABLE `pedido` (
 --
 
 INSERT INTO `pedido` (`id_pedido`, `id_mesa`, `id_producto`, `producto`, `descripcion`, `cantidad`, `id_estado_mesa`, `fecha_ingreso`, `id_usuario`, `print`, `cocina`, `pago`) VALUES
-(1, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso, Queso, Pollo, Champiñones, Jamon, Queso, Piña, Jamon, Queso, Jamon, Queso, Pollo, Queso, Pollo, Maiz tierno, Champiñones, Maiz tierno, Tomate, Cebollita, Pimenton, Per', 1, 4, '2024-05-07 10:51:45', 23, 1, 0, 0),
-(2, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso, Queso, Pollo, Champiñones, Champiñones, Maiz tierno, Tomate, Cebollita, Pimenton, Perejil, Queso, Carne bolañesa, Jalapeño, Doritos', 1, 4, '2024-05-09 10:38:22', 23, 1, 0, 1),
-(3, 5, 17, 'Gaseosa 1.5 l', '', 1, 4, '2024-05-09 10:38:22', 23, 1, 0, 1),
-(4, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso, Queso, Pollo, Champiñones, Champiñones, Maiz tierno, Tomate, Cebollita, Pimenton, Perejil, Queso, Carne bolañesa, Jalapeño, Doritos', 1, 4, '2024-05-09 10:54:44', 23, 1, 0, 1),
-(5, 5, 17, 'Gaseosa 1.5 l', '', 2, 4, '2024-05-09 10:54:44', 23, 1, 0, 1),
-(6, 5, 38, 'Super Perro Con Papas', 'Salsa De La Casa, Salchipapa americana original, Pan perro, Queso Doble Crema, Piña melada, Cebollita picada, Papa ripio, Papas a la francesa', 2, 3, '2024-05-09 11:03:23', 23, 1, 0, 1),
-(7, 5, 17, 'Gaseosa 1.5 l', '', 1, 3, '2024-05-09 11:03:23', 23, 1, 0, 1),
-(8, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso, Queso, Pollo, Champiñones, Jamon, Queso, Piña, Jamon, Queso, Jamon, Queso, Pollo, Queso, Pollo, Maiz tierno, Champiñones, Maiz tierno, Tomate, Cebollita, Pimenton, Per', 5, 4, '2024-05-13 11:01:46', 23, 1, 1, 1),
-(9, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso, Queso, Pollo, Champiñones, Jamon, Queso, Piña, Jamon, Queso, Jamon, Queso, Pollo, Queso, Pollo, Maiz tierno, Champiñones, Maiz tierno, Tomate, Cebollita, Pimenton, Per', 1, 3, '2024-05-13 11:25:51', 23, 1, 0, 0),
-(10, 5, 16, 'Gaseosa 400 ml', '', 2, 3, '2024-05-13 11:25:51', 23, 1, 0, 0),
-(11, 5, 17, 'Gaseosa 1.5 l', '', 1, 3, '2024-05-13 11:25:51', 23, 1, 0, 0),
-(12, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso', 1, 3, '2024-05-13 11:25:51', 23, 1, 0, 0),
-(13, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso', 1, 4, '2024-05-14 22:05:07', 23, 1, 0, 0),
-(14, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Queso, Queso, Pollo, Champiñones, Champiñones, Maiz tierno, Tomate, Cebollita, Pimenton, Perejil, Queso, Carne bolañesa, Jalapeño, Doritos', 2, 4, '2024-05-16 13:21:40', 23, 1, 0, 1),
-(15, 5, 16, 'Gaseosa 400 ml', '', 2, 4, '2024-05-16 13:21:40', 23, 1, 0, 1),
-(16, 5, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon, Queso', 1, 4, '2024-05-17 23:07:01', 23, 1, 0, 0),
-(17, 5, 16, 'Gaseosa 400 ml', '', 2, 4, '2024-05-17 23:07:01', 23, 1, 0, 0);
+(18, 6, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon', 1, 4, '2024-06-17 18:24:16', 23, 0, 0, 1),
+(19, 6, 17, 'Gaseosa 1.5 l', '', 1, 4, '2024-06-17 18:24:16', 23, 0, 0, 1),
+(20, 6, 1, 'Salchipizza Porcion', 'Salchicha llanera, Jamon', 1, 4, '2024-06-19 09:25:13', 23, 0, 0, 1),
+(21, 6, 58, 'Prueba 1', 'prueba, prueba', 2, 4, '2024-07-25 13:46:35', 23, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1001,14 +1194,14 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`id_producto`, `id_proeevedor`, `codigo_producto`, `nombre_producto`, `precio_unitario`, `cantidad_producto`, `id_categoria`, `id_medida`, `id_local`) VALUES
-(1, 1, 1, 'Salchipizza Porcion', 11000, 3, 14, 1, 1),
+(1, 1, 1, 'Salchipizza Porcion', 11000, 300, 14, 1, 1),
 (2, 1, 2, 'Pollo con Champiñones Porcion', 11000, 99, 14, 1, 1),
-(3, 1, 3, 'Hawaiana Porcion', 11000, 100, 14, 1, 1),
-(4, 1, 4, 'Jamon y queso Porcion', 11000, 100, 14, 1, 1),
+(3, 1, 3, 'Hawaiana Porcion', 11000, 98, 14, 1, 1),
+(4, 1, 4, 'Jamon y queso Porcion', 11000, 99, 14, 1, 1),
 (5, 1, 5, 'Jamon y pollo Porcion', 11000, 97, 14, 1, 1),
 (6, 1, 6, 'Pollo y Maiz Porcion', 11000, 99, 14, 1, 1),
 (7, 1, 7, 'Pizza Medida', 58000, 98, 14, 1, 1),
-(8, 1, 8, 'Pizza Grande', 83000, 100, 14, 1, 1),
+(8, 1, 8, 'Pizza Grande', 83000, 96, 14, 1, 1),
 (9, 1, 9, 'Pizza Vegetariana Porcion', 11000, 100, 11, 1, 1),
 (10, 1, 10, 'La Queso Porcion', 11000, 100, 11, 1, 1),
 (11, 1, 11, 'Ranchera Porcion', 11000, 100, 11, 1, 1),
@@ -1016,12 +1209,12 @@ INSERT INTO `producto` (`id_producto`, `id_proeevedor`, `codigo_producto`, `nomb
 (13, 1, 13, 'Peperoni Porcion', 11000, 100, 11, 1, 1),
 (14, 1, 14, 'Napolitana Porcion', 11000, 100, 11, 1, 1),
 (15, 1, 15, 'Pizza Mexicana Porcion', 11000, 100, 11, 1, 1),
-(16, 2, 16, 'Gaseosa 400 ml', 4000, 129, 13, 2, 1),
-(17, 2, 17, 'Gaseosa 1.5 l', 8000, 132, 13, 2, 1),
+(16, 1, 16, 'Gaseosa 400 ml', 4000, 139, 13, 2, 1),
+(17, 2, 17, 'Gaseosa 1.5 l', 8000, 124, 13, 2, 1),
 (18, 1, 18, 'Gaseosa 2.5 l', 10000, 100, 13, 2, 1),
 (19, 1, 19, 'Té Helado', 4000, 100, 13, 2, 1),
 (20, 1, 20, 'Jugos Del Valle', 4000, 100, 13, 2, 1),
-(21, 1, 21, 'Agua en Botella', 4000, 100, 13, 2, 1),
+(21, 1, 21, 'Agua en Botella', 4000, 99, 13, 2, 1),
 (22, 1, 22, 'Cerveza en Lata', 4500, 100, 13, 2, 1),
 (23, 1, 23, 'Hamburguesa Sencilla', 12500, 98, 5, 1, 1),
 (24, 1, 24, 'Hamburguesa De Res', 17500, 100, 5, 1, 1),
@@ -1038,7 +1231,7 @@ INSERT INTO `producto` (`id_producto`, `id_proeevedor`, `codigo_producto`, `nomb
 (35, 1, 35, 'Hamburguesa Hawaiana Con Francesa', 21000, 100, 5, 1, 1),
 (36, 1, 36, 'Hamburguesa Ranchera Con Francesa', 21000, 100, 5, 1, 1),
 (37, 1, 37, 'Super Perro Sencillo', 13000, 100, 4, 1, 1),
-(38, 1, 38, 'Super Perro Con Papas', 15000, 98, 4, 1, 1),
+(38, 1, 38, 'Super Perro Con Papas', 15000, 96, 4, 1, 1),
 (39, 1, 39, 'Perro Ranchero', 15000, 100, 4, 1, 1),
 (40, 1, 40, 'Perro Ranchero Con Papas', 18000, 100, 4, 1, 1),
 (41, 1, 41, 'Perro Mexicano', 14000, 100, 4, 1, 1),
@@ -1056,7 +1249,10 @@ INSERT INTO `producto` (`id_producto`, `id_proeevedor`, `codigo_producto`, `nomb
 (53, 1, 53, 'Papa a la Francesa', 7000, 100, 12, 1, 1),
 (54, 1, 54, 'Porcion de Queso', 2000, 100, 12, 1, 1),
 (55, 1, 55, 'Porcion Tocineta', 2000, 100, 12, 1, 1),
-(56, 1, 56, 'Porcion Chorizo', 3000, 100, 12, 1, 1);
+(56, 1, 56, 'Porcion Chorizo', 3000, 100, 12, 1, 1),
+(58, 1, 21, 'Prueba 1', 4000, 82, 11, 1, 1),
+(59, 1, 54554, 'Prueba 2', 1000, 100, 12, 1, 1),
+(60, 1, 100, 'prueba 3', 1000, 0, 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1096,6 +1292,15 @@ CREATE TABLE `promocion` (
   `id_activo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `promocion`
+--
+
+INSERT INTO `promocion` (`id_promocion`, `id_producto`, `id_promocion_articulo`, `cantidad_promocion_producto`, `id_activo`) VALUES
+(3, 2, 1, 2, 1),
+(4, 2, 2, 1, 1),
+(5, 58, 58, 2, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -1118,7 +1323,10 @@ INSERT INTO `propinas` (`id_propinas`, `id_factura`, `valor_propinas`, `fecha_in
 (2, 2, 2700, '2024-05-09'),
 (3, 3, 3800, '2024-05-09'),
 (4, 10, 5000, '2024-05-13'),
-(5, 11, 3000, '2024-05-16');
+(5, 11, 3000, '2024-05-16'),
+(6, 26, 1900, '2024-06-17'),
+(7, 27, 1100, '2024-06-19'),
+(8, 40, 800, '2024-07-25');
 
 -- --------------------------------------------------------
 
@@ -1168,7 +1376,33 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id_usuario`, `primer_nombre`, `segundo_nombre`, `primer_apellido`, `segundo_apellido`, `usuario`, `clave`, `foto`, `id_rol`, `id_activo`, `id_local`) VALUES
 (23, 'Jogan', 'Felipe', 'Rengifo', 'Solarte', 'JoganRen', 'Johan321', NULL, 1, 1, 1),
-(24, 'Ana', 'Sofia', 'Ochica', 'Solarte', 'Sofi', 'Sofia321', NULL, 2, 1, 1);
+(24, 'Ana', 'Sofia', 'Ochica', 'Solarte', 'Sofi', 'Sofia321', NULL, 2, 1, 1),
+(26, 'nn', '', 'nn', '', 'nn', 'nnnn', NULL, 4, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `vehiculo`
+--
+
+CREATE TABLE `vehiculo` (
+  `id_vehiculo` int(11) NOT NULL,
+  `nivel_conbusible` text DEFAULT NULL,
+  `estado_general` text DEFAULT NULL,
+  `kilometraje` text DEFAULT NULL,
+  `marca` text DEFAULT NULL,
+  `placa` text NOT NULL,
+  `linea` text DEFAULT NULL,
+  `id_cliente_taller` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `vehiculo`
+--
+
+INSERT INTO `vehiculo` (`id_vehiculo`, `nivel_conbusible`, `estado_general`, `kilometraje`, `marca`, `placa`, `linea`, `id_cliente_taller`) VALUES
+(1, '10', 'R', '100000', 'RENOLD', 'OQV07G', 'Coche', 1),
+(2, '100', 'x', '200', '10', 'OQV07G', '10', 2);
 
 -- --------------------------------------------------------
 
@@ -1224,7 +1458,31 @@ INSERT INTO `venta` (`id_venta`, `id_factura`, `id_usuario`, `id_producto`, `pes
 (30, 22, 23, 17, NULL, 0, 8000, 0, '2024-06-12'),
 (31, 23, 23, 17, NULL, 0, 8000, 0, '2024-06-12'),
 (32, 24, 23, 12, NULL, 1, 11000, 11000, '2024-06-12'),
-(33, 25, 23, 23, NULL, 2, 12500, 25000, '2024-06-12');
+(33, 25, 23, 23, NULL, 2, 12500, 25000, '2024-06-12'),
+(34, 26, 23, 1, NULL, 1, 11000, 11000, '2024-06-17'),
+(35, 26, 23, 17, NULL, 1, 8000, 8000, '2024-06-17'),
+(36, 27, 23, 1, NULL, 1, 11000, 11000, '2024-06-19'),
+(37, 28, 23, 8, NULL, 1, 83000, 83000, '2024-06-24'),
+(38, 29, 23, 8, NULL, 1, 83000, 100000, '2024-06-24'),
+(39, 30, 23, 8, NULL, 1, 83000, 100000, '2024-06-24'),
+(40, 31, 23, 16, NULL, 2, 4000, 8, '2024-06-25'),
+(41, 32, 23, 16, NULL, 2, 4000, 8000, '2024-06-25'),
+(42, 33, 23, 17, NULL, 2, 8000, 16000, '2024-06-26'),
+(43, 35, 23, 3, NULL, 2, 11000, 22000, '2024-06-27'),
+(44, 36, 23, 16, NULL, 2, 4000, 8000, '2024-06-27'),
+(45, 37, 23, 4, NULL, 1, 11000, 11000, '2024-06-27'),
+(46, 38, 23, 16, NULL, 2, 4000, 8000, '2024-06-27'),
+(47, 39, 23, 16, NULL, 2, 4000, 8000, '2024-07-05'),
+(48, 40, 23, 58, NULL, 2, 4000, 8000, '2024-07-25'),
+(49, 41, 23, 21, NULL, 1, 4000, 4000, '2024-08-13'),
+(50, 42, 23, 17, NULL, 1, 8000, 8000, '2024-08-21'),
+(51, 42, 23, 38, NULL, 2, 15000, 30000, '2024-08-21'),
+(52, 43, 23, 17, NULL, 1, 8000, 8000, '2024-08-22'),
+(53, 44, 23, 17, NULL, 1, 8000, 8000, '2024-08-22'),
+(54, 45, 23, 1, NULL, 1, 11000, 11000, '2024-08-22'),
+(55, 46, 23, 8, NULL, 1, 83000, 83000, '2024-08-22'),
+(56, 47, 23, 17, NULL, 2, 8000, 16000, '2024-08-27'),
+(57, 48, 24, 58, NULL, 4, 4000, 16000, '2024-08-27');
 
 --
 -- Índices para tablas volcadas
@@ -1235,6 +1493,12 @@ INSERT INTO `venta` (`id_venta`, `id_factura`, `id_usuario`, `id_producto`, `pes
 --
 ALTER TABLE `activo`
   ADD PRIMARY KEY (`id_activo`);
+
+--
+-- Indices de la tabla `apertura`
+--
+ALTER TABLE `apertura`
+  ADD PRIMARY KEY (`id_apertura`);
 
 --
 -- Indices de la tabla `categoria`
@@ -1251,10 +1515,30 @@ ALTER TABLE `cliente`
   ADD KEY `id_local` (`id_local`);
 
 --
+-- Indices de la tabla `cliente_taller`
+--
+ALTER TABLE `cliente_taller`
+  ADD PRIMARY KEY (`id_cliente_taller`);
+
+--
+-- Indices de la tabla `descripcion_factura`
+--
+ALTER TABLE `descripcion_factura`
+  ADD PRIMARY KEY (`id_descripcion_factura`),
+  ADD KEY `id_factura` (`id_factura`);
+
+--
 -- Indices de la tabla `estado_mesa`
 --
 ALTER TABLE `estado_mesa`
   ADD PRIMARY KEY (`id_estado_mesa`);
+
+--
+-- Indices de la tabla `estado_vehiculo`
+--
+ALTER TABLE `estado_vehiculo`
+  ADD PRIMARY KEY (`id_estado_vehiculo`),
+  ADD KEY `id_cliente_taller` (`id_cliente_taller`);
 
 --
 -- Indices de la tabla `eventos`
@@ -1280,6 +1564,13 @@ ALTER TABLE `factura_proeevedor`
   ADD KEY `id_usuario` (`id_usuario`),
   ADD KEY `id_medida` (`id_medida`),
   ADD KEY `id_local` (`id_local`);
+
+--
+-- Indices de la tabla `firmas`
+--
+ALTER TABLE `firmas`
+  ADD PRIMARY KEY (`id_firma`),
+  ADD KEY `id_cliente_taller` (`id_cliente_taller`);
 
 --
 -- Indices de la tabla `funiones`
@@ -1314,6 +1605,13 @@ ALTER TABLE `ingrediente_producto`
 --
 ALTER TABLE `local`
   ADD PRIMARY KEY (`id_local`);
+
+--
+-- Indices de la tabla `material_vehiculo`
+--
+ALTER TABLE `material_vehiculo`
+  ADD PRIMARY KEY (`id_material_vehiculo`),
+  ADD KEY `id_cliente_taller` (`id_cliente_taller`);
 
 --
 -- Indices de la tabla `medida`
@@ -1401,6 +1699,13 @@ ALTER TABLE `usuario`
   ADD KEY `id_activo` (`id_activo`);
 
 --
+-- Indices de la tabla `vehiculo`
+--
+ALTER TABLE `vehiculo`
+  ADD PRIMARY KEY (`id_vehiculo`),
+  ADD KEY `id_cliente_taller` (`id_cliente_taller`);
+
+--
 -- Indices de la tabla `venta`
 --
 ALTER TABLE `venta`
@@ -1420,6 +1725,12 @@ ALTER TABLE `activo`
   MODIFY `id_activo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT de la tabla `apertura`
+--
+ALTER TABLE `apertura`
+  MODIFY `id_apertura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
@@ -1429,13 +1740,31 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `cliente_taller`
+--
+ALTER TABLE `cliente_taller`
+  MODIFY `id_cliente_taller` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `descripcion_factura`
+--
+ALTER TABLE `descripcion_factura`
+  MODIFY `id_descripcion_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `estado_mesa`
 --
 ALTER TABLE `estado_mesa`
   MODIFY `id_estado_mesa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `estado_vehiculo`
+--
+ALTER TABLE `estado_vehiculo`
+  MODIFY `id_estado_vehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `eventos`
@@ -1447,43 +1776,55 @@ ALTER TABLE `eventos`
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
-  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_factura` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT de la tabla `factura_proeevedor`
 --
 ALTER TABLE `factura_proeevedor`
-  MODIFY `id_factura_proeevedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=242;
+  MODIFY `id_factura_proeevedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=254;
+
+--
+-- AUTO_INCREMENT de la tabla `firmas`
+--
+ALTER TABLE `firmas`
+  MODIFY `id_firma` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `funiones`
 --
 ALTER TABLE `funiones`
-  MODIFY `id_funciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_funciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `gasto`
 --
 ALTER TABLE `gasto`
-  MODIFY `id_gasto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_gasto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `ingrediente`
 --
 ALTER TABLE `ingrediente`
-  MODIFY `id_ingrediente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id_ingrediente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de la tabla `ingrediente_producto`
 --
 ALTER TABLE `ingrediente_producto`
-  MODIFY `id_ingrediente_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=250;
+  MODIFY `id_ingrediente_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=252;
 
 --
 -- AUTO_INCREMENT de la tabla `local`
 --
 ALTER TABLE `local`
   MODIFY `id_local` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `material_vehiculo`
+--
+ALTER TABLE `material_vehiculo`
+  MODIFY `id_material_vehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `medida`
@@ -1507,7 +1848,7 @@ ALTER TABLE `nomina`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_pedido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `piso`
@@ -1519,7 +1860,7 @@ ALTER TABLE `piso`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT de la tabla `proeevedor`
@@ -1531,13 +1872,13 @@ ALTER TABLE `proeevedor`
 -- AUTO_INCREMENT de la tabla `promocion`
 --
 ALTER TABLE `promocion`
-  MODIFY `id_promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_promocion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `propinas`
 --
 ALTER TABLE `propinas`
-  MODIFY `id_propinas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_propinas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -1549,13 +1890,19 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT de la tabla `vehiculo`
+--
+ALTER TABLE `vehiculo`
+  MODIFY `id_vehiculo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `venta`
 --
 ALTER TABLE `venta`
-  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_venta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- Restricciones para tablas volcadas
@@ -1572,6 +1919,12 @@ ALTER TABLE `categoria`
 --
 ALTER TABLE `cliente`
   ADD CONSTRAINT `cliente_ibfk_1` FOREIGN KEY (`id_local`) REFERENCES `local` (`id_local`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `descripcion_factura`
+--
+ALTER TABLE `descripcion_factura`
+  ADD CONSTRAINT `descripcion_factura_ibfk_1` FOREIGN KEY (`id_factura`) REFERENCES `factura` (`id_factura`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `factura`

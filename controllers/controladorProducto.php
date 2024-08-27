@@ -28,7 +28,102 @@ class ControladorProducto
                             $agregarFactura = new ControladorFacturaProeevedor();
                             $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura, $precioUnita[$i], $total[$i]);
                             if ($resFactura == true) {
-                                echo '<script>window.location="actualizarProducto"</script>';
+                                if (isset($_SESSION['envioCorreo'])) {
+                                    if ($_SESSION['envioCorreo'] == 'true') {
+
+                                        date_default_timezone_set('America/Mexico_City');
+                                        $fechaActal = date('Y-m-d');
+                                        $enviarCorreo = new ModeloFacturaProeevedor();
+                                        $resEnvioCorreo = $enviarCorreo->listarFacturaProductoModelo($id_proeevedor, $fechaActal);
+                                        $mostrar = new ModeloProeevedor();
+                                        $enviarProe = $mostrar->consultarProeevedorModelo($id_proeevedor);
+                                        $htmlContent = '<html>
+                                    <head>
+                                        <style>
+                                            table {
+                                                width: 100%;
+                                                border-collapse: collapse;
+                                            }
+                                            th, td {
+                                                border: 1px solid #ddd;
+                                                padding: 8px;
+                                            }
+                                            th {
+                                                background-color: #f4f4f4;
+                                            }
+                                            .table-responsive {
+                                                overflow-x: auto;
+                                            }
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <div class="form-row mt-2" style="text-align: center;">
+                                            <div class="form-group col-md-3"></div>
+                                            <div class="form-group col-md-6">
+                                                Proveedor: <span id="nom_proveedor">' . htmlspecialchars($enviarProe[0]['nombre_proeevedor']) . '</span><br>
+                                                NIT: <span id="nit_proveedor">' . htmlspecialchars($enviarProe[0]['nit_proeevedor']) . '</span><br>
+                                                Teléfono: <span id="tel_proveedor">' . htmlspecialchars($enviarProe[0]['telefono_proeevedor']) . '</span><br>
+                                                Dirección: <span id="dir_proveedor">' . htmlspecialchars($enviarProe[0]['direccion_proeevedor']) . '</span>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive mt-3">
+                                            <table class="table mt-2" id="producto">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Código</th>
+                                                        <th>Producto</th>
+                                                        <th>Precio</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Categoría</th>
+                                                        <th>Medida</th>
+                                                        <th>Precio Unitario</th>
+                                                        <th>Costo * Prod</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>';
+
+                                        foreach ($resEnvioCorreo as $key => $value) {
+                                            $htmlContent .= '<tr>
+                                            <td>' . htmlspecialchars($value['codigo_producto']) . '</td>
+                                            <td>' . htmlspecialchars($value['nombre_producto']) . '</td>
+                                            <td>' . htmlspecialchars(number_format($value['precio_unitario'], 0)) . '</td>
+                                            <td>' . htmlspecialchars($value['cantidad_producto']) . '</td>
+                                            <td>' . htmlspecialchars($value['nombre_categoria']) . '</td>
+                                            <td>' . htmlspecialchars($value['nombre_medida']) . '</td>
+                                            <td>' . htmlspecialchars(number_format($value['unitario'], 0)) . '</td>
+                                            <td>' . htmlspecialchars(number_format($value['total'], 0)) . '</td>
+                                        </tr>';
+                                        }
+
+                                        $htmlContent .= '</tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="7" style="text-align: right;"><strong>Total</strong></td>
+                                                    <td>' . htmlspecialchars(number_format($resEnvioCorreo[0]['pago_factura'], 0)) . '</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    </body>
+                                    </html>';
+
+                                        // Configuración del correo
+                                        $to = 'feliperenjifoz@gmail.com'; // Cambia esto por la dirección del destinatario
+                                        $subject = 'Informe de Proveedor y Productos';
+                                        $headers = "MIME-Version: 1.0" . "\r\n";
+                                        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                                        $headers .= 'From: no-reply@example.com' . "\r\n"; // Cambia esto por la dirección del remitente
+
+                                        // Enviar el correo
+                                        if (mail($to, $subject, $htmlContent, $headers)) {
+                                            echo '<script>window.location="actualizarProducto"</script>';
+                                        } else {
+                                            echo 'Hubo un error al enviar el correo.';
+                                        }
+                                    } else {
+                                        echo '<script>window.location="actualizarProducto"</script>';
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -38,7 +133,102 @@ class ControladorProducto
                             $agregarFactura = new ControladorFacturaProeevedor();
                             $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura, $precioUnita[$i], $total[$i]);
                             if ($resFactura == true) {
-                                echo '<script>window.location="agregarProducto"</script>';
+                                if (isset($_SESSION['envioCorreo'])) {
+                                    if ($_SESSION['envioCorreo'] == 'true') {
+
+                                        date_default_timezone_set('America/Mexico_City');
+                                        $fechaActal = date('Y-m-d');
+                                        $enviarCorreo = new ModeloFacturaProeevedor();
+                                        $resEnvioCorreo = $enviarCorreo->listarFacturaProductoModelo($id_proeevedor, $fechaActal);
+                                        $mostrar = new ModeloProeevedor();
+                                        $enviarProe = $mostrar->consultarProeevedorModelo($id_proeevedor);
+                                        $htmlContent = '<html>
+                                    <head>
+                                        <style>
+                                            table {
+                                                width: 100%;
+                                                border-collapse: collapse;
+                                            }
+                                            th, td {
+                                                border: 1px solid #ddd;
+                                                padding: 8px;
+                                            }
+                                            th {
+                                                background-color: #f4f4f4;
+                                            }
+                                            .table-responsive {
+                                                overflow-x: auto;
+                                            }
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <div class="form-row mt-2" style="text-align: center;">
+                                            <div class="form-group col-md-3"></div>
+                                            <div class="form-group col-md-6">
+                                                Proveedor: <span id="nom_proveedor">' . htmlspecialchars($enviarProe[0]['nombre_proeevedor']) . '</span><br>
+                                                NIT: <span id="nit_proveedor">' . htmlspecialchars($enviarProe[0]['nit_proeevedor']) . '</span><br>
+                                                Teléfono: <span id="tel_proveedor">' . htmlspecialchars($enviarProe[0]['telefono_proeevedor']) . '</span><br>
+                                                Dirección: <span id="dir_proveedor">' . htmlspecialchars($enviarProe[0]['direccion_proeevedor']) . '</span>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive mt-3">
+                                            <table class="table mt-2" id="producto">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Código</th>
+                                                        <th>Producto</th>
+                                                        <th>Precio</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Categoría</th>
+                                                        <th>Medida</th>
+                                                        <th>Precio Unitario</th>
+                                                        <th>Costo * Prod</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>';
+
+                                        foreach ($resEnvioCorreo as $key => $value) {
+                                            $htmlContent .= '<tr>
+                                            <td>' . htmlspecialchars($value['codigo_producto']) . '</td>
+                                            <td>' . htmlspecialchars($value['nombre_producto']) . '</td>
+                                            <td>' . htmlspecialchars(number_format($value['precio_unitario'], 0)) . '</td>
+                                            <td>' . htmlspecialchars($value['cantidad_producto']) . '</td>
+                                            <td>' . htmlspecialchars($value['nombre_categoria']) . '</td>
+                                            <td>' . htmlspecialchars($value['nombre_medida']) . '</td>
+                                            <td>' . htmlspecialchars(number_format($value['unitario'], 0)) . '</td>
+                                            <td>' . htmlspecialchars(number_format($value['total'], 0)) . '</td>
+                                        </tr>';
+                                        }
+
+                                        $htmlContent .= '</tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="7" style="text-align: right;"><strong>Total</strong></td>
+                                                    <td>' . htmlspecialchars(number_format($resEnvioCorreo[0]['pago_factura'], 0)) . '</td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    </body>
+                                    </html>';
+
+                                        // Configuración del correo
+                                        $to = 'feliperenjifoz@gmail.com'; // Cambia esto por la dirección del destinatario
+                                        $subject = 'Informe de Proveedor y Productos';
+                                        $headers = "MIME-Version: 1.0" . "\r\n";
+                                        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                                        $headers .= 'From: no-reply@example.com' . "\r\n"; // Cambia esto por la dirección del remitente
+
+                                        // Enviar el correo
+                                        if (mail($to, $subject, $htmlContent, $headers)) {
+                                            echo '<script>window.location="agregarProducto"</script>';
+                                        } else {
+                                            echo 'Hubo un error al enviar el correo.';
+                                        }
+                                    } else {
+                                        echo '<script>window.location="agregarProducto"</script>';
+                                    }
+                                }
                             }
                         }
                     }
@@ -80,7 +270,8 @@ class ControladorProducto
         return $res;
     }
 
-    function listarProductoExcel(){
+    function listarProductoExcel()
+    {
         $listar = new ModeloProducto();
         $res = $listar->listarProductoExcelModelo();
         return $res;

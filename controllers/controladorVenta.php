@@ -68,6 +68,19 @@ class ControladorVenta
         }
     }
 
+    function consultarVentaDiaCantidadTotalFactura($id_producto, $metodo)
+    {
+        if (isset($_POST['consultar'])) {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaDiaCantidadTotalModeloFactura($id_producto, $_POST['buscar'], $metodo);
+            return $res;
+        } else {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaDiaCantidadTotalModeloFactura($id_producto, '', $metodo);
+            return $res;
+        }
+    }
+
     function ganaciasMensualesVenta()
     {
         $ganancia = new ModeloVenta();

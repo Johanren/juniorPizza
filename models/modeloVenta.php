@@ -231,6 +231,41 @@ class ModeloVenta
         }
     }
 
+    function consultarVentaDiaCantidadTotalModeloFactura($id, $fecha, $metodo)
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m-d');
+
+        if ($fecha != null) {
+            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE id_producto = ? AND fecha_ingreso like ? AND metodo_pago = ? AND factura = 'true'";
+        } else {
+            $sql = "SELECT SUM(cantidad), CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')), SUM(peso) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE id_producto = ? AND fecha_ingreso like ? AND metodo_pago = ? AND factura = 'true'";
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($fecha != null) {
+                $fecha = $fecha . "%";
+                $stms->bindParam(1, $id, PDO::PARAM_INT);
+                $stms->bindParam(2, $fecha, PDO::PARAM_STR);
+                $stms->bindParam(3, $metodo, PDO::PARAM_STR);
+            } else {
+                $fechaActal = $fechaActal . "%";
+                $stms->bindParam(1, $id, PDO::PARAM_INT);
+                $stms->bindParam(2, $fechaActal, PDO::PARAM_STR);
+                $stms->bindParam(3, $metodo, PDO::PARAM_STR);
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
     function ganaciasMensualesVentaModelo()
     {
         date_default_timezone_set('America/Mexico_City');

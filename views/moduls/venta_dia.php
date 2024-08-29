@@ -833,7 +833,7 @@ if (isset($_POST['cierre'])) {
                 <?php
 
                 foreach ($resFactura as $key => $value) {
-                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal(
+                    $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotalFactura(
                         $value['id_producto'],
                         $value['metodo_pago']
                     );

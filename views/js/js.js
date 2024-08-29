@@ -1033,6 +1033,7 @@ $(document).ready(function () {
 							var id = data[0]['id_producto'];
 							var codigo = data[0]['codigo_producto'];
 							var name = data[0]['nombre_producto'];
+							var cantidad  = data[0]['cantidad_producto'];
 							//agregar miles
 							var valor = data[0]['precio_unitario'];
 							valor = valor.toString();
@@ -1040,14 +1041,18 @@ $(document).ready(function () {
 							var urlActual = window.location.href;
 							var hosting = window.location.hostname;
 							//console.log(hosting);
-							if (urlActual == "http://" + hosting + "/juniorPizza/caja") {
-								document.getElementById('id_articulo_' + index).value = id;
-								document.getElementById('codigo_' + index).value = codigo;
-								document.getElementById('nombre_' + index).value = name;
-								document.getElementById('valor_' + index).value = value;
-							} else {
-								document.getElementById('nombre_' + index).value = name;
-							}
+							//if (cantidad <= 0) {
+								//swal("Ups!!!!", "El producto: "+name+" esta agotado", "error");
+							//} else {
+								if (urlActual == "http://" + hosting + "/juniorPizza/caja") {
+									document.getElementById('id_articulo_' + index).value = id;
+									document.getElementById('codigo_' + index).value = codigo;
+									document.getElementById('nombre_' + index).value = name;
+									document.getElementById('valor_' + index).value = value;
+								} else {
+									document.getElementById('nombre_' + index).value = name;
+								}
+							//}
 						}
 
 					}

@@ -3,7 +3,7 @@ function hacerClic() {
 	var urlActual = window.location.href;
 	var hosting = window.location.hostname;
 	if (urlActual == "http://" + hosting + "/juniorPizza/factura_pdf") {
-		document.getElementById('caja').click();
+		//document.getElementById('caja').click();
 	}
 	document.getElementById('btnImprimir').click();
 	//console.log("hizo clic");

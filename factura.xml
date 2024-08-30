@@ -46,8 +46,8 @@
                                 NitAdquiriente=11111111
                                 FechaFactura=2024-08-29
                                 ValorTotalFactura=16000
-                                CUFE=36594375c8d3d220fb23e74ffe86e56dab76b357a8505421548d2495de7ceec2bf191e19baf3b619fb31c405034bc723
-                                URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=36594375c8d3d220fb23e74ffe86e56dab76b357a8505421548d2495de7ceec2bf191e19baf3b619fb31c405034bc723
+                                CUFE=584c1129be6b057ba0fcc3a7f2795a50f4954b3694272ddd727223fd616f1a56fbd1e4720b9c42051a03dab2137e64fb
+                                URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=584c1129be6b057ba0fcc3a7f2795a50f4954b3694272ddd727223fd616f1a56fbd1e4720b9c42051a03dab2137e64fb
                             </sts:QRCode>
                         </sts:DianExtensions>
                     </ext:ExtensionContent>
@@ -136,9 +136,9 @@
             <cbc:ProfileID>DIAN 2.1</cbc:ProfileID>
             <cbc:ProfileExecutionID>2</cbc:ProfileExecutionID>
             <cbc:ID>SETG980000000</cbc:ID>
-            <cbc:UUID schemeID='2' schemeName='CUFE-SHA384'>36594375c8d3d220fb23e74ffe86e56dab76b357a8505421548d2495de7ceec2bf191e19baf3b619fb31c405034bc723</cbc:UUID>
+            <cbc:UUID schemeID='2' schemeName='CUFE-SHA384'>584c1129be6b057ba0fcc3a7f2795a50f4954b3694272ddd727223fd616f1a56fbd1e4720b9c42051a03dab2137e64fb</cbc:UUID>
             <cbc:IssueDate>2024-08-29</cbc:IssueDate>
-            <cbc:IssueTime>09:11:24-05:00</cbc:IssueTime>
+            <cbc:IssueTime>22:02:05-05:00</cbc:IssueTime>
             <cbc:InvoiceTypeCode>01</cbc:InvoiceTypeCode>
             <cbc:DocumentCurrencyCode listAgencyID='6' listAgencyName='United Nations Economic Commission for Europe' listID='ISO 4217 Alpha'>COP</cbc:DocumentCurrencyCode>
             <cbc:LineCountNumeric>1</cbc:LineCountNumeric>

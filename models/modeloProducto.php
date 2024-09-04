@@ -72,7 +72,7 @@ class ModeloProducto
     {
         if ($dato != '') {
             $dato = '%' . $dato . '%';
-            $sql = "SELECT * FROM $this->tabla INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE nombre_producto like ? AND id_local = ? ORDER BY id_producto";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE nombre_producto like ? AND producto.id_local = ? ORDER BY id_producto";
         } else {
             $sql = "SELECT * FROM $this->tabla WHERE id_local = ? ORDER BY id_producto";
         }

@@ -18,15 +18,15 @@ class ControladorProducto
             $id_medida = $_POST['id_medida'];
             $totalFactura = str_replace(',', '', $_POST['totalFactura']);
             if ($_SESSION['rol'] == "Administrador") {
-                $id_local = $_POST['id_local'];
+                $id_local = $_SESSION['id_local'];
                 for ($i = 0; $i < count($codigo); $i++) {
                     if ($id[$i] != null) {
                         $cantidad_producto = $cant[$i] + $cantidad[$i];
                         $agreagr = new ModeloProducto();
-                        $res = $agreagr->actualizarProductoModelo($id[$i], $id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad_producto, $id_categoria[$i], $id_medida[$i], $id_local[$i]);
+                        $res = $agreagr->actualizarProductoModelo($id[$i], $id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad_producto, $id_categoria[$i], $id_medida[$i], $id_local);
                         if ($res == true) {
                             $agregarFactura = new ControladorFacturaProeevedor();
-                            $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura, $precioUnita[$i], $total[$i]);
+                            $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local, $totalFactura, $precioUnita[$i], $total[$i]);
                             if ($resFactura == true) {
                                 if (isset($_SESSION['envioCorreo'])) {
                                     if ($_SESSION['envioCorreo'] == 'true') {
@@ -128,10 +128,10 @@ class ControladorProducto
                         }
                     } else {
                         $agreagr = new ModeloProducto();
-                        $res = $agreagr->agregarProductoModelo($id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_categoria[$i], $id_medida[$i], $id_local[$i]);
+                        $res = $agreagr->agregarProductoModelo($id_proeevedor, $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_categoria[$i], $id_medida[$i], $id_local);
                         if ($res == true) {
                             $agregarFactura = new ControladorFacturaProeevedor();
-                            $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local[$i], $totalFactura, $precioUnita[$i], $total[$i]);
+                            $resFactura = $agregarFactura->agregarFacturaProeevedor($id_categoria[$i], $id_proeevedor, $_SESSION['id_usuario'], $id_medida[$i], $codigo[$i], $nombre[$i], $precio[$i], $cantidad[$i], $id_local, $totalFactura, $precioUnita[$i], $total[$i]);
                             if ($resFactura == true) {
                                 if (isset($_SESSION['envioCorreo'])) {
                                     if ($_SESSION['envioCorreo'] == 'true') {

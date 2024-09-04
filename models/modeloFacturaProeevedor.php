@@ -43,7 +43,7 @@ class ModeloFacturaProeevedor
             $fechaActal = date('Y-m-d');
         }
         if ($_SESSION['rol'] == "Administrador") {
-            $sql = "SELECT DISTINCT factura_proeevedor.pago_factura, factura_proeevedor.id_proeevedor, proeevedor.nit_proeevedor, proeevedor.nombre_proeevedor, factura_proeevedor.fecha_ingreso, proeevedor.id_local FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ?";
+            $sql = "SELECT DISTINCT factura_proeevedor.pago_factura, factura_proeevedor.id_proeevedor, proeevedor.nit_proeevedor, proeevedor.nombre_proeevedor, factura_proeevedor.fecha_ingreso, proeevedor.id_local FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_local = ?";
         } else {
             $sql = "SELECT DISTINCT factura_proeevedor.id_proeevedor, proeevedor.nit_proeevedor, proeevedor.nombre_proeevedor, factura_proeevedor.fecha_ingreso, proeevedor.id_local FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_local = ?";
         }
@@ -52,6 +52,7 @@ class ModeloFacturaProeevedor
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
         } else {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
             $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_STR);
@@ -76,7 +77,7 @@ class ModeloFacturaProeevedor
             $fechaActal = date('Y-m-d');
         }
         if ($_SESSION['rol'] == "Administrador") {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = factura_proeevedor.id_medida INNER JOIN categoria ON categoria.id_categoria = factura_proeevedor.id_categoria INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_proeevedor = ?";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = factura_proeevedor.id_medida INNER JOIN categoria ON categoria.id_categoria = factura_proeevedor.id_categoria INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_proeevedor = ? AND proeevedor.id_local = ?";
         } else {
             $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = factura_proeevedor.id_medida INNER JOIN categoria ON categoria.id_categoria = factura_proeevedor.id_categoria INNER JOIN proeevedor ON proeevedor.id_proeevedor = factura_proeevedor.id_proeevedor WHERE factura_proeevedor.fecha_ingreso = ? AND proeevedor.id_proeevedor AND proeevedor.id_local = ?";
         }
@@ -86,6 +87,7 @@ class ModeloFacturaProeevedor
         if ($_SESSION['rol'] == "Administrador") {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
             $stms->bindParam(2, $id, PDO::PARAM_STR);
+            $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
         } else {
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
             $stms->bindParam(2, $id, PDO::PARAM_STR);
@@ -107,11 +109,12 @@ class ModeloFacturaProeevedor
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
         $fechaActal = $fechaActal . "%";
-        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')),SUM(DISTINCT(pago_factura)) FROM $this->tabla WHERE fecha_ingreso like ?";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')),SUM(DISTINCT(pago_factura)) FROM $this->tabla WHERE fecha_ingreso like ? AND id_local = ?";
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
             if ($stms->execute()) {
                 return $stms->fetchAll();
             } else {
@@ -127,12 +130,13 @@ class ModeloFacturaProeevedor
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m');
         $fechaActal = $fechaActal . "%";
-        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ?";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ? AND id_local =? ";
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
             if ($stms->execute()) {
                 return $stms->fetchAll();
             } else {
@@ -148,12 +152,13 @@ class ModeloFacturaProeevedor
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y');
         $fechaActal = $fechaActal . "%";
-        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ?";
+        $sql = "SELECT CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00')) FROM $this->tabla WHERE fecha_ingreso like ? AND id_local = ?";
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
             if ($stms->execute()) {
                 return $stms->fetchAll();
             } else {

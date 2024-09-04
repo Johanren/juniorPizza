@@ -11,7 +11,7 @@ class ControladorProeevedor
                     'nit' => $_POST['nit'],
                     'dire' => $_POST['dire'],
                     'tel' => $_POST['tel'],
-                    'id_local' => $_POST['local']
+                    //'id_local' => $_POST['local']
                 );
             } else {
                 $dato = array(
@@ -19,7 +19,7 @@ class ControladorProeevedor
                     'nit' => $_POST['nit'],
                     'dire' => $_POST['dire'],
                     'tel' => $_POST['tel'],
-                    'id_local' => $_SESSION['id_local']
+                    //'id_local' => $_SESSION['id_local']
                 );
             }
             $agregar = new ModeloProeevedor();
@@ -35,7 +35,7 @@ class ControladorProeevedor
                     'nit' => $_POST['nitEdit'],
                     'dire' => $_POST['direEdit'],
                     'tel' => $_POST['telEdit'],
-                    'id_local' => $_POST['localEdit']
+                    //'id_local' => $_POST['localEdit']
                 );
             } else {
                 $dato = array(
@@ -44,7 +44,7 @@ class ControladorProeevedor
                     'nit' => $_POST['nitEdit'],
                     'dire' => $_POST['direEdit'],
                     'tel' => $_POST['telEdit'],
-                    'id_local' => $_SESSION['id_local']
+                    //'id_local' => $_SESSION['id_local']
                 );
             }
             $agregar = new ModeloProeevedor();

@@ -37,7 +37,7 @@ class ModeloUsuario
             $stms->bindParam(6, $dato['clave'], PDO::PARAM_STR);
             $stms->bindParam(7, $dato['rol'], PDO::PARAM_INT);
             $stms->bindParam(8, $dato['activo'], PDO::PARAM_INT);
-            $stms->bindParam(9, $dato['local'], PDO::PARAM_INT);
+            $stms->bindParam(9, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -53,13 +53,14 @@ class ModeloUsuario
     function listarModeloUsuario()
     {
         if ($_SESSION['rol'] == "Administrador") {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE local.id_local = ?";
         } else {
             $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE local.id_local = ?";
         }
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
+            $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         } else {
             $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         }
@@ -76,11 +77,12 @@ class ModeloUsuario
 
     function consultarUsuarioPerfilModelo($id)
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE id_usuario = ?";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE id_usuario = ? AND usuario.id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($id != '') {
             $stms->bindParam(1, $id, PDO::PARAM_INT);
+            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -96,13 +98,14 @@ class ModeloUsuario
     function listarUsuarioNominaModelo()
     {
         if ($_SESSION['rol'] == "Administrador") {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE local.id_local = ?";
         } else {
             $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE local.id_local = ?";
         }
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($_SESSION['rol'] == "Administrador") {
+            $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         } else {
             $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         }
@@ -119,11 +122,12 @@ class ModeloUsuario
 
     function listarUsuarioIdModelo($id)
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE id_usuario = ?";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN rol ON rol.id_rol = usuario.id_rol INNER JOIN activo ON activo.id_activo = usuario.id_activo INNER JOIN local ON local.id_local = usuario.id_local WHERE id_usuario = ? AND usuario.id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($id != '') {
             $stms->bindParam(1, $id, PDO::PARAM_INT);
+            $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -138,7 +142,7 @@ class ModeloUsuario
 
     function actualizarUsuarioModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET primer_nombre=?,segundo_nombre=?,primer_apellido=?,segundo_apellido=?,usuario=?,clave=?,id_rol=?,id_activo=?,id_local= ? WHERE id_usuario = ?";
+        $sql = "UPDATE $this->tabla SET primer_nombre=?,segundo_nombre=?,primer_apellido=?,segundo_apellido=?,usuario=?,clave=?,id_rol=?,id_activo=?,id_local= ? WHERE id_usuario = ? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($dato != '') {
@@ -150,8 +154,9 @@ class ModeloUsuario
             $stms->bindParam(6, $dato['clave'], PDO::PARAM_STR);
             $stms->bindParam(7, $dato['rol'], PDO::PARAM_INT);
             $stms->bindParam(8, $dato['activo'], PDO::PARAM_INT);
-            $stms->bindParam(9, $dato['local'], PDO::PARAM_INT);
+            $stms->bindParam(9, $_SESSION['id_local'], PDO::PARAM_INT);
             $stms->bindParam(10, $dato['id'], PDO::PARAM_INT);
+            $stms->bindParam(11, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -172,12 +177,13 @@ class ModeloUsuario
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($stms->execute()) {
-                $sql = "DELETE FROM $this->tabla WHERE id_usuario = ?";
+                $sql = "DELETE FROM $this->tabla WHERE id_usuario = ? AND id_local = ?";
 
                 try {
                     $conn = new Conexion();
                     $stms = $conn->conectar()->prepare($sql);
                     $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
                     if ($stms->execute()) {
                         return true;
                     } else {

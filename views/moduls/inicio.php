@@ -87,14 +87,14 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
                     <div class="row">
                         <div class="col">
                             <div class="d-grid gap-2">
-                                <a href="views/excel.php?producto=1" class="btn btn-primary">Reporte Productos</a>
-                                <a href="views/excel.php?ingrediente=1" class="btn btn-primary" type="button">Reporte Ingredientes</a>
+                                <a href="views/excel.php?producto=<?php echo $_SESSION['id_local'] ?>" class="btn btn-primary">Reporte Productos</a>
+                                <a href="views/excel.php?ingrediente=<?php echo $_SESSION['id_local'] ?>" class="btn btn-primary" type="button">Reporte Ingredientes</a>
                             </div>
                         </div>
                         <div class="col">
                             <div class="d-grid gap-2">
-                                <a href="views/excel.php?productoMes=1" class="btn btn-primary">Reporte Productos Vendos del Mes</a>
-                                <a href="views/excel.php?ventaMes=1" class="btn btn-primary" type="button">Reporte Ventas del Mes</a>
+                                <a href="views/excel.php?productoMes=<?php echo $_SESSION['id_local'] ?>" class="btn btn-primary">Reporte Productos Vendos del Mes</a>
+                                <a href="views/excel.php?ventaMes=<?php echo $_SESSION['id_local'] ?>" class="btn btn-primary" type="button">Reporte Ventas del Mes</a>
                             </div>
                         </div>
                     </div>

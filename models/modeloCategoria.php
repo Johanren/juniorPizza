@@ -5,12 +5,13 @@ class ModeloCategoria
     public $tabla = "categoria";
     function agregarCategoriaModelo($dato)
     {
-        $sql = "INSERT INTO $this->tabla (nombre_categoria, id_activo) VALUES (?,?)";
+        $sql = "INSERT INTO $this->tabla (nombre_categoria, id_activo,id_local) VALUES (?,?,?)";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($dato != '') {
             $stms->bindParam(1, $dato['cate'], PDO::PARAM_STR);
             $stms->bindParam(2, $dato['activo'], PDO::PARAM_INT);
+            $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -25,9 +26,10 @@ class ModeloCategoria
 
     function listarCategoriaModelo()
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN activo ON activo.id_activo = categoria.id_activo";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN activo ON activo.id_activo = categoria.id_activo WHERE id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -43,9 +45,9 @@ class ModeloCategoria
     {
         if ($dato != '') {
             $dato = '%' . $dato . '%';
-            $sql = "SELECT * FROM $this->tabla WHERE nombre_categoria like ? ORDER BY id_categoria ";
+            $sql = "SELECT * FROM $this->tabla WHERE nombre_categoria like ? AND id_local = ? ORDER BY id_categoria ";
         } else {
-            $sql = "SELECT * FROM $this->tabla ORDER BY id_categoria";
+            $sql = "SELECT * FROM $this->tabla WHERE id_local = ? ORDER BY id_categoria";
         }
 
         try {
@@ -53,6 +55,9 @@ class ModeloCategoria
             $stms = $conn->conectar()->prepare($sql);
             if ($dato != '') {
                 $stms->bindParam(1, $dato, PDO::PARAM_STR);
+                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+            }else{
+                $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -66,10 +71,11 @@ class ModeloCategoria
 
     function listarCategoriaIdModelo($id)
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN activo ON activo.id_activo = categoria.id_activo WHERE id_categoria = ?";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN activo ON activo.id_activo = categoria.id_activo WHERE id_categoria = ? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $id, PDO::PARAM_STR);
+        $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -83,13 +89,14 @@ class ModeloCategoria
 
     function actualizarCategoriaModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET nombre_categoria=?,id_activo=? WHERE id_categoria=?";
+        $sql = "UPDATE $this->tabla SET nombre_categoria=?,id_activo=? WHERE id_categoria=? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($dato != '') {
             $stms->bindParam(1, $dato['cate'], PDO::PARAM_STR);
             $stms->bindParam(2, $dato['activo'], PDO::PARAM_INT);
             $stms->bindParam(3, $dato['id'], PDO::PARAM_INT);
+            $stms->bindParam(4, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {

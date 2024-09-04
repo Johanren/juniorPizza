@@ -13,7 +13,7 @@ class ModeloIngrediente
             $stms->bindParam(1, $nom_ingre, PDO::PARAM_STR);
             $stms->bindParam(2, $id_medida, PDO::PARAM_INT);
             $stms->bindParam(3, $cant, PDO::PARAM_INT);
-            $stms->bindParam(4, $id_local, PDO::PARAM_INT);
+            $stms->bindParam(4, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -29,10 +29,11 @@ class ModeloIngrediente
     function listarIngredinteModelo()
     {
         if ($_SESSION['rol'] == "Administrador") {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida";
+            $id = $_SESSION['id_local'];
+            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida WHERE ingrediente.id_local = $id";
         } else {
             $id = $_SESSION['id_local'];
-            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida WHERE id_local = $id";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida WHERE ingrediente.id_local = $id";
         }
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
@@ -51,9 +52,9 @@ class ModeloIngrediente
     {
         if ($dato != '') {
             $dato = '%' . $dato . '%';
-            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida INNER JOIN local ON local.id_local = ingrediente.id_local WHERE nombre_ingrediente like ? ORDER BY id_ingrediente";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida INNER JOIN local ON local.id_local = ingrediente.id_local WHERE nombre_ingrediente like ? AND ingrediente.id_local = ? ORDER BY id_ingrediente";
         } else {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida INNER JOIN local ON local.id_local = ingrediente.id_local ORDER BY id_ingrediente";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN medida ON medida.id_medida = ingrediente.id_medida INNER JOIN local ON local.id_local = ingrediente.id_local WHERE ingrediente.id_local=? ORDER BY id_ingrediente";
         }
 
         try {
@@ -61,6 +62,9 @@ class ModeloIngrediente
             $stms = $conn->conectar()->prepare($sql);
             if ($dato != '') {
                 $stms->bindParam(1, $dato, PDO::PARAM_STR);
+                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+            }else{
+                $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -74,13 +78,14 @@ class ModeloIngrediente
 
     function mostrarIngredienteModelo($id)
     {
-        $sql = "SELECT * FROM $this->tabla  WHERE id_ingrediente = ?";
+        $sql = "SELECT * FROM $this->tabla  WHERE id_ingrediente = ? AND id_local = ?";
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($id != null) {
                 $stms->bindParam(1, $id, PDO::PARAM_INT);
+                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -94,7 +99,7 @@ class ModeloIngrediente
 
     function actualizarIngredienteFacturaModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET cantidad=? WHERE id_ingrediente=?";
+        $sql = "UPDATE $this->tabla SET cantidad=? WHERE id_ingrediente=? AND id_local = ?";
 
         try {
             $conn = new Conexion();
@@ -102,6 +107,7 @@ class ModeloIngrediente
             if ($dato != null) {
                 $stms->bindParam(1, $dato['cantidad'], PDO::PARAM_INT);
                 $stms->bindParam(2, $dato['id_ingrediente'], PDO::PARAM_INT);
+                $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return true;
@@ -115,7 +121,7 @@ class ModeloIngrediente
 
     function actualizarIngredienteModelo($id, $nom_ingre, $id_medida, $cant, $id_local)
     {
-        $sql = "UPDATE $this->tabla SET nombre_ingrediente=?,id_medida=?,cantidad=?,id_local=? WHERE id_ingrediente=?";
+        $sql = "UPDATE $this->tabla SET nombre_ingrediente=?,id_medida=?,cantidad=?,id_local=? WHERE id_ingrediente=? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($cant != '') {
@@ -124,6 +130,7 @@ class ModeloIngrediente
             $stms->bindParam(3, $cant, PDO::PARAM_INT);
             $stms->bindParam(4, $id_local, PDO::PARAM_INT);
             $stms->bindParam(5, $id, PDO::PARAM_INT);
+            $stms->bindParam(6, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -144,12 +151,13 @@ class ModeloIngrediente
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($stms->execute()) {
-                $sql = "DELETE FROM $this->tabla WHERE id_ingrediente = ?";
+                $sql = "DELETE FROM $this->tabla WHERE id_ingrediente = ? AND id_local = ?";
 
                 try {
                     $conn = new Conexion();
                     $stms = $conn->conectar()->prepare($sql);
                     $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
                     if ($stms->execute()) {
                         return true;
                     } else {

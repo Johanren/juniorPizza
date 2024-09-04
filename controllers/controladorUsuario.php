@@ -47,7 +47,7 @@ class ControladorUsuario
                     'clave' => $_POST['clave'],
                     'rol' => $_POST['rol'],
                     'activo' => $_POST['activo'],
-                    'local' => $_POST['local']
+                    //'local' => $_POST['local']
                 );
             } else {
                 $dato = array(
@@ -59,7 +59,7 @@ class ControladorUsuario
                     'clave' => $_POST['clave'],
                     'rol' => $_POST['rol'],
                     'activo' => $_POST['activo'],
-                    'local' => $_SESSION['id_local']
+                    //'local' => $_SESSION['id_local']
                 );
             }
 
@@ -80,7 +80,7 @@ class ControladorUsuario
                     'clave' => $_POST['claveEdit'],
                     'rol' => $_POST['rolEdit'],
                     'activo' => $_POST['activoEdit'],
-                    'local' => $_POST['localEdit']
+                    //'local' => $_POST['localEdit']
                 );
             } else {
                 $dato = array(
@@ -93,7 +93,7 @@ class ControladorUsuario
                     'clave' => $_POST['claveEdit'],
                     'rol' => $_POST['rolEdit'],
                     'activo' => $_POST['activoEdit'],
-                    'local' => $_SESSION['id_local']
+                    //'local' => $_SESSION['id_local']
                 );
             }
             $actualizr = new ModeloUsuario();

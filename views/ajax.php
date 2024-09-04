@@ -1,4 +1,5 @@
 <?php
+session_start();
 //controlador
 require_once '../controllers/controladorProeevedor.php';
 require_once '../controllers/controladorMedida.php';

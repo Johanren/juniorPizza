@@ -153,7 +153,7 @@ if (isset($_GET['id'])) {
                         </div>
                     </div>
                     <?php
-                    if ($_SESSION['rol'] == "Administrador") {
+                    /*if ($_SESSION['rol'] == "Administrador") {
                     ?>
                         <div class="form-row">
                             <div class="form-group col-md-4">
@@ -173,7 +173,7 @@ if (isset($_GET['id'])) {
                             </div>
                         </div>
                     <?php
-                    }
+                    }*/
                     ?>
                     <button type="submit" name="agregarCliente" class="btn btn-primary">Agregar</button>
                 </form>

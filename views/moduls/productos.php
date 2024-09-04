@@ -40,7 +40,7 @@ if (isset($_GET['id'])) {
         </div>
         <div class="col-sm-5"></div>
         <div class="col-sm-1">
-            <a href="views/excel.php?producto=1" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel fa-lg"></i></a>
+            <a href="views/excel.php?producto=<?php echo $_SESSION['id_local'] ?>" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel fa-lg"></i></a>
         </div>
     </div>
     <br>
@@ -163,11 +163,11 @@ if (isset($_GET['id'])) {
                                     <th>Categoria</th>
                                     <th>Medida</th>
                                     <?php
-                                    if ($_SESSION['rol'] == "Administrador") {
+                                    /*if ($_SESSION['rol'] == "Administrador") {
                                     ?>
                                         <th>Local</th>
                                     <?php
-                                    }
+                                    }*/
                                     ?>
                                 </tr>
                             </thead>
@@ -186,11 +186,11 @@ if (isset($_GET['id'])) {
                                     <td><input type="hidden" class="form-control" name="id_categoria[]" id="id_categoria_1" required><input type="text" required class="form-control categoria" name="" id="categoria_1"></td>
                                     <td><input type="hidden" class="form-control" name="id_medida[]" id="id_medida_1" required><input type="text" required class="form-control medida" name="" id="medida_1"></td>
                                     <?php
-                                    if ($_SESSION['rol'] == "Administrador") {
+                                    /*if ($_SESSION['rol'] == "Administrador") {
                                     ?>
                                         <td><input type="hidden" class="form-control " name="id_local[]" id="id_local_1"><input type="text" class="form-control nom_local" id="local_1"></td>
                                     <?php
-                                    }
+                                    }*/
                                     ?>
                                 </tr>
                             </tbody>

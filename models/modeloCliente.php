@@ -16,7 +16,7 @@ class ModeloCliente
             $stms->bindParam(4, $dato['segApellido'], PDO::PARAM_STR);
             $stms->bindParam(5, $dato['cc'], PDO::PARAM_STR);
             $stms->bindParam(6, $dato['email'], PDO::PARAM_STR);
-            $stms->bindParam(7, $dato['local'], PDO::PARAM_INT);
+            $stms->bindParam(7, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -31,9 +31,10 @@ class ModeloCliente
 
     function listarModeloCliente()
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN local ON local.id_local = cliente.id_local";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN local ON local.id_local = cliente.id_local WHERE cliente.id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -48,14 +49,15 @@ class ModeloCliente
     function consultarClienteAjaxModelo($dato)
     {
         if ($dato != '') {
-            $sql = "SELECT * FROM $this->tabla WHERE numero_cc like '%$dato%' ORDER BY id_cliente";
+            $sql = "SELECT * FROM $this->tabla WHERE numero_cc like '%$dato%' AND id_local = ? ORDER BY id_cliente";
         } else {
-            $sql = "SELECT * FROM $this->tabla ORDER BY id_cliente";
+            $sql = "SELECT * FROM $this->tabla WHERE id_local = ? ORDER BY id_cliente";
         }
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
             if ($stms->execute()) {
                 return $stms->fetchAll();
             } else {
@@ -68,13 +70,14 @@ class ModeloCliente
 
     function mostrarClienteFacturaVentaModelo($id)
     {
-        $sql = "SELECT * FROM $this->tabla WHERE id_cliente = ?";
+        $sql = "SELECT * FROM $this->tabla WHERE id_cliente = ? AND = id_local = ?";
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($id != null) {
                 $stms->bindParam(1, $id, PDO::PARAM_INT);
+                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -88,7 +91,7 @@ class ModeloCliente
 
     function actualizarClienteModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET primer_nombre=?,segundo_nombre=?,primer_apellido=?,segundo_apellido=?,numero_cc=?,correo=?,id_local=? WHERE id_cliente=?";
+        $sql = "UPDATE $this->tabla SET primer_nombre=?,segundo_nombre=?,primer_apellido=?,segundo_apellido=?,numero_cc=?,correo=?,id_local=? WHERE id_cliente=? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($dato != '') {
@@ -98,8 +101,9 @@ class ModeloCliente
             $stms->bindParam(4, $dato['segApellido'], PDO::PARAM_STR);
             $stms->bindParam(5, $dato['cc'], PDO::PARAM_STR);
             $stms->bindParam(6, $dato['email'], PDO::PARAM_STR);
-            $stms->bindParam(7, $dato['local'], PDO::PARAM_INT);
+            $stms->bindParam(7, $_SESSION['id_local'], PDO::PARAM_INT);
             $stms->bindParam(8, $dato['id'], PDO::PARAM_INT);
+            $stms->bindParam(9, $_SESSION['id_local'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {
@@ -114,9 +118,10 @@ class ModeloCliente
 
     function consumidorFinalCompraModelo()
     {
-        $sql = "SELECT * FROM $this->tabla WHERE numero_cc LIKE '1111%'";
+        $sql = "SELECT * FROM $this->tabla WHERE numero_cc LIKE '1111%' AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
+        $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
         try {
             if ($stms->execute()) {
                 return $stms->fetchAll();;
@@ -136,12 +141,13 @@ class ModeloCliente
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($stms->execute()) {
-                $sql = "DELETE FROM $this->tabla WHERE id_cliente = ?";
+                $sql = "DELETE FROM $this->tabla WHERE id_cliente = ? AND id_local = ?";
 
                 try {
                     $conn = new Conexion();
                     $stms = $conn->conectar()->prepare($sql);
                     $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
                     if ($stms->execute()) {
                         return true;
                     } else {

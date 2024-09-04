@@ -6,7 +6,7 @@ class ModeloFactura
 
     function agregarFacturaModelo($dato)
     {
-        $sql = "INSERT INTO $this->tabla (id_usuario, total_factura, metodo_pago, efectivo, cambio, porcentaje, cuotas,factura, id_cliente) VALUES (?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO $this->tabla (id_usuario, total_factura, metodo_pago, efectivo, cambio, porcentaje, cuotas,factura, id_cliente,id_local) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         try {
             $conn = new Conexion();
@@ -21,6 +21,7 @@ class ModeloFactura
                 $stms->bindParam(7, $dato['cuotas'], PDO::PARAM_INT);
                 $stms->bindParam(8, $dato['factura'], PDO::PARAM_STR);
                 $stms->bindParam(9, $dato['id_cliente'], PDO::PARAM_INT);
+                $stms->bindParam(10, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return true;
@@ -34,11 +35,12 @@ class ModeloFactura
 
     function mostrarUltimoId()
     {
-        $sql = "SELECT MAX(id_factura) FROM $this->tabla";
+        $sql = "SELECT MAX(id_factura) FROM $this->tabla WHERE id_local = ?";
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
             if ($stms->execute()) {
                 return $stms->fetchAll();
             } else {
@@ -51,13 +53,14 @@ class ModeloFactura
 
     function mostrarFacturaVentaModelo($id)
     {
-        $sql = "SELECT * FROM $this->tabla WHERE id_factura = ?";
+        $sql = "SELECT * FROM $this->tabla WHERE id_factura = ? AND id_local = ?";
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($id != null) {
                 $stms->bindParam(1, $id, PDO::PARAM_STR);
+                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -74,9 +77,9 @@ class ModeloFactura
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
         if ($dato != null) {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE cliente.numero_cc = ? AND factura.fecha_factura like ?";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE cliente.numero_cc = ? AND factura.fecha_factura like ? AND factura.id_local = ?";
         } else {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE factura.fecha_factura like ?";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE factura.fecha_factura like ? AND factura.id_local =? ";
         }
 
         try {
@@ -86,9 +89,11 @@ class ModeloFactura
                 $fecha = $dato['fecha'] . "%";
                 $stms->bindParam(1, $dato['cc'], PDO::PARAM_INT);
                 $stms->bindParam(2, $fecha, PDO::PARAM_STR);
+                $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
             } else {
                 $fechaActal = $fechaActal . "%";
                 $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();
@@ -102,10 +107,11 @@ class ModeloFactura
 
     function listarDeudoresFacturaModelo()
     {
-        $sql = "SELECT *, cliente.primer_nombre AS nomCli, cliente.primer_apellido AS apellCli, usuario.primer_nombre AS nomUsu, usuario.primer_apellido AS usuApell FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente INNER JOIN usuario ON usuario.id_usuario = factura.id_usuario";
+        $sql = "SELECT *, cliente.primer_nombre AS nomCli, cliente.primer_apellido AS apellCli, usuario.primer_nombre AS nomUsu, usuario.primer_apellido AS usuApell FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente INNER JOIN usuario ON usuario.id_usuario = factura.id_usuario WHERE factura.id_local = ?";
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
             if ($stms->execute()) {
                 return $stms->fetchAll();
             } else {
@@ -118,7 +124,7 @@ class ModeloFactura
 
     function actualizarDeudaFacturaModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET efectivo = ?, cambio = ?, fecha_factura = ?, id_usuario = ?, cuotas = ? WHERE id_factura = ?";
+        $sql = "UPDATE $this->tabla SET efectivo = ?, cambio = ?, fecha_factura = ?, id_usuario = ?, cuotas = ? WHERE id_factura = ? AND id_local = ?";
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
@@ -129,6 +135,7 @@ class ModeloFactura
                 $stms->bindParam(4, $dato['id_usuario'], PDO::PARAM_INT);
                 $stms->bindParam(5, $dato['cuota'], PDO::PARAM_INT);
                 $stms->bindParam(6, $dato['id_factura'], PDO::PARAM_INT);
+                $stms->bindParam(7, $_SESSION['id_local'], PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return true;
@@ -142,13 +149,14 @@ class ModeloFactura
 
     function restarEfectivoFacturaModelo($id, $efectivo)
     {
-        $sql = "UPDATE $this->tabla SET total_factura=? WHERE id_factura = ?";
+        $sql = "UPDATE $this->tabla SET total_factura=? WHERE id_factura = ? AND id_local = ?";
 
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             $stms->bindParam(1, $efectivo, PDO::PARAM_INT);
             $stms->bindParam(2, $id, PDO::PARAM_INT);
+            $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
             if ($stms->execute()) {
                 return true;
             } else {
@@ -167,12 +175,13 @@ class ModeloFactura
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
             if ($stms->execute()) {
-                $sql = "DELETE FROM $this->tabla WHERE id_factura = ?";
+                $sql = "DELETE FROM $this->tabla WHERE id_factura = ? AND id_local = ?";
 
                 try {
                     $conn = new Conexion();
                     $stms = $conn->conectar()->prepare($sql);
                     $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
                     if ($stms->execute()) {
                         return true;
                     } else {
@@ -191,11 +200,12 @@ class ModeloFactura
 
     function actualizarTotalFacturaPropinaModelo($totalsinpropina, $id)
     {
-        $sql = "UPDATE $this->tabla SET total_factura=? WHERE id_factura=?";
+        $sql = "UPDATE $this->tabla SET total_factura=? WHERE id_factura=? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $totalsinpropina, PDO::PARAM_INT);
         $stms->bindParam(2, $id, PDO::PARAM_INT);
+        $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
         try {
             if ($stms->execute()) {
                 return true;

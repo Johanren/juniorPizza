@@ -13,7 +13,7 @@ class ControladorCliente
                     'segApellido' => $_POST['segApellido'],
                     'cc' => $_POST['cc'],
                     'email' => $_POST['email'],
-                    'local' => $_POST['local']
+                    //'local' => $_POST['local']
                 );
             } else {
                 $dato = array(
@@ -23,7 +23,7 @@ class ControladorCliente
                     'segApellido' => $_POST['segApellido'],
                     'cc' => $_POST['cc'],
                     'email' => $_POST['email'],
-                    'local' => $_SESSION['id_local']
+                    //'local' => $_SESSION['id_local']
                 );
             }
 
@@ -42,7 +42,7 @@ class ControladorCliente
                     'segApellido' => $_POST['segApellidoEdit'],
                     'cc' => $_POST['ccEdit'],
                     'email' => $_POST['emailEdit'],
-                    'local' => $_POST['localEdit']
+                    //'local' => $_POST['localEdit']
                 );
             } else {
                 $dato = array(
@@ -53,7 +53,7 @@ class ControladorCliente
                     'segApellido' => $_POST['segApellidoEdit'],
                     'cc' => $_POST['ccEdit'],
                     'email' => $_POST['emailEdit'],
-                    'local' => $_SESSION['id_local']
+                    //'local' => $_SESSION['id_local']
                 );
             }
 

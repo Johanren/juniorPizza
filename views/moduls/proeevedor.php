@@ -142,7 +142,7 @@ if (isset($_GET['ids'])) {
                     </div>
                     <div class="form-row">
                         <?php
-                        if ($_SESSION['rol'] == "Administrador") {
+                        /*if ($_SESSION['rol'] == "Administrador") {
                             ?>
                             <div class="form-group col-md-6">
                                 <label for="">Establecimiento</label>
@@ -160,7 +160,7 @@ if (isset($_GET['ids'])) {
                                 </select>
                             </div>
                             <?php
-                        }
+                        }*/
                         ?>
                     </div>
                     <button type="submit" name="agregarProeevedor" class="btn btn-primary">Agregar</button>

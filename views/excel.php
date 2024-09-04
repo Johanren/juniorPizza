@@ -6,6 +6,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 if (isset($_GET['producto'])) {
+    $id = $_GET['producto'];
     // Crear una nueva instancia de Spreadsheet
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -32,7 +33,7 @@ if (isset($_GET['producto'])) {
         die("Conexión fallida: " . $conn->connect_error);
     }
 
-    $sql = "SELECT proeevedor.nombre_proeevedor AS nombre_proveedor, producto.codigo_producto, producto.nombre_producto, producto.precio_unitario, producto.cantidad_producto, categoria.nombre_categoria, medida.nombre_medida, local.nombre_local FROM producto INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local";
+    $sql = "SELECT proeevedor.nombre_proeevedor AS nombre_proveedor, producto.codigo_producto, producto.nombre_producto, producto.precio_unitario, producto.cantidad_producto, categoria.nombre_categoria, medida.nombre_medida, local.nombre_local FROM producto INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE producto.id_local = $id";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -65,6 +66,7 @@ if (isset($_GET['producto'])) {
     exit;
 }
 if (isset($_GET['ingrediente'])) {
+    $id = $_GET['ingrediente'];
     // Crear una nueva instancia de Spreadsheet
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -86,7 +88,7 @@ if (isset($_GET['ingrediente'])) {
         die("Conexión fallida: " . $conn->connect_error);
     }
 
-    $sql = "SELECT ingrediente.nombre_ingrediente, ingrediente.cantidad, medida.nombre_medida FROM ingrediente INNER JOIN medida ON medida.id_medida = ingrediente.id_medida";
+    $sql = "SELECT ingrediente.nombre_ingrediente, ingrediente.cantidad, medida.nombre_medida FROM ingrediente INNER JOIN medida ON medida.id_medida = ingrediente.id_medida WHERE ingrediente.id_local = $id";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -114,6 +116,7 @@ if (isset($_GET['ingrediente'])) {
     exit;
 }
 if (isset($_GET['productoMes'])) {
+    $id = $_GET['productoMes'];
     // Crear una nueva instancia de Spreadsheet
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -134,7 +137,7 @@ if (isset($_GET['productoMes'])) {
         die("Conexión fallida: " . $conn->connect_error);
     }
     $fecha = date('Y-m')."%";
-    $sql = "SELECT producto.nombre_producto, SUM(cantidad) AS total_vendido FROM `venta` INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like '$fecha' GROUP BY producto.nombre_producto ORDER BY total_vendido";
+    $sql = "SELECT producto.nombre_producto, SUM(cantidad) AS total_vendido FROM `venta` INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like '$fecha' AND venta.id_local = $id GROUP BY producto.nombre_producto ORDER BY total_vendido";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -162,6 +165,7 @@ if (isset($_GET['productoMes'])) {
 }
 
 if (isset($_GET['ventaMes'])) {
+    $id = $_GET['ventaMes'];
     // Crear una nueva instancia de Spreadsheet
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -182,7 +186,7 @@ if (isset($_GET['ventaMes'])) {
         die("Conexión fallida: " . $conn->connect_error);
     }
     $fecha = date('Y-m')."%";
-    $sql = "SELECT DATE(fecha_ingreso) AS dia_facturado, SUM(precio_compra) AS total FROM `venta` WHERE fecha_ingreso LIKE '$fecha' GROUP BY DATE(fecha_ingreso) ORDER BY DATE(fecha_ingreso)";
+    $sql = "SELECT DATE(fecha_ingreso) AS dia_facturado, SUM(precio_compra) AS total FROM `venta` WHERE fecha_ingreso LIKE '$fecha' AND id_local = $id GROUP BY DATE(fecha_ingreso) ORDER BY DATE(fecha_ingreso)";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

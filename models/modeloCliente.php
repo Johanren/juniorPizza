@@ -70,7 +70,7 @@ class ModeloCliente
 
     function mostrarClienteFacturaVentaModelo($id)
     {
-        $sql = "SELECT * FROM $this->tabla WHERE id_cliente = ? AND = id_local = ?";
+        $sql = "SELECT * FROM $this->tabla WHERE id_cliente = ? AND id_local = ?";
 
         try {
             $conn = new Conexion();

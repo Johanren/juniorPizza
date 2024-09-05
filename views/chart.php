@@ -3,7 +3,7 @@
 require_once '../models/conexion.php';
 require_once '../models/modeloVenta.php';
 require_once '../models/modeloGasto.php';
-
+session_start();
 if (isset($_GET['accion'])) {
     $accion = $_GET['accion'];
     switch ($accion) {

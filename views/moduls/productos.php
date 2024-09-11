@@ -233,6 +233,9 @@ if (isset($_GET['id'])) {
                         <label for="file">Selecciona el archivo Excel</label>
                         <input type="file" class="form-control-file" id="file" name="file" accept=".xls,.xlsx">
                     </div>
+                    <div class="form-group">
+                        <a href="views\file\productos.xlsx">Excel para el cargue</a>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">Subir archivo</button>

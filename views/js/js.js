@@ -1035,7 +1035,7 @@ $(document).ready(function () {
 							var id = data[0]['id_producto'];
 							var codigo = data[0]['codigo_producto'];
 							var name = data[0]['nombre_producto'];
-							var cantidad  = data[0]['cantidad_producto'];
+							var cantidad = data[0]['cantidad_producto'];
 							//agregar miles
 							var valor = data[0]['precio_unitario'];
 							valor = valor.toString();
@@ -1044,16 +1044,16 @@ $(document).ready(function () {
 							var hosting = window.location.hostname;
 							//console.log(hosting);
 							//if (cantidad <= 0) {
-								//swal("Ups!!!!", "El producto: "+name+" esta agotado", "error");
+							//swal("Ups!!!!", "El producto: "+name+" esta agotado", "error");
 							//} else {
-								if (urlActual == "http://" + hosting + "/juniorPizza/caja") {
-									document.getElementById('id_articulo_' + index).value = id;
-									document.getElementById('codigo_' + index).value = codigo;
-									document.getElementById('nombre_' + index).value = name;
-									document.getElementById('valor_' + index).value = value;
-								} else {
-									document.getElementById('nombre_' + index).value = name;
-								}
+							if (urlActual == "http://" + hosting + "/juniorPizza/caja") {
+								document.getElementById('id_articulo_' + index).value = id;
+								document.getElementById('codigo_' + index).value = codigo;
+								document.getElementById('nombre_' + index).value = name;
+								document.getElementById('valor_' + index).value = value;
+							} else {
+								document.getElementById('nombre_' + index).value = name;
+							}
 							//}
 						}
 
@@ -1741,6 +1741,37 @@ $(document).ready(function () {
 				suma = suma.toString();
 				suma = suma.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 				document.querySelector('#total_1').value = suma;
+			}
+		});
+	});
+});
+//Cargar EXCEL
+$(document).ready(function () {
+	$('#uploadForm').on('submit', function (e) {
+		e.preventDefault(); // Prevenir la recarga de la página
+
+		// Crear un FormData para enviar el archivo
+		var formData = new FormData(this);
+
+		// Obtener el valor del id_local desde el campo input hidden
+		var id_local = $('#id_local').val();
+
+		// Agregar el id_local al FormData
+		formData.append('id_local', id_local);
+
+		$.ajax({
+			url: 'views/excel.php', // Archivo PHP para procesar el cargue
+			type: 'POST',
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function (response) {
+				alert(response); // Mostrar respuesta del servidor
+				$('#cargarModal').modal('hide'); // Cerrar el modal
+				location.reload();
+			},
+			error: function () {
+				alert('Error al cargar el archivo.');
 			}
 		});
 	});

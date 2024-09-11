@@ -48,6 +48,7 @@ if (isset($_GET['id'])) {
         <table id="usuario" class="table table-striped table-bordered">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Medida</th>
                     <th>Activo</th>
                     <th>Acciones</th>
@@ -58,6 +59,9 @@ if (isset($_GET['id'])) {
                 foreach ($res as $key => $value) {
                     ?>
                     <tr>
+                    <td>
+                            <?php echo $value['id_medida'] ?>
+                        </td>
                         <td>
                             <?php echo $value['nombre_medida'] ?>
                         </td>
@@ -73,6 +77,7 @@ if (isset($_GET['id'])) {
             </tbody>
             <tfoot>
                 <tr>
+                    <th>#</th>
                     <th>Medida</th>
                     <th>Activo</th>
                     <th>Acciones</th>

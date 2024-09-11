@@ -37,8 +37,12 @@ if (isset($_GET['id'])) {
                     <path d="M3.146 5.146a.5.5 0 0 1 .708 0L5.177 6.47a.75.75 0 0 1 0 1.06L3.854 8.854a.5.5 0 1 1-.708-.708L4.293 7 3.146 5.854a.5.5 0 0 1 0-.708M5.5 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 0 0 1 0v-1h1a.5.5 0 0 0 0-1h-1v-1a.5.5 0 0 0-.5-.5" />
                 </svg>
             </button>
+            <!-- Botón para abrir el modal (Cargar Excel) -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cargarModal">
+                Cargar Excel
+            </button>
         </div>
-        <div class="col-sm-5"></div>
+        <div class="col-sm-4"></div>
         <div class="col-sm-1">
             <a href="views/excel.php?producto=<?php echo $_SESSION['id_local'] ?>" target="_blank" rel="noopener noreferrer"><i class="fas fa-file-excel fa-lg"></i></a>
         </div>
@@ -206,6 +210,34 @@ if (isset($_GET['id'])) {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal para cargar Excel -->
+<div class="modal fade" id="cargarModal" tabindex="-1" role="dialog" aria-labelledby="cargarModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cargarModalLabel">Cargar archivo Excel</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <!-- Campo oculto para el id_local -->
+                    <input type="hidden" id="id_local" name="id_local" value="<?php echo $_SESSION['id_local']; ?>">
+
+                    <div class="form-group">
+                        <label for="file">Selecciona el archivo Excel</label>
+                        <input type="file" class="form-control-file" id="file" name="file" accept=".xls,.xlsx">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Subir archivo</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

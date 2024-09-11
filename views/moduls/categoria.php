@@ -48,6 +48,7 @@ if (isset($_GET['id'])) {
         <table id="usuario" class="table table-striped table-bordered">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Categoria</th>
                     <th>Activo</th>
                     <th>Acciones</th>
@@ -56,8 +57,11 @@ if (isset($_GET['id'])) {
             <tbody>
                 <?php
                 foreach ($res as $key => $value) {
-                    ?>
+                ?>
                     <tr>
+                        <td>
+                            <?php echo $value['id_categoria'] ?>
+                        </td>
                         <td>
                             <?php echo $value['nombre_categoria'] ?>
                         </td>
@@ -67,12 +71,13 @@ if (isset($_GET['id'])) {
                         <td><a href="index.php?action=categoria&id=<?php echo $value['id_categoria'] ?>"><i
                                     class="fas fa-print fa-lg"></i></a></td>
                     </tr>
-                    <?php
+                <?php
                 }
                 ?>
             </tbody>
             <tfoot>
                 <tr>
+                    <th>#</th>
                     <th>Categoria</th>
                     <th>Activo</th>
                     <th>Acciones</th>
@@ -106,11 +111,11 @@ if (isset($_GET['id'])) {
                                 <option selected>Choose...</option>
                                 <?php
                                 foreach ($resActivo as $key => $value) {
-                                    ?>
+                                ?>
                                     <option value="<?php echo $value['id_activo'] ?>">
                                         <?php echo $value['nombre_activo'] ?>
                                     </option>
-                                    <?php
+                                <?php
                                 }
                                 ?>
                             </select>
@@ -150,13 +155,13 @@ if (isset($_GET['id'])) {
                                 <option selected>Choose...</option>
                                 <?php
                                 foreach ($resActivo as $key => $value) {
-                                    ?>
+                                ?>
                                     <option value="<?php echo $value['id_activo'] ?>" <?php if ($value['id_activo'] == $listar[0]['id_activo']) {
-                                           echo 'selected';
-                                       } ?>>
+                                                                                            echo 'selected';
+                                                                                        } ?>>
                                         <?php echo $value['nombre_activo'] ?>
                                     </option>
-                                    <?php
+                                <?php
                                 }
                                 ?>
                             </select>

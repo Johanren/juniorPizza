@@ -88,7 +88,7 @@ class ModeloLocal
 
     function actualizarLocalModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET nombre_local=?,nit=?,direccion=?,telefono=? WHERE id_local=?";
+        $sql = "UPDATE $this->tabla SET nombre_local=?,nit=?,direccion=?,telefono=?,ip=? WHERE id_local=?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($dato != '') {
@@ -96,7 +96,8 @@ class ModeloLocal
             $stms->bindParam(2, $dato['nit'], PDO::PARAM_STR);
             $stms->bindParam(3, $dato['dire'], PDO::PARAM_STR);
             $stms->bindParam(4, $dato['tel'], PDO::PARAM_STR);
-            $stms->bindParam(5, $dato['id'], PDO::PARAM_INT);
+            $stms->bindParam(5, $dato['ip'], PDO::PARAM_STR);
+            $stms->bindParam(6, $dato['id'], PDO::PARAM_INT);
         }
         try {
             if ($stms->execute()) {

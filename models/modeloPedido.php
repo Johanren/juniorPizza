@@ -266,7 +266,7 @@ class ModeloPedido
 
     function listarPedidoPirntFechaIngreso($fecha, $print)
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN producto ON producto.id_producto = pedido.id_producto INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria WHERE fecha_ingreso = ? AND print = ? AND producto.id_local";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN producto ON producto.id_producto = pedido.id_producto INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria WHERE fecha_ingreso = ? AND print = ? AND producto.id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $fecha, PDO::PARAM_STR);

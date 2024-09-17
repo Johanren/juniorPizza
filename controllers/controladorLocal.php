@@ -12,7 +12,7 @@ class ControladorLocal
                 echo '<script>window.location="agregarLocal"</script>';
             }
         } elseif (isset($_POST['actualizarLocal'])) {
-            $dato = array('id' => $_GET['id_local'], 'local' => $_POST['localEdit'], 'nit' => $_POST['nitEdit'], 'dire' => $_POST['direEdit'], 'tel' => $_POST['telEdit']);
+            $dato = array('id' => $_GET['id_local'], 'local' => $_POST['localEdit'], 'nit' => $_POST['nitEdit'], 'dire' => $_POST['direEdit'], 'tel' => $_POST['telEdit'],'ip' => $_POST['ip']);
             $agregar = new ModeloLocal();
             $res = $agregar->actualizarLocalModelo($dato);
             if ($res == true) {

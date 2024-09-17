@@ -1,12 +1,13 @@
 <?php
 session_start();
 $local = new ControladorLocal();
-$res = $local->consultarLocal(1);
+$res = $local->consultarLocal($_SESSION['id_local']);
 if ($res != null) {
     $nombreSistema = $res[0]['nombre_local'];
     $nit = $res[0]['nit'];
     $tel = $res[0]['telefono'];
     $dire = $res[0]['direccion'];
+    $ip = $res[0]['ip'];
 } else {
     $nombreSistema = "Inventario";
     $nit = "1111";
@@ -18,23 +19,23 @@ ob_start();
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php echo $nombreSistema ?></title>
-    <link rel="stylesheet" href="views/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="views/css/bootstrap.css"/>
-    <link rel="stylesheet" href="views/css/dataTables.bootstrap4.min.css"/>
+    <link rel="stylesheet" href="views/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="views/css/bootstrap.css" />
+    <link rel="stylesheet" href="views/css/dataTables.bootstrap4.min.css" />
     <script src="views/js/jquery-3.3.1.js"></script>
     <script src="views/js/jquery.dataTables.min.js"></script>
     <script src="views/js/dataTables.bootstrap4.min.js"></script>
     <script src="views/js/sweetalert.min.js"></script>
-    <link rel="stylesheet" href="views/css/login.css"/>
-    <link rel="stylesheet" href="views/css/perfil.css"/>
-    <link rel="stylesheet" href="views/css/cocina.css"/>
-    <link rel="stylesheet" href="views/css/config.css"/>
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"/>
-    <link rel="icon" href="views/img/icon.jpg"/>
-    <link rel="stylesheet" href="views/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="views/css/login.css" />
+    <link rel="stylesheet" href="views/css/perfil.css" />
+    <link rel="stylesheet" href="views/css/cocina.css" />
+    <link rel="stylesheet" href="views/css/config.css" />
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="views/img/icon.jpg" />
+    <link rel="stylesheet" href="views/css/jquery-ui.css" />
 
 </head>
 
@@ -42,7 +43,7 @@ ob_start();
     <!-- Page Wrapper -->
     <div id="wrapper">
         <?php
-        
+
         if (isset($_SESSION['validar'])) {
             include("views/moduls/narvar.php");
         }
@@ -422,7 +423,7 @@ ob_start();
                                                     .Corte(1)
                                                     .Pulso(48, 60, 120)
                                                     .imprimirEn("cocina");
-                                                //.imprimirEnImpresoraRemota("cocina", "http://192.168.10.11:8000" + "/imprimir");
+                                                //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
                                                 if (respuesta === true) {
                                                     $.ajax({
                                                         url: 'views/ajax.php',
@@ -468,8 +469,8 @@ ob_start();
                                                     .Feed(3)
                                                     .Corte(1)
                                                     .Pulso(48, 60, 120)
-                                                    .imprimirEn("caja");
-                                                //.imprimirEnImpresoraRemota("caja", "http://192.168.10.11:8000" + "/imprimir");
+                                                    //.imprimirEn("caja");
+                                                    .imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
                                                 if (respuesta === true) {
                                                     $.ajax({
                                                         url: 'views/ajax.php',

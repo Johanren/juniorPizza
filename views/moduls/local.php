@@ -180,6 +180,13 @@ if (isset($_GET['id'])) {
                                 placeholder="Segundo Nombre">
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">IP</label>
+                            <input type="text" class="form-control" name="ip" value="<?php echo $listar[0]['ip'] ?>" id="inputEmail4"
+                                placeholder="Dirección IP">
+                        </div>
+                    </div>
                     <button type="submit" name="actualizarLocal" class="btn btn-primary">Actualizar</button>
                 </form>
             </div>

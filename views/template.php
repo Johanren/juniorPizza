@@ -1,7 +1,11 @@
 <?php
 session_start();
 $local = new ControladorLocal();
-$res = $local->consultarLocal($_SESSION['id_local']);
+if (isset($_SESSION['id_local'])) {
+    $res = $local->consultarLocal($_SESSION['id_local']);
+}else{
+    $res = [];
+}
 if ($res != null) {
     $nombreSistema = $res[0]['nombre_local'];
     $nit = $res[0]['nit'];

@@ -500,4 +500,23 @@ class ModeloVenta
             print_r($e->getMessage());
         }
     }
+
+    function informeVentaInicioFinModelo($inicio,$fin){
+        $sql = "SELECT DISTINCT(producto.id_producto), producto.nombre_producto, impuesto.numero_impuesto, impuesto.nombre_impusto, impuesto.base_impuesto, SUM(venta.cantidad) AS total_cantidad, SUM(venta.precio_compra) AS total_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura INNER JOIN impuesto ON producto.id_impuesto = impuesto.id_impuesto WHERE factura.factura = 'true' AND venta.fecha_ingreso BETWEEN ? AND ? AND factura.id_local = ? GROUP BY producto.id_producto, producto.nombre_producto, impuesto.numero_impuesto, impuesto.nombre_impusto, impuesto.base_impuesto;";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $inicio, PDO::PARAM_STR);
+            $stms->bindParam(2, $fin, PDO::PARAM_STR);
+            $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
 }

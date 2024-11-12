@@ -1,35 +1,14 @@
 <?php
 session_start();
 //controlador
-require_once '../controllers/controladorProeevedor.php';
-require_once '../controllers/controladorMedida.php';
-require_once '../controllers/controladorCategoria.php';
-require_once '../controllers/controladorLocal.php';
-require_once '../controllers/controladorProducto.php';
-require_once '../controllers/controladorIngredientes.php';
-require_once '../controllers/controladorIngredienteProducto.php';
-require_once '../controllers/controladorPedido.php';
-require_once '../controllers/controladorMesa.php';
-require_once '../controllers/controladorCliente.php';
-require_once '../controllers/controladorNomina.php';
-require_once '../controllers/controladorVenta.php';
-require_once '../controllers/controladorPropina.php';
-require_once '../controllers/controladorFactura.php';
-//modelo
-require_once '../models/modeloProeevedor.php';
-require_once '../models/modeloMedida.php';
-require_once '../models/modeloCategoria.php';
-require_once '../models/modeloLocal.php';
-require_once '../models/modeloProducto.php';
-require_once '../models/modeloIngrediente.php';
-require_once '../models/modeloIngredienteProducto.php';
-require_once '../models/modeloPedido.php';
-require_once '../models/modeloMesa.php';
-require_once '../models/modeloCliente.php';
-require_once '../models/modeloNomina.php';
-require_once '../models/modeloVenta.php';
-require_once '../models/modeloPropina.php';
-require_once '../models/modeloFactura.php';
+foreach (glob("../controllers/*.php") as $filename) {
+    require_once $filename;
+}
+
+// Requiere todos los archivos en la carpeta 'models'
+foreach (glob("../models/*.php") as $filename) {
+    require_once $filename;
+}
 
 class Ajax
 {
@@ -54,6 +33,7 @@ class Ajax
     public $factura;
     public $propina;
     public $id_factura;
+    public $impuesto;
 
     function consultarProeevedorAjax()
     {
@@ -313,6 +293,20 @@ class Ajax
         print json_encode($res);
 
     }
+
+    function consultarImpuestoAjax()
+    {
+        $consultar = new ControladorImpuesto();
+        $respuesta = $consultar->listarImpuestoAjaxControlador($this->impuesto);
+        foreach ($respuesta as $key => $value) {
+            $datos[] = array(
+                'label' => "0".$value['numero_impuesto']. $value['nombre_impusto'],
+                'id' => $value['id_impuesto'],
+            );
+        }
+
+        print json_encode($datos);
+    }
 }
 
 $ajax = new Ajax();
@@ -421,4 +415,9 @@ if (isset($_GET['nuevo_valor']) && isset($_GET['id_factura'])) {
 if (isset($_GET['codigo1'])) {
     $ajax->articulo = $_GET['codigo1'];
     $ajax->consultarAritucloProeevedorAgregarFactura();
+}
+
+if (isset($_GET['impuesto'])) {
+    $ajax->impuesto = $_GET['impuesto'];
+    $ajax->consultarImpuestoAjax();
 }

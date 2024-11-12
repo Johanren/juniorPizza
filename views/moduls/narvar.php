@@ -228,6 +228,16 @@ if ($ress != null) {
                     <a class="collapse-item" href="propina">Propina</a>
                     <a class="collapse-item" href="devoluciones">Devoluciones</a>
                     <a class="collapse-item" href="deudores">Deudores</a>
+                    <?php
+                    if (isset($_SESSION['factura'])) {
+                        if ($_SESSION['factura'] == 'true') {
+                    ?>
+                            <a class="collapse-item" href="informe">Informes</a>
+                            <a class="collapse-item" href="factuelectr">Facturas Electronicas</a>
+                    <?php
+                        }
+                    }
+                    ?>
                 </div>
             </div>
         </li>

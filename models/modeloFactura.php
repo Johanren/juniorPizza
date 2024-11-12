@@ -77,7 +77,7 @@ class ModeloFactura
         date_default_timezone_set('America/Mexico_City');
         $fechaActal = date('Y-m-d');
         if ($dato != null) {
-            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE cliente.numero_cc = ? AND factura.fecha_factura like ? AND factura.id_local = ?";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE cliente.numero_cc = ? OR factura.fecha_factura like ? AND factura.id_local = ?";
         } else {
             $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE factura.fecha_factura like ? AND factura.id_local =? ";
         }
@@ -209,6 +209,25 @@ class ModeloFactura
         try {
             if ($stms->execute()) {
                 return true;
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
+    function factruaElectronicaInicioFinModelo($inicio,$fin){
+        $sql = "SELECT * FROM $this->tabla INNER JOIN cliente ON cliente.id_cliente = factura.id_cliente WHERE factura.factura = 'true' AND factura.fecha_factura BETWEEN ? AND ? AND factura.id_local = ?";
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            $stms->bindParam(1, $inicio, PDO::PARAM_STR);
+            $stms->bindParam(2, $fin, PDO::PARAM_STR);
+            $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
+            if ($stms->execute()) {
+                return $stms->fetchAll();
             } else {
                 return false;
             }

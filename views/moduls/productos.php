@@ -21,6 +21,7 @@ if (isset($_GET['action'])) {
 $user = new ControladorProducto();
 $user->agregarProducto();
 $res = $user->listarProducto();
+$impuesto = new ControladorImpuesto();
 if ($_SESSION['rol'] != "Administrador" && $_SESSION['rol'] != "Gerente" && $_SESSION['rol'] != "Cajero") {
     echo '<script>window.location="inicio"</script>';
 }
@@ -59,6 +60,7 @@ if (isset($_GET['id'])) {
                     <th>Cantidad</th>
                     <th>Categoria</th>
                     <th>Medida</th>
+                    <th>Impuesto</th>
                     <th>Local</th>
                     <th>Acciones</th>
                 </tr>
@@ -88,6 +90,9 @@ if (isset($_GET['id'])) {
                         </td>
                         <td>
                             <?php echo $value['nombre_medida'] ?>
+                        </td>
+                        <td>
+                            <?php $listarImpuesto = $impuesto->listarImpuesoControlador($value['id_impuesto']); if($listarImpuesto != null){echo "0".$listarImpuesto[0]['numero_impuesto'].$listarImpuesto[0]['nombre_impusto'];} ?>
                         </td>
                         <td>
                             <?php echo $value['nombre_local'] ?>
@@ -166,6 +171,7 @@ if (isset($_GET['id'])) {
                                     <th>Costo * Prod</th>
                                     <th>Categoria</th>
                                     <th>Medida</th>
+                                    <th>Impuesto</th>
                                     <?php
                                     /*if ($_SESSION['rol'] == "Administrador") {
                                     ?>
@@ -189,6 +195,7 @@ if (isset($_GET['id'])) {
                                     <td><input type="text" class="form-control Total" id="total_1" name="total[]" value="0" required></td>
                                     <td><input type="hidden" class="form-control" name="id_categoria[]" id="id_categoria_1" required><input type="text" required class="form-control categoria" name="" id="categoria_1"></td>
                                     <td><input type="hidden" class="form-control" name="id_medida[]" id="id_medida_1" required><input type="text" required class="form-control medida" name="" id="medida_1"></td>
+                                    <td><input type="hidden" class="form-control" name="id_impuesto[]" id="id_impuesto_1"><input type="text" class="form-control impuesto" name="" id="impuesto_1"></td>
                                     <?php
                                     /*if ($_SESSION['rol'] == "Administrador") {
                                     ?>

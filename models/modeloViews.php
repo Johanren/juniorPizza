@@ -1,108 +1,128 @@
 <?php
 
-class modeloViews
+class ModeloViews
 {
-    function enlacePagina($enlace)
-    {
-        if (
-            $enlace == 'ingresar' ||
-            $enlace == 'inicio' ||
-            $enlace == 'productos' ||
-            $enlace == 'promocion' ||
-            $enlace == 'categoria' ||
-            $enlace == 'medida' ||
-            $enlace == 'perfil' ||
-            $enlace == 'proeevedor' ||
-            $enlace == 'facturaProeevedor' ||
-            $enlace == 'usuario' ||
-            $enlace == 'cliente' ||
-            $enlace == 'salir' ||
-            $enlace == 'local' ||
-            $enlace == 'ingredientes' ||
-            $enlace == 'ingrediente_Producto' ||
-            $enlace == 'mesas' ||
-            $enlace == 'pedido' ||
-            $enlace == 'recordatorio' ||
-            $enlace == 'cocina' ||
-            $enlace == '404' ||
-            $enlace == 'configuracion' ||
-            $enlace == 'caja' ||
-            $enlace == 'deudores' ||
-            $enlace == 'venta_dia' ||
-            $enlace == 'devoluciones' ||
-            $enlace == 'nomina' ||
-            $enlace == 'factura_pdf' ||
-            $enlace == 'propina' ||
-            $enlace == 'ayuda' ||
-            $enlace == 'gastos' ||
-            $enlace == 'ordenPedido' ||
-            $enlace == 'factura' ||
-            $enlace == 'prueba' ||
-            $enlace == 'ordenPedidopdf'
-        ) {
-            $modulo = 'views/moduls/' . $enlace . '.php';
-        } elseif ($enlace == 'agregarUsuario' || $enlace == 'eliminarUsuario') {
-            $modulo = 'views/moduls/usuario.php';
-        } elseif ($enlace == 'agregarCliente' || $enlace == 'eliminarCliente') {
-            $modulo = 'views/moduls/cliente.php';
-        } elseif ($enlace == 'loginFallido') {
-            $modulo = 'views/moduls/ingresar.php';
-        } elseif ($enlace == 'loginInactivo') {
-            $modulo = 'views/moduls/ingresar.php';
-        } elseif ($enlace == 'agregarLocal' || $enlace == 'eliminarLocal') {
-            $modulo = 'views/moduls/local.php';
-        } elseif ($enlace == 'agregarProeevedor' || $enlace == 'eliminarProeevedor') {
-            $modulo = 'views/moduls/proeevedor.php';
-        } elseif ($enlace == 'agregarCategoria') {
-            $modulo = 'views/moduls/categoria.php';
-        } elseif ($enlace == 'agregarMedida') {
-            $modulo = 'views/moduls/medida.php';
-        } elseif ($enlace == 'agregarIngrediente' || $enlace == 'eliminarIngredeinte') {
-            $modulo = 'views/moduls/ingredientes.php';
-        } elseif ($enlace == 'agregarProducto' || $enlace == 'eliminarProducto') {
-            $modulo = 'views/moduls/productos.php';
-        } elseif ($enlace == 'agregarIngredienteProducto' || $enlace == 'eliminarProducto_ingrediente') {
-            $modulo = 'views/moduls/ingrediente_Producto.php';
-        } elseif ($enlace == 'agregarPromocion' || $enlace == 'eliminarPromocion') {
-            $modulo = 'views/moduls/promocion.php';
-        } elseif ($enlace == 'agregarMesa' || $enlace == 'eliminarMesa') {
-            $modulo = 'views/moduls/mesas.php';
-        } elseif ($enlace == 'agregarPedidor') {
-            $modulo = 'views/moduls/pedido.php';
-        } elseif ($enlace == 'actualizoMesa') {
-            $modulo = 'views/moduls/pedido.php';
-        } elseif ($enlace == 'agregarNomina') {
-            $modulo = 'views/moduls/nomina.php';
-        } elseif ($enlace == 'actualizarUsuario') {
-            $modulo = 'views/moduls/usuario.php';
-        } elseif ($enlace == 'actualizarCliente') {
-            $modulo = 'views/moduls/cliente.php';
-        } elseif ($enlace == 'actualizarLocal') {
-            $modulo = 'views/moduls/local.php';
-        } elseif ($enlace == 'actualizarProeevedor') {
-            $modulo = 'views/moduls/proeevedor.php';
-        } elseif ($enlace == 'actualizarIngrediente') {
-            $modulo = 'views/moduls/ingredientes.php';
-        } elseif ($enlace == 'actualizarProducto') {
-            $modulo = 'views/moduls/productos.php';
-        } elseif ($enlace == 'actualizarCategoria') {
-            $modulo = 'views/moduls/categoria.php';
-        } elseif ($enlace == 'actualizarMedida') {
-            $modulo = 'views/moduls/medida.php';
-        } elseif ($enlace == 'actualizarPromocion') {
-            $modulo = 'views/moduls/promocion.php';
-        } elseif ($enlace == 'productoDevuelto') {
-            $modulo = 'views/moduls/devoluciones.php';
-        }elseif ($enlace == 'FacturaCancelada') {
-            $modulo = 'views/moduls/devoluciones.php';
-        }elseif ($enlace == 'agregarGasto' || $enlace == 'actualizarGasto' || $enlace == 'eliminarGasto') {
-            $modulo = 'views/moduls/gastos.php';
-        }elseif ($enlace == 'okOrden' || $enlace == 'actuaOrden') {
-            $modulo = 'views/moduls/ordenPedido.php';
-        }else {
-            $modulo = 'views/moduls/404.php';
-        }
-        return $modulo;
 
+    private $directorioModulos = 'views/moduls/';
+    private $modulosValidos = [];
+
+    public function __construct()
+    {
+        $this->cargarModulosValidos($this->directorioModulos);
+    }
+
+    private function cargarModulosValidos($directorio)
+    {
+        // Abrir el directorio y leer los archivos
+        if ($handle = opendir($directorio)) {
+            while (false !== ($entry = readdir($handle))) {
+                // Ignorar los directorios '.' y '..'
+                if ($entry != '.' && $entry != '..' && pathinfo($entry, PATHINFO_EXTENSION) == 'php') {
+                    // Agregar el nombre del archivo sin la extensión a la lista de módulos válidos
+                    $this->modulosValidos[] = pathinfo($entry, PATHINFO_FILENAME);
+                }
+            }
+            closedir($handle);
+        }
+    }
+
+
+    public function enlacePagina($enlace)
+    {
+        $directorioBase = $this->directorioModulos;
+
+        // Definir las rutas de redirección según el valor de $enlace
+        switch ($enlace) {
+            case 'agregarUsuario':
+            case 'eliminarUsuario':
+            case 'actualizarUsuario':
+                $modulo = 'usuario.php';
+                break;
+            case 'agregarCliente':
+            case 'eliminarCliente':
+            case 'actualizarCliente':
+                $modulo = 'cliente.php';
+                break;
+            case 'loginFallido':
+            case 'loginInactivo':
+            case 'LoginSuspendidoPorPago':
+                $modulo = 'ingresar.php';
+                break;
+            case 'agregarLocal':
+            case 'eliminarLocal':
+            case 'actualizarLocal':
+                $modulo = 'local.php';
+                break;
+            case 'agregarProeevedor':
+            case 'eliminarProeevedor':
+            case 'actualizarProeevedor':
+                $modulo = 'proeevedor.php';
+                break;
+            case 'agregarCategoria':
+            case 'actualizarCategoria':
+                $modulo = 'categoria.php';
+                break;
+            case 'agregarMedida':
+            case 'actualizarMedida':
+                $modulo = 'medida.php';
+                break;
+            case 'agregarIngrediente':
+            case 'eliminarIngredeinte':
+            case 'actualizarIngrediente':
+                $modulo = 'ingredientes.php';
+                break;
+            case 'agregarProducto':
+            case 'eliminarProducto':
+            case 'actualizarProducto':
+                $modulo = 'productos.php';
+                break;
+            case 'agregarIngredienteProducto':
+            case 'eliminarProducto_ingrediente':
+                $modulo = 'ingrediente_Producto.php';
+                break;
+            case 'agregarPromocion':
+            case 'eliminarPromocion':
+            case 'actualizarPromocion':
+                $modulo = 'promocion.php';
+                break;
+            case 'agregarMesa':
+            case 'eliminarMesa':
+                $modulo = 'mesas.php';
+                break;
+            case 'agregarPedidor':
+            case 'actualizoMesa':
+                $modulo = 'pedido.php';
+                break;
+            case 'agregarNomina':
+                $modulo = 'nomina.php';
+                break;
+            case 'productoDevuelto':
+            case 'FacturaCancelada':
+                $modulo = 'devoluciones.php';
+                break;
+            case 'agregarGasto':
+            case 'actualizarGasto':
+            case 'eliminarGasto':
+                $modulo = 'gastos.php';
+                break;
+            case 'okOrden':
+            case 'actuaOrden':
+                $modulo = 'ordenPedido.php';
+                break;
+            default:
+                $modulo = $enlace . '.php';
+                break;
+        }
+
+        // Construir la ruta completa del módulo
+        $moduloRuta = $directorioBase . $modulo;
+
+        // Verificar si el módulo existe en la lista de módulos válidos y en el directorio correspondiente
+        if (in_array(pathinfo($modulo, PATHINFO_FILENAME), $this->modulosValidos) && file_exists($moduloRuta)) {
+            return $moduloRuta;
+        } else {
+            // Retornar 404 si no se encuentra el módulo
+            return $this->directorioModulos . '404.php';
+        }
     }
 }

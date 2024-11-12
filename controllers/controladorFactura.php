@@ -257,6 +257,11 @@ class ControladorFactura
                     'cc' => $_POST['cc'],
                     'fecha' => $fechaActal
                 );
+            } else {
+                $dato = array(
+                    'cc' => '',
+                    'fecha' => $_POST['fecha']
+                );
             }
             $consultar = new ModeloFactura();
             $res = $consultar->listarFacturaClienteModelo($dato);
@@ -269,6 +274,17 @@ class ControladorFactura
         } else {
             $consultar = new ModeloFactura();
             $res = $consultar->listarFacturaClienteModelo('');
+            return $res;
+        }
+    }
+
+    function listarFacturaElctronica()
+    {
+        if (isset($_POST['consultar'])) {
+            $inicio = $_POST['inicio'];
+            $fin = $_POST['fin'];
+            $buscar = new ModeloFactura();
+            $res = $buscar->factruaElectronicaInicioFinModelo($inicio, $fin);
             return $res;
         }
     }

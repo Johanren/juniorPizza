@@ -1,8 +1,20 @@
 <?php
+session_start();
+//controlador
+foreach (glob("../controllers/*.php") as $filename) {
+    require_once $filename;
+}
+
+// Requiere todos los archivos en la carpeta 'models'
+foreach (glob("../models/*.php") as $filename) {
+    require_once $filename;
+}
 require '../vendor/autoload.php';
+
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if (isset($_GET['producto'])) {
     $id = $_GET['producto'];
@@ -212,7 +224,86 @@ if (isset($_GET['ventaMes'])) {
     exit;
 }
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
+
+if (isset($_POST['inicio'])) {
+
+    // Verificar si los datos POST están presentes
+    if (isset($_POST['inicio']) && isset($_POST['fin'])) {
+        $fechaInicio = $_POST['inicio'];
+        $fechaFin = $_POST['fin'];
+
+        // Aquí deberías hacer tu consulta a la base de datos usando $fechaInicio y $fechaFin
+        // Simulación de datos (reemplaza esto con tu consulta real)
+
+        $venta = new ControladorVenta();
+        $res = $venta->informeVentaInicioFinExcel($fechaInicio,$fechaFin);
+
+        // Crear nuevo objeto Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Configurar las cabeceras
+        $sheet->setCellValue('A2', 'Desde:');
+        $sheet->setCellValue('B2', 'Hasta:');
+        $sheet->setCellValue('A3', $fechaInicio);
+        $sheet->setCellValue('B3', $fechaFin);
+
+        // Encabezados de la tabla en el Excel
+        $sheet->setCellValue('A5', 'Descripcion');
+        $sheet->setCellValue('B5', 'Impuesto');
+        $sheet->setCellValue('C5', 'Base');
+        $sheet->setCellValue('D5', 'Valor Impuesto');
+        $sheet->setCellValue('E5', 'Total Impuesto');
+
+        // Variables para totales
+        $totalsuma = 0;
+        $totalsumavalor = 0;
+        $base = 0;
+
+        // Si los resultados están disponibles
+        if (!empty($res)) {
+            $row = 6; // Inicia en la fila 6 después de los encabezados
+            foreach ($res as $value) {
+                // Calcular porcentaje e impuesto
+                $porjentaje = $value['base_impuesto'] / 100;
+                $impuesto = $porjentaje * $value['total_pago'];
+                $total = $impuesto + $value['total_pago'];
+
+                // Sumar los totales
+                $totalsuma += $total;
+                $totalsumavalor += $impuesto;
+                $base += $value['total_pago'];
+
+                // Escribir los datos en las celdas del Excel
+                $sheet->setCellValue('A' . $row, $value['nombre_producto']);
+                $sheet->setCellValue('B' . $row, "0" . $value['numero_impuesto'] . " " . $value['nombre_impusto']);
+                $sheet->setCellValue('C' . $row, number_format($value['total_pago'], 0));
+                $sheet->setCellValue('D' . $row, number_format($impuesto, 0));
+                $sheet->setCellValue('E' . $row, number_format($total, 0));
+
+                $row++;
+            }
+
+            // Agregar los totales
+            $sheet->setCellValue('A' . $row, 'Total Impuesto');
+            $sheet->setCellValue('C' . $row, number_format($base, 0));
+            $sheet->setCellValue('D' . $row, number_format($totalsumavalor, 0));
+            $sheet->setCellValue('E' . $row, number_format($totalsuma, 0));
+        }
+
+        // Establecer el nombre del archivo y enviar el Excel al navegador
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Informe_Venta_Electronico.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        // Crear archivo Excel
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+        exit;
+    } else {
+        echo "No se recibieron fechas.";
+    }
+}
 
 $servername = "localhost";
 $username = "root";

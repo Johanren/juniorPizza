@@ -160,4 +160,22 @@ class ControladorVenta
             }
         }
     }
+
+    function informeVentaInicioFin()
+    {
+        if (isset($_POST['consultar'])) {
+            $inicio = $_POST['inicio'];
+            $fin = $_POST['fin'];
+            $buscar = new ModeloVenta();
+            $res = $buscar->informeVentaInicioFinModelo($inicio, $fin);
+            return $res;
+        }
+    }
+
+    function informeVentaInicioFinExcel($inicio, $fin)
+    {
+        $buscar = new ModeloVenta();
+        $res = $buscar->informeVentaInicioFinModelo($inicio, $fin);
+        return $res;
+    }
 }

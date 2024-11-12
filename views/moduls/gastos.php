@@ -51,7 +51,7 @@ if (isset($_GET['id'])) {
     </form>
     <br>
     <div class="table-responsive">
-        <table id="usuario" class="table table-striped table-bordered">
+        <table iccc>
             <thead>
                 <tr>
                     <th>Nombre Gasto</th>

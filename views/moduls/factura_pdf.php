@@ -37,97 +37,102 @@ if ($res != null) {
     $dire = "NNNN";
 }
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
 if (isset($_SESSION['factura'])) {
     if ($_SESSION['factura'] == 'true') {
-        if ($resFactura[0]['factura'] == "true") {
-            $añoActual = date('Y');
-            $mesActual = date('m');
+        if (isset($_GET['factura'])) {
+            if (isset($_POST['enviar_correo'])) {
+                $añoActual = date('Y');
+                $mesActual = date('m');
 
-            // Crear un objeto DateTime para el primer día del mes actual
-            $inicioMes = new DateTime("$añoActual-$mesActual-01");
+                // Crear un objeto DateTime para el primer día del mes actual
+                $inicioMes = new DateTime("$añoActual-$mesActual-01");
 
-            // Clonar el objeto para obtener la fecha de fin y modificarlo al último día del mes
-            $finMes = clone $inicioMes;
-            $finMes->modify('last day of this month');
-            ///////////////////////////////////////////////////
-            date_default_timezone_set('America/Mexico_City');
-            $claveTecnica = "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c"; //esta clave es generada por la DIAn
-            $InvoiceAuthorization = "18760000001"; //numeor de autorizacion por la dian
-            $StartDate = "2019-01-19"; //fecha inico de factura por DIAN
-            $EndDate = "2030-01-19"; // Fecha fin de factura por DIAN
-            $Prefix = "SETG"; //Prefijo dado por DINA
-            $From = "980000000"; // Inicio de facturas por DIAN
-            $To = "985000000"; // Fin de facturas por Dian
-            $companyNit = "11206481"; // Nit dado por DIAN
-            $SoftwareID = "fa326ca7-c1f8-40d3-a6fc-24d7c1040607"; //ID software dado por DIAN
-            $ping = "20191"; //Ping dado por DIan
-            $AuthorizationProviderID = "800197268"; //Autorización Provider dado por DIAN
-
-
-            $CustomizationID = "10"; //TIpo de Operación por DIAN
-            $ProfileExecutionID = "2"; //1 si es produccion 2 si es pruebas
-            $ID = $Prefix . $From;
-            $IssueDate = $fechaActal = date('Y-m-d');
-            $IssueTime = $fechaActal = date('H:i:s') . "-05:00";
-            $InvoiceTypeCode = "01"; //Tipo de factura
-            $LineCountNumeric = "1";
-            $InvoiceStartDate = $inicioMes->format('Y-m-d');
-            $InvoiceEndDate = $finMes->format('Y-m-d');
-
-            //Información de la empresa
-            $AdditionalAccountID = "1"; //1 si es natural 2 si es juridico
-            $IndustryClasificationCode = "5440"; //codigo de la empresa
-            $CompanyName = $res[0]['nombre_local'];
-            $CompanyPostalCode = "252431"; //codigo postal ciudad
-            $CompanyCity = "Girardot"; //nombre ciudad
-            $CompanyDepto = "Cundinamarca"; //nombre departamento
-            $CompanyDeptoCode = "97"; //codigo departamento
-            $CompanyAddres = $res[0]['direccion'];
-            $TaxLevelCode = "0-23"; //codigo significativo fiscal contribuyente, si son varios se pueden separar por ;
-            $cityCode = "25307"; //codigo de la ciudad
-            $TaxSchemeId = "01";
-            $TaxSchemeName = "IVA";
-            $MatriculaMercantil = "";
-            //Información del cliente
-            $AdditionalAccountID = "1"; //si la persona es natural es 1 si es juridio es 2
-            $CustomerName = $resCliente[0]['primer_nombre']; //nombre cliente
-            $CustomerCityCode = "25307"; //codigo postal ciudad clietne
-            $CustomerCity = "Girardot"; //ciudad cliente cliente
-            $CustomerDepto = "Cundinamarca"; //departamentyo cliente
-            $customerDeptoCode  = "97"; //departamento codigo cliente
-            $CustomerAddress = $res[0]['direccion']; //direcccion cliente
-            $customerNit = $resCliente[0]['numero_cc'];
-            $CostomerIdCode = "13"; //Tipo de Identificación clciente Nota: realizar modificacion para agregar codigo documento
-            $SoftwareSecurityCode = hash('sha384', $SoftwareID . $ping . $customerNit);
-
-            ///////////Metodo de Pago
-
-            $PaymentMeansID = "1"; // 1 si es contado 2 si es credito
-            $PaymentMeansCode = "10"; //Agregar segun anexo tenico DIAN
-
-            $TaxableAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
-            $TaxAmount = $resFactura[0]['total_factura'];
-            $Percent = 0;
-            ///
-            $LineExtensionAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
-            $AllowanceTotalAmount = "0";
-            $TaxExclusiveAmount = "0";
-            $TaxInclusiveAmount = $resFactura[0]['total_factura'];
-            $PayableAmount = $resFactura[0]['total_factura'];
+                // Clonar el objeto para obtener la fecha de fin y modificarlo al último día del mes
+                $finMes = clone $inicioMes;
+                $finMes->modify('last day of this month');
+                ///////////////////////////////////////////////////
+                date_default_timezone_set('America/Mexico_City');
+                $claveTecnica = "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c"; //esta clave es generada por la DIAn
+                $InvoiceAuthorization = "18760000001"; //numeor de autorizacion por la dian
+                $StartDate = "2019-01-19"; //fecha inico de factura por DIAN
+                $EndDate = "2030-01-19"; // Fecha fin de factura por DIAN
+                $Prefix = "SETG"; //Prefijo dado por DINA
+                $From = "980000000"; // Inicio de facturas por DIAN
+                $To = "985000000"; // Fin de facturas por Dian
+                $companyNit = "11206481"; // Nit dado por DIAN
+                $SoftwareID = "fa326ca7-c1f8-40d3-a6fc-24d7c1040607"; //ID software dado por DIAN
+                $ping = "20191"; //Ping dado por DIan
+                $AuthorizationProviderID = "800197268"; //Autorización Provider dado por DIAN
 
 
-            ///
-            $codImpt1 = "01";
-            $valorImpt1 = $TaxAmount;
-            $codImpt2 = "04";
-            $valorImpt2 = 0.00;
-            $codImpt3 = "03";
-            $valorImpt3 = 0.00;
-            number_format($LineExtensionAmount, 2);
-            $cufe = $ID . $IssueDate . $IssueTime . $LineExtensionAmount . $codImpt1 . $valorImpt1 . $codImpt2 . $valorImpt2 . $codImpt3 . $valorImpt3 . $PayableAmount . $companyNit . $customerNit . $claveTecnica . $ProfileExecutionID; //Concatenación cufe
-            $UUID = hash('sha384', $cufe);
-            ////
-            $QRCode = "NroFactura=$ID
+                $CustomizationID = "10"; //TIpo de Operación por DIAN
+                $ProfileExecutionID = "2"; //1 si es produccion 2 si es pruebas
+                $ID = $Prefix . $From;
+                $IssueDate = $fechaActal = date('Y-m-d');
+                $IssueTime = $fechaActal = date('H:i:s') . "-05:00";
+                $InvoiceTypeCode = "01"; //Tipo de factura
+                $LineCountNumeric = "1";
+                $InvoiceStartDate = $inicioMes->format('Y-m-d');
+                $InvoiceEndDate = $finMes->format('Y-m-d');
+
+                //Información de la empresa
+                $AdditionalAccountID = "1"; //1 si es natural 2 si es juridico
+                $IndustryClasificationCode = "5440"; //codigo de la empresa
+                $CompanyName = $res[0]['nombre_local'];
+                $CompanyPostalCode = "252431"; //codigo postal ciudad
+                $CompanyCity = "Girardot"; //nombre ciudad
+                $CompanyDepto = "Cundinamarca"; //nombre departamento
+                $CompanyDeptoCode = "97"; //codigo departamento
+                $CompanyAddres = $res[0]['direccion'];
+                $TaxLevelCode = "0-23"; //codigo significativo fiscal contribuyente, si son varios se pueden separar por ;
+                $cityCode = "25307"; //codigo de la ciudad
+                $TaxSchemeId = "01";
+                $TaxSchemeName = "IVA";
+                $MatriculaMercantil = "";
+                //Información del cliente
+                $AdditionalAccountID = "1"; //si la persona es natural es 1 si es juridio es 2
+                $CustomerName = $resCliente[0]['primer_nombre']; //nombre cliente
+                $CustomerCityCode = "25307"; //codigo postal ciudad clietne
+                $CustomerCity = "Girardot"; //ciudad cliente cliente
+                $CustomerDepto = "Cundinamarca"; //departamentyo cliente
+                $customerDeptoCode  = "97"; //departamento codigo cliente
+                $CustomerAddress = $res[0]['direccion']; //direcccion cliente
+                $customerNit = $resCliente[0]['numero_cc'];
+                $CostomerIdCode = "13"; //Tipo de Identificación clciente Nota: realizar modificacion para agregar codigo documento
+                $SoftwareSecurityCode = hash('sha384', $SoftwareID . $ping . $customerNit);
+
+                ///////////Metodo de Pago
+
+                $PaymentMeansID = "1"; // 1 si es contado 2 si es credito
+                $PaymentMeansCode = "10"; //Agregar segun anexo tenico DIAN
+
+                $TaxableAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
+                $TaxAmount = $resFactura[0]['total_factura'];
+                $Percent = 0;
+                ///
+                $LineExtensionAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
+                $AllowanceTotalAmount = "0";
+                $TaxExclusiveAmount = "0";
+                $TaxInclusiveAmount = $resFactura[0]['total_factura'];
+                $PayableAmount = $resFactura[0]['total_factura'];
+
+
+                ///
+                $codImpt1 = "01";
+                $valorImpt1 = $TaxAmount;
+                $codImpt2 = "04";
+                $valorImpt2 = 0.00;
+                $codImpt3 = "03";
+                $valorImpt3 = 0.00;
+                number_format($LineExtensionAmount, 2);
+                $cufe = $ID . $IssueDate . $IssueTime . $LineExtensionAmount . $codImpt1 . $valorImpt1 . $codImpt2 . $valorImpt2 . $codImpt3 . $valorImpt3 . $PayableAmount . $companyNit . $customerNit . $claveTecnica . $ProfileExecutionID; //Concatenación cufe
+                $UUID = hash('sha384', $cufe);
+                ////
+                $QRCode = "NroFactura=$ID
                                 NitFacturador=$companyNit
                                 NitAdquiriente=$customerNit
                                 FechaFactura=$IssueDate
@@ -135,60 +140,60 @@ if (isset($_SESSION['factura'])) {
                                 CUFE=$UUID
                                 URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=$UUID"; //Datos de la factura
 
-            $firma = xmlfirma();
+                $firma = xmlfirma();
 
-            $xml = formHeadXML() .
-                formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix, $From, $To, $companyNit, $SoftwareID, $SoftwareSecurityCode, $AuthorizationProviderID, $QRCode, $firma) .
-                formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $IssueDate, $IssueTime, $InvoiceTypeCode, $LineCountNumeric, $InvoiceStartDate, $InvoiceEndDate) .
-                formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $CompanyName, $CompanyPostalCode, $companyNit, $CompanyCity, $CompanyDepto, $CompanyDeptoCode, $CompanyAddres, $TaxLevelCode, $cityCode, $TaxSchemeId, $TaxSchemeName) .
-                formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode, $CustomerCity, $CustomerDepto, $customerDeptoCode, $CustomerAddress, $CostomerIdCode, $customerNit) .
-                formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Percent, $TaxAmount, $LineExtensionAmount, $AllowanceTotalAmount, $TaxExclusiveAmount, $TaxInclusiveAmount, $PayableAmount) .
-                formLineXML($resVenta);
+                $xml = formHeadXML() .
+                    formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix, $From, $To, $companyNit, $SoftwareID, $SoftwareSecurityCode, $AuthorizationProviderID, $QRCode, $firma) .
+                    formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $IssueDate, $IssueTime, $InvoiceTypeCode, $LineCountNumeric, $InvoiceStartDate, $InvoiceEndDate) .
+                    formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $CompanyName, $CompanyPostalCode, $companyNit, $CompanyCity, $CompanyDepto, $CompanyDeptoCode, $CompanyAddres, $TaxLevelCode, $cityCode, $TaxSchemeId, $TaxSchemeName) .
+                    formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode, $CustomerCity, $CustomerDepto, $customerDeptoCode, $CustomerAddress, $CostomerIdCode, $customerNit) .
+                    formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Percent, $TaxAmount, $LineExtensionAmount, $AllowanceTotalAmount, $TaxExclusiveAmount, $TaxInclusiveAmount, $PayableAmount) .
+                    formLineXML($resVenta);
 
-            validarXML($xml);
+                validarXML($xml);
 
-            function getErrors()
-            {
-                $errors = libxml_get_errors();
-                $formattedErrors = '';
+                function getErrors()
+                {
+                    $errors = libxml_get_errors();
+                    $formattedErrors = '';
 
-                foreach ($errors as $error) {
-                    $formattedErrors .= displayLibxmlError($error);
+                    foreach ($errors as $error) {
+                        $formattedErrors .= displayLibxmlError($error);
+                    }
+
+                    libxml_clear_errors();
+
+                    return $formattedErrors;
                 }
 
-                libxml_clear_errors();
+                function displayLibxmlError($error)
+                {
+                    $return = "";
 
-                return $formattedErrors;
-            }
+                    switch ($error->level) {
+                        case LIBXML_ERR_WARNING:
+                            $return .= "Warning $error->code: ";
+                            break;
+                        case LIBXML_ERR_ERROR:
+                            $return .= "Error $error->code: ";
+                            break;
+                        case LIBXML_ERR_FATAL:
+                            $return .= "Fatal Error $error->code: ";
+                            break;
+                    }
 
-            function displayLibxmlError($error)
-            {
-                $return = "";
+                    $return .= trim($error->message);
 
-                switch ($error->level) {
-                    case LIBXML_ERR_WARNING:
-                        $return .= "Warning $error->code: ";
-                        break;
-                    case LIBXML_ERR_ERROR:
-                        $return .= "Error $error->code: ";
-                        break;
-                    case LIBXML_ERR_FATAL:
-                        $return .= "Fatal Error $error->code: ";
-                        break;
+                    if ($error->file) {
+                        $return .= " in $error->file";
+                    }
+
+                    $return .= " on line $error->line\n";
+
+                    return $return;
                 }
 
-                $return .= trim($error->message);
-
-                if ($error->file) {
-                    $return .= " in $error->file";
-                }
-
-                $return .= " on line $error->line\n";
-
-                return $return;
-            }
-
-            print "
+                print "
         <script>
                 // Incluir las funciones JavaScript aquí
         
@@ -209,8 +214,7 @@ if (isset($_SESSION['factura'])) {
                     // Crear un enlace temporal
                     const link = document.createElement('a');
                     link.href = url;
-                    link.download = '$CustomerName$customerNit$IssueDate
-                    .xml'; // Nombre del archivo a descargar
+                    link.download = 'xml.xml'; // Nombre del archivo a descargar
                     
                     // Simular un clic en el enlace para iniciar la descarga
                     document.body.appendChild(link);
@@ -223,113 +227,523 @@ if (isset($_SESSION['factura'])) {
             </script>
         ";
 
-            //Envio Correo Electronico
+                ob_start();
 
-            $xmlContent = $xml;
-            $xmlFilePath = 'factura.xml';
-            file_put_contents($xmlFilePath, $xmlContent);
+                require_once('vendor/tecnickcom/tcpdf/tcpdf.php');
 
-            $to = $resCliente[0]['correo'];
-            $subject = "Factura electronica N° " . $resFactura[0]['id_factura'] . " de " . $nombreSistema . "";
-            $from = 'tu_email@example.com';
-            $filename = 'factura.xml';
+                // Datos de la factura y QR
+                $UUID = '1234-5678-9012-3456';
+                $qrURL = "https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=$UUID";
 
-            // Cuerpo del correo en HTML
-            $htmlContent = '<html><body>
-            <h2>Factura N° ' . htmlspecialchars($resFactura[0]['id_factura']) . '</h2>
-            <div style="text-align: center;">
-            <p>Fecha: ' . htmlspecialchars($fecha) . '</p>
-            <p>Sistema: ' . htmlspecialchars($res[0]['nombre_local'] ?? 'Inventario') . '</p>
-            <p>Nit: ' . htmlspecialchars($res[0]['nit'] ?? '1111') . '</p>
-            <p>Teléfono: ' . htmlspecialchars($res[0]['telefono'] ?? '11111') . '</p>
-            <p>Dirección: ' . htmlspecialchars($res[0]['direccion'] ?? 'NNNNN') . '</p>
-            <p>DOCUMENTO EQUIVALENTE ELECTRONICO TIQUETE DE MAQUINA REGISTRADORA A CON SISTEMA P.O.S</p>
-            <p>Adquiriente: ' . htmlspecialchars($resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?? 'NNNNN') . '</p>
-            <p>Identificación: ' . htmlspecialchars($resCliente[0]['numero_cc'] ?? 'NNNNN') . '</p>
-            </div>
-            <table border="1" cellpadding="10" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>';
+                // Crear el PDF
+                $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-            foreach ($resVenta as $item) {
-                $htmlContent .= '<tr>
-                <td>' . htmlspecialchars($item['codigo_producto']) . '</td>
-                <td>' . htmlspecialchars($item['nombre_producto']) . '</td>
-                <td>' . htmlspecialchars(number_format($item['valor_unitario'], 0)) . '</td>
-                <td>' . htmlspecialchars($item['cantidad'] > 0 ? $item['cantidad'] : $item['peso'] . ' GR') . '</td>
-                <td>' . htmlspecialchars(number_format($item['precio_compra'], 0)) . '</td>
-            </tr>';
-            }
+                // Configuración básica del documento
+                $pdf->SetCreator(PDF_CREATOR);
+                $pdf->SetAuthor('Tu Empresa');
+                $pdf->SetTitle('Factura Electrónica');
+                $pdf->SetSubject('Factura Electrónica con QR');
+                $pdf->SetKeywords('Factura, PDF, QR, Electrónica');
 
-            $htmlContent .= '</tbody>';
+                // Configurar encabezado
+                $pdf->setPrintHeader(false);
+                $pdf->setPrintFooter(false);
+                $pdf->SetMargins(10, 10, 10);
 
-            if (isset($_SESSION['propina']) && $_SESSION['propina'] == 'true') {
-                $htmlContent .= '<tfoot>
-                <tr>
-                    <th>SubTotal</th>
-                    <td colspan="4">' . htmlspecialchars(number_format($resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0)) . '</td>
-                </tr>
-                <tr>
-                    <th>Propinas</th>
-                    <td colspan="4">' . htmlspecialchars(number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0)) . '</td>
-                </tr>';
-            }
+                // Añadir una página
+                $pdf->AddPage();
 
-            $htmlContent .= '<tr>
-            <th>Total</th>
-            <td colspan="4">' . htmlspecialchars(number_format($resFactura[0]['total_factura'], 0)) . '</td>
-        </tr>
+                // Añadir el logo de la empresa (ajusta la ruta y dimensiones del logo según sea necesario)
+                $logoPath = 'http://localhost/juniorPizza/views/img/icon.jpg'; // Ruta de la imagen del logo
+                $pdf->Image($logoPath, 10, 10, 40, 20, 'JPG'); // Posición (X, Y) y dimensiones (ancho, alto)
+
+                // Añadir información del cliente
+                $pdf->SetFont('helvetica', '', 12);
+                $pdf->Text(10, 60, 'Cliente: ' . htmlspecialchars($resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?? 'Nombre del Cliente'));
+                $pdf->Text(10, 65, 'Cédula: ' . htmlspecialchars($resCliente[0]['numero_cc'] ?? 'CC o NIT'));
+
+                // Configuración del código QR con la URL
+                $style = array(
+                    'border' => 1,
+                    'vpadding' => 'auto',
+                    'hpadding' => 'auto',
+                    'fgcolor' => array(0, 0, 0),
+                    'bgcolor' => false,
+                    'module_width' => 1, // Ancho del módulo
+                    'module_height' => 1, // Altura del módulo
+                );
+
+                // Generar el QR
+                $pdf->write2DBarcode($qrURL, 'QRCODE,H', 140, 30, 50, 50, $style, 'N');
+                $pdf->Text(135, 85, 'Escanee el código para verificar');
+
+                // Contenido de la factura en HTML
+                $html = '
+<h1>Factura Electrónica</h1>
+<p>Factura N°: ' . htmlspecialchars($resFactura[0]['id_factura']) . '</p>
+<p>Fecha: ' . htmlspecialchars($IssueDate) . '</p>
+<p>Sistema: ' . htmlspecialchars($res[0]['nombre_local'] ?? 'Inventario') . '</p>
+<p>Nit: ' . htmlspecialchars($res[0]['nit'] ?? '1111') . '</p>
+<p>Teléfono: ' . htmlspecialchars($res[0]['telefono'] ?? '11111') . '</p>
+<p>Dirección: ' . htmlspecialchars($res[0]['direccion'] ?? 'NNNNN') . '</p>
+<br>
+<table border="1" cellpadding="4" cellspacing="0">
+    <thead>
         <tr>
-            <th>Paga</th>
-            <td>' . htmlspecialchars(number_format($resFactura[0]['efectivo'], 0)) . '</td>
-            <th>Cambio</th>
-            <td>' . htmlspecialchars(number_format($resFactura[0]['cambio'], 0)) . '</td>
+            <th><strong>Código</strong></th>
+            <th><strong>Producto</strong></th>
+            <th><strong>Precio</strong></th>
+            <th><strong>Cantidad</strong></th>
+            <th><strong>Total</strong></th>
         </tr>
-        </tfoot>
-            </table>
-            </body></html>';
+    </thead>
+    <tbody>';
 
-            // Cabeceras del correo
-            $boundary = md5(time());
-            $headers = "From: $from\r\n";
-            $headers .= "Reply-To: $from\r\n";
-            $headers .= "MIME-Version: 1.0\r\n";
-            $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+                foreach ($resVenta as $item) {
+                    $html .= '<tr>
+        <td>' . htmlspecialchars($item['codigo_producto']) . '</td>
+        <td>' . htmlspecialchars($item['nombre_producto']) . '</td>
+        <td>' . htmlspecialchars(number_format($item['valor_unitario'], 0)) . '</td>
+        <td>' . htmlspecialchars($item['cantidad'] > 0 ? $item['cantidad'] : $item['peso'] . ' GR') . '</td>
+        <td>' . htmlspecialchars(number_format($item['precio_compra'], 0)) . '</td>
+    </tr>';
+                }
 
-            // Cuerpo del correo
-            $message = "--$boundary\r\n";
-            $message .= "Content-Type: text/html; charset=UTF-8\r\n";
-            $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-            $message .= $htmlContent . "\r\n\r\n";
-            $message .= "--$boundary\r\n";
-            $message .= "Content-Type: application/xml; name=\"$filename\"\r\n";
-            $message .= "Content-Transfer-Encoding: base64\r\n";
-            $message .= "Content-Disposition: attachment; filename=\"$filename\"\r\n\r\n";
-            $message .= chunk_split(base64_encode(file_get_contents($xmlFilePath))) . "\r\n";
-            $message .= "--$boundary--";
+                $html .= '</tbody></table>
+<br><br>';
 
-            // Envío del correo
-            if (mail($to, $subject, $message, $headers)) {
-                echo '<script>
-        swal("Hurra!!!", "El correo con su factura fue entregado correctamente", "success");
-    </script>';
-            } else {
-                echo '<script>
-        swal("Hurra!!!", "Ups!! No se logro enviar tu factura al correo proporcionado", "success");
-    </script>';
+                if (isset($_SESSION['propina']) && $_SESSION['propina'] == 'true') {
+                    $html .= '<p><strong>SubTotal:</strong> ' . htmlspecialchars(number_format($resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0)) . '</p>';
+                    $html .= '<p><strong>Propinas:</strong> ' . htmlspecialchars(number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0)) . '</p>';
+                }
+
+                $html .= '<p><strong>Total:</strong> ' . htmlspecialchars(number_format($resFactura[0]['total_factura'], 0)) . '</p>';
+                $html .= '<p><strong>Paga:</strong> ' . htmlspecialchars(number_format($resFactura[0]['efectivo'], 0)) . '</p>';
+                $html .= '<p><strong>Cambio:</strong> ' . htmlspecialchars(number_format($resFactura[0]['cambio'], 0)) . '</p>';
+
+                // Escribir el contenido HTML en el PDF
+                $pdf->writeHTML($html, true, false, true, false, '');
+
+                // Guardar el PDF en archivo
+                $pdfFilePath = __DIR__ . '/factura_electronica.pdf'; // Usa una ruta absoluta
+                $pdf->Output($pdfFilePath, 'F');  // Guardar en archivo
+
+                ob_end_flush(); // Limpiar el buffer de salida
+
+
+                // Envío de correo electrónico
+                $xmlContent = $xml;
+                $xmlFilePath = 'factura.xml';
+                file_put_contents($xmlFilePath, $xmlContent);
+                $mail = new PHPMailer(true);
+
+                try {
+                    // Configuración del servidor
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com'; // Cambia esto por tu servidor SMTP
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'feliperenjifoz@gmail.com'; // Tu correo electrónico
+                    $mail->Password = 'eojcvtovqfdueobs'; // Tu contraseña de correo
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587; // Puerto SMTP
+
+                    // Remitente y destinatario
+                    $mail->setFrom('tu_email@example.com', 'Tu Nombre');
+                    $mail->addAddress($resCliente[0]['correo']);
+                    $mail->addAddress('feliperenjifoz@gmail.com'); // Segundo destinatario
+
+                    // Adjuntar archivos
+                    $mail->addAttachment($xmlFilePath); // Adjuntar XML
+                    $mail->addAttachment($pdfFilePath); // Adjuntar PDF
+
+                    // Contenido del correo
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Factura electronica N° ' . $resFactura[0]['id_factura'];
+                    $mail->Body = 'Estimado cliente, adjunto encontrará su factura electrónica.';
+
+                    // Enviar el correo
+                    $mail->send();
+                    echo '<script>swal("Hurra!!!", "El correo con su factura fue entregado correctamente", "success");</script>';
+                } catch (Exception $e) {
+                    echo '<script>swal("Ups!!", "No se logró enviar tu factura al correo proporcionado. Error: ' . $mail->ErrorInfo . '", "error");</script>';
+                }
+?>
+                <a href="#" id="downloadPdf" style="display:none;">Descargar PDF</a>
+                <script>
+                    window.addEventListener('load', function() {
+                        // Usa una ruta accesible a través de HTTP
+                        const pdfUrl = '/juniorPizza/views/moduls/factura_electronica.pdf'; // Ruta accesible vía HTTP
+
+                        // Obtener el enlace con id "downloadPdf"
+                        const a = document.getElementById('downloadPdf');
+
+                        if (a) {
+                            // Establecer el atributo href con la ruta del archivo PDF
+                            a.href = pdfUrl;
+                            a.download = 'factura_electronica.pdf';
+
+                            // Simular clic para descargar el archivo
+                            a.click();
+                        } else {
+                            console.error('No se encontró el elemento con id "downloadPdf".');
+                        }
+                    });
+                </script>
+<?php
+            }
+        } else {
+            if ($resFactura[0]['factura'] == "true") {
+                $añoActual = date('Y');
+                $mesActual = date('m');
+
+                // Crear un objeto DateTime para el primer día del mes actual
+                $inicioMes = new DateTime("$añoActual-$mesActual-01");
+
+                // Clonar el objeto para obtener la fecha de fin y modificarlo al último día del mes
+                $finMes = clone $inicioMes;
+                $finMes->modify('last day of this month');
+                ///////////////////////////////////////////////////
+                date_default_timezone_set('America/Mexico_City');
+                $claveTecnica = "fc8eac422eba16e22ffd8c6f94b3f40a6e38162c"; //esta clave es generada por la DIAn
+                $InvoiceAuthorization = "18760000001"; //numeor de autorizacion por la dian
+                $StartDate = "2019-01-19"; //fecha inico de factura por DIAN
+                $EndDate = "2030-01-19"; // Fecha fin de factura por DIAN
+                $Prefix = "SETG"; //Prefijo dado por DINA
+                $From = "980000000"; // Inicio de facturas por DIAN
+                $To = "985000000"; // Fin de facturas por Dian
+                $companyNit = "11206481"; // Nit dado por DIAN
+                $SoftwareID = "fa326ca7-c1f8-40d3-a6fc-24d7c1040607"; //ID software dado por DIAN
+                $ping = "20191"; //Ping dado por DIan
+                $AuthorizationProviderID = "800197268"; //Autorización Provider dado por DIAN
+
+
+                $CustomizationID = "10"; //TIpo de Operación por DIAN
+                $ProfileExecutionID = "2"; //1 si es produccion 2 si es pruebas
+                $ID = $Prefix . $From;
+                $IssueDate = $fechaActal = date('Y-m-d');
+                $IssueTime = $fechaActal = date('H:i:s') . "-05:00";
+                $InvoiceTypeCode = "01"; //Tipo de factura
+                $LineCountNumeric = "1";
+                $InvoiceStartDate = $inicioMes->format('Y-m-d');
+                $InvoiceEndDate = $finMes->format('Y-m-d');
+
+                //Información de la empresa
+                $AdditionalAccountID = "1"; //1 si es natural 2 si es juridico
+                $IndustryClasificationCode = "5440"; //codigo de la empresa
+                $CompanyName = $res[0]['nombre_local'];
+                $CompanyPostalCode = "252431"; //codigo postal ciudad
+                $CompanyCity = "Girardot"; //nombre ciudad
+                $CompanyDepto = "Cundinamarca"; //nombre departamento
+                $CompanyDeptoCode = "97"; //codigo departamento
+                $CompanyAddres = $res[0]['direccion'];
+                $TaxLevelCode = "0-23"; //codigo significativo fiscal contribuyente, si son varios se pueden separar por ;
+                $cityCode = "25307"; //codigo de la ciudad
+                $TaxSchemeId = "01";
+                $TaxSchemeName = "IVA";
+                $MatriculaMercantil = "";
+                //Información del cliente
+                $AdditionalAccountID = "1"; //si la persona es natural es 1 si es juridio es 2
+                $CustomerName = $resCliente[0]['primer_nombre']; //nombre cliente
+                $CustomerCityCode = "25307"; //codigo postal ciudad clietne
+                $CustomerCity = "Girardot"; //ciudad cliente cliente
+                $CustomerDepto = "Cundinamarca"; //departamentyo cliente
+                $customerDeptoCode  = "97"; //departamento codigo cliente
+                $CustomerAddress = $res[0]['direccion']; //direcccion cliente
+                $customerNit = $resCliente[0]['numero_cc'];
+                $CostomerIdCode = "13"; //Tipo de Identificación clciente Nota: realizar modificacion para agregar codigo documento
+                $SoftwareSecurityCode = hash('sha384', $SoftwareID . $ping . $customerNit);
+
+                ///////////Metodo de Pago
+
+                $PaymentMeansID = "1"; // 1 si es contado 2 si es credito
+                $PaymentMeansCode = "10"; //Agregar segun anexo tenico DIAN
+
+                $TaxableAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
+                $TaxAmount = $resFactura[0]['total_factura'];
+                $Percent = 0;
+                ///
+                $LineExtensionAmount = $resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0);
+                $AllowanceTotalAmount = "0";
+                $TaxExclusiveAmount = "0";
+                $TaxInclusiveAmount = $resFactura[0]['total_factura'];
+                $PayableAmount = $resFactura[0]['total_factura'];
+
+
+                ///
+                $codImpt1 = "01";
+                $valorImpt1 = $TaxAmount;
+                $codImpt2 = "04";
+                $valorImpt2 = 0.00;
+                $codImpt3 = "03";
+                $valorImpt3 = 0.00;
+                number_format($LineExtensionAmount, 2);
+                $cufe = $ID . $IssueDate . $IssueTime . $LineExtensionAmount . $codImpt1 . $valorImpt1 . $codImpt2 . $valorImpt2 . $codImpt3 . $valorImpt3 . $PayableAmount . $companyNit . $customerNit . $claveTecnica . $ProfileExecutionID; //Concatenación cufe
+                $UUID = hash('sha384', $cufe);
+                ////
+                $QRCode = "NroFactura=$ID
+                                NitFacturador=$companyNit
+                                NitAdquiriente=$customerNit
+                                FechaFactura=$IssueDate
+                                ValorTotalFactura=$PayableAmount
+                                CUFE=$UUID
+                                URL=https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=$UUID"; //Datos de la factura
+
+                $firma = xmlfirma();
+
+                $xml = formHeadXML() .
+                    formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix, $From, $To, $companyNit, $SoftwareID, $SoftwareSecurityCode, $AuthorizationProviderID, $QRCode, $firma) .
+                    formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $IssueDate, $IssueTime, $InvoiceTypeCode, $LineCountNumeric, $InvoiceStartDate, $InvoiceEndDate) .
+                    formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $CompanyName, $CompanyPostalCode, $companyNit, $CompanyCity, $CompanyDepto, $CompanyDeptoCode, $CompanyAddres, $TaxLevelCode, $cityCode, $TaxSchemeId, $TaxSchemeName) .
+                    formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode, $CustomerCity, $CustomerDepto, $customerDeptoCode, $CustomerAddress, $CostomerIdCode, $customerNit) .
+                    formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Percent, $TaxAmount, $LineExtensionAmount, $AllowanceTotalAmount, $TaxExclusiveAmount, $TaxInclusiveAmount, $PayableAmount) .
+                    formLineXML($resVenta);
+
+                validarXML($xml);
+
+                function getErrors()
+                {
+                    $errors = libxml_get_errors();
+                    $formattedErrors = '';
+
+                    foreach ($errors as $error) {
+                        $formattedErrors .= displayLibxmlError($error);
+                    }
+
+                    libxml_clear_errors();
+
+                    return $formattedErrors;
+                }
+
+                function displayLibxmlError($error)
+                {
+                    $return = "";
+
+                    switch ($error->level) {
+                        case LIBXML_ERR_WARNING:
+                            $return .= "Warning $error->code: ";
+                            break;
+                        case LIBXML_ERR_ERROR:
+                            $return .= "Error $error->code: ";
+                            break;
+                        case LIBXML_ERR_FATAL:
+                            $return .= "Fatal Error $error->code: ";
+                            break;
+                    }
+
+                    $return .= trim($error->message);
+
+                    if ($error->file) {
+                        $return .= " in $error->file";
+                    }
+
+                    $return .= " on line $error->line\n";
+
+                    return $return;
+                }
+
+                print "
+        <script>
+                // Incluir las funciones JavaScript aquí
+        
+                function generateXMLContent() {
+                    const xmlData = `$xml`;
+                    return xmlData;
+                }
+        
+                
+                    const xmlContent = generateXMLContent();
+                    
+                    // Crear un blob con el contenido XML
+                    const blob = new Blob([xmlContent], { type: 'application/xml' });
+                    
+                    // Crear una URL para el blob
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Crear un enlace temporal
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'xml.xml'; // Nombre del archivo a descargar
+                    
+                    // Simular un clic en el enlace para iniciar la descarga
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    // Limpiar
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                
+            </script>
+        ";
+
+                ob_start();
+
+                require_once('vendor/tecnickcom/tcpdf/tcpdf.php');
+
+                // Datos de la factura y QR
+                $UUID = '1234-5678-9012-3456';
+                $qrURL = "https://catalogo-vpfe-hab.dian.gov.co/document/searchqr?documentkey=$UUID";
+
+                // Crear el PDF
+                $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+                // Configuración básica del documento
+                $pdf->SetCreator(PDF_CREATOR);
+                $pdf->SetAuthor('Tu Empresa');
+                $pdf->SetTitle('Factura Electrónica');
+                $pdf->SetSubject('Factura Electrónica con QR');
+                $pdf->SetKeywords('Factura, PDF, QR, Electrónica');
+
+                // Configurar encabezado
+                $pdf->setPrintHeader(false);
+                $pdf->setPrintFooter(false);
+                $pdf->SetMargins(10, 10, 10);
+
+                // Añadir una página
+                $pdf->AddPage();
+
+                // Añadir el logo de la empresa (ajusta la ruta y dimensiones del logo según sea necesario)
+                $logoPath = 'http://localhost/juniorPizza/views/img/icon.jpg'; // Ruta de la imagen del logo
+                $pdf->Image($logoPath, 10, 10, 40, 20, 'JPG'); // Posición (X, Y) y dimensiones (ancho, alto)
+
+                // Añadir información del cliente
+                $pdf->SetFont('helvetica', '', 12);
+                $pdf->Text(10, 60, 'Cliente: ' . htmlspecialchars($resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?? 'Nombre del Cliente'));
+                $pdf->Text(10, 65, 'Cédula: ' . htmlspecialchars($resCliente[0]['numero_cc'] ?? 'CC o NIT'));
+
+                // Configuración del código QR con la URL
+                $style = array(
+                    'border' => 1,
+                    'vpadding' => 'auto',
+                    'hpadding' => 'auto',
+                    'fgcolor' => array(0, 0, 0),
+                    'bgcolor' => false,
+                    'module_width' => 1, // Ancho del módulo
+                    'module_height' => 1, // Altura del módulo
+                );
+
+                // Generar el QR
+                $pdf->write2DBarcode($qrURL, 'QRCODE,H', 140, 30, 50, 50, $style, 'N');
+                $pdf->Text(135, 85, 'Escanee el código para verificar');
+
+                // Contenido de la factura en HTML
+                $html = '
+<h1>Factura Electrónica</h1>
+<p>Factura N°: ' . htmlspecialchars($resFactura[0]['id_factura']) . '</p>
+<p>Fecha: ' . htmlspecialchars($IssueDate) . '</p>
+<p>Sistema: ' . htmlspecialchars($res[0]['nombre_local'] ?? 'Inventario') . '</p>
+<p>Nit: ' . htmlspecialchars($res[0]['nit'] ?? '1111') . '</p>
+<p>Teléfono: ' . htmlspecialchars($res[0]['telefono'] ?? '11111') . '</p>
+<p>Dirección: ' . htmlspecialchars($res[0]['direccion'] ?? 'NNNNN') . '</p>
+<br>
+<table border="1" cellpadding="4" cellspacing="0">
+    <thead>
+        <tr>
+            <th><strong>Código</strong></th>
+            <th><strong>Producto</strong></th>
+            <th><strong>Precio</strong></th>
+            <th><strong>Cantidad</strong></th>
+            <th><strong>Total</strong></th>
+        </tr>
+    </thead>
+    <tbody>';
+
+                foreach ($resVenta as $item) {
+                    $html .= '<tr>
+        <td>' . htmlspecialchars($item['codigo_producto']) . '</td>
+        <td>' . htmlspecialchars($item['nombre_producto']) . '</td>
+        <td>' . htmlspecialchars(number_format($item['valor_unitario'], 0)) . '</td>
+        <td>' . htmlspecialchars($item['cantidad'] > 0 ? $item['cantidad'] : $item['peso'] . ' GR') . '</td>
+        <td>' . htmlspecialchars(number_format($item['precio_compra'], 0)) . '</td>
+    </tr>';
+                }
+
+                $html .= '</tbody></table>
+<br><br>';
+
+                if (isset($_SESSION['propina']) && $_SESSION['propina'] == 'true') {
+                    $html .= '<p><strong>SubTotal:</strong> ' . htmlspecialchars(number_format($resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0)) . '</p>';
+                    $html .= '<p><strong>Propinas:</strong> ' . htmlspecialchars(number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0)) . '</p>';
+                }
+
+                $html .= '<p><strong>Total:</strong> ' . htmlspecialchars(number_format($resFactura[0]['total_factura'], 0)) . '</p>';
+                $html .= '<p><strong>Paga:</strong> ' . htmlspecialchars(number_format($resFactura[0]['efectivo'], 0)) . '</p>';
+                $html .= '<p><strong>Cambio:</strong> ' . htmlspecialchars(number_format($resFactura[0]['cambio'], 0)) . '</p>';
+
+                // Escribir el contenido HTML en el PDF
+                $pdf->writeHTML($html, true, false, true, false, '');
+
+                // Guardar el PDF en archivo
+                $pdfFilePath = __DIR__ . '/factura_electronica.pdf'; // Usa una ruta absoluta
+                $pdf->Output($pdfFilePath, 'F');  // Guardar en archivo
+
+                ob_end_flush(); // Limpiar el buffer de salida
+
+
+                // Envío de correo electrónico
+                $xmlContent = $xml;
+                $xmlFilePath = 'factura.xml';
+                file_put_contents($xmlFilePath, $xmlContent);
+                $mail = new PHPMailer(true);
+
+                try {
+                    // Configuración del servidor
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com'; // Cambia esto por tu servidor SMTP
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'feliperenjifoz@gmail.com'; // Tu correo electrónico
+                    $mail->Password = 'eojcvtovqfdueobs'; // Tu contraseña de correo
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587; // Puerto SMTP
+
+                    // Remitente y destinatario
+                    $mail->setFrom('tu_email@example.com', 'Tu Nombre');
+                    $mail->addAddress($resCliente[0]['correo']);
+                    $mail->addAddress('feliperenjifoz@gmail.com'); // Segundo destinatario
+
+                    // Adjuntar archivos
+                    $mail->addAttachment($xmlFilePath); // Adjuntar XML
+                    $mail->addAttachment($pdfFilePath); // Adjuntar PDF
+
+                    // Contenido del correo
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Factura electronica N° ' . $resFactura[0]['id_factura'];
+                    $mail->Body = 'Estimado cliente, adjunto encontrará su factura electrónica.';
+
+                    // Enviar el correo
+                    $mail->send();
+                    echo '<script>swal("Hurra!!!", "El correo con su factura fue entregado correctamente", "success");</script>';
+                } catch (Exception $e) {
+                    echo '<script>swal("Ups!!", "No se logró enviar tu factura al correo proporcionado. Error: ' . $mail->ErrorInfo . '", "error");</script>';
+                }
+?>
+                <a href="#" id="downloadPdf" style="display:none;">Descargar PDF</a>
+                <script>
+                    window.addEventListener('load', function() {
+                        // Usa una ruta accesible a través de HTTP
+                        const pdfUrl = '/juniorPizza/views/moduls/factura_electronica.pdf'; // Ruta accesible vía HTTP
+
+                        // Obtener el enlace con id "downloadPdf"
+                        const a = document.getElementById('downloadPdf');
+
+                        if (a) {
+                            // Establecer el atributo href con la ruta del archivo PDF
+                            a.href = pdfUrl;
+                            a.download = 'factura_electronica.pdf';
+
+                            // Simular clic para descargar el archivo
+                            a.click();
+                        } else {
+                            console.error('No se encontró el elemento con id "downloadPdf".');
+                        }
+                    });
+                </script>
+<?php
             }
         }
     }
 }
 ?>
+
 <div class="container">
     <div class="row">
         <div class="col">
@@ -524,6 +938,15 @@ if (isset($_SESSION['factura'])) {
             </div>
             <button id="Imprimir" class="btn btn-primary mt-2">Imprimir</button>
             <a id="caja" href="caja" class="btn btn-primary mt-2">Caja</a>
+            <?php
+            if (isset($_GET['factura'])) {
+            ?>
+                <form action="" method="post">
+                    <button class="btn btn-primary mt-2" name="enviar_correo">Enviar Factura</button>
+                </form>
+            <?php
+            }
+            ?>
         </div>
     </div>
 </div>

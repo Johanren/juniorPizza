@@ -78,6 +78,39 @@ $(document).ready(function () {
 	});
 });
 
+//Autocomplete Impuesto
+$(document).ready(function () {
+	$('body').on('keydown', '.impuesto', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+		$(this).autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { impuesto: request.term },
+					success: function (data) {
+						response(data);
+						//console.log("el dato", data);
+
+					}
+
+				});
+			},
+			minLength: 1,
+			select: function (event, ui) {
+				$("#impuesto_" + index).val(ui.item.label);
+				$("#id_impuesto_" + index).val(ui.item.id);
+				return false;
+
+			}
+
+		});
+	});
+});
+
 //Autocomplete Categoria
 $(document).ready(function () {
 	$('body').on('keydown', '.categoria', function () {
@@ -799,7 +832,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarFactura").click(function () {
-		$("#factura").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_articulo[]" id="id_articulo_' + index + '"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_' + index + '" placeholder="Codigo producto"></td><td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_' + index + '" placeholder="Nombre producto"></td><td><input type="text" name="precio" class="form-control valor" id="valor_' + index + '" disabled></td><!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_' + index + '" value="0"></td>--><!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_' + index + '" value="0" required>--><td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_' + index + '" value="0" required></td><td><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></td><td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td></tr>');
+		$("#factura").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_articulo[]" id="id_articulo_' + index + '"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_' + index + '" placeholder="Codigo producto"></td><td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_' + index + '" placeholder="Nombre producto"></td><td><input type="text" name="precio[]" class="form-control valor" id="valor_' + index + '"></td><!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_' + index + '" value="0"></td>--><!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_' + index + '" value="0" required>--><td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_' + index + '" value="0" required></td><td><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></td><td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td></tr>');
 		index++;
 	});
 });
@@ -1776,3 +1809,91 @@ $(document).ready(function () {
 		});
 	});
 });
+var currentURL = window.location.href;
+var host = window.location.hostname;
+if (currentURL.includes("http://" + host + "/juniorPizza/informe")) {
+	//descarge excel informe ventas electronico
+
+	document.getElementById('informeVentaElectronico').addEventListener('click', function (event) {
+		event.preventDefault(); // Evitar que el enlace realice una acción predeterminada
+
+		// Obtener los valores de las fechas del formulario
+		const inicio = document.getElementById('inicio').value;
+		const fin = document.getElementById('fin').value;
+
+		// Crear un objeto FormData para enviar los datos del formulario
+		const formData = new FormData();
+		formData.append('inicio', inicio);
+		formData.append('fin', fin);
+
+		// Enviar los datos al archivo PHP encargado de generar el Excel
+		fetch('views/excel.php', {
+			method: 'POST',
+			body: formData
+		})
+			.then(response => response.blob()) // Convertir la respuesta a blob (archivo)
+			.then(blob => {
+				// Crear una URL temporal para el archivo
+				const url = window.URL.createObjectURL(blob);
+
+				// Crear un enlace temporal para la descarga
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = 'Informe_Venta_Electronico.xlsx'; // Nombre del archivo a descargar
+				document.body.appendChild(a);
+				a.click();
+
+				// Limpiar URL temporal y remover enlace
+				a.remove();
+				window.URL.revokeObjectURL(url);
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});
+	});
+}
+////manejar accionn boton descargar pdf o impresora pos
+
+document.getElementById('btnImprimirPDF').addEventListener('click', function () {
+    // Llamada AJAX para generar el PDF
+    $.ajax({
+        url: 'views/pdf.php',  // Archivo que genera el PDF
+        type: 'POST',
+        data: { datosFactura: obtenerDatosFactura() },  // Envías los datos de la tabla
+        dataType: 'json',  // Esperas una respuesta en JSON
+        success: function (response) {
+            // Verifica si la URL del PDF está presente en la respuesta
+            if (response.urlPDF) {
+                //console.log('URL del PDF:', response.urlPDF); // Mostrar en consola la URL
+                // Crear un enlace temporal para descargar el PDF automáticamente
+                const a = document.createElement('a');
+                a.href = response.urlPDF;
+                a.download = 'cotizacion.pdf';
+                a.click();
+            } else {
+                console.error('No se recibió la URL del PDF.');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error en la solicitud:', error);
+            alert('Error al generar el PDF');
+        }
+    });
+});
+
+
+// Función para obtener los datos de la tabla
+function obtenerDatosFactura() {
+	var factura = [];
+	$('#factura tr').each(function () {
+		var item = {
+			codigo: $(this).find('input[name="codigo"]').val(),
+			articulo: $(this).find('input[name="articulo"]').val(),
+			precio: $(this).find('input[name="precio[]"]').val(),
+			cantidad: $(this).find('input[name="cantidad[]"]').val(),
+			total: $(this).find('input[name="total"]').val(),
+		};
+		factura.push(item);
+	});
+	return factura;
+}

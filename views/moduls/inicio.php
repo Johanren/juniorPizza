@@ -59,8 +59,19 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
         $('#exampleModalCenter').modal('toggle')
     });
     $(document).ready(function() {
+        // Abre el modal `#reporte` al hacer clic en el botón `#reportes`
         $('#reportes').on('click', function() {
-            $('#reporte').modal('toggle')
+            $('#reporte').modal('toggle');
+        });
+
+        // Cierra el modal `#reporte` y abre el modal `#reporteventames` al hacer clic en `#reporteventa`
+        $('#reporteventa').on('click', function() {
+            $('#reporte').modal('hide'); // Cierra el modal `#reporte`
+
+            // Cuando el modal `#reporte` termine de cerrarse, abre el modal `#reporteventames`
+            $('#reporte').on('hidden.bs.modal', function() {
+                $('#reporteventames').modal('show');
+            });
         });
     });
 </script>
@@ -94,7 +105,35 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
                         <div class="col">
                             <div class="d-grid gap-2">
                                 <a href="views/excel.php?productoMes=<?php echo $_SESSION['id_local'] ?>" class="btn btn-primary">Reporte Productos Vendos del Mes</a>
-                                <a href="views/excel.php?ventaMes=<?php echo $_SESSION['id_local'] ?>" class="btn btn-primary" type="button">Reporte Ventas del Mes</a>
+                                <button type="button" class="btn btn-primary" id="reporteventa" data-bs-toggle="modal" data-bs-target="#reporte">
+                                    Generar Reporte Venta Mes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="reporteventames" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg
+        ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Generar Reportes Venta mes</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-grid gap-2">
+                                <form action="views/excel.php" method="get">
+                                    <label for="">Mes</label>
+                                    <input type="month" name="mes" id="mes" class="form-control">
+                                    <input type="hidden" name="ventaMes" id="" value="<?php echo $_SESSION['id_local'] ?>">
+                                    <button class="btn btn-primary  mt-3" type="submit">Generar</button>
+                                </form>
                             </div>
                         </div>
                     </div>

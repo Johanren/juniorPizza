@@ -196,7 +196,7 @@ if (isset($_GET['ventaMes'])) {
     if ($conn->connect_error) {
         die("Conexión fallida: " . $conn->connect_error);
     }
-    $fecha = date('Y-m') . "%";
+    $fecha = $_GET['mes'] . "%";
     $sql = "SELECT DATE(fecha_ingreso) AS dia_facturado, SUM(precio_compra) AS total FROM `venta` WHERE fecha_ingreso LIKE '$fecha' AND id_local = $id GROUP BY DATE(fecha_ingreso) ORDER BY DATE(fecha_ingreso)";
     $result = $conn->query($sql);
 

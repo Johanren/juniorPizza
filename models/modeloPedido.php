@@ -133,7 +133,7 @@ class ModeloPedido
 
     function ListarMesaPedidoModelo($fecha)
     {
-        $sql = "SELECT DISTINCT pedido.id_mesa, pedido.fecha_ingreso, mesa.nombre_mesa, usuario.primer_nombre, usuario.primer_apellido FROM $this->tabla INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario WHERE fecha_ingreso LIKE ? AND cocina = 0 AND pedido.id_local ORDER BY fecha_ingreso DESC";
+        $sql = "SELECT DISTINCT pedido.id_mesa, pedido.fecha_ingreso, mesa.nombre_mesa, usuario.primer_nombre, usuario.primer_apellido FROM $this->tabla INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario WHERE fecha_ingreso LIKE ? AND cocina = 0 AND pedido.id_local = ? ORDER BY fecha_ingreso DESC";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $fecha, PDO::PARAM_STR);
@@ -190,7 +190,7 @@ class ModeloPedido
 
     function actualizarPedidoCocinaModelo($id, $fecha, $cocina)
     {
-        $sql = "UPDATE $this->tabla SET cocina = ? WHERE fecha_ingreso = ? AND id_mesa = ? AND = ?";
+        $sql = "UPDATE $this->tabla SET cocina = ? WHERE fecha_ingreso = ? AND id_mesa = ? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $cocina, PDO::PARAM_INT);

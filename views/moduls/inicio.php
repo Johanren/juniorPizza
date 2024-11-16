@@ -8,6 +8,9 @@ if ($_SESSION['rol'] == "Cocina") {
 if ($_SESSION['rol'] == "Cajero" || $_SESSION['rol'] == "Gerente") {
     echo '<script>window.location="caja"</script>';
 }
+if ($_SESSION['rol'] == "Domiciliario") {
+    echo '<script>window.location="domicilio"</script>';
+}
 //Ventas mensuales y anuales
 $venta = new ControladorVenta();
 $mesual = $venta->ganaciasMensualesVenta();

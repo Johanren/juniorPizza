@@ -33,6 +33,9 @@ class ModeloViews
 
         // Definir las rutas de redirección según el valor de $enlace
         switch ($enlace) {
+            case 'pedidoCancelado':
+                $modulo = 'domicilioPedido.php';
+                break;
             case 'agregarUsuario':
             case 'eliminarUsuario':
             case 'actualizarUsuario':
@@ -116,7 +119,6 @@ class ModeloViews
 
         // Construir la ruta completa del módulo
         $moduloRuta = $directorioBase . $modulo;
-
         // Verificar si el módulo existe en la lista de módulos válidos y en el directorio correspondiente
         if (in_array(pathinfo($modulo, PATHINFO_FILENAME), $this->modulosValidos) && file_exists($moduloRuta)) {
             return $moduloRuta;

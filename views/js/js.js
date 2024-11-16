@@ -5,6 +5,7 @@ function hacerClic() {
 	if (urlActual == "http://" + hosting + "/juniorPizza/factura_pdf") {
 		//document.getElementById('caja').click();
 	}
+	document.getElementById('btnImprimirDomicilio').click();
 	document.getElementById('btnImprimir').click();
 	//console.log("hizo clic");
 }
@@ -16,6 +17,7 @@ window.onload = function () {
 		setInterval(hacerClic, 10000);
 	}
 };
+
 //Autocomplete
 $("#proeevedor").autocomplete({
 	source: function (request, response) {
@@ -340,6 +342,45 @@ $(document).ready(function () {
 				$("#producto_" + index).val(ui.item.label);
 				$("#id_predido_" + index).val(ui.item.id);
 				$("#descripcion_" + index).val(ui.item.descripcion);
+				$("#valor_" + index).val(ui.item.precio);
+				$("#precio_" + index).val(ui.item.precio);
+				return false;
+
+			}
+
+		});
+	});
+});
+
+//Autocomplete Domicilio
+$(document).ready(function () {
+	$('body').on('keydown', '.productoDomicilio', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+		var id_local = document.getElementById('id_local_1').value
+		$(this).autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: 'views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { productoDomicilio: request.term, id: id_local },
+					success: function (data) {
+						response(data);
+						//console.log("el dato", data);
+
+					}
+
+				});
+			},
+			minLength: 1,
+			select: function (event, ui) {
+				$("#producto_" + index).val(ui.item.label);
+				$("#id_predido_" + index).val(ui.item.id);
+				$("#descripcion_" + index).val(ui.item.descripcion);
+				$("#valor_" + index).val(ui.item.precio);
+				$("#precio_" + index).val(ui.item.precio);
 				return false;
 
 			}
@@ -353,7 +394,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarProducto").click(function () {
-		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><td><input type="hidden" class="form-control" name="id_impuesto[]" id="id_impuesto_'+index+'"><input type="text" class="form-control impuesto" name="" id="impuesto_'+index+'"></td>');
+		$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]"><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]"></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]"></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0"></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]"></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]"><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '"></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0"></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '"><input type="text" class="form-control categoria"name="" id="categoria_' + index + '"></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><td><input type="hidden" class="form-control" name="id_impuesto[]" id="id_impuesto_' + index + '"><input type="text" class="form-control impuesto" name="" id="impuesto_' + index + '"></td>');
 		//$("#producto").append('<tr><td><input type="hidden" id="id_producto_' + index + '" name="id_producto[]" required><input type="text" class="form-control" id="codigo_' + index + '" name="codigo[]" required></td><td><input type="text" class="form-control nombrePro" id="producto_' + index + '" name="nombre[]" required></td><td><input type="text" class="form-control precio_uni" id="precioUni_' + index + '" name="precioUnita[]" value="0" required></td><td><input type="text" class="form-control precio" id="precio_' + index + '" name="precio[]" required></td><td><input type="hidden" id="cantidad_' + index + '" name="cant[]" required><input type="text" class="form-control cant" name="cantidad[]" id="cant_' + index + '" required></td><td><input type="text" class="form-control Total" id="total_' + index + '" name="total[]" value="0" required></td><td><input type="hidden" class="form-control" name="id_categoria[]"id="id_categoria_' + index + '" required><input type="text" class="form-control categoria"name="" id="categoria_' + index + '" required></td><td><input type="hidden" class="form-control" name="id_medida[]"id="id_medida_' + index + '"><input type="text" class="form-control medida" name=""id="medida_' + index + '"></td><?phpif ($_SESSION["rol"] == "Administrador") {?><td><input type="hidden" class="form-control " name="id_local[]"id="id_local_' + index + '"><input type="text" class="form-control nom_local"id="local_' + index + '" required></td><?php}?></tr>');
 		index++;
 	});
@@ -429,7 +470,13 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarPedido").click(function () {
-		$("#pedidoProducto").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_pedido[]" id="id_predido_' + index + '"><input type="text"name="producto[]" class="form-control producto" id="producto_' + index + '"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_' + index + '" class="form-control" cols="30"rows="1"></textarea></th><th><input type="number" name="cantidad[]" class="form-control"placeholder="Cantidad Pedido"></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
+		var urlActual = window.location.href;
+		var hosting = window.location.hostname;
+		if (urlActual == "http://" + hosting + "/juniorPizza/domicilioPedido") {
+			$("#pedidoProducto").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_pedido[]" id="id_predido_' + index + '"><input type="text"name="producto[]" class="form-control producto" id="producto_' + index + '"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_' + index + '" class="form-control" cols="30"rows="1"></textarea></th><th><input type="hidden" name="precio[]" class="form-control valor" id="precio_1" placeholder="Precio" disabled><input type="text" name="precio[]" class="form-control valor" id="valor_' + index + '" placeholder="Precio"></th><th><input type="text" name="cantidad[]" class="form-control cantidad" placeholder="Cantidad Pedido" id="cantidad_' + index + '" value="0" required></th><th><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
+		} else {
+			$("#pedidoProducto").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_pedido[]" id="id_predido_' + index + '"><input type="text"name="producto[]" class="form-control producto" id="producto_' + index + '"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_' + index + '" class="form-control" cols="30"rows="1"></textarea></th><th><input type="number" name="cantidad[]" class="form-control"placeholder="Cantidad Pedido"></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
+		}
 		index++;
 	});
 });
@@ -1855,30 +1902,30 @@ if (currentURL.includes("http://" + host + "/juniorPizza/informe")) {
 ////manejar accionn boton descargar pdf o impresora pos
 
 document.getElementById('btnImprimirPDF').addEventListener('click', function () {
-    // Llamada AJAX para generar el PDF
-    $.ajax({
-        url: 'views/pdf.php',  // Archivo que genera el PDF
-        type: 'POST',
-        data: { datosFactura: obtenerDatosFactura() },  // Envías los datos de la tabla
-        dataType: 'json',  // Esperas una respuesta en JSON
-        success: function (response) {
-            // Verifica si la URL del PDF está presente en la respuesta
-            if (response.urlPDF) {
-                //console.log('URL del PDF:', response.urlPDF); // Mostrar en consola la URL
-                // Crear un enlace temporal para descargar el PDF automáticamente
-                const a = document.createElement('a');
-                a.href = response.urlPDF;
-                a.download = 'cotizacion.pdf';
-                a.click();
-            } else {
-                console.error('No se recibió la URL del PDF.');
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('Error en la solicitud:', error);
-            alert('Error al generar el PDF');
-        }
-    });
+	// Llamada AJAX para generar el PDF
+	$.ajax({
+		url: 'views/pdf.php',  // Archivo que genera el PDF
+		type: 'POST',
+		data: { datosFactura: obtenerDatosFactura() },  // Envías los datos de la tabla
+		dataType: 'json',  // Esperas una respuesta en JSON
+		success: function (response) {
+			// Verifica si la URL del PDF está presente en la respuesta
+			if (response.urlPDF) {
+				//console.log('URL del PDF:', response.urlPDF); // Mostrar en consola la URL
+				// Crear un enlace temporal para descargar el PDF automáticamente
+				const a = document.createElement('a');
+				a.href = response.urlPDF;
+				a.download = 'cotizacion.pdf';
+				a.click();
+			} else {
+				console.error('No se recibió la URL del PDF.');
+			}
+		},
+		error: function (xhr, status, error) {
+			console.error('Error en la solicitud:', error);
+			alert('Error al generar el PDF');
+		}
+	});
 });
 
 
@@ -1899,3 +1946,114 @@ function obtenerDatosFactura() {
 }
 
 
+function actualizarPrint(id) {
+	if (confirm("Quieres Confirmar El Pedido")) {
+		fetch('views/ajax.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				action: 'actualizarPrint',
+				id_domicilio_pedido: id
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					alert("Pedido Confirmado");
+					location.reload();
+				} else {
+					alert("Error al actualizar: " + data.error);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert("Error en la solicitud.");
+			});
+	}
+}
+
+function actualizarCancelado(id) {
+	if (confirm("Quieres Cancelar El Pedido")) {
+		fetch('views/ajax.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				action: 'actualizarCancel',
+				id_domicilio_pedido: id
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					alert("Pedido Cancelado");
+					location.reload();
+				} else {
+					alert("Error al actualizar: " + data.error);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert("Error en la solicitud.");
+			});
+	}
+}
+
+function actualizarDomiciliario(id) {
+	if (confirm("Quieres Entregar El Pedido")) {
+		fetch('views/ajax.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				action: 'actualizarLlevar',
+				id_domicilio_pedido: id
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					alert("Pedido Para Entregar");
+					location.reload();
+				} else {
+					alert("Error al actualizar: " + data.error);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert("Error en la solicitud.");
+			});
+	}
+}
+
+function actualizarEntregado(id) {
+	if (confirm("Confirmar Entrega")) {
+		fetch('views/ajax.php', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				action: 'actualizarEntrega',
+				id_domicilio_pedido: id
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					alert("Pedido Entregado");
+					location.reload();
+				} else {
+					alert("Error al actualizar: " + data.error);
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert("Error en la solicitud.");
+			});
+	}
+}

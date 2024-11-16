@@ -181,6 +181,119 @@ if ($res != null) {
                     </tbody>
                 </table>
             <?php
+            }
+            if (isset($_GET['id_domicilio'])) {
+                $pedido = new ControladorDomicilio();
+                $litarProducto = $pedido->listarPedidoDomicilioFactura();
+            ?>
+                <table class="table mt-5 table-hover">
+                    <thead>
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <!--<th>Precio descuento</th>-->
+                            <!--<th>Peso</th>-->
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="factura">
+                        <?php
+                        foreach ($litarProducto as $key => $value) {
+                        ?>
+                            <tr class="eliminar_<?php echo $key + 1 ?>">
+                                <td><input type="hidden" name="id_articulo[]" id="id_articulo_<?php echo $key + 1 ?>" value="<?php echo $value['id_producto'] ?>"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_1" placeholder="Codigo producto" value="<?php echo $value['codigo_producto'] ?>"></td>
+                                <td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_<?php echo $key + 1 ?>" placeholder="Nombre producto" value="<?php echo $value['nombre_producto'] ?>"></td>
+                                <td><input type="text" name="precio" class="form-control valor" id="valor_<?php echo $key + 1 ?>" value="<?php echo number_format($value['precio_unitario'], 0) ?>" disabled></td>
+                                <!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_1" value="0"></td>-->
+                                <!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_1" value="0" required>-->
+                                <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_<?php echo $key + 1 ?>" value="<?php echo $value['cantidad'] ?>" value="0" required>
+                                </td>
+                                <td><input type="text" name="total" class="form-control resultado" value="<?php echo number_format($value['precio_unitario'] * $value['cantidad'], 0) ?>" id="resultado_<?php echo $key + 1 ?>" disabled>
+                                </td>
+                                <td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td><input type="hidden" name="" id="id_articulo_" value=""><input type="text" name="" class="form-control codigo_articulo" id="codigo_1" placeholder="Codigo producto" value="00000"></td>
+                            <td><input type="text" name="" class="form-control nombre_articulo" id="nombre_" placeholder="Nombre producto" value="Domicilio"></td>
+                            <td><input type="text" name="precioDomicilio" class="form-control domicilioPrecio" id="valor_ " value="<?php echo number_format(5000, 0) ?>"></td>
+                            <!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_1" value="0"></td>-->
+                            <!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_1" value="0" required>-->
+                            <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_" value="1" value="0" required>
+                            </td>
+                            <td><input type="text" name="total" class="form-control resultado" value="<?php echo number_format(5000 * 1, 0) ?>" id="resultado_30" disabled>
+                            </td>
+                            <td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th>SubTotal</th>
+                            <th></th>
+                            <!--<th></th>-->
+                            <!--<th></th>-->
+                            <th></th>
+                            <th></th>
+                            <th><input type="text" class="form-control factura" name="total_Factura" id="total" disabled>
+                            </th>
+                        </tr>
+                    </tbody>
+                    <?php if (isset($_SESSION['propina'])) {
+                        if ($_SESSION['propina'] == 'true') {
+                    ?>
+                            <tbody>
+                                <tr>
+                                    <th>Propinas</th>
+                                    <th></th>
+                                    <!--<th></th>-->
+                                    <!--<th></th>-->
+                                    <th></th>
+                                    <th></th>
+                                    <th><input type="text" class="form-control propina" name="propina" id="propina">
+                                    </th>
+                                </tr>
+                            </tbody>
+                    <?php }
+                    } ?>
+                    <tbody>
+                        <tr>
+                            <th>Total</th>
+                            <th></th>
+                            <!--<th></th>-->
+                            <!--<th></th>-->
+                            <th></th>
+                            <th></th>
+                            <th><input type="text" class="form-control factura" name="total_Factura" id="total_1" disabled>
+                            </th>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th>Metodo Pago</th>
+                            <th><select name="metodo" id="metodo" class="form-control" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="efectivo">Efectivo</option>
+                                    <option value="nequi">Nequi</option>
+                                    <option value="daviplata">Daviplata</option>
+                                    <option value="transfferencia">Transferencia</option>
+                                    <option value="member">Membrecia</option>
+                                </select></th>
+                            <th>Paga</th>
+                            <th><input type="text" class="form-control pago" name="pago" id="pago_1" required></th>
+                            <!--<th></th>-->
+                            <th>Cambio</th>
+                            <th><input type="text" class="form-control" name="cambio" id="cambio_1" disabled></th>
+                        </tr>
+                    </tbody>
+                </table>
+            <?php
             } else {
             ?>
                 <table class="table mt-5 table-hover">
@@ -402,6 +515,8 @@ $agregarFactura = new ControladorFactura();
 $agregarFactura->agregarFactura();
 $mesa = new ControladorPedido();
 $listar = $mesa->listarPedidoMesaFactura();
+$domicilio = new ControladorDomicilio();
+$lsitarDo = $domicilio->listarDomicilioFactura();
 ?>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -428,6 +543,18 @@ $listar = $mesa->listarPedidoMesaFactura();
                             <tr>
                                 <td><?php echo $value['nombre_mesa'] ?></td>
                                 <th><a href="index.php?action=caja&id_mesa=<?php echo $value['id_mesa'] ?>"><i class="fas fa-fingerprint fa-lg"></i></a></th>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                    <tbody>
+                        <?php
+                        foreach ($lsitarDo as $key => $value) {
+                        ?>
+                            <tr>
+                                <td>Domicilio Para: <?php echo $value['nombre'] ?></td>
+                                <th><a href="index.php?action=caja&id_domicilio=<?php echo $value['id_domicilio_pedido'] ?>"><i class="fas fa-fingerprint fa-lg"></i></a></th>
                             </tr>
                         <?php
                         }

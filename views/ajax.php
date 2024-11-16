@@ -19,13 +19,16 @@ class Ajax
     public $local;
     public $producto;
     public $ingrediente;
-    public $productoPedido;
+    public $Pedido;
+    public $id_local;
     public $id_mesa;
     public $fecha;
     public $print;
+    public $printDomicilio;
     public $printUsuario;
-
+    public $printCliente;
     public $respuestaPrint;
+    public $respuestaPrintDomicilio;
     public $cc;
     public $articulo;
     public $idArticulo;
@@ -98,7 +101,7 @@ class Ajax
     function consultarProductoAjax()
     {
         $consultar = new ControladorProducto();
-        $respuesta = $consultar->consultarProductoAjaxControlador($this->producto);
+        $respuesta = $consultar->consultarProductoAjaxControlador($this->producto, '');
         foreach ($respuesta as $key => $value) {
             $datos[] = array(
                 'label' => $value['nombre_producto'],
@@ -140,22 +143,24 @@ class Ajax
     function consultarproductoPedidoAjax()
     {
         $consultar = new ControladorIngredienteProducto();
-        $respuesta = $consultar->consultarIngredeinteAjaxControlador($this->productoPedido);
+        $respuesta = $consultar->consultarIngredeinteAjaxControlador($this->Pedido, $this->id_local);
         $consultar = new ModeloIngredienteProducto();
         foreach ($respuesta as $key => $value) {
-            $res = $consultar->consultarIngredeinteAjaxModelo($value['id_producto']);
+            $res = $consultar->consultarIngredeinteAjaxModelo($value['id_producto'], $this->id_local);
             if ($res[0]['id_producto'] == null) {
                 $datos[] = array(
                     'label' => $value['nombre_producto'],
                     'id' => $value['id_producto'],
-                    'descripcion' => (isset($value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null
+                    'descripcion' => (isset($value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null,
+                    'precio' => number_format($value['precio_unitario'], 0),
                 );
             } else {
-                foreach ($res as $key => $value) {
+                foreach ($res as $key => $valu) {
                     $datos[] = array(
-                        'label' => $value['nombre_producto'],
-                        'id' => $value['id_producto'],
-                        'descripcion' => (isset($value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $value["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null
+                        'precio' => number_format($value['precio_unitario'], 0),
+                        'label' => $valu['nombre_producto'],
+                        'id' => $valu['id_producto'],
+                        'descripcion' => (isset($valu["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"])) ? $valu["GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ')"] : null
                     );
                 }
             }
@@ -197,6 +202,17 @@ class Ajax
         print json_encode($datos);
     }
 
+    function listarPedidoPrintDomicilioAjax()
+    {
+        $resDomicilio = new ControladorDomicilio();
+        $res = $resDomicilio->listarPedidoDomicilioPrintAjaxControlador($this->printDomicilio);
+        foreach ($res as $key => $value) {
+            $datos[] = array('nombre' => $value['producto'], 'cantidad' => $value['cantidad'], 'descripcion' => (isset($value['descripcion'])) ? $value['descripcion'] : " ", 'categoria' => $value['nombre_categoria']);
+        }
+        header('Content-Type: text/html; charset=UTF-8');
+        print json_encode($datos);
+    }
+
     function listarPedidoPrintUsurioAjax()
     {
         $resPedido = new ControladorPedido();
@@ -208,10 +224,28 @@ class Ajax
         print json_encode($datos);
     }
 
+    function listarPedidoDomicilioPrintUsurioAjax()
+    {
+        $resPedido = new ControladorDomicilioPedido();
+        $respe = $resPedido->listarPedidoPirntFechaUsuarioIngresoDomicilioAjaxControlador($this->printCliente);
+        foreach ($respe as $key => $value) {
+            $datos[] = array('nombre' => $value['nombre'], 'id' => $value['id_domicilio_pedido']);
+        }
+        header('Content-Type: text/html; charset=UTF-8');
+        print json_encode($datos);
+    }
+
     function ActualizarPedidoMesa()
     {
         $resPedido = new ControladorPedido();
         $respe = $resPedido->ActualizarPedidoMesaAjaxControlador($this->respuestaPrint, $this->id_mesa);
+        print $respe;
+    }
+
+    function ActualizarPedidoDomicilio()
+    {
+        $resPedido = new ControladorDomicilio();
+        $respe = $resPedido->ActualizarPedidoDomicilioAjaxControlador($this->respuestaPrintDomicilio, $this->id_mesa);
         print $respe;
     }
 
@@ -289,9 +323,8 @@ class Ajax
                 'label' => $value['codigo_producto'],
             );
         }
-        
-        print json_encode($res);
 
+        print json_encode($res);
     }
 
     function consultarImpuestoAjax()
@@ -300,7 +333,7 @@ class Ajax
         $respuesta = $consultar->listarImpuestoAjaxControlador($this->impuesto);
         foreach ($respuesta as $key => $value) {
             $datos[] = array(
-                'label' => "0".$value['numero_impuesto']. $value['nombre_impusto'],
+                'label' => "0" . $value['numero_impuesto'] . $value['nombre_impusto'],
                 'id' => $value['id_impuesto'],
             );
         }
@@ -342,7 +375,14 @@ if (isset($_GET['ingrediente'])) {
 }
 
 if (isset($_GET['productoPedido'])) {
-    $ajax->productoPedido = $_GET['productoPedido'];
+    $ajax->Pedido = $_GET['productoPedido'];
+    $ajax->id_local = '';
+    $ajax->consultarproductoPedidoAjax();
+}
+
+if (isset($_GET['productoDomicilio']) && isset($_GET['id'])) {
+    $ajax->Pedido = $_GET['productoDomicilio'];
+    $ajax->id_local = $_GET['id'];
     $ajax->consultarproductoPedidoAjax();
 }
 
@@ -363,15 +403,31 @@ if (isset($_GET['print'])) {
     $ajax->listarPedidoPrintAjax();
 }
 
+if (isset($_GET['printDomicilio'])) {
+    $ajax->printDomicilio = $_GET['printDomicilio'];
+    $ajax->listarPedidoPrintDomicilioAjax();
+}
+
 if (isset($_GET['printUsuario'])) {
     $ajax->printUsuario = $_GET['printUsuario'];
     $ajax->listarPedidoPrintUsurioAjax();
+}
+
+if (isset($_GET['printCliente'])) {
+    $ajax->printCliente = $_GET['printCliente'];
+    $ajax->listarPedidoDomicilioPrintUsurioAjax();
 }
 
 if (isset($_GET['respuestaPrint']) && isset($_GET['id'])) {
     $ajax->respuestaPrint = $_GET['respuestaPrint'];
     $ajax->id_mesa = $_GET['id'];
     $ajax->ActualizarPedidoMesa();
+}
+
+if (isset($_GET['respuestaPrintDomicilio']) && isset($_GET['id'])) {
+    $ajax->respuestaPrintDomicilio = $_GET['respuestaPrintDomicilio'];
+    $ajax->id_mesa = $_GET['id'];
+    $ajax->ActualizarPedidoDomicilio();
 }
 
 if (isset($_GET['cc'])) {
@@ -421,3 +477,104 @@ if (isset($_GET['impuesto'])) {
     $ajax->impuesto = $_GET['impuesto'];
     $ajax->consultarImpuestoAjax();
 }
+
+////
+try {
+    // Leer el cuerpo de la solicitud
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    // Verificar la acción solicitada
+    if (isset($input['action']) && $input['action'] === 'actualizarPrint') {
+        $id = $input['id_domicilio_pedido'] ?? null;
+
+        if ($id) {
+            // Llamar al modelo para realizar la actualización
+            $modeloPedidos = new ModeloDomicilio();
+            $resultado = $modeloPedidos->actualizarPrintDomicilio($id);
+
+            if ($resultado) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'No se pudo actualizar la base de datos.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'ID no válido.']);
+        }
+    } elseif (isset($input['action']) && $input['action'] === 'actualizarCancel') {
+        $id = $input['id_domicilio_pedido'] ?? null;
+
+        if ($id) {
+            // Llamar al modelo para realizar la actualización
+            $modeloPedidos = new ModeloDomicilio();
+            $resultado = $modeloPedidos->actualizarCanceDomicilio($id);
+
+            if ($resultado) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'No se pudo actualizar la base de datos.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'ID no válido.']);
+        }
+    } elseif (isset($input['action']) && $input['action'] === 'actualizarLlevar') {
+        $id = $input['id_domicilio_pedido'] ?? null;
+
+        if ($id) {
+            // Llamar al modelo para realizar la actualización
+            $modeloPedidos = new ModeloDomicilio();
+            $resultado = $modeloPedidos->actualizarLlevarDomicilio($id);
+
+            if ($resultado) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'No se pudo actualizar la base de datos.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'ID no válido.']);
+        }
+    } elseif (isset($input['action']) && $input['action'] === 'actualizarEntrega') {
+        $id = $input['id_domicilio_pedido'] ?? null;
+
+        if ($id) {
+            // Llamar al modelo para realizar la actualización
+            $modeloPedidos = new ModeloDomicilio();
+            $resultado = $modeloPedidos->actualizarEntregaDomicilio($id);
+
+            if ($resultado) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'No se pudo actualizar la base de datos.']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'ID no válido.']);
+        }
+    }
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+}
+////Notificacion de domicilio
+// Verificar la acción solicitada
+
+try {
+    if (isset($_POST['action']) && $_POST['action'] === 'verificarNuevosDomicilios') {
+        // Obtener el último ID del domicilio
+        $ultimoId = isset($_POST['ultimoId']) ? (int)$_POST['ultimoId'] : 0;
+
+        // Llamar a un modelo o consulta que busque nuevos domicilios
+        $modeloPedidos = new ModeloDomicilio();
+        $nuevosDomicilios = $modeloPedidos->obtenerNuevosDomicilios($ultimoId);
+        foreach ($nuevosDomicilios as $key => $value) {
+            $notificado = new ModeloDomicilioPedido();
+            $notificado->actualziarNotificación($value['id_domicilio_pedido']);
+        }
+        // Retornar los nuevos domicilios en formato JSON
+        echo json_encode([
+            'success' => true,
+            'nuevos' => $nuevosDomicilios,
+        ]);
+    }
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+}
+exit;
+

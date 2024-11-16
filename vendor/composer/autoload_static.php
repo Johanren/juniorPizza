@@ -22,6 +22,10 @@ class ComposerStaticInitf40a010c09964c1de03c1408274f88e3
         array (
             'ZipStream\\' => 10,
         ),
+        'T' => 
+        array (
+            'Twilio\\' => 7,
+        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -78,6 +82,10 @@ class ComposerStaticInitf40a010c09964c1de03c1408274f88e3
         'ZipStream\\' => 
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
+        ),
+        'Twilio\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (

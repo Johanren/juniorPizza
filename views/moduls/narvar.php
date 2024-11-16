@@ -171,6 +171,7 @@ if ($ress != null) {
                     <h6 class="collapse-header">Menu:</h6>
                     <a class="collapse-item" href="mesas">Mesas</a>
                     <a class="collapse-item" href="pedido">Pedidos</a>
+                    <a class="collapse-item" href="domicilio">Domicilio</a>
                     <!--<a class="collapse-item" href="utilities-animation.html">Animations</a>
                 <a class="collapse-item" href="utilities-other.html">Other</a>-->
                 </div>
@@ -560,3 +561,46 @@ if ($ress != null) {
 
         </nav>
         <!-- End of Topbar -->
+        <script>
+            let ultimoId = 0; // ID del último domicilio registrado
+
+            function verificarNuevosDomicilios() {
+                $.ajax({
+                    url: 'views/ajax.php', // Ruta del archivo PHP que procesará la solicitud
+                    type: 'POST', // Cambié a POST ya que es más común para este tipo de solicitudes
+                    dataType: 'json', // Esperamos una respuesta en JSON
+                    data: {
+                        action: 'verificarNuevosDomicilios', // Acción que se va a procesar en el servidor
+                        ultimoId: ultimoId // El último ID de domicilio que tienes almacenado
+                    },
+                    success: function(data) {
+                        if (data.success && data.nuevos.length > 0) {
+                            data.nuevos.forEach(domicilio => {
+                                ultimoId = domicilio.id_domicilio_pedido; // Actualizamos el último ID
+                                alert(`Nuevo domicilio agregado: Cliente - ${domicilio.nombre}, Dirección - ${domicilio.direccion}`);
+
+                                // Esperamos que el usuario haga clic en algún lugar para reproducir el sonido
+                                document.body.addEventListener('click', function playSound() {
+                                    const audio = new Audio('views/audio/domicilio.mp3');
+                                    audio.play().catch(error => {
+                                        console.error('Error al reproducir el sonido:', error);
+                                    });
+                                    // Eliminar el listener para que el sonido no se reproduzca más veces
+                                    document.body.removeEventListener('click', playSound);
+                                });
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error en la solicitud:', error);
+                        alert('Hubo un error al verificar los domicilios.');
+                    }
+                });
+            }
+
+
+
+
+            // Configurar el sondeo cada 5 segundos
+            setInterval(verificarNuevosDomicilios, 5000);
+        </script>

@@ -60,7 +60,7 @@ class ModeloIngredienteProducto
         }
     }
 
-    function consultarIngredeinteAjaxModelo($dato)
+    function consultarIngredeinteAjaxModelo($dato,$id)
     {
         if ($dato != '') {
             $sql = "SELECT producto.id_producto, producto.nombre_producto, GROUP_CONCAT(nombre_ingrediente SEPARATOR ', ') FROM $this->tabla INNER JOIN producto ON producto.id_producto = ingrediente_producto.id_producto INNER JOIN ingrediente ON ingrediente.id_ingrediente = ingrediente_producto.id_ingrediente WHERE ingrediente_producto.id_producto = ? AND ingrediente_producto.id_local = ? ORDER BY producto.id_producto";
@@ -71,11 +71,16 @@ class ModeloIngredienteProducto
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
+            if ($id == null) {
+                $local = $_SESSION['id_local'];
+            }else{
+                $local = $id;
+            }
             if ($dato != '') {
                 $stms->bindParam(1, $dato, PDO::PARAM_INT);
-                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+                $stms->bindParam(2, $local, PDO::PARAM_INT);
             }else{
-                $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
+                $stms->bindParam(1, $local, PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();

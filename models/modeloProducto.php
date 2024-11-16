@@ -69,7 +69,7 @@ class ModeloProducto
         }
     }
 
-    function consultarModeloProductoAjaxModelo($dato)
+    function consultarModeloProductoAjaxModelo($dato,$id)
     {
         if ($dato != '') {
             $dato = '%' . $dato . '%';
@@ -81,11 +81,16 @@ class ModeloProducto
         try {
             $conn = new Conexion();
             $stms = $conn->conectar()->prepare($sql);
+            if ($id == null) {
+                $local = $_SESSION['id_local'];
+            }else{
+                $local = $id;
+            }
             if ($dato != '') {
                 $stms->bindParam(1, $dato, PDO::PARAM_STR);
-                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+                $stms->bindParam(2, $local, PDO::PARAM_INT);
             }else{
-                $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
+                $stms->bindParam(1, $local, PDO::PARAM_INT);
             }
             if ($stms->execute()) {
                 return $stms->fetchAll();

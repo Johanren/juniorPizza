@@ -233,6 +233,22 @@ class ControladorFactura
                                     }
                                 }
                             }
+                        }
+                        if (isset($_GET['id_domicilio'])) {
+                            #Mostrar Pedido Mesa
+                            $listarid = new ModeloDomicilio();
+                            $res = $listarid->listarPedidoDomicilioFacturaModelo($_GET['id_domicilio']);
+                            foreach ($res as $key => $value) {
+                                if ($value['id_producto'] == $id_articulo[$i]) {
+                                    #Actualizar el pago pedido a 1
+                                    $actualizarPagoPedido = new ControladorDomicilio();
+                                    $rePedido = $actualizarPagoPedido->actualizarPagoPedidoDomicilio($_GET['id_domicilio'], $value['fecha_ingreso']);
+                                    #Actualizar estado mesa Disponible
+                                    if ($rePedido == true) {
+                                        echo '<script>window.location="factura_pdf"</script>';
+                                    }
+                                }
+                            }
                         } else {
                             echo '<script>window.location="factura_pdf"</script>';
                         }

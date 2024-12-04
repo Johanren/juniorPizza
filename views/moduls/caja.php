@@ -279,7 +279,7 @@ if ($res != null) {
                             <th>Metodo Pago</th>
                             <th><select name="metodo" id="metodo" class="form-control" required>
                                     <option value="">Seleccionar...</option>
-                                    <option value="efectivo">Efectivo</option>
+                                    <option value="efectivo" >Efectivo</option>
                                     <option value="nequi">Nequi</option>
                                     <option value="daviplata">Daviplata</option>
                                     <option value="transfferencia">Transferencia</option>
@@ -294,7 +294,8 @@ if ($res != null) {
                     </tbody>
                 </table>
             <?php
-            } else {
+            } if (isset($_GET['id_mesa']) || isset($_GET['id_domicilio'])) {
+            }else {
             ?>
                 <table class="table mt-5 table-hover">
                     <thead>

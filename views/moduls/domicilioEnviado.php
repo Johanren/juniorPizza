@@ -124,6 +124,7 @@ $resPe = $listarPedido->listarPedido();
                 </thead>
                 <tbody id="pedidoProducto">
                     <?php
+                    
                     foreach ($resPe as $key => $value) {
                     ?>
                         <tr class="eliminar_1">

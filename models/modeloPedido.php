@@ -151,7 +151,7 @@ class ModeloPedido
 
     function listarPedidoCocinaModelo($id, $fecha)
     {
-        $sql = "SELECT * FROM $this->tabla INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario WHERE fecha_ingreso like ? AND pedido.id_mesa = ? AND cocina = 0 AND pedido.id_local=?";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN mesa ON mesa.id_mesa = pedido.id_mesa INNER JOIN usuario ON usuario.id_usuario = pedido.id_usuario WHERE fecha_ingreso = ? AND pedido.id_mesa = ? AND cocina = 0 AND pedido.id_local=?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $fecha, PDO::PARAM_STR);

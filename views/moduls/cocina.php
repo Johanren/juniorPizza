@@ -136,7 +136,7 @@ if (isset($_GET['id_mesa'])) {
 ?>
     <script>
         var print = 0;
-        var id_mesa = $('#id_mesa').val();
+        let id_mesa = $('#id_mesa').val();
         var fecha = $('#fecha').val();
 
         document.addEventListener("DOMContentLoaded", async () => {
@@ -350,7 +350,7 @@ if (isset($_GET['id_mesa'])) {
                                         .Feed(3)
                                         .Corte(1)
                                         .Pulso(48, 60, 120)
-                                        .imprimirEn("Xprinter1");
+                                        .imprimirEn("cocina");
                                     //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.17:8000" + "/imprimir");
                                     if (respuesta === true) {
                                         $.ajax({
@@ -363,24 +363,44 @@ if (isset($_GET['id_mesa'])) {
                                             },
                                             success: async function(response) {
                                                 if (response == true) {
-                                                    alert("Impreso correctamente");
+                                                    window.location="cocina"
                                                 }
                                             },
                                             error: function(xhr, status, error) {
+                                                window.location="cocina"
                                                 // Mostrar error si hay algún problema con la solicitud AJAX
                                                 $('#valorEspecifico').text('Error: ' + error);
                                             }
                                         });
 
                                     } else {
-                                        alert("Error: " + respuesta);
+                                        $.ajax({
+                                            url: 'views/ajax.php',
+                                            type: 'GET',
+                                            dataType: 'json',
+                                            data: {
+                                                respuestaPrint: print,
+                                                id: id_mesa
+                                            },
+                                            success: async function(response) {
+                                                if (response == true) {
+                                                    window.location="cocina"
+                                                }
+                                            },
+                                            error: function(xhr, status, error) {
+                                                window.location="cocina"
+                                                // Mostrar error si hay algún problema con la solicitud AJAX
+                                                //$('#valorEspecifico').text('Error: ' + error);
+                                            }
+                                        });
+                                        //alert("Error: " + respuesta);
                                     }
                                 }
 
                             },
                             error: function(xhr, status, error) {
                                 // Mostrar error si hay algún problema con la solicitud AJAX
-                                $('#valorEspecifico').text('Error: ' + error);
+                                //$('#valorEspecifico').text('Error: ' + error);
                             }
                         });
                     }
@@ -390,7 +410,7 @@ if (isset($_GET['id_mesa'])) {
                 },
                 error: function(xhr, status, error) {
                     // Mostrar error si hay algún problema con la solicitud AJAX
-                    $('#respuestaServidor').text('Error: ' + error);
+                    //$('#respuestaServidor').text('Error: ' + error);
                 }
             });
         });

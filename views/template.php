@@ -456,6 +456,24 @@ ob_start();
                                                     });
 
                                                 } else {
+                                                    $.ajax({
+                                                        url: 'views/ajax.php',
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        data: {
+                                                            respuestaPrint: print,
+                                                            id: id_mesa
+                                                        },
+                                                        success: async function(response) {
+                                                            if (response == true) {
+                                                                location.reload();
+                                                            }
+                                                        },
+                                                        error: function(xhr, status, error) {
+                                                            // Mostrar error si hay algún problema con la solicitud AJAX
+                                                            $('#valorEspecifico').text('Error: ' + error);
+                                                        }
+                                                    });
                                                     alert("Error: " + respuesta);
                                                 }
 
@@ -480,8 +498,8 @@ ob_start();
                                                     .Feed(3)
                                                     .Corte(1)
                                                     .Pulso(48, 60, 120)
-                                                    //.imprimirEn("caja");
-                                                    .imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
+                                                    .imprimirEn("cocina");
+                                                    //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
                                                 if (respuesta === true) {
                                                     $.ajax({
                                                         url: 'views/ajax.php',
@@ -503,6 +521,24 @@ ob_start();
                                                     });
 
                                                 } else {
+                                                    $.ajax({
+                                                        url: 'views/ajax.php',
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        data: {
+                                                            respuestaPrint: print,
+                                                            id: id_mesa
+                                                        },
+                                                        success: async function(response) {
+                                                            if (response == true) {
+                                                                location.reload();
+                                                            }
+                                                        },
+                                                        error: function(xhr, status, error) {
+                                                            // Mostrar error si hay algún problema con la solicitud AJAX
+                                                            $('#valorEspecifico').text('Error: ' + error);
+                                                        }
+                                                    });
                                                     alert("Error: " + respuesta);
                                                 }
 
@@ -803,6 +839,24 @@ ob_start();
                                             });
 
                                         } else {
+                                            $.ajax({
+                                                url: 'views/ajax.php',
+                                                type: 'GET',
+                                                dataType: 'json',
+                                                data: {
+                                                    respuestaPrintDomicilio: printDomicilio,
+                                                    id: producto.id
+                                                },
+                                                success: async function(response) {
+                                                    if (response == true) {
+                                                        location.reload();
+                                                    }
+                                                },
+                                                error: function(xhr, status, error) {
+                                                    // Mostrar error si hay algún problema con la solicitud AJAX
+                                                    $('#valorEspecifico').text('Error: ' + error);
+                                                }
+                                            });
                                             alert("Error: " + respuesta);
                                         }
 
@@ -844,11 +898,31 @@ ob_start();
                                                 },
                                                 error: function(xhr, status, error) {
                                                     // Mostrar error si hay algún problema con la solicitud AJAX
+                                                    location.reload();
                                                     $('#valorEspecifico').text('Error: ' + error);
                                                 }
                                             });
 
                                         } else {
+                                            $.ajax({
+                                                url: 'views/ajax.php',
+                                                type: 'GET',
+                                                dataType: 'json',
+                                                data: {
+                                                    respuestaPrintDomicilio: printDomicilio,
+                                                    id: producto.id
+                                                },
+                                                success: async function(response) {
+                                                    if (response == true) {
+                                                        location.reload();
+                                                    }
+                                                },
+                                                error: function(xhr, status, error) {
+                                                    // Mostrar error si hay algún problema con la solicitud AJAX
+                                                    location.reload();
+                                                    $('#valorEspecifico').text('Error: ' + error);
+                                                }
+                                            });
                                             alert("Error: " + respuesta);
                                         }
 

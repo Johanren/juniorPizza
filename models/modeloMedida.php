@@ -89,7 +89,7 @@ class ModeloMedida
 
     function actualizarMeedidaModelo($dato)
     {
-        $sql = "UPDATE $this->tabla SET nombre_medida=?,id_activo=? WHERE id_medida=? AND id_loca = ?";
+        $sql = "UPDATE $this->tabla SET nombre_medida=?,id_activo=? WHERE id_medida=? AND id_local = ?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         if ($dato != '') {

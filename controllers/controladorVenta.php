@@ -178,4 +178,10 @@ class ControladorVenta
         $res = $buscar->informeVentaInicioFinModelo($inicio, $fin);
         return $res;
     }
+
+    function informeVentainicioFinFactura($inicio, $fin){
+        $buscar = new ModeloVenta();
+        $res = $buscar->informeVentainicioFinFacturaModelo($inicio, $fin);
+        return $res;
+    }
 }

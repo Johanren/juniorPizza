@@ -237,6 +237,7 @@ if (isset($_POST['inicio'])) {
 
         $venta = new ControladorVenta();
         $res = $venta->informeVentaInicioFinExcel($fechaInicio,$fechaFin);
+        $resFactura = $venta->informeVentainicioFinFactura($fechaInicio,$fechaFin);
 
         // Crear nuevo objeto Spreadsheet
         $spreadsheet = new Spreadsheet();
@@ -248,6 +249,14 @@ if (isset($_POST['inicio'])) {
         $sheet->setCellValue('A3', $fechaInicio);
         $sheet->setCellValue('B3', $fechaFin);
 
+        $sheet->setCellValue('D2', 'Resolución');
+        $sheet->setCellValue('D3', '18764084082433');
+
+        $sheet->setCellValue('F2', 'Factura Desde');
+        $sheet->setCellValue('F3', $resFactura[0]['MIN(factura.id_factura)']);
+
+        $sheet->setCellValue('G2', 'Factura Hasta');
+        $sheet->setCellValue('G3', $resFactura[0]['MAX(factura.id_factura)']);
         // Encabezados de la tabla en el Excel
         $sheet->setCellValue('A5', 'Descripcion');
         $sheet->setCellValue('B5', 'Impuesto');

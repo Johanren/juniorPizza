@@ -473,9 +473,9 @@ $(document).ready(function () {
 		var urlActual = window.location.href;
 		var hosting = window.location.hostname;
 		if (urlActual != "http://" + hosting + "/juniorPizza/domicilioPedido") {
-			$("#pedidoProducto").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_pedido[]" id="id_predido_' + index + '"><input type="text"name="producto[]" class="form-control producto" id="producto_' + index + '"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_' + index + '" class="form-control" cols="30"rows="1"></textarea></th><th><input type="hidden" name="precio[]" class="form-control valor" id="precio_1" placeholder="Precio" disabled><input type="text" name="precio[]" class="form-control valor" id="valor_' + index + '" placeholder="Precio"></th><th><input type="text" name="cantidad[]" class="form-control cantidad" placeholder="Cantidad Pedido" id="cantidad_' + index + '" value="0" required></th><th><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
+			$("#pedidoProducto").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_pedido[]" id="id_predido_' + index + '"><input type="text"name="producto[]" class="form-control producto" id="producto_' + index + '"placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_' + index + '" class="form-control" cols="30"rows="1"></textarea></th><th><input type="text" name="cantidad[]" class="form-control cantidad" placeholder="Cantidad Pedido" id="cantidad_' + index + '" required></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
 		} else {
-			$("#pedidoProducto").append('<tr class="eliminar_'+index+'"><td><input type="hidden" name="id_pedido[]" id="id_predido_'+index+'"><input type="text" name="producto[]" class="form-control productoDomicilio" required id="producto_'+index+'" placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_'+index+'" class="form-control" cols="30" rows="1"></textarea></th><th><input type="hidden" name="precio[]" class="form-control valor" id="precio_'+index+'" placeholder="Precio"><input type="text" name="" class="form-control valor" id="valor_'+index+'" placeholder="Precio" disabled></th><th><input type="text" name="cantidad[]" class="form-control cantidad" placeholder="Cantidad Pedido" id="cantidad_'+index+'" value="0" required></th><th><input type="text" name="total" class="form-control resultado" id="resultado_'+index+'" disabled></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
+			$("#pedidoProducto").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_pedido[]" id="id_predido_' + index + '"><input type="text" name="producto[]" class="form-control productoDomicilio" required id="producto_' + index + '" placeholder="Producto"></td><th><textarea name="descripcion[]" id="descripcion_' + index + '" class="form-control" cols="30" rows="1"></textarea></th><th><input type="hidden" name="precio[]" class="form-control valor" id="precio_' + index + '" placeholder="Precio"><input type="text" name="" class="form-control valor" id="valor_' + index + '" placeholder="Precio" disabled></th><th><input type="text" name="cantidad[]" class="form-control cantidad" placeholder="Cantidad Pedido" id="cantidad_' + index + '" value="0" required></th><th><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></th><th><a class="btn btn-primary eliminar" id="eliminarFactura"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16"><path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" /></svg></a></th></tr>');
 		}
 		index++;
 	});
@@ -1012,6 +1012,8 @@ $('body').on('click', '#cc', function () {
 
 //codigo de barra factura
 $(document).ready(function () {
+	var index1 = 2; // Variable global para el índice de los productos
+
 	$(document).on('keydown', '.codigo_articulo', function () {
 		var id = this.id;
 		var splitid = id.split('_');
@@ -1021,10 +1023,11 @@ $(document).ready(function () {
 		var cantidad = 0;
 		var posicion = [];
 		var arrayQR = [];
+
 		function codigoAJAX() {
-			var codigo = $('#codigo_' + index + '').val();
+			var codigo = $('#codigo_' + index).val();
 			var numero = (cantidad + 1) == 0 ? 1 : cantidad + 1;
-			//console.log(numero);
+
 			inicio = 0;
 			for (i = 0; i < numero; i++) {
 				codigobarra = codigo.substring(inicio, posicion[i]);
@@ -1036,33 +1039,51 @@ $(document).ready(function () {
 					dataType: 'json',
 					data: { codigo1: codigo },
 
-				})
-					.done(function (data) {
-						console.log("el dato", data);
-						var len = data.length;
-						if (len > 0) {
-							var id = data[0]['id_producto'];
-							var codigo = data[0]['codigo_producto'];
-							var name = data[0]['nombre_producto'];
-							//agregar miles
-							var valor = data[0]['precio_unitario'];
-							valor = valor.toString();
-							value = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+				}).done(function (data) {
+					console.log("el dato", data);
+					var len = data.length;
+					if (len > 0) {
+						var id = data[0]['id_producto'];
+						var codigo = data[0]['codigo_producto'];
+						var name = data[0]['nombre_producto'];
+						var valor = data[0]['precio_unitario'];
+						valor = valor.toString();
+						value = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-							document.getElementById('id_articulo_' + index).value = id;
-							document.getElementById('codigo_' + index).value = codigo;
-							document.getElementById('nombre_' + index).value = name;
-							document.getElementById('valor_' + index).value = value;
-						}
-					})
+						document.getElementById('id_articulo_' + index).value = id;
+						document.getElementById('codigo_' + index).value = codigo;
+						document.getElementById('nombre_' + index).value = name;
+						document.getElementById('valor_' + index).value = value;
 
+						// Agregar nueva fila con index1 autoincrementado
+						$("#factura").append(
+							`<tr class="eliminar_${index1}">
+                                <td><input type="hidden" name="id_articulo[]" id="id_articulo_${index1}">
+                                    <input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_${index1}" placeholder="Codigo producto">
+                                </td>
+                                <td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_${index1}" placeholder="Nombre producto"></td>
+                                <td><input type="text" name="precio[]" class="form-control valor" id="valor_${index1}"></td>
+                                <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_${index1}" value="0" required></td>
+                                <td><input type="text" name="total" class="form-control resultado" id="resultado_${index1}" disabled></td>
+                                <td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
+                            </tr>`
+						);
+
+						// Mover el foco automáticamente al nuevo campo de código
+
+						$('#codigo_' + index1).focus();
+
+						index1++; // Incrementar el índice para la siguiente fila
+					}
+				});
 			}
 			cantidad = 0;
 			posicion = [];
-			$('#codigo_' + index + '').val('');
+			$('#codigo_' + index).val('');
 		}
-		$('#codigo_' + index + '').on("keyup", function (e) {
-			var codigo = $('#codigo_' + index + '').val();
+
+		$('#codigo_' + index).on("keyup", function (e) {
+			var codigo = $('#codigo_' + index).val();
 			largo = codigo.length;
 
 			if (e.which == 13) {
@@ -1074,6 +1095,8 @@ $(document).ready(function () {
 		});
 	});
 });
+
+
 
 //agregar factura nombre
 
@@ -1827,6 +1850,7 @@ $(document).ready(function () {
 });
 //Cargar EXCEL
 $(document).ready(function () {
+	//productos
 	$('#uploadForm').on('submit', function (e) {
 		e.preventDefault(); // Prevenir la recarga de la página
 
@@ -1837,6 +1861,37 @@ $(document).ready(function () {
 		var id_local = $('#id_local').val();
 
 		// Agregar el id_local al FormData
+		formData.append('pagina', 'producto');
+		formData.append('id_local', id_local);
+
+		$.ajax({
+			url: 'views/excel.php', // Archivo PHP para procesar el cargue
+			type: 'POST',
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function (response) {
+				alert(response); // Mostrar respuesta del servidor
+				$('#cargarModal').modal('hide'); // Cerrar el modal
+				location.reload();
+			},
+			error: function () {
+				alert('Error al cargar el archivo.');
+			}
+		});
+	});
+	//ingrediente
+	$('#uploadForm1').on('submit', function (e) {
+		e.preventDefault(); // Prevenir la recarga de la página
+
+		// Crear un FormData para enviar el archivo
+		var formData = new FormData(this);
+
+		// Obtener el valor del id_local desde el campo input hidden
+		var id_local = $('#id_local').val();
+
+		// Agregar el id_local al FormData
+		formData.append('pagina', 'ingrediente');
 		formData.append('id_local', id_local);
 
 		$.ajax({

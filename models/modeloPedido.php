@@ -93,7 +93,7 @@ class ModeloPedido
 
     function actualizarMesaPedido($id, $id_mesa)
     {
-        $sql = "UPDATE $this->tabla SET id_mesa = ? WHERE id_mesa = ? AND id_local";
+        $sql = "UPDATE $this->tabla SET id_mesa = ? WHERE id_mesa = ? AND id_local=?";
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         $stms->bindParam(1, $id_mesa, PDO::PARAM_INT);

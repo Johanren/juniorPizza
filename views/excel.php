@@ -236,8 +236,8 @@ if (isset($_POST['inicio'])) {
         // Simulación de datos (reemplaza esto con tu consulta real)
 
         $venta = new ControladorVenta();
-        $res = $venta->informeVentaInicioFinExcel($fechaInicio,$fechaFin);
-        $resFactura = $venta->informeVentainicioFinFactura($fechaInicio,$fechaFin);
+        $res = $venta->informeVentaInicioFinExcel($fechaInicio, $fechaFin);
+        $resFactura = $venta->informeVentainicioFinFactura($fechaInicio, $fechaFin);
 
         // Crear nuevo objeto Spreadsheet
         $spreadsheet = new Spreadsheet();
@@ -329,69 +329,130 @@ if ($conn->connect_error) {
 // Verificar si se ha subido un archivo
 if (isset($_FILES['file']['name'])) {
     $fileName = $_FILES['file']['tmp_name'];
+    if (isset($_POST['pagina']) && $_POST['pagina'] == 'producto') {
+        // Obtener el id_local enviado por el formulario
+        $id_local = isset($_POST['id_local']) ? (int)$_POST['id_local'] : 0;
 
-    // Obtener el id_local enviado por el formulario
-    $id_local = isset($_POST['id_local']) ? (int)$_POST['id_local'] : 0;
+        // Cargar el archivo de Excel
+        $spreadsheet = IOFactory::load($fileName);
+        $sheet = $spreadsheet->getActiveSheet();
+        $data = $sheet->toArray();
 
-    // Cargar el archivo de Excel
-    $spreadsheet = IOFactory::load($fileName);
-    $sheet = $spreadsheet->getActiveSheet();
-    $data = $sheet->toArray();
+        // Recorrer los datos del archivo Excel y guardarlos en la base de datos
+        foreach ($data as $key => $row) {
+            if ($key == 0) continue; // Saltar la primera fila (encabezado)
+            // Verificar que todos los campos obligatorios tengan datos, permitiendo que el precio sea 0
+            if (!empty($row[0]) && !empty($row[1]) && !empty($row[2]) && !empty($row[4]) && !empty($row[5]) && !empty($row[6])) {
 
-    // Recorrer los datos del archivo Excel y guardarlos en la base de datos
-    foreach ($data as $key => $row) {
-        if ($key == 0) continue; // Saltar la primera fila (encabezado)
-        // Verificar que todos los campos obligatorios tengan datos, permitiendo que el precio sea 0
-        if (!empty($row[0]) && !empty($row[1]) && !empty($row[2]) && !empty($row[4]) && !empty($row[5]) && !empty($row[6])) {
+                $id_proveedor = $row[0];
+                $codigo = $row[1];
+                $nombre = $row[2];
+                $precio = $row[3]; // Este puede ser 0
+                $cantidad = $row[4];
+                $id_categoria = $row[5];
+                $id_medida = $row[6];
 
-            $id_proveedor = $row[0];
-            $codigo = $row[1];
-            $nombre = $row[2];
-            $precio = $row[3]; // Este puede ser 0
-            $cantidad = $row[4];
-            $id_categoria = $row[5];
-            $id_medida = $row[6];
+                // Verificar si el producto ya existe
+                $checkSql = "SELECT * FROM producto WHERE nombre_producto = ? AND id_local = ?";
+                if ($checkStmt = $conn->prepare($checkSql)) {
+                    $checkStmt->bind_param("si", $nombre, $id_local);
+                    $checkStmt->execute();
+                    $result = $checkStmt->get_result();
 
-            // Verificar si el producto ya existe
-            $checkSql = "SELECT * FROM producto WHERE nombre_producto = ? AND id_local = ?";
-            if ($checkStmt = $conn->prepare($checkSql)) {
-                $checkStmt->bind_param("si", $nombre, $id_local);
-                $checkStmt->execute();
-                $result = $checkStmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    // Si existe, actualizar el producto
-                    $updateSql = "UPDATE producto SET id_proeevedor = ?, codigo_producto = ?, precio_unitario = ?, cantidad_producto = ?, id_categoria = ?, id_medida = ? WHERE nombre_producto = ? AND id_local = ?";
-                    if ($updateStmt = $conn->prepare($updateSql)) {
-                        $updateStmt->bind_param("issiiisi", $id_proveedor, $codigo, $precio, $cantidad, $id_categoria, $id_medida, $nombre, $id_local);
-                        if (!$updateStmt->execute()) {
-                            echo "Error al actualizar el producto: " . $updateStmt->error;
+                    if ($result->num_rows > 0) {
+                        // Si existe, actualizar el producto
+                        $updateSql = "UPDATE producto SET id_proeevedor = ?, codigo_producto = ?, precio_unitario = ?, cantidad_producto = ?, id_categoria = ?, id_medida = ? WHERE nombre_producto = ? AND id_local = ?";
+                        if ($updateStmt = $conn->prepare($updateSql)) {
+                            $updateStmt->bind_param("issiiisi", $id_proveedor, $codigo, $precio, $cantidad, $id_categoria, $id_medida, $nombre, $id_local);
+                            if (!$updateStmt->execute()) {
+                                echo "Error al actualizar el producto: " . $updateStmt->error;
+                            }
+                        } else {
+                            echo "Error en la preparación de la consulta de actualización: " . $conn->error;
                         }
                     } else {
-                        echo "Error en la preparación de la consulta de actualización: " . $conn->error;
-                    }
-                } else {
-                    // Si no existe, insertar el nuevo producto
-                    $insertSql = "INSERT INTO producto (id_proeevedor, codigo_producto, nombre_producto, precio_unitario, cantidad_producto, id_categoria, id_medida, id_local)
+                        // Si no existe, insertar el nuevo producto
+                        $insertSql = "INSERT INTO producto (id_proeevedor, codigo_producto, nombre_producto, precio_unitario, cantidad_producto, id_categoria, id_medida, id_local)
                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                    if ($insertStmt = $conn->prepare($insertSql)) {
-                        $insertStmt->bind_param("issdiiii", $id_proveedor, $codigo, $nombre, $precio, $cantidad, $id_categoria, $id_medida, $id_local);
-                        if (!$insertStmt->execute()) {
-                            echo "Error al insertar el producto: " . $insertStmt->error;
+                        if ($insertStmt = $conn->prepare($insertSql)) {
+                            $insertStmt->bind_param("issdiiii", $id_proveedor, $codigo, $nombre, $precio, $cantidad, $id_categoria, $id_medida, $id_local);
+                            if (!$insertStmt->execute()) {
+                                echo "Error al insertar el producto: " . $insertStmt->error;
+                            }
+                        } else {
+                            echo "Error en la preparación de la consulta de inserción: " . $conn->error;
                         }
-                    } else {
-                        echo "Error en la preparación de la consulta de inserción: " . $conn->error;
                     }
-                }
 
-                $checkStmt->close();
-            } else {
-                echo "Error en la preparación de la consulta de verificación: " . $conn->error;
+                    $checkStmt->close();
+                } else {
+                    echo "Error en la preparación de la consulta de verificación: " . $conn->error;
+                }
             }
         }
-    }
 
-    echo "Carga completada";
+        echo "Carga completada";
+    }
+    if (isset($_POST['pagina']) && $_POST['pagina'] == 'ingrediente') {
+        // Obtener el id_local enviado por el formulario
+        $id_local = isset($_POST['id_local']) ? (int)$_POST['id_local'] : 0;
+        // Cargar el archivo de Excel
+        $spreadsheet = IOFactory::load($fileName);
+        $sheet = $spreadsheet->getActiveSheet();
+        $data = $sheet->toArray();
+
+        // Recorrer los datos del archivo Excel y guardarlos en la base de datos
+        foreach ($data as $key => $row) {
+            if ($key == 0) continue; // Saltar la primera fila (encabezado)
+
+            // Verificar que los campos obligatorios tengan datos
+            if (!empty($row[0]) && !empty($row[1]) && !empty($row[2])) {
+                $nombre_ingrediente = $row[0]; // Nombre del ingrediente
+                $id_medida = (int) $row[1]; // ID de la unidad de medida
+                $cantidad = (float) $row[2]; // Cantidad del ingrediente
+
+                // Verificar si el ingrediente ya existe en el mismo local
+                $checkSql = "SELECT * FROM ingrediente WHERE nombre_ingrediente = ? AND id_local = ?";
+                if ($checkStmt = $conn->prepare($checkSql)) {
+                    $checkStmt->bind_param("si", $nombre_ingrediente, $id_local);
+                    $checkStmt->execute();
+                    $result = $checkStmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        // Si existe, actualizar el ingrediente
+                        $updateSql = "UPDATE ingrediente SET id_medida = ?, cantidad = ? WHERE nombre_ingrediente = ? AND id_local = ?";
+                        if ($updateStmt = $conn->prepare($updateSql)) {
+                            $updateStmt->bind_param("dssi", $id_medida, $cantidad, $nombre_ingrediente, $id_local);
+                            if (!$updateStmt->execute()) {
+                                echo "Error al actualizar el ingrediente: " . $updateStmt->error;
+                            }
+                        } else {
+                            echo "Error en la consulta de actualización: " . $conn->error;
+                        }
+                    } else {
+                        // Si no existe, insertar el nuevo ingrediente
+                        $insertSql = "INSERT INTO ingrediente (nombre_ingrediente, id_medida, cantidad, id_local) VALUES (?, ?, ?, ?)";
+                        if ($insertStmt = $conn->prepare($insertSql)) {
+                            $insertStmt->bind_param("sidi", $nombre_ingrediente, $id_medida, $cantidad, $id_local);
+                            if (!$insertStmt->execute()) {
+                                echo "Error al insertar el ingrediente: " . $insertStmt->error;
+                            }
+                        } else {
+                            echo "Error en la consulta de inserción: " . $conn->error;
+                        }
+                    }
+
+                    $checkStmt->close();
+                } else {
+                    echo "Error en la consulta de verificación: " . $conn->error;
+                }
+            }
+        }
+
+        echo "Carga de ingredientes completada.";
+    } else {
+        echo "Error al subir el archivo.";
+    }
 } else {
     echo "No se ha subido ningún archivo.";
 }

@@ -16,15 +16,29 @@ class ControladorIngredienteProducto
                 }
             }
         } elseif (isset($_POST['actualiarIngredienteProducto'])) {
-            $id = $_POST['id'];
-            $id_producto = $_POST['id_producto'];
-            $id_ingre = $_POST['id_ingreEdit'];
-            $cantidad = $_POST['cantidadEdit'];
-            for ($i = 0; $i < count($cantidad); $i++) {
-                $agregar = new ModeloIngredienteProducto();
-                $res = $agregar->actualizarIngredienteProductoModelo($id[$i], $id_producto, $id_ingre[$i], $cantidad[$i]);
-                if ($res == true) {
-                    echo '<script>window.location="agregarIngredienteProducto"</script>';
+            $id_ingre1 = $_POST['id_ingre'];
+            if ($id_ingre1 != ' ') {
+                $id_producto = $_POST['id_producto'];
+                $id_ingre1 = $_POST['id_ingre'];
+                $cantidad = $_POST['cantidad'];
+                for ($i = 0; $i < count($cantidad); $i++) {
+                    $agregar = new ModeloIngredienteProducto();
+                    $res = $agregar->agregarIngredienteProductoModelo($id_producto, $id_ingre1[$i], $cantidad[$i]);
+                    if ($res == true) {
+                        echo '<script>window.location="agregarIngredienteProducto"</script>';
+                    }
+                }
+            } else {
+                $id = $_POST['id'];
+                $id_producto = $_POST['id_producto'];
+                $id_ingre = $_POST['id_ingreEdit'];
+                $cantidad = $_POST['cantidadEdit'];
+                for ($i = 0; $i < count($cantidad); $i++) {
+                    $agregar = new ModeloIngredienteProducto();
+                    $res = $agregar->actualizarIngredienteProductoModelo($id[$i], $id_producto, $id_ingre[$i], $cantidad[$i]);
+                    if ($res == true) {
+                        echo '<script>window.location="agregarIngredienteProducto"</script>';
+                    }
                 }
             }
         }
@@ -57,7 +71,7 @@ class ControladorIngredienteProducto
         //$res = $consultar->consultarIngredeinteAjaxModelo($dato);
         //if ($res[0]['id_producto'] == null) {
         $consultarPro = new ControladorProducto();
-        $res = $consultarPro->consultarProductoAjaxControlador($dato,$id);
+        $res = $consultarPro->consultarProductoAjaxControlador($dato, $id);
         return $res;
         //}
         //return $res;

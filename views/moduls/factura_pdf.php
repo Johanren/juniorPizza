@@ -389,7 +389,7 @@ if (isset($_SESSION['factura'])) {
                         }
                     });
                 </script>
-<?php
+            <?php
             }
         } else {
             if ($resFactura[0]['factura'] == "true") {
@@ -715,7 +715,7 @@ if (isset($_SESSION['factura'])) {
                 } catch (Exception $e) {
                     echo '<script>swal("Ups!!", "No se logró enviar tu factura al correo proporcionado. Error: ' . $mail->ErrorInfo . '", "error");</script>';
                 }
-?>
+            ?>
                 <a href="#" id="downloadPdf" style="display:none;">Descargar PDF</a>
                 <script>
                     window.addEventListener('load', function() {
@@ -935,6 +935,7 @@ if (isset($_SESSION['factura'])) {
                 <div class="control">
                     <input hidden id="maximaLongitudPrecio" value="8" class="input" type="number">
                 </div>
+                <input type="hidden" id="cufe" value="<?php echo $UUID = hash('sha384', $cufe); ?>">
             </div>
             <button id="Imprimir" class="btn btn-primary mt-2">Imprimir</button>
             <a id="caja" href="caja" class="btn btn-primary mt-2">Caja</a>
@@ -1315,7 +1316,7 @@ function xmlfirma()
 ?>
 <script>
     //Imprimir
-
+    var cufe = $('#cufe').val();
     document.addEventListener("DOMContentLoaded", async () => {
         // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
         // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
@@ -1526,7 +1527,19 @@ function xmlfirma()
                                                                                                                     echo "Views/img/img.jpg";
                                                                                                                 } ?>", 0, 216)*/
                 .Feed(1)
+            <?php
+            if (isset($_SESSION['factura'])) {
+                if ($_SESSION['factura'] == 'true') {
+                    if ($resFactura[0]['factura'] == "true") {
+            ?>
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "SEBASTIAN\n")
+            <?php
+                    }
+                }
+            }
+            ?>
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Número Factura: <?php echo $resFactura[0]['id_factura'] ?>\n")
+                .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
                 .EscribirTexto("<?php echo $nombreSistema ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
                 .TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: <?php echo $tel ?>\n")
@@ -1536,7 +1549,12 @@ function xmlfirma()
                 if ($_SESSION['factura'] == 'true') {
                     if ($resFactura[0]['factura'] == "true") {
             ?>
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "DOCUMENTO EQUIVALENTE ELECTRONICO TIQUETE DE MAQUINA REGISTRADORA A CON SISTEMA P.O.S\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Factura Electrónica de venta <?php echo $resFactura[0]['id_factura'] ?>\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Vence: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Impreso: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Vendedor: rafipanespinal@gmail.com\n")
+                            .EscribirTexto("------------------------------------------------\n")
                             .TextoSegunPaginaDeCodigos(2, "cp850", "Adquiriente: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
                             .TextoSegunPaginaDeCodigos(2, "cp850", "Identificación: <?php echo $resCliente[0]['numero_cc'] ?>\n")
             <?php
@@ -1544,10 +1562,12 @@ function xmlfirma()
                 }
             }
             ?>
-                .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                .EscribirTexto("------------------------------------------------\n")
+                .TextoSegunPaginaDeCodigos(2, "cp850", "Nombre o Razón social: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
+                .TextoSegunPaginaDeCodigos(2, "cp850", "CC y/o NIT: <?php echo $resCliente[0]['numero_cc'] ?>\n")
+                .EscribirTexto("------------------------------------------------\n")
                 .Feed(1)
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                .EscribirTexto("____________________\n")
                 .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
                 .EscribirTexto(tabla)
                 .EscribirTexto("------------------------------------------------\n")
@@ -1557,19 +1577,27 @@ function xmlfirma()
                 .EscribirTexto("------------------------------------------------\n")
                 .EscribirTexto("Pago <?php echo $resFactura[0]['efectivo'] ?>   Cambio: <?php echo number_format($resFactura[0]['cambio'], 0) ?>\n")
                 .EscribirTexto("------------------------------------------------\n")
+                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                .TextoSegunPaginaDeCodigos(2, "cp850", "GRACIAS POR SU COMPRA\n")
             <?php
             if (isset($_SESSION['factura'])) {
-                if ($_SESSION['factura'] == 'false') {
-                    if ($resFactura[0]['factura'] == "false") {
+                if ($_SESSION['factura'] == 'true') {
+                    if ($resFactura[0]['factura'] == "true") {
             ?>
-                            .EscribirTexto("Cliente Final\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Nombre y apellido: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "CC: <?php echo $resCliente[0]['numero_cc'] ?>\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Resolución DIAN Nro: 18764084082433\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "FECHA: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "PREFIJO FF\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "RANGO DEL FF1 AL FF 10000\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "CUFE: " + cufe + "\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Representación impresa de Factrua Electronica de Venta\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Software CREATIVETEC fabricado por CREATIVETEC\n")
+                            .TextoSegunPaginaDeCodigos(2, "cp850", "Contacto: 3122146368\n")
             <?php
                     }
                 }
             }
             ?>
+
                 .Feed(3)
                 .Corte(1)
                 .Pulso(48, 60, 120)

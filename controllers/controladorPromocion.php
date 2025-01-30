@@ -17,16 +17,31 @@ class ControladorPromocion
                 }
             }
         } elseif (isset($_POST['actualizarIngredienteProducto'])) {
-            $id = $_POST['id'];
-            $id_producto = $_POST['id_producto'];
-            $id_prodcu = $_POST['id_prodcuEdit'];
-            $cantidadPromocion = $_POST['cantidadPromocionEdit'];
-            $id_activa = $_POST['activoEdit'];
-            for ($i = 0; $i < count($id); $i++) {
-                $agregar = new ModeloPromocion();
-                $res = $agregar->actualizarPromocionModelo($id[$i], $id_producto, $id_prodcu[$i], $cantidadPromocion[$i], $id_activa[$i]);
-                if ($res == true) {
-                    echo '<script>window.location="actualizarPromocion"</script>';
+            $id_prodcu1 = $_POST['id_produc'];
+            if ($id_prodcu1 != ' ') {
+                $id_producto = $_POST['id_producto'];
+                $id_prodcu1 = $_POST['id_prodcu'];
+                $cantidadPromocion = $_POST['cantidadPromocion'];
+                $id_activa = 1;
+                for ($i = 0; $i < count($id_prodcu1); $i++) {
+                    $agregar = new ModeloPromocion();
+                    $res = $agregar->agregarPromocionModelo($id_producto, $id_prodcu1[$i], $cantidadPromocion[$i], $id_activa);
+                    if ($res == true) {
+                        echo '<script>window.location="agregarPromocion"</script>';
+                    }
+                }
+            } else {
+                $id = $_POST['id'];
+                $id_producto = $_POST['id_producto'];
+                $id_prodcu = $_POST['id_prodcuEdit'];
+                $cantidadPromocion = $_POST['cantidadPromocionEdit'];
+                $id_activa = $_POST['activoEdit'];
+                for ($i = 0; $i < count($id); $i++) {
+                    $agregar = new ModeloPromocion();
+                    $res = $agregar->actualizarPromocionModelo($id[$i], $id_producto, $id_prodcu[$i], $cantidadPromocion[$i], $id_activa[$i]);
+                    if ($res == true) {
+                        echo '<script>window.location="actualizarPromocion"</script>';
+                    }
                 }
             }
         }

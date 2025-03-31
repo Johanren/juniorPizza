@@ -68,6 +68,18 @@ class ControladorVenta
         }
     }
 
+    function ventaTotalDiaPos(){
+        if (isset($_POST['consultar'])) {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaTotalDiaPosImprimir($_POST['buscar']);
+            return $res;
+        } else {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaTotalDiaPosImprimir('');
+            return $res;
+        }
+    }
+
     function consultarVentaDiaCantidadTotal($id_producto, $metodo)
     {
         if (isset($_POST['consultar'])) {

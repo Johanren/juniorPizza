@@ -263,6 +263,59 @@ class ModeloVenta
         }
     }
 
+    function consultarVentaTotalDiaPosImprimir($fecha)
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m-d');
+
+        if ($fecha != null) {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_local = ? AND factura = 'true'";
+            } else {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_usuario = ? AND id_local = ? AND factura = 'true'";
+            }
+        } else {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_local = ? AND factura = 'true'";
+            } else {
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_usuario = ? AND id_local=? AND factura = 'true'";
+            }
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($fecha != null) {
+                $fecha = $fecha . "%";
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+                } else {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                    $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
+                }
+            } else {
+                $fechaActal = $fechaActal . "%";
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+                } else {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                    $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
+                }
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
     function consultarVentaDiaCantidadTotalModelo($id, $fecha, $metodo)
     {
         date_default_timezone_set('America/Mexico_City');

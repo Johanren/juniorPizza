@@ -4,6 +4,7 @@ $res = $cantidad->consultarVentaDia();
 $resPos = $cantidad->consultarVentaDiaPosImprimir();
 $resFactura = $cantidad->consultarVentaDiaFactura();
 $total = $cantidad->ventaTotalDia();
+$totalPOS = $cantidad->ventaTotalDiaPos();
 #Gasto
 $proeevedor = new ControladorGasto();
 $resGas = $proeevedor->TotalGasto();
@@ -316,6 +317,8 @@ if (isset($_POST['cierre'])) {
                     <th>
                         <?php $totalVenta = ($total[0]['SUM(precio_compra)'] - $resPro[0]['SUM(DISTINCT(pago_factura))'] - $resNomina[0]['SUM(pago)'] - $resGas[0]['SUM(total)']) + $base;
                         echo '$' . number_format($totalVenta, 0) ?>
+                        <?php $totalVentaPos = ($totalPOS[0]['SUM(precio_compra)'] - $resPro[0]['SUM(DISTINCT(pago_factura))'] - $resNomina[0]['SUM(pago)'] - $resGas[0]['SUM(total)']) + $base;
+                        '$' . number_format($totalVentaPos, 0) ?>
                     </th>
                 </tr>
             </tbody>
@@ -694,12 +697,12 @@ if (isset($_POST['cierre'])) {
             <?php
             }
             ?>
-                .EscribirTexto("SubTotal <?php echo $total[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>\n")
+                .EscribirTexto("SubTotal <?php echo $totalPOS[0]["CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Subtotal Gasto <?php echo $resGas[0]["CONCAT('$', FORMAT(SUM(total), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Subtotal Proeevedores <?php echo $resPro[0]["CONCAT('$', FORMAT(SUM(DISTINCT(pago_factura)), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Subtotal Nomina <?php echo $resNomina[0]["CONCAT('$', FORMAT(SUM(pago), '$#,##0.00'))"] ?>\n")
                 .EscribirTexto("Base Caja $<?php echo number_format($base, 0) ?>\n")
-                .EscribirTexto("Total $<?php echo number_format($totalVenta, 0) ?>\n")
+                .EscribirTexto("Total $<?php echo number_format($totalVentaPos, 0) ?>\n")
                 .Feed(3)
                 .Corte(1)
                 .Pulso(48, 60, 120)

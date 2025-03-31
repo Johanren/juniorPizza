@@ -89,11 +89,13 @@ class ModeloMesa
             $stms = $conn->conectar()->prepare($sql);
             if ($stms->execute()) {
                 $sql = "DELETE FROM $this->tabla WHERE id_mesa = ? AND id_local = ?";
-                $stms->bindParam(1, $_SESSION['id_local'], PDO::PARAM_INT);
+                $stms->bindParam(1, $id, PDO::PARAM_INT);
+                $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
                 try {
                     $conn = new Conexion();
                     $stms = $conn->conectar()->prepare($sql);
                     $stms->bindParam(1, $id, PDO::PARAM_INT);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
                     if ($stms->execute()) {
                         return true;
                     } else {

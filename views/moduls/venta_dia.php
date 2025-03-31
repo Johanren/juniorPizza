@@ -1,6 +1,7 @@
 <?php
 $cantidad = new ControladorVenta();
 $res = $cantidad->consultarVentaDia();
+$resPos = $cantidad->consultarVentaDiaPosImprimir();
 $resFactura = $cantidad->consultarVentaDiaFactura();
 $total = $cantidad->ventaTotalDia();
 #Gasto
@@ -568,7 +569,7 @@ if (isset($_POST['cierre'])) {
             const listaDeProductos = [
                 <?php
 
-                foreach ($res as $key => $value) {
+                foreach ($resPos as $key => $value) {
                     $res_cantidad_total = $cantidad->consultarVentaDiaCantidadTotal(
                         $value['id_producto'],
                         $value['metodo_pago']

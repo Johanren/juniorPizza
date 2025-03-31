@@ -29,6 +29,19 @@ class ControladorVenta
         }
     }
 
+    function consultarVentaDiaPosImprimir()
+    {
+        if (isset($_POST['consultar'])) {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaDiaPosImprimir($_POST['buscar']);
+            return $res;
+        } else {
+            $buscar = new ModeloVenta();
+            $res = $buscar->consultarVentaDiaPosImprimir('');
+            return $res;
+        }
+    }
+
     function consultarVentaDiaFactura()
     {
         if (isset($_POST['consultar'])) {

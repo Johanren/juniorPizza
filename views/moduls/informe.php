@@ -26,11 +26,11 @@ $base = 0;
         <div class="row mt-3">
             <div class="col-sm-3">
                 <label for="">Fecha Inicio</label>
-                <input type="date" class="form-control" id="inicio" name="inicio" value="<?php echo $inicioMes->format('Y-m-d'); ?>">
+                <input type="date" class="form-control" id="inicio" name="inicio" value="<?php if (isset($_POST['inicio'])) { echo $_POST['inicio']; }else{ echo $inicioMes->format('Y-m-d');} ?>">
             </div>
             <div class="col-sm-3">
                 <label for="">Fecha Fin</label>
-                <input type="date" class="form-control" id="fin" name="fin" value="<?php echo $finMes->format('Y-m-d'); ?>">
+                <input type="date" class="form-control" id="fin" name="fin" value="<?php if (isset($_POST['fin'])) { echo $_POST['fin']; }else{ echo $finMes->format('Y-m-d');} ?>">
             </div>
             <div class="col-sm-3">
                 <button type="hidden" name="consultar" class="btn btn-primary">Buscar</button>

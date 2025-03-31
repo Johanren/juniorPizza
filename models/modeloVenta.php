@@ -104,6 +104,59 @@ class ModeloVenta
         }
     }
 
+    function consultarVentaDiaPosImprimir($fecha)
+    {
+        date_default_timezone_set('America/Mexico_City');
+        $fechaActal = date('Y-m-d');
+
+        if ($fecha != null) {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_local = ? AND factura.factura = 'false'";
+            } else {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_usuario = ? AND venta.id_local=? AND factura.factura = 'false'";
+            }
+        } else {
+            if ($_SESSION['rol'] == "Administrador") {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_local=? AND factura.factura = 'false'";
+            } else {
+                $sql = "SELECT DISTINCT(producto.id_producto),fecha_ingreso, producto.nombre_producto, CONCAT('$', FORMAT(valor_unitario, '$#,##0.00')), factura.metodo_pago FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND venta.id_usuario = ? AND venta.id_local=? AND factura.factura = 'false'";
+            }
+        }
+
+        try {
+            $conn = new Conexion();
+            $stms = $conn->conectar()->prepare($sql);
+            if ($fecha != null) {
+                $fecha = $fecha . "%";
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+                } else {
+                    $stms->bindParam(1, $fecha, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                    $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
+                }
+            } else {
+                $fechaActal = $fechaActal . "%";
+                if ($_SESSION['rol'] == "Administrador") {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_local'], PDO::PARAM_INT);
+                } else {
+                    $stms->bindParam(1, $fechaActal, PDO::PARAM_STR);
+                    $stms->bindParam(2, $_SESSION['id_usuario'], PDO::PARAM_INT);
+                    $stms->bindParam(3, $_SESSION['id_local'], PDO::PARAM_INT);
+                }
+            }
+            if ($stms->execute()) {
+                return $stms->fetchAll();
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            print_r($e->getMessage());
+        }
+    }
+
     function consultarVentaDiaFactura($fecha)
     {
         date_default_timezone_set('America/Mexico_City');

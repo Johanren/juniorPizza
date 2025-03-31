@@ -9,75 +9,77 @@ if (isset($_GET['id_factura'])) {
 ?>
 <h1 style="text-align: center;">Deudores</h1>
 <div class="container mt-5">
-    <table class="table mt-5" id="usuario">
-        <thead>
-            <tr>
-                <th>Número factura</th>
-                <th>Deudor</th>
-                <th>Número Documento</th>
-                <th>Deuda</th>
-                <?php
-                if (isset($_SESSION['dueda'])) {
-                    if ($_SESSION['dueda'] == 'true') {
+    <div class="table-responsive">
+        <table class="table mt-5" id="usuario">
+            <thead>
+                <tr>
+                    <th>Número factura</th>
+                    <th>Deudor</th>
+                    <th>Número Documento</th>
+                    <th>Deuda</th>
+                    <?php
+                    if (isset($_SESSION['dueda'])) {
+                        if ($_SESSION['dueda'] == 'true') {
 
-                ?>
-                        <th>Cuotas</th>
-                        <th>Cuotas * dueda</th>
-                <?php
-                    }
-                }
-                ?>
-                <th>Usuario</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($resConsul as $key => $value) {
-                if ($value['cambio'] < 0) {
-            ?>
-                    <tr>
-                        <td>
-                            <?php echo $value['id_factura'] ?>
-                        </td>
-                        <td>
-                            <?php echo $value['nomCli'] . " " . $value['apellCli'] ?>
-                        </td>
-                        <td>
-                            <?php echo $value['numero_cc'] ?>
-                        </td>
-                        <td>
-                            <?php echo number_format($value['cambio'], 0) ?>
-                        </td>
-                        <?php
-                        if (isset($_SESSION['dueda'])) {
-                            if ($_SESSION['dueda'] == 'true') {
-
-                        ?>
-                                <td><?php echo $value['cuotas'] ?></td>
-                                <td><?php if ($value['cuotas'] == 0) {
-                                    echo number_format(0, 0);
-                                    } else {
-                                        $cuota = abs($value['cambio']) / $value['cuotas'];
-                                        echo number_format($cuota, 0);
-                                    }
-                                    ?></td>
-                        <?php
-                            }
+                    ?>
+                            <th>Cuotas</th>
+                            <th>Cuotas * dueda</th>
+                    <?php
                         }
-                        ?>
-                        <td>
-                            <?php echo $value['nomUsu'] . " " . $value['usuApell'] ?>
-                        </td>
-                        <td>
-                            <?php echo $value['fecha_factura'] ?>
-                        </td>
-                        <td><a href="index.php?action=deudores&id_factura=<?php echo $value['id_factura'] ?>"><i class="fas fa-print fa-lg"></i></a></td>
-                    </tr>
-            <?php }
-            } ?>
-        </tbody>
-    </table>
+                    }
+                    ?>
+                    <th>Usuario</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($resConsul as $key => $value) {
+                    if ($value['cambio'] < 0) {
+                ?>
+                        <tr>
+                            <td>
+                                <?php echo $value['id_factura'] ?>
+                            </td>
+                            <td>
+                                <?php echo $value['nomCli'] . " " . $value['apellCli'] ?>
+                            </td>
+                            <td>
+                                <?php echo $value['numero_cc'] ?>
+                            </td>
+                            <td>
+                                <?php echo number_format($value['cambio'], 0) ?>
+                            </td>
+                            <?php
+                            if (isset($_SESSION['dueda'])) {
+                                if ($_SESSION['dueda'] == 'true') {
+
+                            ?>
+                                    <td><?php echo $value['cuotas'] ?></td>
+                                    <td><?php if ($value['cuotas'] == 0) {
+                                            echo number_format(0, 0);
+                                        } else {
+                                            $cuota = abs($value['cambio']) / $value['cuotas'];
+                                            echo number_format($cuota, 0);
+                                        }
+                                        ?></td>
+                            <?php
+                                }
+                            }
+                            ?>
+                            <td>
+                                <?php echo $value['nomUsu'] . " " . $value['usuApell'] ?>
+                            </td>
+                            <td>
+                                <?php echo $value['fecha_factura'] ?>
+                            </td>
+                            <td><a href="index.php?action=deudores&id_factura=<?php echo $value['id_factura'] ?>"><i class="fas fa-print fa-lg"></i></a></td>
+                        </tr>
+                <?php }
+                } ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="deudor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

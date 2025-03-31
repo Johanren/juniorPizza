@@ -255,7 +255,7 @@ if (isset($_SESSION['factura'])) {
 
                 // Añadir el logo de la empresa (ajusta la ruta y dimensiones del logo según sea necesario)
                 $logoPath = 'http://localhost/juniorPizza/views/img/icon.jpg'; // Ruta de la imagen del logo
-                $pdf->Image($logoPath, 10, 10, 40, 20, 'JPG'); // Posición (X, Y) y dimensiones (ancho, alto)
+                $pdf->Image($logoPath, 10, 10, 50, 40, 'JPG'); // Posición (X, Y) y dimensiones (ancho, alto)
 
                 // Añadir información del cliente
                 $pdf->SetFont('helvetica', '', 12);
@@ -603,7 +603,7 @@ if (isset($_SESSION['factura'])) {
 
                 // Añadir el logo de la empresa (ajusta la ruta y dimensiones del logo según sea necesario)
                 $logoPath = 'http://localhost/juniorPizza/views/img/icon.jpg'; // Ruta de la imagen del logo
-                $pdf->Image($logoPath, 10, 10, 40, 20, 'JPG'); // Posición (X, Y) y dimensiones (ancho, alto)
+                $pdf->Image($logoPath, 10, 10, 50, 40, 'JPG'); // Posición (X, Y) y dimensiones (ancho, alto)
 
                 // Añadir información del cliente
                 $pdf->SetFont('helvetica', '', 12);

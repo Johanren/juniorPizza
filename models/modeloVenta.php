@@ -270,15 +270,15 @@ class ModeloVenta
 
         if ($fecha != null) {
             if ($_SESSION['rol'] == "Administrador") {
-                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_local = ? AND factura = 'true'";
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND id_local = ? AND factura.factura = 'true'";
             } else {
-                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_usuario = ? AND id_local = ? AND factura = 'true'";
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND id_usuario = ? AND factura.id_local = ? AND factura = 'true'";
             }
         } else {
             if ($_SESSION['rol'] == "Administrador") {
-                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_local = ? AND factura = 'true'";
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND factura.id_local = ? AND factura = 'true'";
             } else {
-                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla WHERE fecha_ingreso like ? AND id_usuario = ? AND id_local=? AND factura = 'true'";
+                $sql = "SELECT CONCAT('$', FORMAT(SUM(precio_compra), '$#,##0.00')),SUM(precio_compra) FROM $this->tabla INNER JOIN factura ON factura.id_factura = venta.id_factura WHERE fecha_ingreso like ? AND id_usuario = ? AND factura.id_local = ? AND factura = 'true'";
             }
         }
 

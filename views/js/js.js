@@ -282,6 +282,82 @@ $(document).ready(function () {
 	});
 });
 
+$(document).ready(function () {
+	var index1 = 2; // Variable global para el índice de los productos
+
+	$(document).on('keydown', '.codigoPro', function () {
+		var id = this.id;
+		var splitid = id.split('_');
+		var index = splitid[1];
+
+		var controladorTiempo = "";
+		var cantidad = 0;
+		var posicion = [];
+		var arrayQR = [];
+
+		function codigoAJAX() {
+			var codigo = $('#codigo_' + index).val();
+			var numero = (cantidad + 1) == 0 ? 1 : cantidad + 1;
+
+			inicio = 0;
+			for (i = 0; i < numero; i++) {
+				codigobarra = codigo.substring(inicio, posicion[i]);
+				inicio = posicion[i];
+				arrayQR.push(codigobarra);
+				$.ajax({
+					url: 'views/ajax.php',
+					type: 'get',
+					dataType: 'json',
+					data: { producto: codigo },
+
+				}).done(function (data) {
+					console.log("el dato", data);
+					var len = data.length;
+					if (len > 0) {
+						var id = data[0]['id'];
+						var codigo = data[0]['codigo'];
+						var prodc = data[0]['label'];
+						var precio = data[0]['precio'];
+						var cant = data[0]['cantidad'];
+						var id_cat = data[0]['id_categoria'];
+						var cat = data[0]['nombre_categoria'];
+						var id_medi = data[0]['id_medida'];
+						var medi = data[0]['nombre_medida'];
+						var id_loc = data[0]['id_local'];
+						var loc = data[0]['nombre_local'];
+
+						document.getElementById('id_producto_' + index).value = id;
+						document.getElementById('codigo_' + index).value = codigo;
+						document.getElementById('producto_' + index).value = prodc;
+						document.getElementById('precio_' + index).value = precio;
+						document.getElementById('cantidad_' + index).value = cant;
+						document.getElementById('id_categoria_' + index).value = id_cat;
+						document.getElementById('categoria_' + index).value = cat;
+						document.getElementById('id_medida_' + index).value = id_medi;
+						document.getElementById('medida_' + index).value = medi;
+						/*document.getElementById('id_local_' + index).value = id_loc;
+						document.getElementById('local_' + index).value = loc;*/
+					}
+				});
+			}
+			cantidad = 0;
+			posicion = [];
+		}
+
+		$('#codigo_' + index).on("keyup", function (e) {
+			var codigo = $('#codigo_' + index).val();
+			largo = codigo.length;
+
+			if (e.which == 13) {
+				cantidad++;
+				posicion.push(largo);
+			}
+			clearTimeout(controladorTiempo);
+			controladorTiempo = setTimeout(codigoAJAX, 500);
+		});
+	});
+});
+
 //Autocomplete promocio
 $(document).ready(function () {
 	$('body').on('keydown', '.prod', function () {

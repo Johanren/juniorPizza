@@ -187,7 +187,7 @@ if (isset($_GET['id'])) {
                                             print "productol";
                                         } ?>">
                                 <tr>
-                                    <td><input type="hidden" id="id_producto_1" name="id_producto[]"><input type="text" class="form-control" id="codigo_1" required name="codigo[]"></td>
+                                    <td><input type="hidden" id="id_producto_1" name="id_producto[]"><input type="text" class="form-control codigoPro" id="codigo_1" required name="codigo[]"></td>
                                     <td><input type="text" class="form-control nombrePro" id="producto_1" name="nombre[]" required></td>
                                     <td><input type="text" class="form-control precio_uni" id="precioUni_1" name="precioUnita[]" value="0" required></td>
                                     <td><input type="text" class="form-control precio" id="precio_1" name="precio[]" required></td>

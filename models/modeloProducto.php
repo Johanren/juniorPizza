@@ -73,7 +73,7 @@ class ModeloProducto
     {
         if ($dato != '') {
             $dato = '%' . $dato . '%';
-            $sql = "SELECT * FROM $this->tabla INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE nombre_producto like ? AND producto.id_local = ? ORDER BY id_producto";
+            $sql = "SELECT * FROM $this->tabla INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE nombre_producto like ? OR producto.codigo_producto like ? AND producto.id_local = ? ORDER BY id_producto";
         } else {
             $sql = "SELECT * FROM $this->tabla WHERE id_local = ? ORDER BY id_producto";
         }
@@ -88,7 +88,8 @@ class ModeloProducto
             }
             if ($dato != '') {
                 $stms->bindParam(1, $dato, PDO::PARAM_STR);
-                $stms->bindParam(2, $local, PDO::PARAM_INT);
+                $stms->bindParam(2, $dato, PDO::PARAM_STR);
+                $stms->bindParam(3, $local, PDO::PARAM_INT);
             }else{
                 $stms->bindParam(1, $local, PDO::PARAM_INT);
             }

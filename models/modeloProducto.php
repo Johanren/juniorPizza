@@ -126,7 +126,7 @@ class ModeloProducto
     function consultarAritucloProeevedoridAjaxModelo($nit)
     {
 
-        $sql = "SELECT * FROM $this->tabla WHERE codigo_producto like ? OR nombre_producto like ? AND id_local = ?";
+        $sql = "SELECT * FROM $this->tabla INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE codigo_producto like ? OR nombre_producto like ? AND producto.id_local = ?";
 
         try {
             $conn = new Conexion();

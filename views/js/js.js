@@ -308,17 +308,17 @@ $(document).ready(function () {
 					url: 'views/ajax.php',
 					type: 'get',
 					dataType: 'json',
-					data: { producto: codigo },
+					data: { codigo1: codigo },
 
 				}).done(function (data) {
 					console.log("el dato", data);
 					var len = data.length;
 					if (len > 0) {
-						var id = data[0]['id'];
-						var codigo = data[0]['codigo'];
-						var prodc = data[0]['label'];
-						var precio = data[0]['precio'];
-						var cant = data[0]['cantidad'];
+						var id = data[0]['id_producto'];
+						var codigo = data[0]['codigo_producto'];
+						var prodc = data[0]['nombre_producto'];
+						var precio = data[0]['precio_unitario'];
+						var cant = data[0]['cantidad_producto'];
 						var id_cat = data[0]['id_categoria'];
 						var cat = data[0]['nombre_categoria'];
 						var id_medi = data[0]['id_medida'];

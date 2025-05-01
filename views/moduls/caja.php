@@ -337,7 +337,7 @@ if ($res != null) {
                                                                                                             } ?>></td>
                             <!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_1" value="0"></td>-->
                             <!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_1" value="0" required>-->
-                            <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_1" value="0" required>
+                            <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_1" value="0">
                             </td>
                             <?php
                             if (isset($_SESSION['dueda'])) {

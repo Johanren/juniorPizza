@@ -869,25 +869,28 @@ $(document).ready(function () {
 	});
 
 	function calcularTotal() {
-		// Recorrer todos los campos de resultado y sumar sus valores
+		// Obtener todos los campos con clase 'resultado'
 		let valor_total_elems = document.querySelectorAll('.resultado');
-		let valorSinDesimal = Array.from(valor_total_elems).map(function (elem) {
-			return elem.value.replace(/,/g, '');
-		});
-		if (!document.getElementById('propina')) {
-			let propina = 0
-			let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
-			var total = suma + parseInt(propina);
-			//console.log(suma);
-			return total;
-		} else {
-			let propina = document.getElementById('propina').value
-			var valorSinDesimalPropina = propina.replace(/,/g, '');
-			let suma = valorSinDesimal.reduce((acc, curr) => acc + parseInt(curr), 0);
-			var total = suma + parseInt(valorSinDesimalPropina);
-			//console.log(suma);
-			return total;
+	
+		// Limpiar y convertir los valores, ignorando los vacíos o inválidos
+		let valoresLimpios = Array.from(valor_total_elems)
+			.map(elem => elem.value.replace(/,/g, ''))
+			.filter(val => val !== '' && !isNaN(val))
+			.map(val => parseFloat(val));
+	
+		// Sumar los valores
+		let suma = valoresLimpios.reduce((acc, curr) => acc + curr, 0);
+	
+		let propina = 0;
+		if (document.getElementById('propina')) {
+			let propinaRaw = document.getElementById('propina').value.replace(/,/g, '');
+			if (propinaRaw !== '' && !isNaN(propinaRaw)) {
+				propina = parseFloat(propinaRaw);
+			}
 		}
+	
+		let total = suma + propina;
+		return total;
 	}
 });
 
@@ -955,7 +958,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 	var index = 2;
 	$("#agregarFactura").click(function () {
-		$("#factura").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_articulo[]" id="id_articulo_' + index + '"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_' + index + '" placeholder="Codigo producto"></td><td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_' + index + '" placeholder="Nombre producto"></td><td><input type="text" name="precio[]" class="form-control valor" id="valor_' + index + '"></td><!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_' + index + '" value="0"></td>--><!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_' + index + '" value="0" required>--><td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_' + index + '" value="0" required></td><td><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></td><td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td></tr>');
+		$("#factura").append('<tr class="eliminar_' + index + '"><td><input type="hidden" name="id_articulo[]" id="id_articulo_' + index + '"><input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_' + index + '" placeholder="Codigo producto"></td><td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_' + index + '" placeholder="Nombre producto"></td><td><input type="text" name="precio[]" class="form-control valor" id="valor_' + index + '"></td><!--<td><input type="text" name="descuento[]" class="form-control" id="descuento_' + index + '" value="0"></td>--><!--<td><input type="text" name="peso[]" class="form-control peso" id="peso_' + index + '" value="0" required>--><td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_' + index + '" value="0"></td><td><input type="text" name="total" class="form-control resultado" id="resultado_' + index + '" disabled></td><td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td></tr>');
 		index++;
 	});
 });
@@ -1088,12 +1091,12 @@ $('body').on('click', '#cc', function () {
 
 //codigo de barra factura
 $(document).ready(function () {
-	var index1 = 2; // Variable global para el índice de los productos
+	var index1 = 2; // Para nuevas filas
 
+	// Evento para detectar código de barras
 	$(document).on('keydown', '.codigo_articulo', function () {
 		var id = this.id;
-		var splitid = id.split('_');
-		var index = splitid[1];
+		var index = id.split('_')[1];
 
 		var controladorTiempo = "";
 		var cantidad = 0;
@@ -1102,54 +1105,54 @@ $(document).ready(function () {
 
 		function codigoAJAX() {
 			var codigo = $('#codigo_' + index).val();
-			var numero = (cantidad + 1) == 0 ? 1 : cantidad + 1;
+			var numero = (cantidad + 1) === 0 ? 1 : cantidad + 1;
+			var inicio = 0;
 
-			inicio = 0;
-			for (i = 0; i < numero; i++) {
-				codigobarra = codigo.substring(inicio, posicion[i]);
+			for (let i = 0; i < numero; i++) {
+				let codigobarra = codigo.substring(inicio, posicion[i]);
 				inicio = posicion[i];
 				arrayQR.push(codigobarra);
+
 				$.ajax({
 					url: 'views/ajax.php',
 					type: 'get',
 					dataType: 'json',
 					data: { codigo1: codigo },
-
 				}).done(function (data) {
-					console.log("el dato", data);
-					var len = data.length;
-					if (len > 0) {
-						var id = data[0]['id_producto'];
-						var codigo = data[0]['codigo_producto'];
-						var name = data[0]['nombre_producto'];
-						var valor = data[0]['precio_unitario'];
-						valor = valor.toString();
-						value = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+					if (data.length > 0) {
+						let producto = data[0];
+						let valor = producto.precio_unitario.toString();
+						let valorConMiles = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-						document.getElementById('id_articulo_' + index).value = id;
-						document.getElementById('codigo_' + index).value = codigo;
-						document.getElementById('nombre_' + index).value = name;
-						document.getElementById('valor_' + index).value = value;
+						// Asignar valores
+						$('#id_articulo_' + index).val(producto.id_producto);
+						$('#codigo_' + index).val(producto.codigo_producto);
+						$('#nombre_' + index).val(producto.nombre_producto);
+						$('#valor_' + index).val(valorConMiles);
+						$('#cantidad_' + index).val(1);
 
-						// Agregar nueva fila con index1 autoincrementado
+						// Calcular total inicial
+						let total = parseFloat(valor.replace(/,/g, '')) * 1;
+						let totalConMiles = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+						$('#resultado_' + index).val(totalConMiles);
+
+						calcularTotalGeneral();
+
+						// Crear nueva fila
 						$("#factura").append(
 							`<tr class="eliminar_${index1}">
-                                <td><input type="hidden" name="id_articulo[]" id="id_articulo_${index1}">
-                                    <input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_${index1}" placeholder="Codigo producto">
-                                </td>
-                                <td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_${index1}" placeholder="Nombre producto"></td>
-                                <td><input type="text" name="precio[]" class="form-control valor" id="valor_${index1}"></td>
-                                <td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_${index1}" value="0" required></td>
-                                <td><input type="text" name="total" class="form-control resultado" id="resultado_${index1}" disabled></td>
-                                <td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
-                            </tr>`
+								<td><input type="hidden" name="id_articulo[]" id="id_articulo_${index1}">
+									<input type="text" name="codigo" class="form-control codigo_articulo" id="codigo_${index1}" placeholder="Codigo producto">
+								</td>
+								<td><input type="text" name="articulo" class="form-control nombre_articulo" id="nombre_${index1}" placeholder="Nombre producto"></td>
+								<td><input type="text" name="precio[]" class="form-control valor" id="valor_${index1}"></td>
+								<td><input type="text" name="cantidad[]" class="form-control cantidad" id="cantidad_${index1}" value="0" required></td>
+								<td><input type="text" name="total" class="form-control resultado" id="resultado_${index1}" disabled></td>
+								<td><a class="btn btn-primary mt-3 eliminar" id="eliminarFactura">Eliminar</a></td>
+							</tr>`
 						);
-
-						// Mover el foco automáticamente al nuevo campo de código
-
 						$('#codigo_' + index1).focus();
-
-						index1++; // Incrementar el índice para la siguiente fila
+						index1++;
 					}
 				});
 			}
@@ -1159,10 +1162,10 @@ $(document).ready(function () {
 		}
 
 		$('#codigo_' + index).on("keyup", function (e) {
-			var codigo = $('#codigo_' + index).val();
-			largo = codigo.length;
+			let codigo = $(this).val();
+			let largo = codigo.length;
 
-			if (e.which == 13) {
+			if (e.which === 13) {
 				cantidad++;
 				posicion.push(largo);
 			}
@@ -1170,8 +1173,31 @@ $(document).ready(function () {
 			controladorTiempo = setTimeout(codigoAJAX, 500);
 		});
 	});
-});
 
+	// Evento para calcular total al cambiar la cantidad
+	$(document).on('input', '.cantidad', function () {
+		let id = this.id;
+		let index = id.split('_')[1];
+		let cantidad = parseFloat(this.value) || 0;
+		let valor = $('#valor_' + index).val().replace(/,/g, '');
+		let total = cantidad * parseFloat(valor || 0);
+		let totalConMiles = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+		$('#resultado_' + index).val(totalConMiles);
+		calcularTotalGeneral();
+	});
+
+	// Calcular total general
+	function calcularTotalGeneral() {
+		let suma = 0;
+		$('[id^="resultado_"]').each(function () {
+			let valor = $(this).val().replace(/,/g, '');
+			suma += parseFloat(valor) || 0;
+		});
+		let totalGeneral = suma.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		$('#total_1').val(totalGeneral);
+	}
+});
 
 
 //agregar factura nombre

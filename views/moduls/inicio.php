@@ -62,21 +62,42 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
         $('#exampleModalCenter').modal('toggle')
     });
     $(document).ready(function() {
-        // Abre el modal `#reporte` al hacer clic en el botón `#reportes`
+        // Abre el modal principal de reportes
         $('#reportes').on('click', function() {
             $('#reporte').modal('toggle');
         });
 
-        // Cierra el modal `#reporte` y abre el modal `#reporteventames` al hacer clic en `#reporteventa`
+        // Reporte de ventas del mes
         $('#reporteventa').on('click', function() {
-            $('#reporte').modal('hide'); // Cierra el modal `#reporte`
-
-            // Cuando el modal `#reporte` termine de cerrarse, abre el modal `#reporteventames`
+            $('#reporte').modal('hide');
             $('#reporte').on('hidden.bs.modal', function() {
                 $('#reporteventames').modal('show');
+                // Quitamos el listener para evitar múltiples aperturas
+                $('#reporte').off('hidden.bs.modal');
+            });
+        });
+
+        // Reporte de productos vendidos del mes
+        $('#reporteproductos').on('click', function() {
+            $('#reporte').modal('hide');
+            $('#reporte').on('hidden.bs.modal', function() {
+                $('#reporteproductosmes').modal('show');
+                $('#reporte').off('hidden.bs.modal');
             });
         });
     });
+    function calcularSemana() {
+    const inicio = document.getElementById('ini').value;
+    if (inicio) {
+        const fechaInicio = new Date(inicio);
+        fechaInicio.setDate(fechaInicio.getDate() + 7); // Sumar 7 días
+        const dia = ("0" + fechaInicio.getDate()).slice(-2); // Formato de dos dígitos
+        const mes = ("0" + (fechaInicio.getMonth() + 1)).slice(-2); // Formato de mes
+        const anio = fechaInicio.getFullYear();
+        const fechaFin = `${anio}-${mes}-${dia}`;
+        document.getElementById('fin').value = fechaFin;
+    }
+}
 </script>
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -107,8 +128,11 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
                         </div>
                         <div class="col">
                             <div class="d-grid gap-2">
-                                <a href="views/excel.php?productoMes=<?php echo $_SESSION['id_local'] ?>" class="btn btn-primary">Reporte Productos Vendos del Mes</a>
-                                <button type="button" class="btn btn-primary" id="reporteventa" data-bs-toggle="modal" data-bs-target="#reporte">
+                                <button type="button" class="btn btn-primary" id="reporteproductos">
+                                    Reporte Productos Vendidos del Mes
+                                </button>
+
+                                <button type="button" class="btn btn-primary" id="reporteventa">
                                     Generar Reporte Venta Mes
                                 </button>
                             </div>
@@ -135,6 +159,37 @@ $ventaAnual = '$' . number_format($resultado2, 0, '.', ',');
                                     <label for="">Mes</label>
                                     <input type="month" name="mes" id="mes" class="form-control">
                                     <input type="hidden" name="ventaMes" id="" value="<?php echo $_SESSION['id_local'] ?>">
+                                    <button class="btn btn-primary  mt-3" type="submit">Generar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="reporteproductosmes" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg
+        ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Generar Reportes Productos mes</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-grid gap-2">
+                                <form action="views/excel.php" method="get">
+                                    <div class="form-group">
+                                        <label for="">Inicio</label>
+                                        <input type="date" name="inicio" id="ini" class="form-control" onchange="calcularSemana()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Fin</label>
+                                        <input type="date" name="fin" id="fin" class="form-control">
+                                    </div>
+                                    <input type="hidden" name="productoMes" id="" value="<?php echo $_SESSION['id_local'] ?>">
                                     <button class="btn btn-primary  mt-3" type="submit">Generar</button>
                                 </form>
                             </div>

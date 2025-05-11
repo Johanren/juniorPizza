@@ -6,7 +6,8 @@
         "phpmailer/phpmailer": "^6.9",
         "swiftmailer/swiftmailer": "^6.3",
         "symfony/mailer": "^5.4",
-        "twilio/sdk": "^8.3"
+        "twilio/sdk": "^8.3",
+        "picqer/php-barcode-generator": "^2.4"
     },
     "config": {
         "audit.abandoned": "ignore"

@@ -17,63 +17,145 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 if (isset($_GET['producto'])) {
-    $id = $_GET['producto'];
-    // Crear una nueva instancia de Spreadsheet
-    $spreadsheet = new Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-
-    // Agregar los encabezados de la tabla
-    $sheet->setCellValue('A1', 'Proveedor');
-    $sheet->setCellValue('B1', 'Codigo');
-    $sheet->setCellValue('C1', 'Producto');
-    $sheet->setCellValue('D1', 'Precio unitario');
-    $sheet->setCellValue('E1', 'Cantidad');
-    $sheet->setCellValue('F1', 'Categoria');
-    $sheet->setCellValue('G1', 'Medida');
-    $sheet->setCellValue('H1', 'Local');
-
-    // Conectar a la base de datos y recuperar los datos
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "junior";
-
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
+    $id = $_GET['producto'] ?? 0;
+    $conn = new mysqli("localhost", "root", "", "junior");
     if ($conn->connect_error) {
         die("Conexión fallida: " . $conn->connect_error);
     }
 
-    $sql = "SELECT proeevedor.nombre_proeevedor AS nombre_proveedor, producto.codigo_producto, producto.nombre_producto, producto.precio_unitario, producto.cantidad_producto, categoria.nombre_categoria, medida.nombre_medida, local.nombre_local FROM producto INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE producto.id_local = $id";
+    $sql = "SELECT 
+    proeevedor.nombre_proeevedor AS nombre_proveedor, 
+    producto.codigo_producto, 
+    producto.nombre_producto, 
+    producto.precio_unitario, 
+    producto.cantidad_producto, 
+    categoria.nombre_categoria, 
+    medida.nombre_medida, 
+    local.nombre_local 
+    FROM producto 
+    INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor 
+    INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria 
+    INNER JOIN medida ON medida.id_medida = producto.id_medida 
+    INNER JOIN local ON local.id_local = producto.id_local 
+    WHERE producto.id_local = $id";
+
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        $row = 2; // Empezar desde la fila 2 ya que la fila 1 contiene los encabezados
-        while ($data = $result->fetch_assoc()) {
-            $sheet->setCellValue('A' . $row, $data['nombre_proveedor']);
-            $sheet->setCellValue('B' . $row, $data['codigo_producto']);
-            $sheet->setCellValue('C' . $row, $data['nombre_producto']);
-            $sheet->setCellValue('D' . $row, number_format($data['precio_unitario'], 2));
-            $sheet->setCellValue('E' . $row, $data['cantidad_producto']);
-            $sheet->setCellValue('F' . $row, $data['nombre_categoria']);
-            $sheet->setCellValue('G' . $row, $data['nombre_medida']);
-            $sheet->setCellValue('H' . $row, $data['nombre_local']);
-            $row++;
+    // === 1. CREAR EXCEL ===
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->fromArray(['Proveedor', 'Codigo', 'Producto', 'Precio unitario', 'Cantidad', 'Categoria', 'Medida', 'Local'], null, 'A1');
+
+    $row = 2;
+    $productos = [];
+
+    while ($data = $result->fetch_assoc()) {
+        $sheet->fromArray([
+            $data['nombre_proveedor'],
+            $data['codigo_producto'],
+            $data['nombre_producto'],
+            number_format($data['precio_unitario'], 2),
+            $data['cantidad_producto'],
+            $data['nombre_categoria'],
+            $data['nombre_medida'],
+            $data['nombre_local'],
+        ], null, 'A' . $row);
+
+        $productos[] = [
+            'codigo' => $data['codigo_producto'],
+            'nombre' => $data['nombre_producto'],
+        ];
+
+        $row++;
+    }
+
+    $excelFile = sys_get_temp_dir() . '/productos_' . uniqid() . '.xlsx';
+    $writer = new Xlsx($spreadsheet);
+    $writer->save($excelFile);
+
+    // === 2. CREAR PDF DE ETIQUETAS ===
+    $pdf = new TCPDF('P', 'mm', 'A4');
+    $pdf->SetMargins(10, 10, 10);
+    $pdf->AddPage();
+    $pdf->SetAutoPageBreak(false, 0);
+
+    $labelsPerRow = 3;
+    $labelWidth = 60;
+    $labelHeight = 40;
+
+    $x = 10;
+    $y = 10;
+    $currentColumn = 0;
+
+    foreach ($productos as $item) {
+        $codigo = $item['codigo'];
+        $nombre = $item['nombre'];
+
+        // Nombre del producto
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->SetXY($x, $y + 2);
+        $pdf->MultiCell($labelWidth, 5, $nombre, 0, 'C', false);
+
+        // Código de barras centrado
+        $barcodeWidth = $labelWidth - 20; // ancho más pequeño para dejar márgenes
+        $barcodeX = $x + ($labelWidth - $barcodeWidth) / 2;
+        $style = [
+            'position' => '',
+            'align' => 'C',
+            'stretch' => false,
+            'fitwidth' => false,
+            'cellfitalign' => '',
+            'border' => false,
+            'hpadding' => 0,
+            'vpadding' => 0,
+            'fgcolor' => [0, 0, 0],
+            'bgcolor' => false,
+            'text' => false,
+        ];
+        $pdf->write1DBarcode($codigo, 'C128', $barcodeX, $y + 13, $barcodeWidth, 12, 0.4, $style, 'C');
+
+        // Código numérico centrado
+        $pdf->SetFont('helvetica', '', 7);
+        $pdf->SetXY($x, $y + 28);
+        $pdf->Cell($labelWidth, 5, $codigo, 0, 0, 'C');
+
+        // Mover posición
+        $currentColumn++;
+        if ($currentColumn >= $labelsPerRow) {
+            $currentColumn = 0;
+            $x = 10;
+            $y += $labelHeight + 5;
+            if ($y + $labelHeight > 280) {
+                $pdf->AddPage();
+                $y = 10;
+            }
+        } else {
+            $x += $labelWidth + 5;
         }
     }
 
-    $conn->close();
 
-    // Crear el archivo Excel
-    $writer = new Xlsx($spreadsheet);
+    $pdfFile = sys_get_temp_dir() . '/etiquetas_' . uniqid() . '.pdf';
+    $pdf->Output($pdfFile, 'F');
 
-    // Configurar los encabezados HTTP para la descarga del archivo
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="productos.xlsx"');
-    header('Cache-Control: max-age=0');
+    // === 3. CREAR ZIP CON AMBOS ===
+    $zipFile = sys_get_temp_dir() . '/productos_completos_' . uniqid() . '.zip';
+    $zip = new ZipArchive();
+    $zip->open($zipFile, ZipArchive::CREATE);
+    $zip->addFile($excelFile, 'productos.xlsx');
+    $zip->addFile($pdfFile, 'etiquetas_codigos.pdf');
+    $zip->close();
 
-    // Enviar el archivo al navegador
-    $writer->save('php://output');
+    // === 4. FORZAR DESCARGA ZIP ===
+    header('Content-Type: application/zip');
+    header('Content-Disposition: attachment; filename="productos_completos.zip"');
+    header('Content-Length: ' . filesize($zipFile));
+    readfile($zipFile);
+
+    // === 5. LIMPIAR TEMPORALES ===
+    unlink($excelFile);
+    unlink($pdfFile);
+    unlink($zipFile);
     exit;
 }
 if (isset($_GET['ingrediente'])) {
@@ -147,8 +229,9 @@ if (isset($_GET['productoMes'])) {
     if ($conn->connect_error) {
         die("Conexión fallida: " . $conn->connect_error);
     }
-    $fecha = date('Y-m') . "%";
-    $sql = "SELECT producto.nombre_producto, SUM(cantidad) AS total_vendido FROM `venta` INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE fecha_ingreso like '$fecha' AND venta.id_local = $id GROUP BY producto.nombre_producto ORDER BY total_vendido";
+    $fecha_inicio = $_GET['inicio'];
+    $fecha_fin = $_GET['fin'];
+    $sql = "SELECT producto.nombre_producto, SUM(cantidad) AS total_vendido FROM venta INNER JOIN producto ON producto.id_producto = venta.id_producto WHERE venta.fecha_ingreso BETWEEN '$fecha_inicio' AND '$fecha_fin' AND venta.id_local = $id GROUP BY producto.nombre_producto ORDER BY total_vendido;";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

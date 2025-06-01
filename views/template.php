@@ -8,6 +8,10 @@ if (isset($_SESSION['id_local'])) {
 }
 if ($res != null) {
     $nombreSistema = $res[0]['nombre_local'];
+    if (strpos($nombreSistema, '58') !== false) {
+        $nombreSistema = str_replace('58', '', $nombreSistema);
+    }
+    $nombreSistema;
     $nit = $res[0]['nit'];
     $tel = $res[0]['telefono'];
     $dire = $res[0]['direccion'];
@@ -499,7 +503,7 @@ ob_start();
                                                     .Corte(1)
                                                     .Pulso(48, 60, 120)
                                                     .imprimirEn("cocina");
-                                                    //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
+                                                //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
                                                 if (respuesta === true) {
                                                     $.ajax({
                                                         url: 'views/ajax.php',

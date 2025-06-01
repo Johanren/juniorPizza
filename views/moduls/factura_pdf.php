@@ -27,6 +27,10 @@ date_default_timezone_set('America/Mexico_City');
 $fecha = date('Y-m-d') . " " . date('H:i:s');
 if ($res != null) {
     $nombreSistema = $res[0]['nombre_local'];
+    if (strpos($nombreSistema, '58') !== false) {
+        $nombreSistema = str_replace('58', '', $nombreSistema);
+    }
+    $nombreSistema;
     $nit = $res[0]['nit'];
     $tel = $res[0]['telefono'];
     $dire = $res[0]['direccion'];
@@ -920,67 +924,94 @@ if (isset($_SESSION['factura'])) {
                     <input hidden id="relleno" value=" " class="input" type="text" maxlength="1" placeholder="El relleno de las celdas">
                 </div>
             </div>
-            <div class="field">
-                <!--<label class="label">Máxima longitud para el nombre</label>-->
-                <div class="control">
-                    <input hidden id="maximaLongitudNombre" value="20" class="input" type="number">
-                </div>
-            </div>
-            <div class="field">
-                <!--<label class="label">Máxima longitud para la cantidad</label>-->
-                <div class="control">
-                    <input hidden id="maximaLongitudCantidad" value="8" class="input" type="number">
-                </div>
-            </div>
-            <div class="field">
-                <!--<label class="label">Máxima longitud para el precio</label>-->
-                <div class="control">
-                    <input hidden id="maximaLongitudPrecio" value="8" class="input" type="number">
-                </div>
-                <input type="hidden" id="cufe" value="<?php echo $UUID = hash('sha384', $cufe); ?>">
-            </div>
-            <button id="Imprimir" class="btn btn-primary mt-2">Imprimir</button>
-            <a id="caja" href="caja" class="btn btn-primary mt-2">Caja</a>
             <?php
-            if (isset($_GET['factura'])) {
+            $nombreSistema = $res[0]['nombre_local'];
+            if (strpos($nombreSistema, '58') !== false) {
+
             ?>
-                <form action="" method="post">
-                    <button class="btn btn-primary mt-2" name="enviar_correo">Enviar Factura</button>
-                </form>
-            <?php
-            }
-            ?>
+                <div class="field">
+                    <!--<label class="label">Máxima longitud para el nombre</label>-->
+                    <div class="control">
+                        <input hidden id="maximaLongitudNombre" value="7" class="input" type="number">
+                    </div>
+                </div>
+                <div class="field">
+                    <!--<label class="label">Máxima longitud para la cantidad</label>-->
+                    <div class="control">
+                        <input hidden id="maximaLongitudCantidad" value="7" class="input" type="number">
+                    </div>
+                </div>
+                <div class="field">
+                    <!--<label class="label">Máxima longitud para el precio</label>-->
+                    <div class="control">
+                        <input hidden id="maximaLongitudPrecio" value="7" class="input" type="number">
+                    <?php
+                } else {
+                    ?><div class="field">
+                            <!--<label class="label">Máxima longitud para el nombre</label>-->
+                            <div class="control">
+                                <input hidden id="maximaLongitudNombre" value="20" class="input" type="number">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <!--<label class="label">Máxima longitud para la cantidad</label>-->
+                            <div class="control">
+                                <input hidden id="maximaLongitudCantidad" value="8" class="input" type="number">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <!--<label class="label">Máxima longitud para el precio</label>-->
+                            <div class="control">
+                                <input hidden id="maximaLongitudPrecio" value="8" class="input" type="number">
+
+                            <?php
+                        }
+                            ?>
+                            </div>
+                            <input type="hidden" id="cufe" value="<?php echo $UUID = hash('sha384', $cufe); ?>">
+                        </div>
+                        <button id="Imprimir" class="btn btn-primary mt-2">Imprimir</button>
+                        <a id="caja" href="caja" class="btn btn-primary mt-2">Caja</a>
+                        <?php
+                        if (isset($_GET['factura'])) {
+                        ?>
+                            <form action="" method="post">
+                                <button class="btn btn-primary mt-2" name="enviar_correo">Enviar Factura</button>
+                            </form>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </div>
         </div>
-    </div>
-</div>
-<?php
+        <?php
 
-function validarXML($doc)
-{
+        function validarXML($doc)
+        {
 
-    libxml_use_internal_errors(true);
+            libxml_use_internal_errors(true);
 
-    $xml = new DOMDocument();
-    $xml->loadXML($doc);
-    $doc_validator = "C:/xampp/htdocs/juniorPizza/views/xmlValidator/UBL-Invoice-2.1.xsd";
+            $xml = new DOMDocument();
+            $xml->loadXML($doc);
+            $doc_validator = "C:/xampp/htdocs/juniorPizza/views/xmlValidator/UBL-Invoice-2.1.xsd";
 
-    if ($xml->schemaValidate($doc_validator)) {
-        //echo "enviado";
-    } else {
-        echo getErrors();
-        //echo "fallo";
-    }
-}
+            if ($xml->schemaValidate($doc_validator)) {
+                //echo "enviado";
+            } else {
+                echo getErrors();
+                //echo "fallo";
+            }
+        }
 
-function formHeadXML()
-{
-    $xml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:sts="dian:gov:co:facturaelectronica:Structures-2-1" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd">';
-    return $xml;
-}
+        function formHeadXML()
+        {
+            $xml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?><Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:sts="dian:gov:co:facturaelectronica:Structures-2-1" xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" xmlns:xades141="http://uri.etsi.org/01903/v1.4.1#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd">';
+            return $xml;
+        }
 
-function formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix, $From, $To, $companyNit, $SoftwareID, $SoftwareSecurityCode, $AuthorizationProviderID, $QRCode, $firma)
-{
-    $xml = "
+        function formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix, $From, $To, $companyNit, $SoftwareID, $SoftwareSecurityCode, $AuthorizationProviderID, $QRCode, $firma)
+        {
+            $xml = "
             <ext:UBLExtensions>
               <ext:UBLExtension>
                  <ext:ExtensionContent>
@@ -1035,12 +1066,12 @@ function formExtensionsXML($InvoiceAuthorization, $StartDate, $EndDate, $Prefix,
                 </ext:UBLExtension>
             </ext:UBLExtensions>
             ";
-    return $xml;
-}
+            return $xml;
+        }
 
-function formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $IssueDate, $IssueTime, $InvoiceTypeCode, $LineCountNumeric, $InvoiceStartDate, $InvoiceEndDate)
-{
-    $xml = "<cbc:UBLVersionID>
+        function formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $IssueDate, $IssueTime, $InvoiceTypeCode, $LineCountNumeric, $InvoiceStartDate, $InvoiceEndDate)
+        {
+            $xml = "<cbc:UBLVersionID>
                 UBL 2.1
             </cbc:UBLVersionID>
             <cbc:CustomizationID>$CustomizationID</cbc:CustomizationID>
@@ -1058,12 +1089,12 @@ function formVersionXML($CustomizationID, $ProfileExecutionID, $ID, $UUID, $Issu
                 <cbc:EndDate>$InvoiceEndDate</cbc:EndDate>
             </cac:InvoicePeriod>
             ";
-    return $xml;
-}
+            return $xml;
+        }
 
-function formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $CompanyName, $CompanyPostalCode, $companyNit, $CompanyCity, $CompanyDepto, $CompanyDeptoCode, $CompanyAddres, $TaxLevelCode, $cityCode, $TaxSchemeId, $TaxSchemeName)
-{
-    $xml = "<cac:AccountingSupplierParty>
+        function formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $CompanyName, $CompanyPostalCode, $companyNit, $CompanyCity, $CompanyDepto, $CompanyDeptoCode, $CompanyAddres, $TaxLevelCode, $cityCode, $TaxSchemeId, $TaxSchemeName)
+        {
+            $xml = "<cac:AccountingSupplierParty>
                 <cbc:AdditionalAccountID>$AdditionalAccountID</cbc:AdditionalAccountID>
                 <cac:Party>
                     <cac:PartyName>
@@ -1112,12 +1143,12 @@ function formCompanyXML($AdditionalAccountID, $IndustryClasificationCode, $Compa
                     </cac:PartyLegalEntity>
                 </cac:Party>
             </cac:AccountingSupplierParty>";
-    return $xml;
-}
+            return $xml;
+        }
 
-function formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode, $CustomerCity, $CustomerDepto, $customerDeptoCode, $CustomerAddress, $CostomerIdCode, $customerNit)
-{
-    $xml = "
+        function formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode, $CustomerCity, $CustomerDepto, $customerDeptoCode, $CustomerAddress, $CostomerIdCode, $customerNit)
+        {
+            $xml = "
             <cac:AccountingCustomerParty>
                 <cbc:AdditionalAccountID>$AdditionalAccountID</cbc:AdditionalAccountID>
                 <cac:Party>
@@ -1153,12 +1184,12 @@ function formCustumerXML($AdditionalAccountID, $CustomerName, $CustomerCityCode,
                     </cac:PartyLegalEntity>
                 </cac:Party>
             </cac:AccountingCustomerParty>";
-    return $xml;
-}
+            return $xml;
+        }
 
-function formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Percent, $TaxAmount, $LineExtensionAmount, $AllowanceTotalAmount, $TaxExclusiveAmount, $TaxInclusiveAmount, $PayableAmount)
-{
-    $xml = "
+        function formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Percent, $TaxAmount, $LineExtensionAmount, $AllowanceTotalAmount, $TaxExclusiveAmount, $TaxInclusiveAmount, $PayableAmount)
+        {
+            $xml = "
             <cac:PaymentMeans>
                 <cbc:ID>$PaymentMeansID</cbc:ID>
                 <cbc:PaymentMeansCode>$PaymentMeansCode</cbc:PaymentMeansCode>
@@ -1183,30 +1214,30 @@ function formTotalXML($PaymentMeansID, $PaymentMeansCode, $TaxableAmount, $Perce
                 <cbc:TaxInclusiveAmount currencyID='COP'>$TaxInclusiveAmount</cbc:TaxInclusiveAmount>
                 <cbc:PayableAmount currencyID='COP'>$PayableAmount</cbc:PayableAmount>
             </cac:LegalMonetaryTotal>";
-    return $xml;
-}
+            return $xml;
+        }
 
-function formLineXML($resVenta)
-{
-    $xml = "";
-    foreach ($resVenta as $key => $value) {
-        //Productosw
-        $lineID = $key + 1; //Consecutivo de cuantos productos hay en la factura
-        $lineQty = $value['cantidad']; //Cantidad de productos vendidos
-        $AllowanceCharge = "1"; //descuento por producto
-        //Descuentos
-        $LineBaseAmount = "0"; //valor antes de descuento
-        $AllowancePercentage = "0"; //Porcentaje de descuento
-        $LineAllowanceAmount = "0"; //Descuento
-        $LineTotal = $value['precio_compra']; // Total con descuento
-        ///
-        $LineTax = "0"; //Valor IVA
-        $LineTaxPercentage = "0"; //IVA
-        //
-        $LineItemName = $value['nombre_producto']; //Nombre Producto
-        $LineTotal = $value['precio_compra']; //Total producto
+        function formLineXML($resVenta)
+        {
+            $xml = "";
+            foreach ($resVenta as $key => $value) {
+                //Productosw
+                $lineID = $key + 1; //Consecutivo de cuantos productos hay en la factura
+                $lineQty = $value['cantidad']; //Cantidad de productos vendidos
+                $AllowanceCharge = "1"; //descuento por producto
+                //Descuentos
+                $LineBaseAmount = "0"; //valor antes de descuento
+                $AllowancePercentage = "0"; //Porcentaje de descuento
+                $LineAllowanceAmount = "0"; //Descuento
+                $LineTotal = $value['precio_compra']; // Total con descuento
+                ///
+                $LineTax = "0"; //Valor IVA
+                $LineTaxPercentage = "0"; //IVA
+                //
+                $LineItemName = $value['nombre_producto']; //Nombre Producto
+                $LineTotal = $value['precio_compra']; //Total producto
 
-        $xml .= "
+                $xml .= "
                 <cac:InvoiceLine>
                 <cbc:ID>$lineID</cbc:ID>
                 <cbc:InvoicedQuantity unitCode='EA'>$lineQty</cbc:InvoicedQuantity>
@@ -1235,12 +1266,12 @@ function formLineXML($resVenta)
                 </cac:Price>
             </cac:InvoiceLine>
             ";
-    }
-    return $xml . "</Invoice>";
-}
-function xmlfirma()
-{
-    $xml = '<ds:Signature Id="xmldsig-d0322c4f-be87-495a-95d5-9244980495f4">
+            }
+            return $xml . "</Invoice>";
+        }
+        function xmlfirma()
+        {
+            $xml = '<ds:Signature Id="xmldsig-d0322c4f-be87-495a-95d5-9244980495f4">
         <ds:SignedInfo>
         <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
         <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
@@ -1312,304 +1343,336 @@ function xmlfirma()
         </ds:KeyInfo>
         <ds:Object><xades:QualifyingProperties Target="#xmldsig-d0322c4f-be87-495a-95d5-9244980495f4"><xades:SignedProperties Id="xmldsig-d0322c4f-be87-495a-95d5-9244980495f4-signedprops"><xades:SignedSignatureProperties><xades:SigningTime>2019-06-21T19:09:35.993-05:00</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>nem6KXhqlV0A0FK5o+MwJZ3Y1aHgmL1hDs/RMJu7HYw=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>C=CO,L=Bogota D.C.,O=Andes SCD.,OU=Division de certificacion entidad final,CN=CA ANDES SCD S.A. Clase II,1.2.840.113549.1.9.1=#1614696e666f40616e6465737363642e636f6d2e636f</ds:X509IssuerName><ds:X509SerialNumber>7785324499979575522</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>oEsyOEeUGTXr45Jr0jHJx3l/9CxcsxPMOTarEiXOclY=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>C=CO,L=Bogota D.C.,O=Andes SCD,OU=Division de certificacion,CN=ROOT CA ANDES SCD S.A.,1.2.840.113549.1.9.1=#1614696e666f40616e6465737363642e636f6d2e636f</ds:X509IssuerName><ds:X509SerialNumber>8136867327090815624</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>Cs7emRwtXWVYHJrqS9eXEXfUcFyJJBqFhDFOetHu8ts=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>C=CO,L=Bogota D.C.,O=Andes SCD,OU=Division de certificacion,CN=ROOT CA ANDES SCD S.A.,1.2.840.113549.1.9.1=#1614696e666f40616e6465737363642e636f6d2e636f</ds:X509IssuerName><ds:X509SerialNumber>3184328748892787122</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate><xades:SignaturePolicyIdentifier><xades:SignaturePolicyId><xades:SigPolicyId><xades:Identifier>https://facturaelectronica.dian.gov.co/politicadefirma/v1/politicadefirmav2.pdf</xades:Identifier></xades:SigPolicyId><xades:SigPolicyHash><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>dMoMvtcG5aIzgYo0tIsSQeVJBDnUnfSOfBpxXrmor0Y=</ds:DigestValue></xades:SigPolicyHash></xades:SignaturePolicyId></xades:SignaturePolicyIdentifier><xades:SignerRole><xades:ClaimedRoles><xades:ClaimedRole>supplier</xades:ClaimedRole></xades:ClaimedRoles></xades:SignerRole></xades:SignedSignatureProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object>
         </ds:Signature>';
-    return $xml;
-}
+            return $xml;
+        }
 
-?>
-<script>
-    //Imprimir
-    var cufe = $('#cufe').val();
-    document.addEventListener("DOMContentLoaded", async () => {
-        // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
-        // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
-        // a cualquier lugar
-        const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
-            const resultado = [];
-            let indice = 0;
-            while (indice < cadena.length) {
-                const pedazo = cadena.substring(indice, indice + maximaLongitud);
-                indice += maximaLongitud;
-                resultado.push(pedazo);
-            }
-            return resultado;
-        }
-        const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
-            let mayorConteoDeCadenasSeparadas = 0;
-            const cadenasSeparadas = [];
-            for (const contenido of contenidosConMaximaLongitud) {
-                const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
-                cadenasSeparadas.push({
-                    separadas,
-                    maximaLongitud: contenido.maximaLongitud
-                });
-                if (separadas.length > mayorConteoDeCadenasSeparadas) {
-                    mayorConteoDeCadenasSeparadas = separadas.length;
-                }
-            }
-            return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
-        }
-        const tabularDatos = (cadenas, relleno, separadorColumnas) => {
-            const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
-            let indice = 0;
-            const lineas = [];
-            while (indice < mayorConteoDeBloques) {
-                let linea = "";
-                for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
-                    let cadena = "";
-                    if (indice < contenidos.separadas.length) {
-                        cadena = contenidos.separadas[indice];
+        ?>
+        <script>
+            //Imprimir
+            var cufe = $('#cufe').val();
+            document.addEventListener("DOMContentLoaded", async () => {
+                // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
+                // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
+                // a cualquier lugar
+                const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
+                    const resultado = [];
+                    let indice = 0;
+                    while (indice < cadena.length) {
+                        const pedazo = cadena.substring(indice, indice + maximaLongitud);
+                        indice += maximaLongitud;
+                        resultado.push(pedazo);
                     }
-                    if (cadena.length < contenidos.maximaLongitud) {
-                        cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
+                    return resultado;
+                }
+                const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
+                    let mayorConteoDeCadenasSeparadas = 0;
+                    const cadenasSeparadas = [];
+                    for (const contenido of contenidosConMaximaLongitud) {
+                        const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
+                        cadenasSeparadas.push({
+                            separadas,
+                            maximaLongitud: contenido.maximaLongitud
+                        });
+                        if (separadas.length > mayorConteoDeCadenasSeparadas) {
+                            mayorConteoDeCadenasSeparadas = separadas.length;
+                        }
                     }
-                    linea += cadena + separadorColumnas;
+                    return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
                 }
-                lineas.push(linea);
-                indice++;
-            }
-            return lineas;
-        }
-
-
-        const obtenerListaDeImpresoras = async () => {
-            return await ConectorPluginV3.obtenerImpresoras();
-        }
-        const URLPlugin = "http://localhost:8000"
-        const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
-            $btnImprimir = document.querySelector("#Imprimir"),
-            $separador = document.querySelector("#separador"),
-            $relleno = document.querySelector("#relleno"),
-            $maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
-            $maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
-            $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
-        $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
-
-
-        const init = async () => {
-            /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
-            for (const impresora of impresoras) {
-                $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
-                    value: impresora,
-                    text: impresora,
-                }));
-            }*/
-            $btnImprimir.addEventListener("click", () => {
-                const nombreImpresora = "caja";
-                if (!nombreImpresora) {
-                    return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
+                const tabularDatos = (cadenas, relleno, separadorColumnas) => {
+                    const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
+                    let indice = 0;
+                    const lineas = [];
+                    while (indice < mayorConteoDeBloques) {
+                        let linea = "";
+                        for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
+                            let cadena = "";
+                            if (indice < contenidos.separadas.length) {
+                                cadena = contenidos.separadas[indice];
+                            }
+                            if (cadena.length < contenidos.maximaLongitud) {
+                                cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
+                            }
+                            linea += cadena + separadorColumnas;
+                        }
+                        lineas.push(linea);
+                        indice++;
+                    }
+                    return lineas;
                 }
-                imprimirTabla("caja");
+
+
+                const obtenerListaDeImpresoras = async () => {
+                    return await ConectorPluginV3.obtenerImpresoras();
+                }
+                const URLPlugin = "http://localhost:8000"
+                const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
+                    $btnImprimir = document.querySelector("#Imprimir"),
+                    $separador = document.querySelector("#separador"),
+                    $relleno = document.querySelector("#relleno"),
+                    $maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
+                    $maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
+                    $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
+                $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
+
+
+                const init = async () => {
+                    /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
+                    for (const impresora of impresoras) {
+                        $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
+                            value: impresora,
+                            text: impresora,
+                        }));
+                    }*/
+                    $btnImprimir.addEventListener("click", () => {
+                        const nombreImpresora = "caja";
+                        if (!nombreImpresora) {
+                            return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
+                        }
+                        imprimirTabla("caja");
+                    });
+                }
+
+
+                const imprimirTabla = async (nombreImpresora) => {
+                    const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
+                        maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
+                        maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
+                        maximaLongitudPrecioTotal = parseInt($maximaLongitudPrecio.value),
+                        relleno = $relleno.value,
+                        separadorColumnas = $separador.value;
+                    const obtenerLineaSeparadora = () => {
+                        const lineasSeparador = tabularDatos(
+                            [{
+                                    contenido: "-",
+                                    maximaLongitud: maximaLongitudNombre
+                                },
+                                {
+                                    contenido: "-",
+                                    maximaLongitud: maximaLongitudCantidad
+                                },
+                                {
+                                    contenido: "-",
+                                    maximaLongitud: maximaLongitudPrecio
+                                },
+                                {
+                                    contenido: "-",
+                                    maximaLongitud: maximaLongitudPrecioTotal
+                                },
+                            ],
+                            "-",
+                            "+",
+                        );
+                        let separadorDeLineas = "";
+                        if (lineasSeparador.length > 0) {
+                            separadorDeLineas = lineasSeparador[0]
+                        }
+                        return separadorDeLineas;
+                    }
+                    // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
+                    // definir otras propiedades, etcétera
+                    const listaDeProductos = [
+                        <?php foreach ($resVenta as $key => $value) {
+                        ?> {
+                                nombre: "<?php echo $value['nombre_producto'] ?>",
+                                cantidad: "<?php if ($value['cantidad'] > 0) {
+                                                echo $value['cantidad'];
+                                            } else {
+                                                echo $value['peso'];
+                                            } ?>",
+                                precio: <?php echo $value['valor_unitario'] ?>,
+                                precioTotal: <?php echo $value['precio_compra'] ?>,
+                            },
+                        <?php
+                        }
+                        ?>
+                    ];
+                    // Comenzar a diseñar la tabla
+                    let tabla = obtenerLineaSeparadora() + "\n";
+
+
+                    const lineasEncabezado = tabularDatos([
+
+                            {
+                                contenido: "Nombre",
+                                maximaLongitud: maximaLongitudNombre
+                            },
+                            {
+                                contenido: "Cantidad",
+                                maximaLongitud: maximaLongitudCantidad
+                            },
+                            {
+                                contenido: "Precio",
+                                maximaLongitud: maximaLongitudPrecio
+                            },
+                            {
+                                contenido: "Total",
+                                maximaLongitud: maximaLongitudPrecioTotal
+                            },
+                        ],
+                        relleno,
+                        separadorColumnas,
+                    );
+
+                    for (const linea of lineasEncabezado) {
+                        tabla += linea + "\n";
+                    }
+                    tabla += obtenerLineaSeparadora() + "\n";
+                    for (const producto of listaDeProductos) {
+                        const lineas = tabularDatos(
+                            [{
+                                    contenido: producto.nombre,
+                                    maximaLongitud: maximaLongitudNombre
+                                },
+                                {
+                                    contenido: producto.cantidad.toString(),
+                                    maximaLongitud: maximaLongitudCantidad
+                                },
+                                {
+                                    contenido: producto.precio.toString(),
+                                    maximaLongitud: maximaLongitudPrecio
+                                },
+                                {
+                                    contenido: producto.precioTotal.toString(),
+                                    maximaLongitud: maximaLongitudPrecio
+                                },
+                            ],
+                            relleno,
+                            separadorColumnas
+                        );
+                        for (const linea of lineas) {
+                            tabla += linea + "\n";
+                        }
+                        tabla += obtenerLineaSeparadora() + "\n";
+                    }
+                    console.log(tabla);
+
+
+
+                    const conector = new ConectorPluginV3(URLPlugin);
+                    const respuesta = await conector
+                        .Iniciar()
+                        .DeshabilitarElModoDeCaracteresChinos()
+                    <?php
+                    $nombreSistema = $res[0]['nombre_local'];
+                    if (strpos($nombreSistema, '58') !== false) {
+
+                    ?>
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+                    <?php
+                    } else {
+
+
+                    ?>
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                    <?php
+
+                    }
+                    ?>
+                        /*.DescargarImagenDeInternetEImprimir("http://<?php echo $_SERVER['HTTP_HOST'] ?>/inventario/<?php if ($diseno != null) {
+                                                                                                                            echo $diseno[0]['icon_sistema'];
+                                                                                                                        } else {
+                                                                                                                            echo "Views/img/img.jpg";
+                                                                                                                        } ?>", 0, 216)*/
+                        .Feed(1)
+                    <?php
+                    if (isset($_SESSION['factura'])) {
+                        if ($_SESSION['factura'] == 'true') {
+                            if ($resFactura[0]['factura'] == "true") {
+                    ?>
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "SEBASTIAN\n")
+                    <?php
+                            }
+                        }
+                    }
+                    ?>
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "Número Factura: <?php echo $resFactura[0]['id_factura'] ?>\n")
+                        .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                        .EscribirTexto("<?php echo $nombreSistema ?>\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: <?php echo $tel ?>\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: <?php echo $dire ?>\n")
+                    <?php
+                    if (isset($_SESSION['factura'])) {
+                        if ($_SESSION['factura'] == 'true') {
+                            if ($resFactura[0]['factura'] == "true") {
+                    ?>
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Factura Electrónica de venta <?php echo $resFactura[0]['id_factura'] ?>\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Vence: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Impreso: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Vendedor: rafipanespinal@gmail.com\n")
+                                    .EscribirTexto("------------------------------------------------\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Adquiriente: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Identificación: <?php echo $resCliente[0]['numero_cc'] ?>\n")
+                    <?php
+                            }
+                        }
+                    }
+                    ?>
+                        .EscribirTexto("------------------------------------------------\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "Nombre o Razón social: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "CC y/o NIT: <?php echo $resCliente[0]['numero_cc'] ?>\n")
+                        .EscribirTexto("------------------------------------------------\n")
+                        .Feed(1)
+
+                    <?php
+                    $nombreSistema = $res[0]['nombre_local'];
+                    if (strpos($nombreSistema, '58') !== false) {
+
+                    ?>
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+                    <?php
+                    } else {
+
+
+                    ?>
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
+                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+                    <?php
+
+                    }
+                    ?>
+                        .EscribirTexto(tabla)
+                        .EscribirTexto("------------------------------------------------\n")
+                        .EscribirTexto("SubTotal $<?php echo number_format($resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0) ?>\n")
+                        .EscribirTexto("Propina $<?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0) ?>\n")
+                        .EscribirTexto("Total $<?php echo number_format($resFactura[0]['total_factura'], 2) ?>\n")
+                        .EscribirTexto("------------------------------------------------\n")
+                        .EscribirTexto("Pago <?php echo $resFactura[0]['efectivo'] ?>   Cambio: <?php echo number_format($resFactura[0]['cambio'], 0) ?>\n")
+                        .EscribirTexto("------------------------------------------------\n")
+                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "GRACIAS POR SU COMPRA\n")
+                    <?php
+                    if (isset($_SESSION['factura'])) {
+                        if ($_SESSION['factura'] == 'true') {
+                            if ($resFactura[0]['factura'] == "true") {
+                    ?>
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Resolución DIAN Nro: 18764084082433\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "FECHA: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "PREFIJO FF\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "RANGO DEL FF1 AL FF 10000\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "CUFE: " + cufe + "\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Representación impresa de Factrua Electronica de Venta\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Software CREATIVETEC fabricado por CREATIVETEC\n")
+                                    .TextoSegunPaginaDeCodigos(2, "cp850", "Contacto: 3122146368\n")
+                    <?php
+                            }
+                        }
+                    }
+                    ?>
+
+                        .Feed(3)
+                        .Corte(1)
+                        .Pulso(48, 60, 120)
+                        .imprimirEn("caja");
+                    if (respuesta === true) {
+                        alert("Impreso correctamente");
+                    } else {
+                        alert("Error: " + respuesta);
+                    }
+                }
+                init();
             });
-        }
-
-
-        const imprimirTabla = async (nombreImpresora) => {
-            const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
-                maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
-                maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
-                maximaLongitudPrecioTotal = parseInt($maximaLongitudPrecio.value),
-                relleno = $relleno.value,
-                separadorColumnas = $separador.value;
-            const obtenerLineaSeparadora = () => {
-                const lineasSeparador = tabularDatos(
-                    [{
-                            contenido: "-",
-                            maximaLongitud: maximaLongitudNombre
-                        },
-                        {
-                            contenido: "-",
-                            maximaLongitud: maximaLongitudCantidad
-                        },
-                        {
-                            contenido: "-",
-                            maximaLongitud: maximaLongitudPrecio
-                        },
-                        {
-                            contenido: "-",
-                            maximaLongitud: maximaLongitudPrecioTotal
-                        },
-                    ],
-                    "-",
-                    "+",
-                );
-                let separadorDeLineas = "";
-                if (lineasSeparador.length > 0) {
-                    separadorDeLineas = lineasSeparador[0]
-                }
-                return separadorDeLineas;
-            }
-            // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
-            // definir otras propiedades, etcétera
-            const listaDeProductos = [
-                <?php foreach ($resVenta as $key => $value) {
-                ?> {
-                        nombre: "<?php echo $value['nombre_producto'] ?>",
-                        cantidad: "<?php if ($value['cantidad'] > 0) {
-                                        echo $value['cantidad'];
-                                    } else {
-                                        echo $value['peso'];
-                                    } ?>",
-                        precio: <?php echo $value['valor_unitario'] ?>,
-                        precioTotal: <?php echo $value['precio_compra'] ?>,
-                    },
-                <?php
-                }
-                ?>
-            ];
-            // Comenzar a diseñar la tabla
-            let tabla = obtenerLineaSeparadora() + "\n";
-
-
-            const lineasEncabezado = tabularDatos([
-
-                    {
-                        contenido: "Nombre",
-                        maximaLongitud: maximaLongitudNombre
-                    },
-                    {
-                        contenido: "Cantidad",
-                        maximaLongitud: maximaLongitudCantidad
-                    },
-                    {
-                        contenido: "Precio",
-                        maximaLongitud: maximaLongitudPrecio
-                    },
-                    {
-                        contenido: "Total",
-                        maximaLongitud: maximaLongitudPrecioTotal
-                    },
-                ],
-                relleno,
-                separadorColumnas,
-            );
-
-            for (const linea of lineasEncabezado) {
-                tabla += linea + "\n";
-            }
-            tabla += obtenerLineaSeparadora() + "\n";
-            for (const producto of listaDeProductos) {
-                const lineas = tabularDatos(
-                    [{
-                            contenido: producto.nombre,
-                            maximaLongitud: maximaLongitudNombre
-                        },
-                        {
-                            contenido: producto.cantidad.toString(),
-                            maximaLongitud: maximaLongitudCantidad
-                        },
-                        {
-                            contenido: producto.precio.toString(),
-                            maximaLongitud: maximaLongitudPrecio
-                        },
-                        {
-                            contenido: producto.precioTotal.toString(),
-                            maximaLongitud: maximaLongitudPrecio
-                        },
-                    ],
-                    relleno,
-                    separadorColumnas
-                );
-                for (const linea of lineas) {
-                    tabla += linea + "\n";
-                }
-                tabla += obtenerLineaSeparadora() + "\n";
-            }
-            console.log(tabla);
-
-
-
-            const conector = new ConectorPluginV3(URLPlugin);
-            const respuesta = await conector
-                .Iniciar()
-                .DeshabilitarElModoDeCaracteresChinos()
-                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                /*.DescargarImagenDeInternetEImprimir("http://<?php echo $_SERVER['HTTP_HOST'] ?>/inventario/<?php if ($diseno != null) {
-                                                                                                                    echo $diseno[0]['icon_sistema'];
-                                                                                                                } else {
-                                                                                                                    echo "Views/img/img.jpg";
-                                                                                                                } ?>", 0, 216)*/
-                .Feed(1)
-            <?php
-            if (isset($_SESSION['factura'])) {
-                if ($_SESSION['factura'] == 'true') {
-                    if ($resFactura[0]['factura'] == "true") {
-            ?>
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "SEBASTIAN\n")
-            <?php
-                    }
-                }
-            }
-            ?>
-                .TextoSegunPaginaDeCodigos(2, "cp850", "Número Factura: <?php echo $resFactura[0]['id_factura'] ?>\n")
-                .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "Nit: <?php echo $nit ?>\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "Teléfono: <?php echo $tel ?>\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "Direccion: <?php echo $dire ?>\n")
-            <?php
-            if (isset($_SESSION['factura'])) {
-                if ($_SESSION['factura'] == 'true') {
-                    if ($resFactura[0]['factura'] == "true") {
-            ?>
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Factura Electrónica de venta <?php echo $resFactura[0]['id_factura'] ?>\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Vence: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Impreso: " + (new Intl.DateTimeFormat("es-MX").format(new Date())))
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Vendedor: rafipanespinal@gmail.com\n")
-                            .EscribirTexto("------------------------------------------------\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Adquiriente: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Identificación: <?php echo $resCliente[0]['numero_cc'] ?>\n")
-            <?php
-                    }
-                }
-            }
-            ?>
-                .EscribirTexto("------------------------------------------------\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "Nombre o Razón social: <?php echo $resCliente[0]['primer_nombre'] . " " . $resCliente[0]['primer_apellido'] ?>\n")
-                .TextoSegunPaginaDeCodigos(2, "cp850", "CC y/o NIT: <?php echo $resCliente[0]['numero_cc'] ?>\n")
-                .EscribirTexto("------------------------------------------------\n")
-                .Feed(1)
-                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                .EscribirTexto(tabla)
-                .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("SubTotal $<?php echo number_format($resFactura[0]['total_factura'] - (isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0), 0) ?>\n")
-                .EscribirTexto("Propina $<?php echo number_format(isset($resPropina[0]['valor_propinas']) ? $resPropina[0]['valor_propinas'] : 0, 0) ?>\n")
-                .EscribirTexto("Total $<?php echo number_format($resFactura[0]['total_factura'], 2) ?>\n")
-                .EscribirTexto("------------------------------------------------\n")
-                .EscribirTexto("Pago <?php echo $resFactura[0]['efectivo'] ?>   Cambio: <?php echo number_format($resFactura[0]['cambio'], 0) ?>\n")
-                .EscribirTexto("------------------------------------------------\n")
-                .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                .TextoSegunPaginaDeCodigos(2, "cp850", "GRACIAS POR SU COMPRA\n")
-            <?php
-            if (isset($_SESSION['factura'])) {
-                if ($_SESSION['factura'] == 'true') {
-                    if ($resFactura[0]['factura'] == "true") {
-            ?>
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Resolución DIAN Nro: 18764084082433\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "FECHA: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "PREFIJO FF\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "RANGO DEL FF1 AL FF 10000\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "CUFE: " + cufe + "\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Representación impresa de Factrua Electronica de Venta\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Software CREATIVETEC fabricado por CREATIVETEC\n")
-                            .TextoSegunPaginaDeCodigos(2, "cp850", "Contacto: 3122146368\n")
-            <?php
-                    }
-                }
-            }
-            ?>
-
-                .Feed(3)
-                .Corte(1)
-                .Pulso(48, 60, 120)
-                .imprimirEn("caja");
-            if (respuesta === true) {
-                alert("Impreso correctamente");
-            } else {
-                alert("Error: " + respuesta);
-            }
-        }
-        init();
-    });
-</script>
+        </script>

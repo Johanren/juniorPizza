@@ -6,6 +6,10 @@ $local = new ControladorLocal();
 $ress = $local->consultarLocal($_SESSION['id_local']);
 if ($ress != null) {
     $nombreSistema = $ress[0]['nombre_local'];
+    if (strpos($nombreSistema, '58') !== false) {
+        $nombreSistema = str_replace('58', '', $nombreSistema);
+    }
+    $nombreSistema;
     $nit = $ress[0]['nit'];
     $tel = $ress[0]['telefono'];
     $dire = $ress[0]['direccion'];

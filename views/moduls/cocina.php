@@ -491,3 +491,7 @@ if (isset($_GET['id_mesa'])) {
 <?php
 }
 ?>
+
+<script>
+    setInterval(() => location.reload(), 5000); // recarga cada 5 segundos
+</script>

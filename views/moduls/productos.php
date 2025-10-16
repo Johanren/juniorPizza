@@ -61,7 +61,7 @@ if (isset($_GET['id'])) {
                     <th>Categoria</th>
                     <th>Medida</th>
                     <th>Impuesto</th>
-                    <th>Local</th>
+                    <th>Ganancia</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -92,10 +92,13 @@ if (isset($_GET['id'])) {
                             <?php echo $value['nombre_medida'] ?>
                         </td>
                         <td>
-                            <?php $listarImpuesto = $impuesto->listarImpuesoControlador($value['id_impuesto']); if($listarImpuesto != null){echo "0".$listarImpuesto[0]['numero_impuesto'].$listarImpuesto[0]['nombre_impusto'];} ?>
+                            <?php $listarImpuesto = $impuesto->listarImpuesoControlador($value['id_impuesto']);
+                            if ($listarImpuesto != null) {
+                                echo "0" . $listarImpuesto[0]['numero_impuesto'] . $listarImpuesto[0]['nombre_impusto'];
+                            } ?>
                         </td>
                         <td>
-                            <?php echo $value['nombre_local'] ?>
+                            <?php echo number_format($value['ganancia'], 2); ?>
                         </td>
                         <td>
                             <a href="index.php?action=productos&id=<?php echo $value['id_producto'] ?>"><i class="fas fa-trash-alt fa-lg"></i></a>
@@ -114,7 +117,8 @@ if (isset($_GET['id'])) {
                     <th>Cantidad</th>
                     <th>Categoria</th>
                     <th>Medida</th>
-                    <th>Local</th>
+                    <th>Impuesto</th>
+                    <th>Ganancia</th>
                     <th>Acciones</th>
                 </tr>
             </tfoot>

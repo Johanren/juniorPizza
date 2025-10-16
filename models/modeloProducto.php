@@ -32,13 +32,32 @@ class ModeloProducto
 
     function listarProductoModelo()
     {
-        if ($_SESSION['rol'] == "Administrador") {
-            $id = $_SESSION['id_local'];
-            $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE producto.id_local = $id";
-        } else {
-            $id = $_SESSION['id_local'];
-            $sql = "SELECT * FROM $this->tabla INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria INNER JOIN medida ON medida.id_medida = producto.id_medida INNER JOIN local ON local.id_local = producto.id_local WHERE producto.id_local = $id";
-        }
+        $id = $_SESSION['id_local'];
+        $sql = "SELECT 
+    producto.*,
+    proeevedor.nombre_proeevedor,
+    categoria.nombre_categoria,
+    medida.nombre_medida,
+    local.nombre_local,
+    (
+    (
+        producto.precio_unitario - (
+            SELECT (f.unitario / f.cantidad_producto)
+            FROM factura_proeevedor AS f
+            WHERE f.nombre_producto = producto.nombre_producto
+            ORDER BY f.id_factura_proeevedor DESC
+            LIMIT 1
+        )
+    ) * producto.cantidad_producto
+) AS ganancia
+FROM producto
+INNER JOIN proeevedor ON proeevedor.id_proeevedor = producto.id_proeevedor
+INNER JOIN categoria ON categoria.id_categoria = producto.id_categoria
+INNER JOIN medida ON medida.id_medida = producto.id_medida
+INNER JOIN local ON local.id_local = producto.id_local
+WHERE producto.id_local = $id;
+";
+
         $conn = new Conexion();
         $stms = $conn->conectar()->prepare($sql);
         try {
@@ -69,7 +88,7 @@ class ModeloProducto
         }
     }
 
-    function consultarModeloProductoAjaxModelo($dato,$id)
+    function consultarModeloProductoAjaxModelo($dato, $id)
     {
         if ($dato != '') {
             $dato = '%' . $dato . '%';
@@ -83,14 +102,14 @@ class ModeloProducto
             $stms = $conn->conectar()->prepare($sql);
             if ($id == null) {
                 $local = $_SESSION['id_local'];
-            }else{
+            } else {
                 $local = $id;
             }
             if ($dato != '') {
                 $stms->bindParam(1, $dato, PDO::PARAM_STR);
                 $stms->bindParam(2, $dato, PDO::PARAM_STR);
                 $stms->bindParam(3, $local, PDO::PARAM_INT);
-            }else{
+            } else {
                 $stms->bindParam(1, $local, PDO::PARAM_INT);
             }
             if ($stms->execute()) {

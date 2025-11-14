@@ -69,69 +69,16 @@ ob_start();
         include("views/moduls/footer.php");
     }
     ?>
-
-    <div class="container">
-        <div class="columns">
-            <div class="column">
-            </div>
-        </div>
-        <div class="columns">
-            <div class="column">
-                <div class="select is-rounded">
-                    <select hidden id="listaDeImpresoras"></select>
-                </div>
-                <div class="field">
-                    <!--<label class="label">Separador</label>-->
-                    <div class="control">
-                        <input hidden id="separador" value=" " class="input" type="text" maxlength="1" placeholder="El separador de columnas">
-                    </div>
-                </div>
-                <div class="field">
-                    <!--<label class="label">Relleno</label>-->
-                    <div class="control">
-                        <input hidden id="relleno" value=" " class="input" type="text" maxlength="1" placeholder="El relleno de las celdas">
-                    </div>
-                </div>
-                <div class="field">
-                    <!--<label class="label">Máxima longitud para el nombre</label>-->
-                    <div class="control">
-                        <input hidden id="maximaLongitudNombre" value="20" class="input" type="number">
-                    </div>
-                </div>
-                <div class="field">
-                    <!--<label class="label">Máxima longitud para la cantidad</label>-->
-                    <div class="control">
-                        <input hidden id="maximaLongitudCantidad" value="5" class="input" type="number">
-                    </div>
-                </div>
-                <div class="field">
-                    <!--<label class="label">Máxima longitud para el precio</label>-->
-                    <div class="control">
-                        <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
-                    </div>
-                </div>
-                <?php
-                if (isset($_SESSION['impresionPos'])) {
-                    if ($_SESSION['impresionPos'] == 'true') {
-                ?>
-                        <div class="field">
-                            <div class="">
-                                <input type="hidden" id="<?php if ($_SESSION['impresionPos'] == 'true') { ?>btnImprimir<?php } ?>">
-                            </div>
-                        </div>
-
-                <?php
-                    }
-                } ?>
-                <div class="field">
-                    <div class="">
-                        <input type="hidden" id="btnImprimirDomicilio">
-                        <input type="hidden" id="reproducirAudio">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php
+    if (isset($_SESSION['impresionPos'])) {
+        if ($_SESSION['impresionPos'] == 'true') {
+    ?>
+            <input type="hidden" id="<?php if ($_SESSION['impresionPos'] == 'true') { ?>btnImprimir<?php } ?>">
+    <?php
+        }
+    } ?>
+    <input type="hidden" id="btnImprimirDomicilio">
+    <input type="hidden" id="reproducirAudio">
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -189,768 +136,330 @@ ob_start();
             $usuario = "1111";
     ?>
             <script>
+                /* ==========================================
+                VARIABLES GLOBALES (SE MANTIENEN IGUAL)
+                ===========================================*/
+                let printDomicilio = 0;
+                let idMesaDomicilio = 0;
+                const URLImpresionPlugin = "http://localhost:8000";
+
                 var print = 0;
                 var id_mesa = 0;
-                document.addEventListener("click", async () => {
-                    $.ajax({
-                        url: 'views/ajax.php',
-                        type: 'get',
-                        dataType: 'json',
-                        data: {
-                            print: print
-                        },
-                        success: function(response) {
-                            //console.log(response.nombre);
+                const URLPlugin = "http://localhost:8000";
 
-                            // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
-                            // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
-                            // a cualquier lugar
-                            const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
-                                const resultado = [];
-                                let indice = 0;
-                                while (indice < cadena.length) {
-                                    const pedazo = cadena.substring(indice, indice + maximaLongitud);
-                                    indice += maximaLongitud;
-                                    resultado.push(pedazo);
-                                }
-                                return resultado;
+
+                /* ==========================================
+                   UTILIDADES COMPARTIDAS (UNIFICADAS)
+                ===========================================*/
+                const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
+                    const resultado = [];
+                    let indice = 0;
+                    while (indice < cadena.length) {
+                        const pedazo = cadena.substring(indice, indice + maximaLongitud);
+                        indice += maximaLongitud;
+                        resultado.push(pedazo);
+                    }
+                    return resultado;
+                };
+
+                const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
+                    let mayor = 0;
+                    const separadas = [];
+                    for (const contenido of contenidosConMaximaLongitud) {
+                        const trozos = separarCadenaEnArregloSiSuperaLongitud(
+                            String(contenido.contenido),
+                            contenido.maximaLongitud
+                        );
+                        separadas.push({
+                            separadas: trozos,
+                            maximaLongitud: contenido.maximaLongitud,
+                        });
+                        if (trozos.length > mayor) mayor = trozos.length;
+                    }
+                    return [separadas, mayor];
+                };
+
+                const tabularDatos = (cadenas, relleno, separadorColumnas) => {
+                    const [arreglos, mayorConteo] =
+                    dividirCadenasYEncontrarMayorConteoDeBloques(cadenas);
+
+                    const lineas = [];
+                    for (let i = 0; i < mayorConteo; i++) {
+                        let linea = "";
+                        for (const contenido of arreglos) {
+                            let cad = contenido.separadas[i] || "";
+                            if (cad.length < contenido.maximaLongitud) {
+                                cad += relleno.repeat(contenido.maximaLongitud - cad.length);
                             }
-                            const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
-                                let mayorConteoDeCadenasSeparadas = 0;
-                                const cadenasSeparadas = [];
-                                for (const contenido of contenidosConMaximaLongitud) {
-                                    const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
-                                    cadenasSeparadas.push({
-                                        separadas,
-                                        maximaLongitud: contenido.maximaLongitud
-                                    });
-                                    if (separadas.length > mayorConteoDeCadenasSeparadas) {
-                                        mayorConteoDeCadenasSeparadas = separadas.length;
-                                    }
-                                }
-                                return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
-                            }
-                            const tabularDatos = (cadenas, relleno, separadorColumnas) => {
-                                const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
-                                let indice = 0;
-                                const lineas = [];
-                                while (indice < mayorConteoDeBloques) {
-                                    let linea = "";
-                                    for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
-                                        let cadena = "";
-                                        if (indice < contenidos.separadas.length) {
-                                            cadena = contenidos.separadas[indice];
-                                        }
-                                        if (cadena.length < contenidos.maximaLongitud) {
-                                            cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
-                                        }
-                                        linea += cadena + separadorColumnas;
-                                    }
-                                    lineas.push(linea);
-                                    indice++;
-                                }
-                                return lineas;
-                            }
-
-
-                            const obtenerListaDeImpresoras = async () => {
-                                return await ConectorPluginV3.obtenerImpresoras();
-                            }
-                            const URLPlugin = "http://localhost:8000"
-                            const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
-                                $btnImprimir = document.querySelector("#btnImprimir"),
-                                $separador = document.querySelector("#separador"),
-                                $relleno = document.querySelector("#relleno"),
-                                $maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
-                                $maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
-                                $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
-                            $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
-
-                            const init = async () => {
-                                /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
-                                for (const impresora of impresoras) {
-                                    $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
-                                        value: impresora,
-                                        text: impresora,
-                                    }));
-                                }*/
-                                $btnImprimir.addEventListener("click", () => {
-                                    const nombreImpresora = "caja";
-                                    if (!nombreImpresora) {
-                                        return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
-                                    }
-                                    imprimirTabla("caja");
-                                });
-                            }
-
-
-                            const imprimirTabla = async (nombreImpresora) => {
-                                const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
-                                    maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
-                                    maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
-                                    relleno = $relleno.value,
-                                    separadorColumnas = $separador.value;
-                                const obtenerLineaSeparadora = () => {
-                                    const lineasSeparador = tabularDatos(
-                                        [{
-                                                contenido: "-",
-                                                maximaLongitud: maximaLongitudNombre
-                                            },
-                                            {
-                                                contenido: "-",
-                                                maximaLongitud: maximaLongitudCantidad
-                                            },
-                                            {
-                                                contenido: "-",
-                                                maximaLongitud: maximaLongitudPrecio
-                                            },
-                                        ],
-                                        "-",
-                                        "+",
-                                    );
-                                    let separadorDeLineas = "";
-                                    if (lineasSeparador.length > 0) {
-                                        separadorDeLineas = lineasSeparador[0]
-                                    }
-                                    return separadorDeLineas;
-                                }
-                                // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
-                                // definir otras propiedades, etcétera
-                                // Filtrar los productos por categoría
-                                const listaDeProductos = response;
-                                const bebidas = listaDeProductos.filter(producto => producto.categoria === 'Bebidas');
-                                const otrosProductos = listaDeProductos.filter(producto => producto.categoria !== 'Bebidas');
-                                //console.log(bebidas);
-                                //console.log(otrosProductos);
-                                // Comenzar a diseñar la tabla
-                                let tabla = obtenerLineaSeparadora() + "\n";
-                                let tabla1 = obtenerLineaSeparadora() + "\n";
-
-
-                                const lineasEncabezado = tabularDatos([
-
-                                        {
-                                            contenido: "Nombre",
-                                            maximaLongitud: maximaLongitudNombre
-                                        },
-                                        {
-                                            contenido: "Cantidad",
-                                            maximaLongitud: maximaLongitudCantidad
-                                        },
-                                        {
-                                            contenido: "Descripcion",
-                                            maximaLongitud: maximaLongitudPrecio
-                                        },
-                                    ],
-                                    relleno,
-                                    separadorColumnas,
-                                );
-
-                                for (const linea of lineasEncabezado) {
-                                    tabla += linea + "\n";
-                                    tabla1 += linea + "\n";
-                                }
-                                tabla += obtenerLineaSeparadora() + "\n";
-                                if (bebidas.length > 0) {
-                                    for (const producto of bebidas) {
-                                        const lineas = tabularDatos(
-                                            [{
-                                                    contenido: producto.nombre,
-                                                    maximaLongitud: maximaLongitudNombre
-                                                },
-                                                {
-                                                    contenido: producto.cantidad.toString(),
-                                                    maximaLongitud: maximaLongitudCantidad
-                                                },
-                                                {
-                                                    contenido: producto.descripcion.toString(),
-                                                    maximaLongitud: maximaLongitudPrecio
-                                                },
-                                            ],
-                                            relleno,
-                                            separadorColumnas
-                                        );
-                                        for (const linea of lineas) {
-                                            tabla += linea + "\n";
-                                        }
-                                        tabla += obtenerLineaSeparadora() + "\n";
-                                    }
-                                    console.log(tabla);
-                                }
-                                if (otrosProductos.length > 0) {
-                                    for (const producto of otrosProductos) {
-                                        const lineas = tabularDatos(
-                                            [{
-                                                    contenido: producto.nombre,
-                                                    maximaLongitud: maximaLongitudNombre
-                                                },
-                                                {
-                                                    contenido: producto.cantidad.toString(),
-                                                    maximaLongitud: maximaLongitudCantidad
-                                                },
-                                                {
-                                                    contenido: producto.descripcion.toString(),
-                                                    maximaLongitud: maximaLongitudPrecio
-                                                },
-                                            ],
-                                            relleno,
-                                            separadorColumnas
-                                        );
-                                        for (const linea of lineas) {
-                                            tabla1 += linea + "\n";
-                                        }
-                                        tabla1 += obtenerLineaSeparadora() + "\n";
-                                    }
-                                    console.log(tabla1);
-                                }
-                                const conector = new ConectorPluginV3(URLPlugin);
-
-                                $.ajax({
-                                    url: 'views/ajax.php',
-                                    type: 'GET',
-                                    dataType: 'json',
-                                    data: {
-                                        printUsuario: print
-                                    },
-                                    success: async function(response) {
-                                        const listarPedido = response;
-                                        for (const producto of listarPedido) {
-                                            if (bebidas.length > 0) {
-
-                                                // Extraer el valor específico del array devuelto
-                                                const respuesta = await conector
-                                                    .Iniciar()
-                                                    .EstablecerTamañoFuente(1, 1)
-                                                    .DeshabilitarElModoDeCaracteresChinos()
-                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                                                    //.DescargarImagenDeInternetEImprimir("", 0, 216)
-                                                    .Feed(1)
-                                                    .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                                                    .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
-                                                    .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
-                                                    .TextoSegunPaginaDeCodigos(2, "cp850", " Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
-                                                    .Feed(1)
-                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                                                    .EscribirTexto(tabla)
-                                                    .EscribirTexto("------------------------------------------------\n")
-                                                    .Feed(3)
-                                                    .Corte(1)
-                                                    .Pulso(48, 60, 120)
-                                                    .imprimirEn("cocina");
-                                                //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
-                                                if (respuesta === true) {
-                                                    $.ajax({
-                                                        url: 'views/ajax.php',
-                                                        type: 'GET',
-                                                        dataType: 'json',
-                                                        data: {
-                                                            respuestaPrint: print,
-                                                            id: id_mesa
-                                                        },
-                                                        success: async function(response) {
-                                                            if (response == true) {
-                                                                location.reload();
-                                                            }
-                                                        },
-                                                        error: function(xhr, status, error) {
-                                                            // Mostrar error si hay algún problema con la solicitud AJAX
-                                                            $('#valorEspecifico').text('Error: ' + error);
-                                                        }
-                                                    });
-
-                                                } else {
-                                                    $.ajax({
-                                                        url: 'views/ajax.php',
-                                                        type: 'GET',
-                                                        dataType: 'json',
-                                                        data: {
-                                                            respuestaPrint: print,
-                                                            id: id_mesa
-                                                        },
-                                                        success: async function(response) {
-                                                            if (response == true) {
-                                                                location.reload();
-                                                            }
-                                                        },
-                                                        error: function(xhr, status, error) {
-                                                            // Mostrar error si hay algún problema con la solicitud AJAX
-                                                            $('#valorEspecifico').text('Error: ' + error);
-                                                        }
-                                                    });
-                                                    alert("Error: " + respuesta);
-                                                }
-
-                                            }
-                                            if (otrosProductos.length > 0) {
-                                                // Extraer el valor específico del array devuelto
-                                                const respuesta = await conector
-                                                    .Iniciar()
-                                                    .DeshabilitarElModoDeCaracteresChinos()
-                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                                                    //.DescargarImagenDeInternetEImprimir("", 0, 216)
-                                                    .Feed(1)
-                                                    .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                                                    .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
-                                                    .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
-                                                    .TextoSegunPaginaDeCodigos(2, "cp850", " Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
-                                                    .Feed(1)
-                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                                                    .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                                                    .EscribirTexto(tabla1)
-                                                    .EscribirTexto("------------------------------------------------\n")
-                                                    .Feed(3)
-                                                    .Corte(1)
-                                                    .Pulso(48, 60, 120)
-                                                    .imprimirEn("cocina");
-                                                //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
-                                                if (respuesta === true) {
-                                                    $.ajax({
-                                                        url: 'views/ajax.php',
-                                                        type: 'GET',
-                                                        dataType: 'json',
-                                                        data: {
-                                                            respuestaPrint: print,
-                                                            id: id_mesa
-                                                        },
-                                                        success: async function(response) {
-                                                            if (response == true) {
-                                                                location.reload();
-                                                            }
-                                                        },
-                                                        error: function(xhr, status, error) {
-                                                            // Mostrar error si hay algún problema con la solicitud AJAX
-                                                            $('#valorEspecifico').text('Error: ' + error);
-                                                        }
-                                                    });
-
-                                                } else {
-                                                    $.ajax({
-                                                        url: 'views/ajax.php',
-                                                        type: 'GET',
-                                                        dataType: 'json',
-                                                        data: {
-                                                            respuestaPrint: print,
-                                                            id: id_mesa
-                                                        },
-                                                        success: async function(response) {
-                                                            if (response == true) {
-                                                                location.reload();
-                                                            }
-                                                        },
-                                                        error: function(xhr, status, error) {
-                                                            // Mostrar error si hay algún problema con la solicitud AJAX
-                                                            $('#valorEspecifico').text('Error: ' + error);
-                                                        }
-                                                    });
-                                                    alert("Error: " + respuesta);
-                                                }
-
-                                            }
-                                        }
-
-                                    },
-                                    error: function(xhr, status, error) {
-                                        // Mostrar error si hay algún problema con la solicitud AJAX
-                                        $('#valorEspecifico').text('Error: ' + error);
-                                    }
-                                });
-                            }
-                            init();
-
-
-                        },
-                        error: function(xhr, status, error) {
-                            // Mostrar error si hay algún problema con la solicitud AJAX
-                            $('#respuestaServidor').text('Error: ' + error);
+                            linea += cad + separadorColumnas;
                         }
+                        lineas.push(linea);
+                    }
+                    return lineas;
+                };
+
+
+                /* ==========================================
+                   SEPARADOR Y TABLA (UNIFICADO)
+                ===========================================*/
+                function obtenerLineaSeparadora(maxNom, maxCant, maxDesc) {
+                    const lineas = tabularDatos(
+                        [{
+                                contenido: "-",
+                                maximaLongitud: maxNom
+                            },
+                            {
+                                contenido: "-",
+                                maximaLongitud: maxCant
+                            },
+                            {
+                                contenido: "-",
+                                maximaLongitud: maxDesc
+                            },
+                        ],
+                        "-",
+                        "+"
+                    );
+                    return lineas.length ? lineas[0] : "";
+                }
+
+                function construirTabla(productos, cfg) {
+                    const separador = obtenerLineaSeparadora(cfg.maxNom, cfg.maxCant, cfg.maxDesc);
+                    let tabla = separador + "\n";
+
+                    const encabezado = tabularDatos(
+                        [{
+                                contenido: "Nombre",
+                                maximaLongitud: cfg.maxNom
+                            },
+                            {
+                                contenido: "Cant",
+                                maximaLongitud: cfg.maxCant
+                            },
+                            {
+                                contenido: "Descripcion",
+                                maximaLongitud: cfg.maxDesc
+                            },
+                        ],
+                        cfg.relleno,
+                        cfg.separador
+                    );
+
+                    encabezado.forEach((l) => (tabla += l + "\n"));
+                    tabla += separador + "\n";
+
+                    for (const p of productos) {
+                        const filas = tabularDatos(
+                            [{
+                                    contenido: p.nombre,
+                                    maximaLongitud: cfg.maxNom
+                                },
+                                {
+                                    contenido: p.cantidad.toString(),
+                                    maximaLongitud: cfg.maxCant
+                                },
+                                {
+                                    contenido: p.descripcion.toString(),
+                                    maximaLongitud: cfg.maxDesc
+                                },
+                            ],
+                            cfg.relleno,
+                            cfg.separador
+                        );
+                        filas.forEach((f) => (tabla += f + "\n"));
+                        tabla += separador + "\n";
+                    }
+
+                    return tabla;
+                }
+
+
+                /* ==========================================
+                   AJAX UNIFICADO
+                ===========================================*/
+                function ajaxGetJson(url, data) {
+                    return new Promise((resolve) => {
+                        $.ajax({
+                            url,
+                            type: "GET",
+                            dataType: "json",
+                            data,
+                            success: resolve,
+                            error: () => resolve([]),
+                        });
                     });
+                }
+
+
+                /* ==========================================
+                   ---------- IMPRESIÓN DOMICILIO ----------
+                ===========================================*/
+
+                window.onload = () => {
+                    cargarProductos();
+                    console.log();
+                };
+
+                function cargarProductos() {
+                    $.ajax({
+                        url: "views/ajax.php",
+                        type: "GET",
+                        dataType: "json",
+                        data: {
+                            printDomicilio
+                        },
+                        success: inicializarImpresion,
+                    });
+                }
+
+                function inicializarImpresion(listaProductos) {
+                    const btn = document.querySelector("#btnImprimirDomicilio");
+
+                    if (!btn) return;
+
+                    const cfg = {
+                        separador: document.querySelector("#separador").value,
+                        relleno: document.querySelector("#relleno").value,
+                        maxNom: parseInt(document.querySelector("#maximaLongitudNombre").value),
+                        maxCant: parseInt(document.querySelector("#maximaLongitudCantidad").value),
+                        maxDesc: parseInt(document.querySelector("#maximaLongitudPrecio").value),
+                    };
+
+                    btn.onclick = () => imprimirTodo(listaProductos, cfg);
+                }
+
+                function obtenerClientes() {
+                    return ajaxGetJson("views/ajax.php", {
+                        printCliente: printDomicilio,
+                    });
+                }
+
+                function marcarImpresa(id) {
+                    return ajaxGetJson("views/ajax.php", {
+                        respuestaPrintDomicilio: printDomicilio,
+                        id,
+                    });
+                }
+
+                async function imprimirTodo(listaProductos, cfg) {
+                    const bebidas = listaProductos.filter((p) => p.categoria === "Bebidas");
+                    const otros = listaProductos.filter((p) => p.categoria !== "Bebidas");
+
+                    let tablaBebidas =
+                        bebidas.length > 0 ? construirTabla(bebidas, cfg) : "";
+                    let tablaOtros = otros.length > 0 ? construirTabla(otros, cfg) : "";
+
+                    const conector = new ConectorPluginV3(URLImpresionPlugin);
+
+                    const clientes = await obtenerClientes();
+
+                    for (const cliente of clientes) {
+                        if (bebidas.length) await imprimirTicket(conector, cliente, tablaBebidas);
+                        if (otros.length) await imprimirTicket(conector, cliente, tablaOtros);
+                        await marcarImpresa(cliente.id);
+                    }
+
+                    location.reload();
+                }
+
+                async function imprimirTicket(conector, cliente, tabla) {
+                    return await conector
+                        .Iniciar()
+                        .DeshabilitarElModoDeCaracteresChinos()
+                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                        .Feed(1)
+                        .EscribirTexto("<?php echo $nombreSistema ?>\n")
+                        .EscribirTexto("Fecha: " + new Intl.DateTimeFormat("es-MX").format(new Date()) + "\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "Cliente: " + cliente.nombre + "\n")
+                        .Feed(1)
+                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+                        .EscribirTexto(tabla)
+                        .EscribirTexto("----------------------------------------------\n")
+                        .Feed(3)
+                        .Corte(1)
+                        .Pulso(48, 60, 120)
+                        .imprimirEn("caja");
+                }
+
+
+
+                /* ==========================================
+                   ---------- IMPRESIÓN DE MESA NORMAL ----------
+                ===========================================*/
+
+                async function actualizarEstadoMesa() {
+                    return ajaxGetJson("views/ajax.php", {
+                        respuestaPrint: print,
+                        id: id_mesa,
+                    });
+                }
+
+                async function imprimirConectorParaProducto(conector, tabla, producto, destino) {
+                    return await conector
+                        .Iniciar()
+                        .DeshabilitarElModoDeCaracteresChinos()
+                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
+                        .Feed(1)
+                        .EscribirTexto("<?php echo $nombreSistema ?>\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
+                        .EscribirTexto("Fecha: " + new Intl.DateTimeFormat("es-MX").format(new Date()) + "\n")
+                        .TextoSegunPaginaDeCodigos(2, "cp850", "Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
+                        .Feed(1)
+                        .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
+                        .EscribirTexto(tabla)
+                        .EscribirTexto("------------------------------------------------\n")
+                        .Feed(3)
+                        .Corte(1)
+                        .Pulso(48, 60, 120)
+                        .imprimirEn(destino);
+                }
+
+                async function flujoPrincipalDeImpresion() {
+                    const lista = await ajaxGetJson("views/ajax.php", {
+                        print
+                    });
+
+                    const bebidas = lista.filter((p) => p.categoria === "Bebidas");
+                    const otros = lista.filter((p) => p.categoria !== "Bebidas");
+
+                    const cfg = {
+                        maxNom: 20,
+                        maxCant: 6,
+                        maxDesc: 16,
+                        relleno: " ",
+                        separador: " ",
+                    };
+
+                    const tablaBebidas = bebidas.length ? construirTabla(bebidas, cfg) : "";
+                    const tablaOtros = otros.length ? construirTabla(otros, cfg) : "";
+
+                    const conector = new ConectorPluginV3(URLPlugin);
+
+                    const pedidos = await ajaxGetJson("views/ajax.php", {
+                        printUsuario: print
+                    });
+
+                    for (const producto of pedidos) {
+                        if (bebidas.length) await imprimirConectorParaProducto(conector, tablaBebidas, producto, "caja");
+                        if (otros.length) await imprimirConectorParaProducto(conector, tablaOtros, producto, "cocina");
+                        await actualizarEstadoMesa();
+                        location.reload();
+                    }
+                }
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    const btn = document.querySelector("#btnImprimir");
+                    const btn1 = document.querySelector("#btnImprimirDomicilio");
+                    if (btn) btn.onclick = flujoPrincipalDeImpresion;
+                    if (btn1) btn1.onclick = cargarProductos;
                 });
             </script>
     <?php
         }
     }
-    //Impresion DOMICILIO
     ?>
-    <script>
-        var printDomicilio = 0;
-        var id_mesa = 0;
-        document.addEventListener("click", async () => {
-            $.ajax({
-                url: 'views/ajax.php',
-                type: 'get',
-                dataType: 'json',
-                data: {
-                    printDomicilio: printDomicilio
-                },
-                success: function(response) {
-                    //console.log(response);
-
-                    // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
-                    // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
-                    // a cualquier lugar
-                    const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
-                        const resultado = [];
-                        let indice = 0;
-                        while (indice < cadena.length) {
-                            const pedazo = cadena.substring(indice, indice + maximaLongitud);
-                            indice += maximaLongitud;
-                            resultado.push(pedazo);
-                        }
-                        return resultado;
-                    }
-                    const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
-                        let mayorConteoDeCadenasSeparadas = 0;
-                        const cadenasSeparadas = [];
-                        for (const contenido of contenidosConMaximaLongitud) {
-                            const separadas = separarCadenaEnArregloSiSuperaLongitud(contenido.contenido, contenido.maximaLongitud);
-                            cadenasSeparadas.push({
-                                separadas,
-                                maximaLongitud: contenido.maximaLongitud
-                            });
-                            if (separadas.length > mayorConteoDeCadenasSeparadas) {
-                                mayorConteoDeCadenasSeparadas = separadas.length;
-                            }
-                        }
-                        return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
-                    }
-                    const tabularDatos = (cadenas, relleno, separadorColumnas) => {
-                        const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
-                        let indice = 0;
-                        const lineas = [];
-                        while (indice < mayorConteoDeBloques) {
-                            let linea = "";
-                            for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
-                                let cadena = "";
-                                if (indice < contenidos.separadas.length) {
-                                    cadena = contenidos.separadas[indice];
-                                }
-                                if (cadena.length < contenidos.maximaLongitud) {
-                                    cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
-                                }
-                                linea += cadena + separadorColumnas;
-                            }
-                            lineas.push(linea);
-                            indice++;
-                        }
-                        return lineas;
-                    }
 
 
-                    const obtenerListaDeImpresoras = async () => {
-                        return await ConectorPluginV3.obtenerImpresoras();
-                    }
-                    const URLPlugin = "http://localhost:8000"
-                    const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
-                        $btnImprimir = document.querySelector("#btnImprimirDomicilio"),
-                        $separador = document.querySelector("#separador"),
-                        $relleno = document.querySelector("#relleno"),
-                        $maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
-                        $maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
-                        $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
-                    $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
-
-                    const init = async () => {
-                        /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
-                        for (const impresora of impresoras) {
-                            $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
-                                value: impresora,
-                                text: impresora,
-                            }));
-                        }*/
-                        $btnImprimir.addEventListener("click", () => {
-                            const nombreImpresora = "caja";
-                            if (!nombreImpresora) {
-                                return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
-                            }
-                            imprimirTabla("caja");
-                        });
-                    }
-
-
-                    const imprimirTabla = async (nombreImpresora) => {
-                        const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
-                            maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
-                            maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
-                            relleno = $relleno.value,
-                            separadorColumnas = $separador.value;
-                        const obtenerLineaSeparadora = () => {
-                            const lineasSeparador = tabularDatos(
-                                [{
-                                        contenido: "-",
-                                        maximaLongitud: maximaLongitudNombre
-                                    },
-                                    {
-                                        contenido: "-",
-                                        maximaLongitud: maximaLongitudCantidad
-                                    },
-                                    {
-                                        contenido: "-",
-                                        maximaLongitud: maximaLongitudPrecio
-                                    },
-                                ],
-                                "-",
-                                "+",
-                            );
-                            let separadorDeLineas = "";
-                            if (lineasSeparador.length > 0) {
-                                separadorDeLineas = lineasSeparador[0]
-                            }
-                            return separadorDeLineas;
-                        }
-                        // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
-                        // definir otras propiedades, etcétera
-                        // Filtrar los productos por categoría
-                        const listaDeProductos = response;
-                        const bebidas = listaDeProductos.filter(producto => producto.categoria === 'Bebidas');
-                        const otrosProductos = listaDeProductos.filter(producto => producto.categoria !== 'Bebidas');
-                        //console.log(bebidas);
-                        //console.log(otrosProductos);
-                        // Comenzar a diseñar la tabla
-                        let tabla = obtenerLineaSeparadora() + "\n";
-                        let tabla1 = obtenerLineaSeparadora() + "\n";
-
-
-                        const lineasEncabezado = tabularDatos([
-
-                                {
-                                    contenido: "Nombre",
-                                    maximaLongitud: maximaLongitudNombre
-                                },
-                                {
-                                    contenido: "Cantidad",
-                                    maximaLongitud: maximaLongitudCantidad
-                                },
-                                {
-                                    contenido: "Descripcion",
-                                    maximaLongitud: maximaLongitudPrecio
-                                },
-                            ],
-                            relleno,
-                            separadorColumnas,
-                        );
-
-                        for (const linea of lineasEncabezado) {
-                            tabla += linea + "\n";
-                            tabla1 += linea + "\n";
-                        }
-                        tabla += obtenerLineaSeparadora() + "\n";
-                        if (bebidas.length > 0) {
-                            for (const producto of bebidas) {
-                                const lineas = tabularDatos(
-                                    [{
-                                            contenido: producto.nombre,
-                                            maximaLongitud: maximaLongitudNombre
-                                        },
-                                        {
-                                            contenido: producto.cantidad.toString(),
-                                            maximaLongitud: maximaLongitudCantidad
-                                        },
-                                        {
-                                            contenido: producto.descripcion.toString(),
-                                            maximaLongitud: maximaLongitudPrecio
-                                        },
-                                    ],
-                                    relleno,
-                                    separadorColumnas
-                                );
-                                for (const linea of lineas) {
-                                    tabla += linea + "\n";
-                                }
-                                tabla += obtenerLineaSeparadora() + "\n";
-                            }
-                            console.log(tabla);
-                        }
-                        if (otrosProductos.length > 0) {
-                            for (const producto of otrosProductos) {
-                                const lineas = tabularDatos(
-                                    [{
-                                            contenido: producto.nombre,
-                                            maximaLongitud: maximaLongitudNombre
-                                        },
-                                        {
-                                            contenido: producto.cantidad.toString(),
-                                            maximaLongitud: maximaLongitudCantidad
-                                        },
-                                        {
-                                            contenido: producto.descripcion.toString(),
-                                            maximaLongitud: maximaLongitudPrecio
-                                        },
-                                    ],
-                                    relleno,
-                                    separadorColumnas
-                                );
-                                for (const linea of lineas) {
-                                    tabla1 += linea + "\n";
-                                }
-                                tabla1 += obtenerLineaSeparadora() + "\n";
-                            }
-                            console.log(tabla1);
-                        }
-                        const conector = new ConectorPluginV3(URLPlugin);
-
-                        $.ajax({
-                            url: 'views/ajax.php',
-                            type: 'GET',
-                            dataType: 'json',
-                            data: {
-                                printCliente: printDomicilio
-                            },
-                            success: async function(response) {
-                                const listarPedido = response;
-                                for (const producto of listarPedido) {
-                                    if (bebidas.length > 0) {
-
-                                        // Extraer el valor específico del array devuelto
-                                        const respuesta = await conector
-                                            .Iniciar()
-                                            .EstablecerTamañoFuente(1, 1)
-                                            .DeshabilitarElModoDeCaracteresChinos()
-                                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                                            //.DescargarImagenDeInternetEImprimir("", 0, 216)
-                                            .Feed(1)
-                                            .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                                            .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
-                                            .TextoSegunPaginaDeCodigos(2, "cp850", " Cliente:" + producto.nombre + "\n")
-                                            .Feed(1)
-                                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                                            .EscribirTexto(tabla)
-                                            .EscribirTexto("------------------------------------------------\n")
-                                            .Feed(3)
-                                            .Corte(1)
-                                            .Pulso(48, 60, 120)
-                                            .imprimirEn("caja");
-                                        //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
-                                        if (respuesta === true) {
-                                            $.ajax({
-                                                url: 'views/ajax.php',
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                data: {
-                                                    respuestaPrintDomicilio: printDomicilio,
-                                                    id: producto.id
-                                                },
-                                                success: async function(response) {
-                                                    if (response == true) {
-                                                        location.reload();
-                                                    }
-                                                },
-                                                error: function(xhr, status, error) {
-                                                    // Mostrar error si hay algún problema con la solicitud AJAX
-                                                    $('#valorEspecifico').text('Error: ' + error);
-                                                }
-                                            });
-
-                                        } else {
-                                            $.ajax({
-                                                url: 'views/ajax.php',
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                data: {
-                                                    respuestaPrintDomicilio: printDomicilio,
-                                                    id: producto.id
-                                                },
-                                                success: async function(response) {
-                                                    if (response == true) {
-                                                        location.reload();
-                                                    }
-                                                },
-                                                error: function(xhr, status, error) {
-                                                    // Mostrar error si hay algún problema con la solicitud AJAX
-                                                    $('#valorEspecifico').text('Error: ' + error);
-                                                }
-                                            });
-                                            alert("Error: " + respuesta);
-                                        }
-
-                                    }
-                                    if (otrosProductos.length > 0) {
-                                        // Extraer el valor específico del array devuelto
-                                        const respuesta = await conector
-                                            .Iniciar()
-                                            .DeshabilitarElModoDeCaracteresChinos()
-                                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                                            //.DescargarImagenDeInternetEImprimir("", 0, 216)
-                                            .Feed(1)
-                                            .EscribirTexto("<?php echo $nombreSistema ?>\n")
-                                            .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
-                                            .TextoSegunPaginaDeCodigos(2, "cp850", " Cliente:" + producto.nombre + "\n")
-                                            .Feed(1)
-                                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
-                                            .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
-                                            .EscribirTexto(tabla1)
-                                            .EscribirTexto("------------------------------------------------\n")
-                                            .Feed(3)
-                                            .Corte(1)
-                                            .Pulso(48, 60, 120)
-                                            .imprimirEn("caja");
-                                        //.imprimirEnImpresoraRemota("cocina", "http://<?php echo $ip ?>:8000" + "/imprimir");
-                                        if (respuesta === true) {
-                                            $.ajax({
-                                                url: 'views/ajax.php',
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                data: {
-                                                    respuestaPrintDomicilio: printDomicilio,
-                                                    id: producto.id
-                                                },
-                                                success: async function(response) {
-                                                    if (response == true) {
-                                                        location.reload();
-                                                    }
-                                                },
-                                                error: function(xhr, status, error) {
-                                                    // Mostrar error si hay algún problema con la solicitud AJAX
-                                                    location.reload();
-                                                    $('#valorEspecifico').text('Error: ' + error);
-                                                }
-                                            });
-
-                                        } else {
-                                            $.ajax({
-                                                url: 'views/ajax.php',
-                                                type: 'GET',
-                                                dataType: 'json',
-                                                data: {
-                                                    respuestaPrintDomicilio: printDomicilio,
-                                                    id: producto.id
-                                                },
-                                                success: async function(response) {
-                                                    if (response == true) {
-                                                        location.reload();
-                                                    }
-                                                },
-                                                error: function(xhr, status, error) {
-                                                    // Mostrar error si hay algún problema con la solicitud AJAX
-                                                    location.reload();
-                                                    $('#valorEspecifico').text('Error: ' + error);
-                                                }
-                                            });
-                                            alert("Error: " + respuesta);
-                                        }
-
-                                    }
-                                }
-
-                            },
-                            error: function(xhr, status, error) {
-                                // Mostrar error si hay algún problema con la solicitud AJAX
-                                $('#valorEspecifico').text('Error: ' + error);
-                            }
-                        });
-                    }
-                    init();
-
-
-                },
-                error: function(xhr, status, error) {
-                    // Mostrar error si hay algún problema con la solicitud AJAX
-                    $('#respuestaServidor').text('Error: ' + error);
-                }
-            });
-        });
-    </script>
 
 </body>
 <script src="views/js/table.js"></script>

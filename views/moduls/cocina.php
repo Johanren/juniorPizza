@@ -51,14 +51,14 @@ $fechaActal = date('Y-m-d');
                                         print "";
                                     }
                                 } ?>" href="<?php if (isset($_GET['id_mesa'])) {
-                                        if ($_GET['id_mesa'] == $pedido['id_mesa'] && $_GET['fecha'] == $value['fecha_ingreso']) {
-                                            print "#";
-                                        } else {
-                                            print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
-                                        }
-                                    } else {
-                                        print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
-                                    } ?>"><i class="fas fa-print fa-lg"></i></a>
+                                                if ($_GET['id_mesa'] == $pedido['id_mesa'] && $_GET['fecha'] == $value['fecha_ingreso']) {
+                                                    print "#";
+                                                } else {
+                                                    print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
+                                                }
+                                            } else {
+                                                print "index.php?action=cocina&id_mesa=" . $pedido['id_mesa'] . "&fecha=" . $value['fecha_ingreso'];
+                                            } ?>"><i class="fas fa-print fa-lg"></i></a>
                         <a href="index.php?action=cocina&estado=<?php print $pedido['id_mesa'] ?>&fecha=<?php print $pedido['fecha_ingreso'] ?>"><i class="fas fa-hand-point-right fa-lg"></i></a>
                     </div>
                 </div>
@@ -99,13 +99,13 @@ $fechaActal = date('Y-m-d');
             <div class="field">
                 <!--<label class="label">Máxima longitud para la cantidad</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudCantidad" value="5" class="input" type="number">
+                    <input hidden id="maximaLongitudCantidad" value="6" class="input" type="number">
                 </div>
             </div>
             <div class="field">
                 <!--<label class="label">Máxima longitud para el precio</label>-->
                 <div class="control">
-                    <input hidden id="maximaLongitudPrecio" value="20" class="input" type="number">
+                    <input hidden id="maximaLongitudPrecio" value="16" class="input" type="number">
                 </div>
             </div>
             <div class="field">
@@ -149,10 +149,10 @@ if (isset($_GET['id_mesa'])) {
                     fecha: fecha
                 },
                 success: function(response) {
-                    //console.log(response.nombre);
-                    // Las siguientes 3 funciones fueron tomadas de: https://parzibyte.me/blog/2023/02/28/javascript-tabular-datos-limite-longitud-separador-relleno/
-                    // No tienen que ver con el plugin, solo son funciones de JS creadas por mí para tabular datos y enviarlos
-                    // a cualquier lugar
+
+                    /* ============================
+                       FUNCIONES PARA TABULAR DATOS
+                    ============================ */
                     const separarCadenaEnArregloSiSuperaLongitud = (cadena, maximaLongitud) => {
                         const resultado = [];
                         let indice = 0;
@@ -163,6 +163,7 @@ if (isset($_GET['id_mesa'])) {
                         }
                         return resultado;
                     }
+
                     const dividirCadenasYEncontrarMayorConteoDeBloques = (contenidosConMaximaLongitud) => {
                         let mayorConteoDeCadenasSeparadas = 0;
                         const cadenasSeparadas = [];
@@ -178,19 +179,20 @@ if (isset($_GET['id_mesa'])) {
                         }
                         return [cadenasSeparadas, mayorConteoDeCadenasSeparadas];
                     }
+
                     const tabularDatos = (cadenas, relleno, separadorColumnas) => {
-                        const [arreglosDeContenidosConMaximaLongitudSeparadas, mayorConteoDeBloques] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas)
+                        const [arreglos, mayor] = dividirCadenasYEncontrarMayorConteoDeBloques(cadenas);
                         let indice = 0;
                         const lineas = [];
-                        while (indice < mayorConteoDeBloques) {
+                        while (indice < mayor) {
                             let linea = "";
-                            for (const contenidos of arreglosDeContenidosConMaximaLongitudSeparadas) {
+                            for (const contenido of arreglos) {
                                 let cadena = "";
-                                if (indice < contenidos.separadas.length) {
-                                    cadena = contenidos.separadas[indice];
+                                if (indice < contenido.separadas.length) {
+                                    cadena = contenido.separadas[indice];
                                 }
-                                if (cadena.length < contenidos.maximaLongitud) {
-                                    cadena = cadena + relleno.repeat(contenidos.maximaLongitud - cadena.length);
+                                if (cadena.length < contenido.maximaLongitud) {
+                                    cadena = cadena + relleno.repeat(contenido.maximaLongitud - cadena.length);
                                 }
                                 linea += cadena + separadorColumnas;
                             }
@@ -200,46 +202,37 @@ if (isset($_GET['id_mesa'])) {
                         return lineas;
                     }
 
-
-                    const obtenerListaDeImpresoras = async () => {
-                        return await ConectorPluginV3.obtenerImpresoras();
-                    }
-                    const URLPlugin = "http://localhost:8000"
-                    const $listaDeImpresoras = document.querySelector("#listaDeImpresoras"),
-                        $btnImprimir = document.querySelector("#btnImprimir"),
+                    const URLPlugin = "http://localhost:8000";
+                    const $btnImprimir = document.querySelector("#btnImprimir"),
                         $separador = document.querySelector("#separador"),
                         $relleno = document.querySelector("#relleno"),
                         $maximaLongitudNombre = document.querySelector("#maximaLongitudNombre"),
                         $maximaLongitudCantidad = document.querySelector("#maximaLongitudCantidad"),
                         $maximaLongitudPrecio = document.querySelector("#maximaLongitudPrecio");
-                    $maximaLongitudPrecioTotal = document.querySelector("#maximaLongitudPrecio");
 
                     const init = async () => {
-                        /*const impresoras = await ConectorPluginV3.obtenerImpresoras();
-                        for (const impresora of impresoras) {
-                            $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
-                                value: impresora,
-                                text: impresora,
-                            }));
-                        }*/
                         $btnImprimir.addEventListener("click", () => {
-                            const nombreImpresora = "Xprinter1";
+                            const nombreImpresora = "cocina";
                             if (!nombreImpresora) {
-                                return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
+                                return alert("Seleccione una impresora.");
                             }
-                            imprimirTabla("Xprinter1");
+                            imprimirTabla("cocina");
                         });
                     }
 
-
+                    /* ============================
+                       FUNCIÓN PRINCIPAL DE IMPRESIÓN
+                    ============================ */
                     const imprimirTabla = async (nombreImpresora) => {
+
                         const maximaLongitudNombre = parseInt($maximaLongitudNombre.value),
                             maximaLongitudCantidad = parseInt($maximaLongitudCantidad.value),
                             maximaLongitudPrecio = parseInt($maximaLongitudPrecio.value),
                             relleno = $relleno.value,
                             separadorColumnas = $separador.value;
+
                         const obtenerLineaSeparadora = () => {
-                            const lineasSeparador = tabularDatos(
+                            const lineas = tabularDatos(
                                 [{
                                         contenido: "-",
                                         maximaLongitud: maximaLongitudNombre
@@ -254,26 +247,16 @@ if (isset($_GET['id_mesa'])) {
                                     },
                                 ],
                                 "-",
-                                "+",
+                                "+"
                             );
-                            let separadorDeLineas = "";
-                            if (lineasSeparador.length > 0) {
-                                separadorDeLineas = lineasSeparador[0]
-                            }
-                            return separadorDeLineas;
+                            return lineas.length > 0 ? lineas[0] : "";
                         }
-                        // Simple lista de ejemplo. Obviamente tú puedes traerla de cualquier otro lado,
-                        // definir otras propiedades, etcétera
+
                         const listaDeProductos = response;
-                        //console.log(listaDeProductos);
 
-                        // Comenzar a diseñar la tabla
                         let tabla = obtenerLineaSeparadora() + "\n";
-
-
-                        const lineasEncabezado = tabularDatos([
-
-                                {
+                        const lineasEncabezado = tabularDatos(
+                            [{
                                     contenido: "Nombre",
                                     maximaLongitud: maximaLongitudNombre
                                 },
@@ -294,6 +277,7 @@ if (isset($_GET['id_mesa'])) {
                             tabla += linea + "\n";
                         }
                         tabla += obtenerLineaSeparadora() + "\n";
+
                         for (const producto of listaDeProductos) {
                             const lineas = tabularDatos(
                                 [{
@@ -312,14 +296,17 @@ if (isset($_GET['id_mesa'])) {
                                 relleno,
                                 separadorColumnas
                             );
-                            for (const linea of lineas) {
-                                tabla += linea + "\n";
-                            }
+                            for (const linea of lineas) tabla += linea + "\n";
                             tabla += obtenerLineaSeparadora() + "\n";
                         }
+
                         console.log(tabla);
+
                         const conector = new ConectorPluginV3(URLPlugin);
 
+                        /* ============================
+                           ÚLTIMO AJAX PARA PEDIDOS
+                        ============================ */
                         $.ajax({
                             url: 'views/ajax.php',
                             type: 'GET',
@@ -330,18 +317,21 @@ if (isset($_GET['id_mesa'])) {
                             },
                             success: async function(response) {
                                 const listarPedido = response;
+
+                                /* ============================
+                                   IMPRIME CADA PRODUCTO
+                                ============================ */
                                 for (const producto of listarPedido) {
-                                    // Extraer el valor específico del array devuelto
-                                    const respuesta = await conector
+
+                                    await conector
                                         .Iniciar()
                                         .DeshabilitarElModoDeCaracteresChinos()
                                         .EstablecerAlineacion(ConectorPluginV3.ALINEACION_CENTRO)
-                                        //.DescargarImagenDeInternetEImprimir("", 0, 216)
                                         .Feed(1)
                                         .EscribirTexto("<?php echo $nombreSistema ?>\n")
                                         .TextoSegunPaginaDeCodigos(2, "cp850", producto.mesa + "\n")
                                         .EscribirTexto("Fecha: " + (new Intl.DateTimeFormat("es-MX").format(new Date())) + "\n")
-                                        .TextoSegunPaginaDeCodigos(2, "cp850", " Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
+                                        .TextoSegunPaginaDeCodigos(2, "cp850", "Atendido por:" + producto.nombre + " " + producto.apellido + "\n")
                                         .Feed(1)
                                         .EstablecerAlineacion(ConectorPluginV3.ALINEACION_IZQUIERDA)
                                         .EstablecerAlineacion(ConectorPluginV3.ALINEACION_DERECHA)
@@ -351,143 +341,39 @@ if (isset($_GET['id_mesa'])) {
                                         .Corte(1)
                                         .Pulso(48, 60, 120)
                                         .imprimirEn("cocina");
-                                    //.imprimirEnImpresoraRemota("prueba1", "http://192.168.80.17:8000" + "/imprimir");
-                                    if (respuesta === true) {
-                                        $.ajax({
-                                            url: 'views/ajax.php',
-                                            type: 'GET',
-                                            dataType: 'json',
-                                            data: {
-                                                respuestaPrint: print,
-                                                id: id_mesa
-                                            },
-                                            success: async function(response) {
-                                                if (response == true) {
-                                                    window.location="cocina"
-                                                }
-                                            },
-                                            error: function(xhr, status, error) {
-                                                window.location="cocina"
-                                                // Mostrar error si hay algún problema con la solicitud AJAX
-                                                $('#valorEspecifico').text('Error: ' + error);
-                                            }
-                                        });
-
-                                    } else {
-                                        $.ajax({
-                                            url: 'views/ajax.php',
-                                            type: 'GET',
-                                            dataType: 'json',
-                                            data: {
-                                                respuestaPrint: print,
-                                                id: id_mesa
-                                            },
-                                            success: async function(response) {
-                                                if (response == true) {
-                                                    window.location="cocina"
-                                                }
-                                            },
-                                            error: function(xhr, status, error) {
-                                                window.location="cocina"
-                                                // Mostrar error si hay algún problema con la solicitud AJAX
-                                                //$('#valorEspecifico').text('Error: ' + error);
-                                            }
-                                        });
-                                        //alert("Error: " + respuesta);
-                                    }
                                 }
 
-                            },
-                            error: function(xhr, status, error) {
-                                // Mostrar error si hay algún problema con la solicitud AJAX
-                                //$('#valorEspecifico').text('Error: ' + error);
+                                /* ============================
+                                   AQUÍ SE ACTUALIZA EL PRINT
+                                   SOLO UNA VEZ
+                                ============================ */
+                                $.ajax({
+                                    url: 'views/ajax.php',
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    data: {
+                                        respuestaPrint: print,
+                                        id: id_mesa
+                                    },
+                                    success: function(r) {
+                                        window.location = "cocina"; // 🔥 SOLO UNA RECARGA
+                                    },
+                                    error: function() {
+                                        window.location = "cocina"; // 🔥 EN CASO DE ERROR TAMBIÉN RECARGA
+                                    }
+                                });
+
                             }
                         });
+
                     }
+
                     init();
-
-
-                },
-                error: function(xhr, status, error) {
-                    // Mostrar error si hay algún problema con la solicitud AJAX
-                    //$('#respuestaServidor').text('Error: ' + error);
                 }
             });
         });
     </script>
-    <script>
-        /*document.addEventListener("DOMContentLoaded", async () => {
-            const URLPlugin = "http://localhost:8000"
-            const $listaDeImpresoras = "prueba1",
-                $btnImprimir = document.querySelector("#btnImprimir"),
-                $btnObtenerImpresoras = "prueba1",
-                $url = "http://192.168.80.25:8000",
-                $mensaje = "hola";
 
-            const obtenerImpresoras = async () => {
-                const url = $url.value;
-                if (!url) {
-                    return alert("Escribe la URL");
-                }
-                for (let i = $listaDeImpresoras.options.length; i >= 0; i--) {
-                    $listaDeImpresoras.remove(i);
-                }
-                const impresoras = await ConectorPluginV3.obtenerImpresorasRemotas(URLPlugin, url + "/impresoras");
-                if (Array.isArray(impresoras)) {
-
-                    for (const impresora of impresoras) {
-                        $listaDeImpresoras.appendChild(Object.assign(document.createElement("option"), {
-                            value: impresora,
-                            text: impresora,
-                        }));
-                    }
-                } else {
-                    alert("Error obteniendo impresoras: " + impresoras);
-                }
-            };
-            const init = async () => {
-
-                $btnImprimir.addEventListener("click", () => {
-                    const nombreImpresora = "prueba1";
-                    if (!nombreImpresora) {
-                        return alert("Por favor seleccione una impresora. Si no hay ninguna, asegúrese de haberla compartido como se indica en: https://parzibyte.me/blog/2017/12/11/instalar-impresora-termica-generica/")
-                    }
-                    imprimirHolaMundo(nombreImpresora);
-                });
-                $btnObtenerImpresoras.addEventListener("click", () => {
-                    obtenerImpresoras();
-                });
-            }
-
-
-            const imprimirHolaMundo = async (nombreImpresora) => {
-                const mensaje = "Hola";
-                const url = "http://192.168.80.25:8000";
-                console.log(nombreImpresora);
-                console.log(mensaje);
-                console.log(url);
-                if (!mensaje) {
-                    return alert("Escribe un mensaje");
-                }
-
-                if (!url) {
-                    return alert("Escribe la URL");
-                }
-                const conector = new ConectorPluginV3(URLPlugin);
-                conector.Iniciar();
-                conector.EscribirTexto(mensaje);
-                conector.Feed(1);
-                const respuesta = await conector
-                    .imprimirEnImpresoraRemota(nombreImpresora, url + "/imprimir");
-                if (respuesta === true) {
-                    alert("Impreso correctamente");
-                } else {
-                    alert("Error: " + respuesta);
-                }
-            }
-            init();
-        });*/
-    </script>
 <?php
 }
 ?>
